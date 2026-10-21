@@ -84,4 +84,20 @@ function go(){
 }
 spin.onclick=go;document.getElementById("auto").onclick=()=>{auto=!auto;note(auto?"AUTO SPIN ON":"AUTO SPIN OFF");if(auto&&!busy)go()};document.getElementById("turbo").onclick=()=>{turbo=!turbo;note(turbo?"TURBO MODE ON":"TURBO MODE OFF")};document.getElementById("close").onclick=()=>overlay.classList.remove("show");
 </script>
+<script>
+const KIMIA_API = "https://kimia-prive-api.onrender.com";
+
+async function checkKimiaAPI() {
+  try {
+    const response = await fetch(KIMIA_API + "/api/health");
+    const data = await response.json();
+    console.log("KIMIA PRIVÉ API:", data);
+  } catch (error) {
+    console.error("KIMIA PRIVÉ API connection failed:", error);
+  }
+}
+
+checkKimiaAPI();
+</script>
+
 </body></html>
