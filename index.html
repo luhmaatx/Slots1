@@ -412,4 +412,2440 @@ button:disabled{
 
 @keyframes bigWin{
   50%{
-    transform
+    transform:scale(1.12);
+    box-shadow:
+      inset 0 0 28px rgba(255,240,180,1),
+      0 0 28px rgba(255,208,110,1);
+  }
+}
+
+.payline{
+  position:absolute;
+  left:-2px;
+  right:-2px;
+  height:2px;
+  z-index:4;
+  opacity:.8;
+  pointer-events:none;
+  background:linear-gradient(
+    90deg,
+    transparent,
+    var(--rose) 12%,
+    #ffe5ed 50%,
+    var(--rose) 88%,
+    transparent
+  );
+  box-shadow:0 0 8px var(--rose);
+}
+
+.payline.one{top:16.66%}
+.payline.two{top:50%}
+.payline.three{top:83.33%}
+
+.payline.active{
+  height:3px;
+  opacity:1;
+  box-shadow:
+    0 0 8px var(--rose),
+    0 0 18px rgba(233,154,178,.7);
+  animation:lineFlash .35s infinite alternate;
+}
+
+@keyframes lineFlash{
+  to{opacity:.55}
+}
+
+.line-labels{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:5px;
+  margin-top:9px;
+}
+
+.line-label{
+  padding:7px 2px;
+  border:1px solid #493724;
+  border-radius:7px;
+  text-align:center;
+  color:#caa66c;
+  background:#100b08;
+  font-size:8px;
+  letter-spacing:.04em;
+}
+
+.line-label b{
+  display:block;
+  margin-top:3px;
+  color:#f0d9b4;
+  font-size:10px;
+}
+
+.betinfo{
+  display:grid;
+  grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:3px;
+  margin-top:10px;
+  padding:10px 0;
+  border-top:1px solid #483723;
+  border-bottom:1px solid #483723;
+}
+
+.betinfo div{
+  min-width:0;
+  text-align:center;
+  color:#9a8871;
+  font-size:7px;
+  letter-spacing:.06em;
+}
+
+.betinfo b{
+  display:block;
+  margin-top:5px;
+  color:#f0d9b4;
+  font:500 14px 'Cormorant Garamond',Georgia,serif;
+}
+
+.bet-section{
+  margin-top:12px;
+  position:relative;
+  z-index:2;
+}
+
+.bet-heading{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  margin-bottom:7px;
+  color:#a99372;
+  font-size:8px;
+  letter-spacing:.14em;
+}
+
+.bet-options{
+  display:grid;
+  grid-template-columns:repeat(4,minmax(0,1fr));
+  gap:5px;
+}
+
+.bet-option{
+  min-width:0;
+  padding:10px 2px;
+  border:1px solid #57422b;
+  border-radius:9px;
+  color:#d5bd96;
+  background:linear-gradient(145deg,#20140c,#0e0906);
+  font-size:11px;
+  transition:.18s ease;
+}
+
+.bet-option:active{
+  transform:scale(.96);
+}
+
+.bet-option.active{
+  border-color:#f0cf91;
+  color:#170e08;
+  background:linear-gradient(145deg,#fff0c9,#c29352);
+  box-shadow:0 0 13px rgba(233,201,141,.2);
+  font-weight:700;
+}
+
+.max-bet{
+  display:block;
+  width:100%;
+  margin-top:7px;
+  padding:8px;
+  border:1px solid #8d6a3d;
+  border-radius:8px;
+  color:var(--gold);
+  background:linear-gradient(90deg,#25170e,#110b07);
+  font-size:9px;
+  letter-spacing:.15em;
+}
+
+.message{
+  min-height:33px;
+  padding:12px 2px 8px;
+  text-align:center;
+  color:#caa66c;
+  font-size:9px;
+  letter-spacing:.1em;
+  line-height:1.5;
+}
+
+.message.hot{
+  color:#f0a2ba;
+  text-shadow:0 0 15px #e98ea9;
+  animation:messageGlow .7s infinite alternate;
+}
+
+@keyframes messageGlow{
+  to{letter-spacing:.15em}
+}
+
+.controls{
+  display:grid;
+  grid-template-columns:58px minmax(0,1fr) 58px;
+  gap:7px;
+  align-items:center;
+}
+
+.round{
+  height:53px;
+  border:1px solid #604a2f;
+  border-radius:13px;
+  color:#caa66c;
+  background:linear-gradient(145deg,#1b100a,#0b0705);
+  font-size:8px;
+  letter-spacing:.07em;
+  transition:.15s;
+}
+
+.round:active{
+  transform:scale(.95);
+}
+
+.round.on{
+  border-color:#f0cf91;
+  color:#f6dca9;
+  box-shadow:0 0 15px rgba(233,201,141,.2);
+}
+
+.round span{
+  font-size:18px;
+}
+
+.spinbtn{
+  height:59px;
+  border:1px solid #ffe2a6;
+  border-radius:15px;
+  color:#180e07;
+  background:
+    radial-gradient(ellipse at 50% 12%,#fff4d4,#d5a45f 58%,#8c602d);
+  box-shadow:
+    0 0 25px rgba(233,201,141,.2),
+    inset 0 1px #fff8e8;
+  font:600 24px 'Cormorant Garamond',Georgia,serif;
+  letter-spacing:.16em;
+  transition:transform .15s,filter .15s;
+}
+
+.spinbtn:active{
+  transform:scale(.97);
+}
+
+.spinbtn.ready{
+  animation:readyPulse 2s ease-in-out infinite;
+}
+
+@keyframes readyPulse{
+  50%{
+    box-shadow:
+      0 0 34px rgba(233,201,141,.38),
+      inset 0 1px #fff8e8;
+  }
+}
+
+/* FEATURES */
+
+.features{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:8px;
+  margin:13px 12px;
+}
+
+.feature{
+  padding:13px;
+  border:1px solid #443423;
+  border-radius:14px;
+  background:linear-gradient(135deg,#18100b,#0b0806);
+  transition:.2s;
+}
+
+.feature:active{
+  transform:scale(.98);
+}
+
+.feature .icon{
+  font-size:21px;
+}
+
+.feature b{
+  display:block;
+  margin-top:3px;
+  color:#ecd7b7;
+  font:500 16px 'Cormorant Garamond',Georgia,serif;
+}
+
+.feature span{
+  color:#9a8871;
+  font-size:8px;
+  letter-spacing:.08em;
+}
+
+/* VIP */
+
+.vipcard{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:12px;
+  margin:13px 12px;
+  padding:16px;
+  border:1px solid #715735;
+  border-radius:17px;
+  background:
+    radial-gradient(circle at 85% 50%,rgba(233,201,141,.09),transparent 30%),
+    linear-gradient(120deg,#28180f,#0c0806);
+  overflow:hidden;
+  position:relative;
+}
+
+.vipcard:after{
+  content:"";
+  position:absolute;
+  top:0;
+  bottom:0;
+  left:-40%;
+  width:25%;
+  background:linear-gradient(
+    90deg,
+    transparent,
+    rgba(255,255,255,.16),
+    transparent
+  );
+  transform:skewX(-20deg);
+  animation:vipSheen 4s ease-in-out infinite;
+}
+
+@keyframes vipSheen{
+  0%,65%{left:-40%}
+  100%{left:125%}
+}
+
+.vipcard .title{
+  color:#f0d5aa;
+  font:500 19px 'Cormorant Garamond',Georgia,serif;
+}
+
+.vipcard p{
+  margin:3px 0 0;
+  color:#a08b72;
+  font-size:8px;
+  letter-spacing:.1em;
+}
+
+.progress{
+  width:130px;
+  max-width:100%;
+  height:5px;
+  margin-top:9px;
+  overflow:hidden;
+  border-radius:9px;
+  background:#2c2117;
+}
+
+.progress i{
+  display:block;
+  width:0;
+  height:100%;
+  background:linear-gradient(90deg,#b07e42,#f0c985);
+  transition:width .5s;
+}
+
+/* LEADERBOARD */
+
+.leader{
+  margin:13px 12px;
+  padding:14px;
+  border:1px solid #443423;
+  border-radius:17px;
+  background:linear-gradient(135deg,#110c08,#090605);
+}
+
+.leaderhead{
+  display:flex;
+  justify-content:space-between;
+  gap:8px;
+  color:#cba96f;
+  font-size:9px;
+  letter-spacing:.1em;
+}
+
+.rows{
+  margin-top:8px;
+}
+
+.player-row{
+  display:flex;
+  align-items:center;
+  gap:9px;
+  padding:9px 0;
+  border-bottom:1px solid #281e15;
+  animation:rowIn .3s ease both;
+}
+
+.player-row:last-child{
+  border-bottom:0;
+}
+
+@keyframes rowIn{
+  from{
+    opacity:0;
+    transform:translateX(-8px);
+  }
+  to{
+    opacity:1;
+    transform:none;
+  }
+}
+
+.rank{
+  width:20px;
+  color:#c5a36a;
+  font-size:10px;
+}
+
+.mini{
+  width:31px;
+  height:31px;
+  flex-shrink:0;
+  display:grid;
+  place-items:center;
+  border:1px solid #80633e;
+  border-radius:50%;
+  color:#f0d5aa;
+  background:#22150e;
+  font-family:Georgia,serif;
+}
+
+.who{
+  flex:1;
+  min-width:0;
+  overflow:hidden;
+  color:#f0dfc5;
+  text-overflow:ellipsis;
+  white-space:nowrap;
+  font-size:10px;
+}
+
+.score{
+  color:#c7a979;
+  text-align:right;
+  white-space:nowrap;
+  font-size:9px;
+}
+
+.leader-foot{
+  margin-top:7px;
+  color:#766754;
+  font-size:8px;
+  line-height:1.5;
+}
+
+/* NAV */
+
+nav{
+  position:fixed;
+  z-index:8;
+  bottom:0;
+  left:50%;
+  transform:translateX(-50%);
+  width:min(480px,100%);
+  display:grid;
+  grid-template-columns:repeat(5,1fr);
+  padding:9px 6px calc(8px + env(safe-area-inset-bottom));
+  border-top:1px solid #493a28;
+  background:rgba(7,5,4,.97);
+  backdrop-filter:blur(15px);
+}
+
+nav button{
+  border:0;
+  color:#8a7864;
+  background:none;
+  font-size:8px;
+  letter-spacing:.06em;
+}
+
+nav button.active{
+  color:var(--gold);
+}
+
+nav i{
+  display:block;
+  margin-bottom:3px;
+  font-style:normal;
+  font-size:19px;
+}
+
+/* WIN OVERLAY */
+
+.overlay{
+  position:fixed;
+  z-index:20;
+  inset:0;
+  display:grid;
+  place-items:center;
+  padding:20px;
+  background:rgba(2,1,1,.88);
+  opacity:0;
+  pointer-events:none;
+  transition:opacity .25s;
+}
+
+.overlay.show{
+  opacity:1;
+  pointer-events:auto;
+}
+
+.winbox{
+  width:min(370px,100%);
+  padding:27px;
+  border:1px solid var(--gold);
+  border-radius:24px;
+  text-align:center;
+  background:
+    radial-gradient(circle at 50% 0,#432918,#0d0806 68%);
+  box-shadow:0 0 70px rgba(233,154,178,.25);
+  animation:appear .35s ease-out;
+}
+
+.winbox.royale{
+  animation:royaleAppear .45s ease-out;
+}
+
+@keyframes appear{
+  from{
+    transform:scale(.85) translateY(12px);
+    opacity:0;
+  }
+  to{
+    transform:scale(1) translateY(0);
+    opacity:1;
+  }
+}
+
+@keyframes royaleAppear{
+  0%{
+    transform:scale(.65) rotate(-2deg);
+    opacity:0;
+  }
+  70%{
+    transform:scale(1.04) rotate(.5deg);
+  }
+  100%{
+    transform:scale(1) rotate(0);
+    opacity:1;
+  }
+}
+
+.winbox .icon{
+  font-size:54px;
+  animation:iconFloat 1.4s ease-in-out infinite;
+}
+
+@keyframes iconFloat{
+  50%{
+    transform:translateY(-6px) scale(1.05);
+  }
+}
+
+.winbox h2{
+  margin:4px;
+  color:#f1d09a;
+  font:500 38px 'Cormorant Garamond',Georgia,serif;
+}
+
+.winbox p{
+  color:#b5a087;
+  font-size:10px;
+  line-height:1.6;
+  letter-spacing:.08em;
+}
+
+.winAmount{
+  margin:10px 0 15px;
+  color:#ffe7ad;
+  font:600 30px 'Cormorant Garamond',Georgia,serif;
+  text-shadow:0 0 22px rgba(233,201,141,.6);
+}
+
+.close{
+  padding:11px 25px;
+  border:1px solid var(--gold);
+  border-radius:10px;
+  color:var(--gold);
+  background:transparent;
+  font-size:9px;
+  letter-spacing:.12em;
+}
+
+/* TOAST */
+
+.toast{
+  position:fixed;
+  z-index:30;
+  top:12px;
+  left:50%;
+  transform:translate(-50%,-150%);
+  width:max-content;
+  max-width:90%;
+  padding:11px 18px;
+  border-radius:99px;
+  color:#120d08;
+  background:#efd19a;
+  text-align:center;
+  font-size:9px;
+  font-weight:700;
+  letter-spacing:.07em;
+  transition:transform .3s;
+}
+
+.toast.show{
+  transform:translate(-50%,0);
+}
+
+/* BONUS BADGE */
+
+.bonus-badge{
+  position:fixed;
+  z-index:12;
+  right:14px;
+  bottom:92px;
+  display:none;
+  padding:9px 12px;
+  border:1px solid #d5ad68;
+  border-radius:99px;
+  color:#170e08;
+  background:#efd19a;
+  font-size:8px;
+  font-weight:700;
+  letter-spacing:.08em;
+  box-shadow:0 5px 25px #000;
+}
+
+.bonus-badge.show{
+  display:block;
+  animation:bonusPop .35s ease;
+}
+
+@keyframes bonusPop{
+  from{
+    transform:scale(.7);
+    opacity:0;
+  }
+  to{
+    transform:scale(1);
+    opacity:1;
+  }
+}
+
+@media(max-width:360px){
+  .brand h1{font-size:43px}
+  .machine{
+    margin-left:6px;
+    margin-right:6px;
+    padding:9px;
+  }
+  .reelbox{padding:6px}
+  .reels{gap:4px}
+  .reel{
+    height:65px;
+    border-radius:7px;
+    font-size:23px;
+  }
+  .controls{
+    grid-template-columns:49px minmax(0,1fr) 49px;
+    gap:5px;
+  }
+  .round{height:49px}
+  .spinbtn{height:55px}
+  .bet-option{font-size:10px}
+}
+</style>
+</head>
+
+<body>
+
+<div class="toast" id="toast"></div>
+<div class="bonus-badge" id="bonusBadge">✦ BONUS READY</div>
+
+<div class="overlay" id="overlay">
+  <div class="winbox" id="winbox">
+    <div class="icon" id="winIcon">♛</div>
+    <h2 id="winTitle">WINNER</h2>
+    <p id="winText">Virtual chips awarded!</p>
+    <div class="winAmount" id="winAmount"></div>
+    <button class="close" id="close">CONTINUE</button>
+  </div>
+</div>
+
+<div class="shell">
+<div class="noise"></div>
+
+<header class="header">
+  <button class="menu" id="menuBtn" aria-label="Menu">☰</button>
+  <div class="tiny">VIP CLUB</div>
+  <div class="avatar" id="avatar">K</div>
+</header>
+
+<section class="brand">
+  <div class="crown">♕</div>
+  <h1>KIMIA</h1>
+  <div class="prive">PRIVÉ</div>
+  <div class="tag">PRIVATE FORTUNE CLUB</div>
+</section>
+
+<div class="balance" id="balanceBox">
+  <div>
+    <small>AVAILABLE CHIPS</small>
+    <strong id="bal">Loading…</strong> 🪙
+  </div>
+
+  <div style="text-align:right">
+    <div class="vip" id="vip">♛ VIP LEVEL 0</div>
+    <div class="tiny" id="playerName">CONNECTING TO TELEGRAM</div>
+  </div>
+</div>
+
+<section class="jackpot" id="jackpot">
+  <div class="label">PRIVÉ PROGRESSIVE JACKPOT</div>
+  <div class="number" id="jack">1,248,730</div>
+  <div class="line"></div>
+</section>
+
+<section class="machine" id="machine">
+
+  <div class="machine-title">
+    ✦ PRIVÉ ROYALE · FIVE REELS ✦
+  </div>
+
+  <div class="reelbox">
+    <div class="reels" id="reels">
+
+      <div class="payline one" data-line="0"></div>
+      <div class="payline two" data-line="1"></div>
+      <div class="payline three" data-line="2"></div>
+
+      <div class="reel" id="r0">💎</div>
+      <div class="reel" id="r1">7️⃣</div>
+      <div class="reel" id="r2">💗</div>
+      <div class="reel" id="r3">🌹</div>
+      <div class="reel" id="r4">✨</div>
+
+      <div class="reel" id="r5">🌹</div>
+      <div class="reel" id="r6">💎</div>
+      <div class="reel" id="r7">♠️</div>
+      <div class="reel" id="r8">💗</div>
+      <div class="reel" id="r9">7️⃣</div>
+
+      <div class="reel" id="r10">✨</div>
+      <div class="reel" id="r11">💗</div>
+      <div class="reel" id="r12">♠️</div>
+      <div class="reel" id="r13">🌹</div>
+      <div class="reel" id="r14">💎</div>
+
+    </div>
+
+    <div class="line-labels">
+      <div class="line-label">
+        LINE 1
+        <b id="line1">100 🪙</b>
+      </div>
+
+      <div class="line-label">
+        LINE 2
+        <b id="line2">100 🪙</b>
+      </div>
+
+      <div class="line-label">
+        LINE 3
+        <b id="line3">100 🪙</b>
+      </div>
+    </div>
+  </div>
+
+  <div class="betinfo">
+    <div>
+      REELS × ROWS
+      <b>5 × 3</b>
+    </div>
+
+    <div>
+      ACTIVE LINES
+      <b>3</b>
+    </div>
+
+    <div>
+      TOTAL BET
+      <b id="totalBet">300 🪙</b>
+    </div>
+  </div>
+
+  <div class="bet-section">
+
+    <div class="bet-heading">
+      <span>SELECT YOUR BET</span>
+      <span>CHIPS PER SPIN</span>
+    </div>
+
+    <div class="bet-options">
+      <button class="bet-option active" data-bet="300">300</button>
+      <button class="bet-option" data-bet="600">600</button>
+      <button class="bet-option" data-bet="1500">1,500</button>
+      <button class="bet-option" data-bet="3000">3,000</button>
+    </div>
+
+    <button class="max-bet" id="maxBet">
+      ♛ MAX BET · 3,000 CHIPS
+    </button>
+
+  </div>
+
+  <div class="message" id="msg">
+    CONNECTING TO PRIVÉ CLUB…
+  </div>
+
+  <div class="controls">
+
+    <button class="round" id="auto">
+      <span>↻</span><br>AUTO
+    </button>
+
+    <button class="spinbtn" id="spin" disabled>
+      SPIN
+    </button>
+
+    <button class="round" id="turbo">
+      <span>ϟ</span><br>TURBO
+    </button>
+
+  </div>
+
+</section>
+
+<section class="features">
+
+  <div class="feature" id="dailyFeature">
+    <div class="icon">🎁</div>
+    <b>Privé Daily</b>
+    <span>DAILY REWARDS</span>
+  </div>
+
+  <div class="feature" id="jackpotFeature">
+    <div class="icon">💎</div>
+    <b>Jackpot Room</b>
+    <span>BIGGEST WINS</span>
+  </div>
+
+</section>
+
+<section class="vipcard">
+
+  <div style="flex:1">
+
+    <div class="title">
+      KIMIA PRIVÉ VIP
+    </div>
+
+    <p id="vipDescription">
+      YOUR EXCLUSIVE CLUB STATUS
+    </p>
+
+    <div class="progress">
+      <i id="progressBar"></i>
+    </div>
+
+  </div>
+
+  <div style="font-size:26px;color:#d5b36f">
+    ♛
+  </div>
+
+</section>
+
+<section class="leader" id="leaderSection">
+
+  <div class="leaderhead">
+    <span>♛ TOP PLAYERS</span>
+    <span>VIRTUAL CHIPS</span>
+  </div>
+
+  <div class="rows" id="leaderRows">
+
+    <div class="player-row">
+      <div class="who">
+        Loading leaderboard…
+      </div>
+    </div>
+
+  </div>
+
+  <div class="leader-foot">
+    Rankings are based on player balances stored by the game server.
+  </div>
+
+</section>
+
+<nav>
+
+  <button class="active" data-nav="home">
+    <i>⌂</i>HOME
+  </button>
+
+  <button data-nav="slots">
+    <i>▣</i>SLOTS
+  </button>
+
+  <button data-nav="rank">
+    <i>♛</i>RANK
+  </button>
+
+  <button data-nav="wallet">
+    <i>◈</i>WALLET
+  </button>
+
+  <button data-nav="profile">
+    <i>♙</i>PROFILE
+  </button>
+
+</nav>
+
+</div>
+
+<script>
+"use strict";
+
+/* =========================================================
+   KIMIA PRIVÉ FRONTEND
+   Backend/API intentionally preserved
+========================================================= */
+
+const KIMIA_API =
+  "https://kimia-prive-api.onrender.com";
+
+const tg =
+  window.Telegram && window.Telegram.WebApp;
+
+const reels =
+  Array.from(
+    {length:15},
+    (_,i)=>document.getElementById("r"+i)
+  );
+
+const allowedBets =
+  [300,600,1500,3000];
+
+let balance = 0;
+let bet = 300;
+let busy = true;
+let auto = false;
+let turbo = false;
+let loggedIn = false;
+let playerData = null;
+let autoTimer = null;
+let jackpot = 1248730;
+
+/* =========================================================
+   DOM
+========================================================= */
+
+const bal =
+  document.getElementById("bal");
+
+const msg =
+  document.getElementById("msg");
+
+const spin =
+  document.getElementById("spin");
+
+const overlay =
+  document.getElementById("overlay");
+
+const winbox =
+  document.getElementById("winbox");
+
+const toast =
+  document.getElementById("toast");
+
+const machine =
+  document.getElementById("machine");
+
+const balanceBox =
+  document.getElementById("balanceBox");
+
+const jackpotBox =
+  document.getElementById("jackpot");
+
+const bonusBadge =
+  document.getElementById("bonusBadge");
+
+/* =========================================================
+   HELPERS
+========================================================= */
+
+const fmt =
+  n => Number(n || 0)
+    .toLocaleString("en-US");
+
+function wait(ms){
+  return new Promise(
+    resolve=>setTimeout(resolve,ms)
+  );
+}
+
+function note(text){
+
+  toast.textContent = text;
+
+  toast.classList.add("show");
+
+  clearTimeout(note.timer);
+
+  note.timer =
+    setTimeout(
+      ()=>toast.classList.remove("show"),
+      2600
+    );
+}
+
+/* =========================================================
+   SOUND ENGINE
+   No external audio files required
+========================================================= */
+
+let audioContext = null;
+
+function getAudio(){
+
+  try{
+
+    if(!audioContext){
+
+      const C =
+        window.AudioContext ||
+        window.webkitAudioContext;
+
+      if(!C) return null;
+
+      audioContext =
+        new C();
+    }
+
+    if(
+      audioContext.state ===
+      "suspended"
+    ){
+      audioContext.resume();
+    }
+
+    return audioContext;
+
+  }catch(e){
+
+    return null;
+
+  }
+}
+
+function tone(
+  frequency,
+  duration=.08,
+  volume=.035,
+  type="sine"
+){
+
+  try{
+
+    const c = getAudio();
+
+    if(!c) return;
+
+    const oscillator =
+      c.createOscillator();
+
+    const gain =
+      c.createGain();
+
+    oscillator.type = type;
+
+    oscillator.frequency.value =
+      frequency;
+
+    gain.gain.setValueAtTime(
+      0,
+      c.currentTime
+    );
+
+    gain.gain.linearRampToValueAtTime(
+      volume,
+      c.currentTime+.01
+    );
+
+    gain.gain.exponentialRampToValueAtTime(
+      .001,
+      c.currentTime+duration
+    );
+
+    oscillator.connect(gain);
+    gain.connect(c.destination);
+
+    oscillator.start();
+
+    oscillator.stop(
+      c.currentTime+duration
+    );
+
+  }catch(e){}
+}
+
+function spinSound(){
+
+  tone(180,.06,.025,"square");
+
+}
+
+function reelStopSound(column){
+
+  tone(
+    220 + column*55,
+    .09,
+    .035,
+    "triangle"
+  );
+
+}
+
+function winSound(){
+
+  const notes =
+    [523,659,784,1046];
+
+  notes.forEach(
+    (n,i)=>{
+      setTimeout(
+        ()=>tone(n,.18,.045,"sine"),
+        i*90
+      );
+    }
+  );
+}
+
+function jackpotSound(){
+
+  const notes =
+    [392,523,659,784,1046,1318];
+
+  notes.forEach(
+    (n,i)=>{
+      setTimeout(
+        ()=>tone(n,.22,.055,"sine"),
+        i*100
+      );
+    }
+  );
+}
+
+/* =========================================================
+   OVERLAY
+========================================================= */
+
+function showWin(
+  title,
+  text,
+  icon,
+  amount=0,
+  major=false
+){
+
+  document.getElementById(
+    "winTitle"
+  ).textContent = title;
+
+  document.getElementById(
+    "winText"
+  ).textContent = text;
+
+  document.getElementById(
+    "winIcon"
+  ).textContent = icon;
+
+  document.getElementById(
+    "winAmount"
+  ).textContent =
+    amount > 0
+      ? "+"+fmt(amount)+" 🪙"
+      : "";
+
+  winbox.classList.toggle(
+    "royale",
+    major
+  );
+
+  overlay.classList.add("show");
+
+}
+
+/* =========================================================
+   API
+========================================================= */
+
+async function api(
+  path,
+  body={}
+){
+
+  if(
+    !tg ||
+    !tg.initData
+  ){
+
+    throw new Error(
+      "Open the game from your Telegram bot."
+    );
+
+  }
+
+  const response =
+    await fetch(
+      KIMIA_API+path,
+      {
+        method:"POST",
+        headers:{
+          "Content-Type":
+            "application/json"
+        },
+        body:JSON.stringify({
+          ...body,
+          initData:tg.initData
+        })
+      }
+    );
+
+  let data;
+
+  try{
+
+    data =
+      await response.json();
+
+  }catch(e){
+
+    throw new Error(
+      "The server returned an invalid response."
+    );
+
+  }
+
+  if(!response.ok){
+
+    throw new Error(
+      data.error ||
+      "Request failed. Please try again."
+    );
+
+  }
+
+  return data;
+}
+
+/* =========================================================
+   BET DISPLAY
+========================================================= */
+
+function updateBetDisplay(){
+
+  document.getElementById(
+    "totalBet"
+  ).textContent =
+    fmt(bet)+" 🪙";
+
+  const perLine =
+    bet/3;
+
+  ["line1","line2","line3"]
+    .forEach(
+      id=>{
+        document.getElementById(id)
+          .textContent =
+          fmt(perLine)+" 🪙";
+      }
+    );
+
+  document
+    .querySelectorAll(".bet-option")
+    .forEach(button=>{
+
+      button.classList.toggle(
+        "active",
+        Number(button.dataset.bet)===bet
+      );
+
+    });
+
+}
+
+function selectBet(value){
+
+  if(
+    !allowedBets.includes(value)
+  ) return;
+
+  if(busy){
+
+    note(
+      "Wait until the current spin finishes."
+    );
+
+    return;
+
+  }
+
+  bet=value;
+
+  updateBetDisplay();
+
+  tone(440,.06,.03);
+
+}
+
+/* =========================================================
+   BET BUTTONS
+========================================================= */
+
+document
+  .querySelectorAll(".bet-option")
+  .forEach(button=>{
+
+    button.addEventListener(
+      "click",
+      ()=>{
+        selectBet(
+          Number(button.dataset.bet)
+        );
+      }
+    );
+
+  });
+
+document
+  .getElementById("maxBet")
+  .addEventListener(
+    "click",
+    ()=>{
+
+      selectBet(3000);
+
+      note(
+        "MAX BET · 3,000 CHIPS"
+      );
+
+    }
+  );
+
+/* =========================================================
+   PLAYER
+========================================================= */
+
+function updatePlayer(player){
+
+  playerData=player;
+
+  balance =
+    Number(player.balance || 0);
+
+  bal.textContent =
+    fmt(balance);
+
+  const level =
+    Number(player.vipLevel || 0);
+
+  document.getElementById(
+    "vip"
+  ).textContent =
+    "♛ VIP LEVEL "+level;
+
+  const username =
+    player.username
+      ? "@"+player.username
+      : "TELEGRAM PLAYER";
+
+  document.getElementById(
+    "playerName"
+  ).textContent =
+    username;
+
+  const initial =
+    player.username
+      ? player.username
+          .replace(/^@/,"")
+          .charAt(0)
+          .toUpperCase()
+      : "K";
+
+  document.getElementById(
+    "avatar"
+  ).textContent =
+    initial || "K";
+
+  const progress =
+    Math.min(
+      100,
+      Math.max(
+        8,
+        (level%10)*10+10
+      )
+    );
+
+  document.getElementById(
+    "progressBar"
+  ).style.width =
+    progress+"%";
+
+  const descriptions = [
+
+    "YOUR EXCLUSIVE CLUB STATUS",
+
+    "PRIVÉ MEMBER",
+
+    "GILDED MEMBER",
+
+    "ROYALE MEMBER",
+
+    "DIAMOND MEMBER",
+
+    "BLACK LABEL MEMBER",
+
+    "CROWN MEMBER",
+
+    "ROYAL ELITE",
+
+    "PRIVÉ ELITE",
+
+    "GRAND PRIVÉ",
+
+    "KIMIA ROYALE"
+
+  ];
+
+  document.getElementById(
+    "vipDescription"
+  ).textContent =
+    descriptions[
+      Math.min(level,10)
+    ];
+
+}
+
+/* =========================================================
+   LEADERBOARD
+========================================================= */
+
+async function loadLeaderboard(){
+
+  const container =
+    document.getElementById(
+      "leaderRows"
+    );
+
+  try{
+
+    const response =
+      await fetch(
+        KIMIA_API+
+        "/api/leaderboard",
+        {
+          method:"GET",
+          cache:"no-store"
+        }
+      );
+
+    const data =
+      await response.json();
+
+    if(!response.ok){
+
+      throw new Error(
+        data.error ||
+        "Leaderboard unavailable."
+      );
+
+    }
+
+    const players =
+      Array.isArray(data.players)
+        ? data.players
+        : [];
+
+    container.replaceChildren();
+
+    if(!players.length){
+
+      container.textContent =
+        "No ranked players yet.";
+
+      return;
+
+    }
+
+    players.forEach(
+      (player,index)=>{
+
+        const row =
+          document.createElement("div");
+
+        row.className =
+          "player-row";
+
+        row.style.animationDelay =
+          (index*.04)+"s";
+
+        const rank =
+          document.createElement("div");
+
+        rank.className="rank";
+
+        rank.textContent =
+          String(
+            player.rank ||
+            index+1
+          ).padStart(2,"0");
+
+        const mini =
+          document.createElement("div");
+
+        mini.className="mini";
+
+        const name =
+          String(
+            player.username ||
+            "Anonymous Player"
+          );
+
+        mini.textContent =
+          name
+            .replace(/^@/,"")
+            .charAt(0)
+            .toUpperCase() ||
+          "♙";
+
+        const who =
+          document.createElement("div");
+
+        who.className="who";
+
+        who.textContent=name;
+
+        const score =
+          document.createElement("div");
+
+        score.className="score";
+
+        score.textContent =
+          fmt(player.balance)+" 🪙";
+
+        row.append(
+          rank,
+          mini,
+          who,
+          score
+        );
+
+        container.appendChild(row);
+
+      }
+    );
+
+  }catch(error){
+
+    console.error(
+      "Leaderboard error:",
+      error
+    );
+
+    container.replaceChildren();
+
+    const row =
+      document.createElement("div");
+
+    row.className =
+      "player-row";
+
+    row.textContent =
+      "Leaderboard temporarily unavailable.";
+
+    container.appendChild(row);
+
+  }
+
+}
+
+/* =========================================================
+   JACKPOT DISPLAY
+========================================================= */
+
+function updateJackpot(){
+
+  jackpot +=
+    Math.floor(
+      Math.random()*4
+    );
+
+  document.getElementById(
+    "jack"
+  ).textContent =
+    fmt(jackpot);
+
+}
+
+setInterval(
+  updateJackpot,
+  3200
+);
+
+/* =========================================================
+   REEL PREP
+========================================================= */
+
+function clearWinEffects(){
+
+  reels.forEach(
+    reel=>{
+      reel.classList.remove(
+        "win",
+        "bigwin",
+        "stop"
+      );
+    }
+  );
+
+  document
+    .querySelectorAll(".payline")
+    .forEach(
+      line=>{
+        line.classList.remove(
+          "active"
+        );
+      }
+    );
+
+}
+
+/* =========================================================
+   SPIN ANIMATION
+========================================================= */
+
+async function animateReels(){
+
+  machine.classList.add(
+    "spinning"
+  );
+
+  reels.forEach(
+    reel=>{
+      reel.classList.remove(
+        "win",
+        "bigwin",
+        "stop"
+      );
+
+      reel.classList.add(
+        "spinning"
+      );
+    }
+  );
+
+  spinSound();
+
+  /*
+    Five columns stop independently.
+    This preserves the existing 5x3
+    server result layout.
+  */
+
+  for(
+    let column=0;
+    column<5;
+    column++
+  ){
+
+    await wait(
+      turbo
+        ? 80
+        : 210
+    );
+
+    for(
+      let row=0;
+      row<3;
+      row++
+    ){
+
+      const index =
+        row*5+column;
+
+      reels[index]
+        .classList.remove(
+          "spinning"
+        );
+
+      reels[index]
+        .classList.add(
+          "stop"
+        );
+
+    }
+
+    reelStopSound(column);
+
+  }
+
+  machine.classList.remove(
+    "spinning"
+  );
+
+}
+
+/* =========================================================
+   BONUS
+========================================================= */
+
+function checkBonus(win){
+
+  if(win<=0) return;
+
+  /*
+    Front-end celebration only.
+    No bonus chips are created here,
+    so the existing server balance remains authoritative.
+  */
+
+  if(win >= bet*10){
+
+    bonusBadge.textContent =
+      "♛ ROYALE WIN";
+
+    bonusBadge.classList.add(
+      "show"
+    );
+
+    setTimeout(
+      ()=>{
+        bonusBadge.classList.remove(
+          "show"
+        );
+      },
+      5000
+    );
+
+  }
+
+}
+
+/* =========================================================
+   SPIN
+========================================================= */
+
+async function go(){
+
+  if(
+    busy ||
+    !loggedIn
+  ) return;
+
+  if(balance < bet){
+
+    msg.textContent =
+      "NOT ENOUGH CHIPS";
+
+    note(
+      "You need "+
+      fmt(bet)+
+      " chips to spin."
+    );
+
+    auto=false;
+
+    document
+      .getElementById("auto")
+      .classList.remove("on");
+
+    return;
+
+  }
+
+  busy=true;
+
+  spin.disabled=true;
+
+  spin.classList.remove(
+    "ready"
+  );
+
+  msg.classList.remove(
+    "hot"
+  );
+
+  msg.textContent =
+    "SPINNING FIVE REELS…";
+
+  clearWinEffects();
+
+  /*
+    Backend remains authoritative.
+    We do not manufacture results
+    in the browser.
+  */
+
+  try{
+
+    const result =
+      await api(
+        "/api/spin",
+        {bet}
+      );
+
+    if(
+      !Array.isArray(
+        result.symbols
+      ) ||
+      result.symbols.length!==15
+    ){
+
+      throw new Error(
+        "The server must return 15 symbols for the 5-reel, 3-row game. Check your server.js deployment."
+      );
+
+    }
+
+    const symbols =
+      result.symbols;
+
+    const win =
+      Number(result.win || 0);
+
+    const lines =
+      Array.isArray(
+        result.winningLines
+      )
+        ? result.winningLines
+        : [];
+
+    /*
+      Start the visual animation,
+      then reveal the server result.
+    */
+
+    const animationPromise =
+      animateReels();
+
+    /*
+      Keep the animation feeling
+      substantial while the server
+      response is already available.
+    */
+
+    await animationPromise;
+
+    for(
+      let i=0;
+      i<15;
+      i++
+    ){
+
+      reels[i].textContent =
+        symbols[i];
+
+    }
+
+    balance =
+      Number(
+        result.balance
+      );
+
+    bal.textContent =
+      fmt(balance);
+
+    /*
+      Balance flash.
+    */
+
+    balanceBox.classList.remove(
+      "flash"
+    );
+
+    void balanceBox.offsetWidth;
+
+    balanceBox.classList.add(
+      "flash"
+    );
+
+    if(win > 0){
+
+      /*
+        Highlight winning rows.
+      */
+
+      lines.forEach(
+        line=>{
+
+          const row =
+            Number(line);
+
+          if(
+            Number.isInteger(row) &&
+            row>=0 &&
+            row<3
+          ){
+
+            document
+              .querySelector(
+                '.payline[data-line="'+
+                row+
+                '"]'
+              )
+              ?.classList.add(
+                "active"
+              );
+
+            for(
+              let column=0;
+              column<5;
+              column++
+            ){
+
+              reels[
+                row*5+column
+              ].classList.add(
+                "win"
+              );
+
+            }
+
+          }
+
+        }
+      );
+
+      msg.classList.add(
+        "hot"
+      );
+
+      msg.textContent =
+        "WIN · +"+
+        fmt(win)+
+        " VIRTUAL CHIPS";
+
+      if(
+        win >= bet*10
+      ){
+
+        reels.forEach(
+          reel=>{
+            reel.classList.add(
+              "bigwin"
+            );
+          }
+        );
+
+        jackpotSound();
+
+        showWin(
+          "ROYale WIN",
+          "A major Privé payout has landed.",
+          "♛",
+          win,
+          true
+        );
+
+      }else{
+
+        winSound();
+
+        showWin(
+          "YOU WON!",
+          "Virtual chips awarded.",
+          "♛",
+          win,
+          false
+        );
+
+      }
+
+      checkBonus(win);
+
+    }else{
+
+      msg.textContent =
+        "NO MATCH · TRY YOUR LUCK AGAIN";
+
+    }
+
+    /*
+      Leaderboard refresh after
+      every completed spin.
+    */
+
+    await loadLeaderboard();
+
+  }catch(error){
+
+    console.error(
+      "KIMIA spin error:",
+      error
+    );
+
+    msg.textContent =
+      "SPIN FAILED · TRY AGAIN";
+
+    note(
+      error.message
+    );
+
+  }finally{
+
+    reels.forEach(
+      reel=>{
+        reel.classList.remove(
+          "spinning"
+        );
+      }
+    );
+
+    machine.classList.remove(
+      "spinning"
+    );
+
+    busy=false;
+
+    spin.disabled =
+      !loggedIn;
+
+    if(loggedIn){
+
+      spin.classList.add(
+        "ready"
+      );
+
+    }
+
+    /*
+      Auto-spin continues only after
+      the previous spin has completely
+      finished.
+    */
+
+    if(
+      auto &&
+      loggedIn &&
+      balance>=bet
+    ){
+
+      clearTimeout(
+        autoTimer
+      );
+
+      autoTimer =
+        setTimeout(
+          ()=>{
+            if(
+              auto &&
+              loggedIn &&
+              !busy
+            ){
+              go();
+            }
+          },
+          turbo
+            ? 250
+            : 1100
+        );
+
+    }else if(
+      auto &&
+      balance<bet
+    ){
+
+      auto=false;
+
+      document
+        .getElementById("auto")
+        .classList.remove("on");
+
+      note(
+        "AUTO SPIN STOPPED · LOW CHIPS"
+      );
+
+    }
+
+  }
+
+}
+
+/* =========================================================
+   LOGIN
+========================================================= */
+
+async function login(){
+
+  if(
+    !tg ||
+    !tg.initData
+  ){
+
+    bal.textContent="—";
+
+    msg.textContent =
+      "OPEN THROUGH TELEGRAM";
+
+    spin.disabled=true;
+
+    busy=true;
+
+    note(
+      "Open KIMIA PRIVÉ from your Telegram bot."
+    );
+
+    return;
+
+  }
+
+  try{
+
+    tg.ready();
+
+    tg.expand();
+
+  }catch(e){}
+
+  try{
+
+    msg.textContent =
+      "VERIFYING TELEGRAM…";
+
+    const player =
+      await api(
+        "/api/me"
+      );
+
+    updatePlayer(player);
+
+    loggedIn=true;
+
+    busy=false;
+
+    spin.disabled=false;
+
+    spin.classList.add(
+      "ready"
+    );
+
+    msg.textContent =
+      "FIVE REELS · THREE PAYLINES · GOOD LUCK";
+
+    await loadLeaderboard();
+
+  }catch(error){
+
+    console.error(
+      "KIMIA login error:",
+      error
+    );
+
+    loggedIn=false;
+
+    busy=true;
+
+    spin.disabled=true;
+
+    msg.textContent =
+      "LOGIN FAILED · REOPEN GAME";
+
+    note(
+      error.message
+    );
+
+  }
+
+}
+
+/* =========================================================
+   AUTO
+========================================================= */
+
+document
+  .getElementById("auto")
+  .addEventListener(
+    "click",
+    ()=>{
+
+      if(!loggedIn){
+
+        note(
+          "Connect to Telegram first."
+        );
+
+        return;
+
+      }
+
+      auto=!auto;
+
+      document
+        .getElementById("auto")
+        .classList.toggle(
+          "on",
+          auto
+        );
+
+      note(
+        auto
+          ? "AUTO SPIN ON"
+          : "AUTO SPIN OFF"
+      );
+
+      if(
+        auto &&
+        !busy
+      ){
+
+        go();
+
+      }
+
+    }
+  );
+
+/* =========================================================
+   TURBO
+========================================================= */
+
+document
+  .getElementById("turbo")
+  .addEventListener(
+    "click",
+    ()=>{
+
+      turbo=!turbo;
+
+      document
+        .getElementById("turbo")
+        .classList.toggle(
+          "on",
+          turbo
+        );
+
+      note(
+        turbo
+          ? "TURBO MODE ON"
+          : "TURBO MODE OFF"
+      );
+
+      tone(
+        turbo ? 720 : 440,
+        .08,
+        .03
+      );
+
+    }
+  );
+
+/* =========================================================
+   CLOSE WIN
+========================================================= */
+
+document
+  .getElementById("close")
+  .addEventListener(
+    "click",
+    ()=>{
+
+      overlay.classList.remove(
+        "show"
+      );
+
+    }
+  );
+
+overlay.addEventListener(
+  "click",
+  event=>{
+
+    if(
+      event.target === overlay
+    ){
+
+      overlay.classList.remove(
+        "show"
+      );
+
+    }
+
+  }
+);
+
+/* =========================================================
+   MENU
+========================================================= */
+
+document
+  .getElementById("menuBtn")
+  .addEventListener(
+    "click",
+    ()=>{
+
+      note(
+        "WELCOME TO KIMIA PRIVÉ"
+      );
+
+      tone(
+        520,
+        .08,
+        .03
+      );
+
+    }
+  );
+
+/* =========================================================
+   BONUS FEATURE CARDS
+========================================================= */
+
+document
+  .getElementById("dailyFeature")
+  .addEventListener(
+    "click",
+    ()=>{
+
+      note(
+        "PRIVÉ DAILY · YOUR NEXT REWARD WILL APPEAR HERE"
+      );
+
+      tone(
+        660,
+        .1,
+        .035
+      );
+
+    }
+  );
+
+document
+  .getElementById("jackpotFeature")
+  .addEventListener(
+    "click",
+    ()=>{
+
+      jackpotBox.scrollIntoView({
+        behavior:"smooth",
+        block:"center"
+      });
+
+      note(
+        "PRIVÉ PROGRESSIVE JACKPOT"
+      );
+
+      tone(
+        784,
+        .12,
+        .035
+      );
+
+    }
+  );
+
+/* =========================================================
+   NAVIGATION
+========================================================= */
+
+document
+  .querySelectorAll("[data-nav]")
+  .forEach(button=>{
+
+    button.addEventListener(
+      "click",
+      ()=>{
+
+        document
+          .querySelectorAll(
+            "[data-nav]"
+          )
+          .forEach(item=>{
+
+            item.classList.toggle(
+              "active",
+              item===button
+            );
+
+          });
+
+        const target =
+          button.dataset.nav;
+
+        if(target==="rank"){
+
+          document
+            .getElementById(
+              "leaderSection"
+            )
+            .scrollIntoView({
+              behavior:"smooth"
+            });
+
+          loadLeaderboard();
+
+        }else if(
+          target==="wallet"
+        ){
+
+          document
+            .querySelector(
+              ".balance"
+            )
+            .scrollIntoView({
+              behavior:"smooth"
+            });
+
+        }else if(
+          target==="slots" ||
+          target==="home"
+        ){
+
+          document
+            .querySelector(
+              ".machine"
+            )
+            .scrollIntoView({
+              behavior:"smooth"
+            });
+
+        }else{
+
+          note(
+            "KIMIA PRIVÉ · VIP LEVEL "+
+            Number(
+              playerData?.vipLevel || 0
+            )
+          );
+
+        }
+
+      }
+    );
+
+  });
+
+/* =========================================================
+   INITIALIZE
+========================================================= */
+
+updateBetDisplay();
+
+login();
+
+</script>
+
+</body>
+  </html>
