@@ -3,27 +3,27 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta name="theme-color" content="#050302">
+<meta name="theme-color" content="#080503">
 <title>KIMIA PRIVÉ</title>
 
 <script src="https://telegram.org/js/telegram-web-app.js"></script>
 
-<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700&family=Cormorant+Garamond:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700&family=Cormorant+Garamond:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 
 <style>
 :root{
-  --black:#030201;
-  --black2:#090604;
-  --black3:#120b07;
-  --gold:#c98a3e;
-  --gold2:#f0bd69;
-  --gold3:#ffe5a5;
-  --gold4:#fff4d0;
-  --pink:#ff3f91;
-  --pink2:#ff9fc7;
-  --cream:#f8e4bd;
-  --muted:#9b805d;
-  --line:#80552b;
+  --bg:#050302;
+  --panel:#100905;
+  --panel2:#1b0d06;
+  --gold:#c9954d;
+  --gold2:#f6d28f;
+  --gold3:#fff0c2;
+  --pink:#ed5b91;
+  --pink2:#ff9fc4;
+  --text:#f7e3bd;
+  --muted:#9c815d;
+  --line:#684522;
+  --green:#65d9a4;
 }
 
 *{
@@ -31,63 +31,38 @@
   -webkit-tap-highlight-color:transparent;
 }
 
-html,
-body{
+html,body{
   margin:0;
-  width:100%;
   min-height:100%;
-  background:#020101;
+  background:#030201;
 }
 
 body{
-  color:var(--cream);
+  color:var(--text);
   font-family:Inter,Arial,sans-serif;
   overflow-x:hidden;
 
   background:
-    radial-gradient(circle at 50% 8%,rgba(255,166,65,.19),transparent 25%),
-    radial-gradient(circle at 12% 34%,rgba(126,34,40,.17),transparent 28%),
-    radial-gradient(circle at 90% 38%,rgba(132,39,45,.18),transparent 27%),
-    linear-gradient(180deg,#130b07 0%,#080403 42%,#020101 100%);
+    radial-gradient(circle at 50% -5%,rgba(222,143,57,.27),transparent 30%),
+    radial-gradient(circle at 0% 45%,rgba(125,35,47,.17),transparent 28%),
+    radial-gradient(circle at 100% 45%,rgba(125,35,47,.17),transparent 28%),
+    linear-gradient(180deg,#120906 0%,#080403 45%,#030201 100%);
 }
-
-/* luxury atmosphere */
 
 body:before{
   content:"";
   position:fixed;
-  z-index:-3;
   inset:0;
-
-  background:
-    radial-gradient(ellipse at 50% 20%,transparent 20%,rgba(0,0,0,.55) 80%),
-    repeating-linear-gradient(
-      105deg,
-      transparent 0,
-      transparent 100px,
-      rgba(255,190,100,.025) 101px,
-      transparent 103px
-    );
-}
-
-body:after{
-  content:"";
-  position:fixed;
-  z-index:-2;
-  left:50%;
-  top:0;
-  width:500px;
-  height:700px;
-  transform:translateX(-50%);
-
-  background:
-    radial-gradient(
-      ellipse at center top,
-      rgba(255,183,83,.13),
-      transparent 60%
-    );
-
   pointer-events:none;
+  opacity:.16;
+  background:
+    repeating-linear-gradient(
+      125deg,
+      transparent 0,
+      transparent 70px,
+      rgba(255,220,160,.035) 71px,
+      transparent 72px
+    );
 }
 
 button{
@@ -101,247 +76,157 @@ button:disabled{
 }
 
 .app{
-  width:min(100%,1040px);
+  width:min(100%,820px);
   margin:auto;
-  padding:8px 10px 120px;
+  padding:9px 12px 112px;
 }
 
 /* =========================================================
-   TOP HEADER
+   TOP
 ========================================================= */
 
 .top{
   display:grid;
   grid-template-columns:1fr auto 1fr;
   align-items:center;
-  gap:10px;
-  min-height:72px;
+  gap:8px;
+  margin:3px 2px 8px;
 }
 
-.profile{
-  justify-self:start;
+.profile-card{
   display:flex;
   align-items:center;
-  gap:10px;
+  gap:8px;
+  min-width:0;
 }
 
-.avatar{
-  width:58px;
-  height:58px;
+.profile-photo{
+  width:49px;
+  height:49px;
   flex:none;
-
-  border-radius:50%;
-
   display:grid;
   place-items:center;
-
-  border:1px solid var(--gold3);
-
-  background:
-    radial-gradient(
-      circle at 40% 25%,
-      #8b542b,
-      #241208 55%,
-      #050302
-    );
-
-  box-shadow:
-    0 0 0 2px #050302,
-    0 0 0 3px #9c672f,
-    0 0 20px rgba(240,174,83,.25);
+  border-radius:50%;
 
   font-family:Cinzel,serif;
-  font-size:20px;
+  font-size:18px;
   color:var(--gold3);
+
+  border:1px solid var(--gold2);
+
+  background:
+    radial-gradient(circle at 35% 25%,#77451f,#241207 55%,#070302);
+
+  box-shadow:
+    0 0 0 3px #0a0503,
+    0 0 0 4px #704a25,
+    0 0 22px rgba(221,158,79,.24);
 }
 
-.profile-copy{
-  min-width:120px;
+.profile-info{
+  min-width:0;
 }
 
 .profile-name{
   font-family:Cinzel,serif;
-  font-size:14px;
-  letter-spacing:1.5px;
-  color:#f6dfb5;
-}
-
-.profile-vip{
-  margin-top:2px;
   font-size:11px;
-  color:#e4c28e;
-}
-
-.vip-row{
-  display:flex;
-  align-items:center;
-  gap:7px;
-  margin-top:5px;
-}
-
-.vip-bar{
-  width:105px;
-  height:6px;
-
+  letter-spacing:1px;
+  white-space:nowrap;
   overflow:hidden;
+  text-overflow:ellipsis;
+  color:#f7dfb2;
+}
 
-  border-radius:10px;
-  border:1px solid #67431f;
+.profile-level{
+  margin-top:3px;
+  font-size:9px;
+  color:#ad9068;
+}
 
-  background:#0a0604;
+.vip-meter{
+  width:105px;
+  height:4px;
+  margin-top:6px;
+  overflow:hidden;
+  border-radius:20px;
+  border:1px solid #50351e;
+  background:#100a06;
 }
 
 .vip-fill{
-  width:42%;
+  width:45%;
   height:100%;
-
-  background:
-    linear-gradient(
-      90deg,
-      #b06d2e,
-      #ffe0a0
-    );
-
-  box-shadow:
-    0 0 8px #f0ad55;
+  background:linear-gradient(90deg,#935725,#ffe0a0);
+  box-shadow:0 0 8px #e9b86d;
 }
 
-.vip-percent{
-  font-size:10px;
-  color:#d8b27a;
-}
-
-.header-crown{
+.top-brand{
   text-align:center;
-  font-size:30px;
-  color:var(--gold3);
-  text-shadow:
-    0 0 8px #ffca6c,
-    0 0 24px #a85d24;
 }
 
-.header-crown small{
-  display:block;
-  margin-top:-4px;
-
-  font-family:Cinzel,serif;
-  font-size:8px;
-  letter-spacing:3px;
-  color:#d7ae72;
-}
-
-.balance{
-  justify-self:end;
-
-  min-width:165px;
-
-  display:flex;
-  align-items:center;
-  gap:9px;
-
-  padding:8px 9px;
-
-  border:1px solid #87582b;
-  border-radius:35px;
-
-  background:
-    linear-gradient(
-      145deg,
-      rgba(39,22,11,.96),
-      rgba(7,4,3,.96)
-    );
-
-  box-shadow:
-    inset 0 1px rgba(255,238,190,.18),
-    0 6px 18px #000b;
-}
-
-.coins{
-  width:39px;
-  height:39px;
-
-  display:grid;
-  place-items:center;
-
-  border-radius:50%;
-
+.top-brand .crown{
   font-size:22px;
-
-  background:
-    radial-gradient(circle at 35% 25%,#ffe4a1,#a96724 65%,#3b1c09);
-
-  box-shadow:
-    inset 0 1px #fff8,
-    0 0 12px rgba(236,161,62,.35);
+  color:#f7d38d;
+  text-shadow:0 0 17px #d9953e;
 }
 
-.balance-copy{
-  flex:1;
-}
-
-.balance-label{
-  font-size:8px;
-  letter-spacing:1.6px;
+.top-brand .tiny{
+  font-size:7px;
+  letter-spacing:3px;
   color:#a98a63;
 }
 
-.balance-value{
+.money{
+  justify-self:end;
+
+  min-width:145px;
+  padding:8px 10px;
+
+  display:flex;
+  align-items:center;
+  gap:7px;
+
+  border:1px solid #76502c;
+  border-radius:28px;
+
+  background:linear-gradient(145deg,#221309,#0d0704);
+
+  box-shadow:
+    inset 0 1px #fff2,
+    0 6px 20px #0009;
+}
+
+.coin-stack{
+  font-size:21px;
+  filter:drop-shadow(0 0 7px #d89a3c);
+}
+
+.money-label{
+  font-size:7px;
+  letter-spacing:1.5px;
+  color:#9f8460;
+}
+
+.money-value{
   margin-top:1px;
-
-  font-family:"Cormorant Garamond",serif;
-  font-size:24px;
-  font-weight:700;
-
-  color:#f8d99f;
+  font:600 17px "Cormorant Garamond",serif;
+  color:#f8dfb0;
 }
 
 .plus{
-  width:34px;
-  height:34px;
-
-  border-radius:50%;
+  margin-left:auto;
+  width:26px;
+  height:26px;
 
   display:grid;
   place-items:center;
 
-  color:#ffe0a0;
-
-  border:1px solid #a87538;
-
-  background:
-    radial-gradient(circle,#34200f,#0b0604);
-
-  font-size:24px;
-}
-
-/* =========================================================
-   MOBILE MENU
-========================================================= */
-
-.menu-button{
-  position:absolute;
-  left:18px;
-  top:84px;
-
-  width:57px;
-  height:57px;
-
   border-radius:50%;
+  border:1px solid #936a3a;
 
-  color:#f5d29a;
-
-  border:1px solid #a16d35;
-
-  background:
-    radial-gradient(circle at 40% 25%,#2e1a0d,#080403 70%);
-
-  box-shadow:
-    inset 0 1px #fff3,
-    0 0 0 2px #120905,
-    0 5px 15px #000c;
-
-  font-size:27px;
-  z-index:5;
+  background:#140b06;
+  color:#f3cf91;
+  font-size:17px;
 }
 
 /* =========================================================
@@ -350,527 +235,336 @@ button:disabled{
 
 .brand{
   position:relative;
-
   text-align:center;
-
-  padding:
-    15px
-    0
-    20px;
+  padding:5px 0 13px;
 }
 
 .brand:before,
 .brand:after{
   content:"";
-
   position:absolute;
-  top:57%;
-
+  top:52%;
   width:20%;
   height:1px;
-
-  background:
-    linear-gradient(
-      90deg,
-      transparent,
-      #d09a52,
-      transparent
-    );
+  background:linear-gradient(90deg,transparent,#9d6b37);
 }
 
-.brand:before{
-  left:0;
-}
+.brand:before{left:0}
 
 .brand:after{
   right:0;
+  transform:rotate(180deg);
 }
 
-.crown{
-  color:#f6ce84;
-
-  font-size:39px;
-
-  line-height:1;
-
+.brand-crown{
+  font-size:27px;
+  color:#f7d38d;
   text-shadow:
-    0 0 7px #ffe0a0,
-    0 0 20px #cf812f;
+    0 0 8px #f5c76e,
+    0 0 25px #b16d2e;
 }
 
 .brand h1{
-  margin:0;
+  margin:2px 0 -1px;
 
   font-family:Cinzel,Georgia,serif;
-
-  font-size:
-    clamp(48px,11vw,92px);
-
+  font-size:clamp(38px,11vw,68px);
   font-weight:500;
+  letter-spacing:7px;
+  line-height:.95;
 
-  letter-spacing:
-    clamp(5px,1.5vw,13px);
-
-  line-height:.9;
-
-  background:
-    linear-gradient(
-      180deg,
-      #fff7d8 0%,
-      #e9b566 25%,
-      #fff0bd 45%,
-      #b96f2d 72%,
-      #ffe3a0 100%
-    );
+  background:linear-gradient(
+    180deg,
+    #fff2c9 0%,
+    #e6b66a 30%,
+    #fff0c1 53%,
+    #a46729 100%
+  );
 
   -webkit-background-clip:text;
   background-clip:text;
   color:transparent;
 
-  filter:
-    drop-shadow(0 5px 2px #000)
-    drop-shadow(0 0 13px rgba(255,190,85,.25));
+  filter:drop-shadow(0 4px 2px #000);
 }
 
 .brand h2{
-  margin:3px 0 0;
+  margin:0;
 
   font-family:Cinzel,Georgia,serif;
+  font-size:20px;
+  letter-spacing:11px;
+  padding-left:11px;
 
-  font-size:
-    clamp(25px,5vw,42px);
-
-  font-weight:500;
-
-  letter-spacing:
-    clamp(8px,2vw,16px);
-
-  padding-left:
-    clamp(8px,2vw,16px);
-
-  color:#f3d09a;
-
-  text-shadow:
-    0 3px 4px #000,
-    0 0 10px rgba(245,181,92,.25);
+  color:#f4d39b;
+  text-shadow:0 2px 4px #000;
 }
 
-.tagline{
-  margin-top:11px;
-
-  font-size:9px;
-
-  letter-spacing:5px;
-
-  color:#c39b66;
+.brand-sub{
+  margin-top:7px;
+  font-size:8px;
+  letter-spacing:4px;
+  color:#bf9561;
 }
 
 /* =========================================================
-   HEADER CARDS
+   BONUS
 ========================================================= */
 
-.quick{
+.bonus{
   display:grid;
   grid-template-columns:1fr 1fr;
-  gap:9px;
-
-  margin-bottom:12px;
+  gap:8px;
+  margin-bottom:10px;
 }
 
-.quick-card{
-  min-height:61px;
+.info-card{
+  min-height:55px;
+  padding:8px 10px;
 
   display:flex;
   align-items:center;
-  gap:10px;
+  gap:9px;
 
-  padding:9px 12px;
+  border:1px solid #704a27;
+  border-radius:15px;
 
-  border:1px solid #795027;
-  border-radius:18px;
-
-  background:
-    linear-gradient(
-      145deg,
-      #26150a,
-      #090504 65%
-    );
+  background:linear-gradient(145deg,#211208,#0c0604);
 
   box-shadow:
     inset 0 1px #fff2,
-    0 7px 20px #000a;
+    0 6px 18px #0008;
 }
 
-.quick-icon{
-  width:40px;
-  height:40px;
-
+.info-icon{
+  width:34px;
+  height:34px;
   flex:none;
 
   display:grid;
   place-items:center;
 
   border-radius:50%;
+  border:1px solid #a77740;
 
-  font-size:22px;
+  background:radial-gradient(circle,#70431f,#1b0d07);
 
-  border:1px solid #a9763b;
-
-  background:
-    radial-gradient(circle,#5d3517,#110804 72%);
-
-  box-shadow:
-    0 0 12px rgba(215,143,52,.18);
+  box-shadow:0 0 10px #c7893c33;
 }
 
-.quick-label{
-  font-size:8px;
+.info-label{
+  font-size:7px;
   letter-spacing:1.5px;
-  color:#a98b64;
+  color:#a68a63;
 }
 
-.quick-value{
+.info-value{
   margin-top:2px;
-
-  font-family:"Cormorant Garamond",serif;
-
-  font-size:18px;
-
-  color:#f3d29b;
+  font:500 15px "Cormorant Garamond",serif;
+  color:#f5d9a8;
 }
 
 /* =========================================================
-   MACHINE
+   CABINET
 ========================================================= */
 
-.machine{
+.cabinet{
   position:relative;
+  margin-top:3px;
+  padding:9px;
 
-  margin-top:7px;
-
-  padding:12px;
-
-  border-radius:38px;
+  border-radius:35px;
 
   background:
     linear-gradient(
-      135deg,
-      #f1c275 0%,
-      #9b642c 3%,
-      #3b2110 6%,
-      #0d0704 11%,
-      #050302 48%,
-      #160b06 87%,
-      #7d4d22 96%,
-      #e4ae5f 100%
+      145deg,
+      #e2af65 0%,
+      #71461f 5%,
+      #1c0f08 10%,
+      #080504 50%,
+      #513019 91%,
+      #d09a51 100%
     );
 
-  border:1px solid #ffe0a0;
-
   box-shadow:
-    0 0 0 2px #3b2110,
-    0 0 0 4px #9c662f,
-    0 0 0 5px #1a0c06,
-    0 22px 55px #000f,
-    inset 0 2px 3px #fff9,
-    inset 0 -12px 20px #000;
+    0 0 0 1px #f7d48f,
+    0 0 0 3px #3c2413,
+    0 0 0 5px #8e5b2c,
+    0 18px 45px #000d,
+    inset 0 2px 3px #fff7,
+    inset 0 -5px 10px #000;
+
+  transform:perspective(1100px) rotateX(.5deg);
 }
 
-.machine:before{
+.cabinet:before{
   content:"";
-
   position:absolute;
-
-  left:8%;
-  right:8%;
+  left:6%;
+  right:6%;
   top:0;
+  height:4px;
 
-  height:7px;
+  border-radius:100%;
 
-  border-radius:50%;
+  background:linear-gradient(
+    90deg,
+    transparent,
+    #ffe6a4,
+    #fff,
+    #ffe6a4,
+    transparent
+  );
 
-  background:
-    linear-gradient(
-      90deg,
-      transparent,
-      #fff0bd 20%,
-      white 50%,
-      #fff0bd 80%,
-      transparent
-    );
-
-  filter:blur(.7px);
-
-  opacity:.9;
+  filter:blur(.5px);
 }
 
-.machine-inner{
+.cabinet-inner{
   position:relative;
 
-  padding:
-    18px
-    15px
-    15px;
-
-  border-radius:30px;
+  border-radius:27px;
+  padding:14px 11px 12px;
 
   background:
-    radial-gradient(
-      ellipse at 50% 0%,
-      rgba(140,76,24,.32),
-      transparent 30%
-    ),
-    linear-gradient(
-      160deg,
-      #241208,
-      #080403 42%,
-      #130a06
-    );
+    radial-gradient(circle at 50% 0%,#2d170a,transparent 30%),
+    linear-gradient(160deg,#1b0e08,#090504 42%,#160b07);
 
-  border:1px solid #7b5129;
+  border:1px solid #795027;
 
   box-shadow:
-    inset 0 0 0 2px #0a0503,
-    inset 0 0 50px #000,
-    inset 0 2px #fff2;
+    inset 0 0 0 2px #120804,
+    inset 0 0 40px #000,
+    inset 0 2px #f8d29422;
 }
 
-/* machine crown */
-
-.machine-top{
+.cabinet-label{
   text-align:center;
 
-  height:32px;
+  font-family:Cinzel,serif;
+  font-size:8px;
+  letter-spacing:2.8px;
+  color:#d7b174;
 
-  position:relative;
+  margin:0 0 10px;
 }
 
-.machine-top:before{
-  content:"";
-
-  position:absolute;
-
-  left:16%;
-  right:16%;
-  top:15px;
-
-  height:2px;
-
-  background:
-    linear-gradient(
-      90deg,
-      transparent,
-      #d89b4c,
-      #fff0b5,
-      #d89b4c,
-      transparent
-    );
-
-  box-shadow:0 0 8px #e3a957;
-}
-
-.machine-crown{
-  position:relative;
-  z-index:2;
-
-  display:inline-grid;
-  place-items:center;
-
-  width:54px;
-  height:34px;
-
-  font-size:26px;
-
-  color:#ffe09a;
-
-  background:#160b06;
-
-  border:1px solid #a97237;
-
-  border-radius:50%;
-
-  box-shadow:
-    0 0 0 3px #080403,
-    0 0 12px rgba(241,171,71,.25);
+.cabinet-label:before,
+.cabinet-label:after{
+  content:"✦";
+  color:#b47a38;
+  padding:0 8px;
 }
 
 /* =========================================================
    REELS
 ========================================================= */
 
-.reel-window{
+.reel-frame{
   position:relative;
-
-  padding:9px;
-
-  border-radius:23px;
+  padding:10px;
+  border-radius:20px;
 
   background:
     linear-gradient(
-      135deg,
-      #e5b15f,
-      #71451f 5%,
-      #160b06 10%,
+      145deg,
+      #d7a45d,
+      #5d381b 7%,
+      #120a06 14%,
       #050302 50%,
-      #70441f 90%,
-      #dda858
+      #5d381b 86%,
+      #d7a45d
     );
 
-  border:1px solid #f4ca80;
-
   box-shadow:
-    inset 0 2px 3px #fff8,
+    0 0 0 1px #f0c57e,
+    0 0 0 3px #28170c,
+    inset 0 2px 3px #fff5,
     inset 0 -8px 15px #000,
-    0 10px 30px #000d;
-}
-
-.reel-window:before{
-  content:"";
-
-  position:absolute;
-
-  inset:3px;
-
-  border-radius:20px;
-
-  border:1px solid rgba(255,221,160,.28);
-
-  pointer-events:none;
+    0 10px 25px #000d;
 }
 
 .reel-glass{
   position:relative;
-
   overflow:hidden;
 
-  padding:5px;
-
-  border-radius:15px;
+  border-radius:13px;
 
   background:
-    linear-gradient(
-      90deg,
-      #030201,
-      #170b06 20%,
-      #080403 50%,
-      #170b06 80%,
-      #030201
-    );
+    linear-gradient(90deg,#050302,#140b06 50%,#050302);
 
-  border:1px solid #9d6b34;
+  border:1px solid #a8753b;
 
   box-shadow:
-    inset 0 0 30px #000,
-    inset 0 1px #fff5;
+    inset 0 0 25px #000,
+    inset 0 1px #fff5,
+    0 0 15px #000;
+
+  padding:5px;
 }
 
 .reel-glass:before{
   content:"";
-
   position:absolute;
+  z-index:50;
 
-  z-index:20;
+  left:-45%;
+  top:-80%;
 
-  top:-60%;
-  left:-35%;
+  width:30%;
+  height:240%;
 
-  width:22%;
-  height:220%;
+  transform:rotate(23deg);
 
-  transform:rotate(25deg);
-
-  background:
-    linear-gradient(
-      90deg,
-      transparent,
-      rgba(255,255,255,.18),
-      transparent
-    );
-
-  animation:
-    glassSweep 4.5s linear infinite;
+  background:linear-gradient(
+    90deg,
+    transparent,
+    rgba(255,255,255,.14),
+    transparent
+  );
 
   pointer-events:none;
 }
 
+.reel-glass.flash:before{
+  animation:glassSweep .55s ease-out;
+}
+
 @keyframes glassSweep{
-  0%{left:-40%}
-  100%{left:130%}
+  from{left:-45%}
+  to{left:130%}
 }
 
 .reels{
-  position:relative;
-
   display:grid;
+  grid-template-columns:repeat(5,minmax(0,1fr));
+  gap:4px;
 
-  grid-template-columns:
-    repeat(5,minmax(0,1fr));
-
-  gap:5px;
-
-  perspective:1400px;
+  perspective:1100px;
 }
 
 .reel{
+  position:relative;
+
   display:grid;
-
-  grid-template-rows:
-    repeat(3,1fr);
-
-  gap:5px;
+  grid-template-rows:repeat(3,1fr);
+  gap:4px;
 
   min-width:0;
-
   transform-style:preserve-3d;
 }
 
 .reel:nth-child(1){
-  transform:
-    perspective(900px)
-    rotateY(4deg);
+  transform:perspective(900px) rotateY(3deg);
 }
 
 .reel:nth-child(5){
-  transform:
-    perspective(900px)
-    rotateY(-4deg);
+  transform:perspective(900px) rotateY(-3deg);
 }
-
-/* reel divider */
-
-.reel:not(:last-child):after{
-  content:"";
-
-  position:absolute;
-
-  top:0;
-  bottom:0;
-
-  width:2px;
-
-  background:
-    linear-gradient(
-      180deg,
-      transparent,
-      #e2ad60 20%,
-      #fff0bd 50%,
-      #8c5728 80%,
-      transparent
-    );
-
-  opacity:.5;
-}
-
-/* =========================================================
-   TILES
-========================================================= */
 
 .tile{
   position:relative;
 
-  aspect-ratio:
-    1 / .92;
-
+  aspect-ratio:1/.92;
   min-width:0;
 
   display:grid;
@@ -878,211 +572,185 @@ button:disabled{
 
   overflow:hidden;
 
-  border-radius:9px;
+  border-radius:8px;
 
   background:
     radial-gradient(
       ellipse at 35% 20%,
-      rgba(255,236,190,.12),
-      transparent 35%
+      rgba(255,241,197,.13),
+      transparent 38%
     ),
-    linear-gradient(
-      145deg,
-      #25140a,
-      #070403 58%,
-      #180b06
-    );
+    linear-gradient(145deg,#24150b,#080504 65%,#170b06);
 
-  border:1px solid #89592c;
+  border:1px solid #8d5c2d;
 
   box-shadow:
     inset 0 1px #fff4,
-    inset 0 -8px 14px #000,
-    inset 0 0 14px #000,
-    0 3px 0 #321c0d,
-    0 5px 9px #000d;
+    inset 0 -7px 12px #000,
+    inset 0 0 12px #000,
+    0 3px 0 #3b2211,
+    0 4px 8px #000c;
 }
 
 .tile:before{
   content:"";
-
   position:absolute;
   inset:2px;
 
-  border-radius:7px;
+  border-radius:6px;
 
-  border:1px solid rgba(255,226,165,.10);
+  border:1px solid rgba(255,215,151,.09);
 }
 
 .tile:after{
   content:"";
-
   position:absolute;
 
-  left:-60%;
   top:-20%;
+  left:-50%;
 
-  width:45%;
-  height:160%;
+  width:60%;
+  height:150%;
 
-  transform:rotate(28deg);
+  transform:rotate(25deg);
 
-  background:
-    linear-gradient(
-      90deg,
-      transparent,
-      rgba(255,255,255,.09),
-      transparent
-    );
-
-  pointer-events:none;
+  background:linear-gradient(
+    90deg,
+    transparent,
+    rgba(255,224,170,.07),
+    transparent
+  );
 }
-
-/* =========================================================
-   SYMBOLS
-========================================================= */
 
 .symbol{
   position:relative;
-  z-index:4;
+  z-index:5;
 
-  display:grid;
-  place-items:center;
+  font-family:Cinzel,Georgia,serif;
+  font-weight:600;
 
-  font-family:Cinzel,serif;
-  font-weight:700;
+  font-size:clamp(28px,7vw,54px);
 
-  font-size:
-    clamp(28px,6.7vw,67px);
-
-  color:#f8d28e;
-
-  transform:translateZ(25px);
+  color:#f8d18d;
 
   filter:
-    drop-shadow(0 4px 2px #000)
-    drop-shadow(0 0 8px rgba(255,180,70,.35));
+    drop-shadow(0 3px 2px #000)
+    drop-shadow(0 0 7px rgba(238,172,76,.28));
 
   user-select:none;
 }
 
-.kp-symbol{
-  width:76%;
-  height:76%;
-
-  border-radius:50%;
-
-  font-family:Cinzel,serif;
-
-  font-size:
-    clamp(19px,4.5vw,43px);
-
-  color:#f5d8a0;
-
-  border:2px solid #d49a4d;
-
-  background:
-    radial-gradient(
-      circle at 40% 25%,
-      #5b3517,
-      #170a05 62%,
-      #050302
-    );
-
-  box-shadow:
-    inset 0 1px #fff6,
-    inset 0 -8px 12px #000,
-    0 0 0 2px #281308,
-    0 0 12px rgba(231,165,73,.25);
+.symbol.kp{
+  font-size:clamp(22px,6vw,44px);
+  color:#f6d69c;
+  text-shadow:0 0 10px #c28a45;
 }
 
-.crown-symbol{
-  font-size:
-    clamp(30px,7vw,62px);
-
-  color:#f6c76f;
-
-  text-shadow:
-    0 2px #5a2d0c,
-    0 0 5px #fff1bd,
-    0 0 16px #e69a39;
-}
-
-.bell-symbol{
-  font-size:
-    clamp(31px,7vw,62px);
-
-  color:#eeb45b;
-
-  text-shadow:
-    0 2px 2px #512609,
-    0 0 9px #d9882e,
-    0 0 15px rgba(236,159,57,.5);
-}
-
-.cherry-symbol{
-  font-size:
-    clamp(31px,7vw,62px);
-
-  filter:
-    drop-shadow(0 4px 2px #000)
-    drop-shadow(0 0 10px #e92768);
-}
-
-.diamond-symbol{
-  font-size:
-    clamp(32px,7vw,65px);
-
-  color:#ff75ac;
-
-  text-shadow:
-    0 0 4px #fff,
-    0 0 10px #ff4b94,
-    0 0 23px #e52670;
-}
-
-.heart-symbol{
-  font-size:
-    clamp(32px,7vw,64px);
-
-  color:#ff6ba7;
-
-  text-shadow:
-    0 0 3px #fff,
-    0 0 10px #ff4d91,
-    0 0 22px #b51b5c;
-}
-
-.seven-symbol{
-  font-family:Cinzel,serif;
-
-  font-style:italic;
-
-  font-size:
-    clamp(42px,9vw,82px);
-
+.symbol.seven{
   font-weight:700;
+  font-style:italic;
+  font-size:clamp(37px,9vw,62px);
 
-  background:
-    linear-gradient(
-      180deg,
-      #ffd1e4,
-      #ff4f96 25%,
-      #db1764 55%,
-      #771139 100%
-    );
+  background:linear-gradient(
+    180deg,
+    #ffb5d4,
+    #d82d6d 42%,
+    #7b123c
+  );
 
   -webkit-background-clip:text;
   background-clip:text;
-
   color:transparent;
 
-  -webkit-text-stroke:
-    1px #ffe0ed;
+  -webkit-text-stroke:1px #ffd1e3;
 
   filter:
-    drop-shadow(0 4px 2px #26030e)
-    drop-shadow(0 0 13px #ff3c89);
+    drop-shadow(0 4px 2px #18030b)
+    drop-shadow(0 0 12px #e93d81);
+}
+
+.symbol.diamond{
+  color:#ff79aa;
+  text-shadow:
+    0 0 4px #fff,
+    0 0 15px #ff3f88,
+    0 0 25px #d9276e;
+}
+
+.symbol.heart{
+  color:#ff70a8;
+  text-shadow:
+    0 0 4px #fff,
+    0 0 15px #ff3f88,
+    0 0 25px #b51e5b;
+}
+
+.symbol.crown{
+  color:#f5c36d;
+  font-size:clamp(30px,7vw,49px);
+  text-shadow:
+    0 2px #512b0d,
+    0 0 12px #d68d2e;
+}
+
+.symbol.bell{
+  color:#f3bd68;
+  text-shadow:
+    0 2px 1px #5a300d,
+    0 0 10px #d89236;
+}
+
+.symbol.cherry{
+  color:#ed426f;
+  text-shadow:
+    0 0 8px #ff376e,
+    0 3px 2px #26050e;
+}
+
+/* =========================================================
+   REALISTIC REEL ANIMATION
+========================================================= */
+
+.reel.spinning .tile{
+  animation:
+    reelMove .115s linear infinite;
+}
+
+.reel.spinning .symbol{
+  filter:blur(3px);
+  opacity:.72;
+}
+
+.reel.spinning{
+  filter:brightness(1.08);
+}
+
+@keyframes reelMove{
+  0%{
+    transform:translateY(-8px) rotateX(7deg);
+  }
+  50%{
+    transform:translateY(8px) rotateX(-7deg);
+  }
+  100%{
+    transform:translateY(-8px) rotateX(7deg);
+  }
+}
+
+.reel.stopped .tile{
+  animation:reelStop .28s cubic-bezier(.2,.9,.25,1);
+}
+
+@keyframes reelStop{
+  0%{
+    transform:translateY(-18px) scaleY(.96);
+  }
+  60%{
+    transform:translateY(5px) scaleY(1.02);
+  }
+  100%{
+    transform:translateY(0) scaleY(1);
+  }
 }
 
 /* =========================================================
@@ -1091,11 +759,10 @@ button:disabled{
 
 .payline{
   position:absolute;
+  z-index:60;
 
-  z-index:25;
-
-  left:4px;
-  right:4px;
+  left:3px;
+  right:3px;
   top:50%;
 
   height:2px;
@@ -1106,108 +773,59 @@ button:disabled{
     linear-gradient(
       90deg,
       transparent,
-      #f6c773 6%,
-      #fff0bc 50%,
-      #f6c773 94%,
+      #ffcf7a 8%,
+      #ffe6ae 50%,
+      #ffcf7a 92%,
       transparent
     );
 
   box-shadow:
     0 0 4px #fff,
-    0 0 13px #ed9d3d;
+    0 0 12px #f2a34c;
 
-  opacity:.5;
-
+  opacity:.42;
   pointer-events:none;
 }
 
 /* =========================================================
-   SPINNING
-========================================================= */
-
-.reels.spinning .tile{
-  animation:
-    reelShake .11s linear infinite;
-}
-
-.reels.spinning .symbol{
-  filter:blur(3px);
-  animation:
-    symbolRoll .09s linear infinite;
-}
-
-@keyframes reelShake{
-  0%{
-    transform:translateY(-5px);
-  }
-
-  50%{
-    transform:translateY(5px);
-  }
-
-  100%{
-    transform:translateY(-5px);
-  }
-}
-
-@keyframes symbolRoll{
-  0%{
-    transform:translateY(-10px) scale(1.03);
-  }
-
-  50%{
-    transform:translateY(10px) scale(.96);
-  }
-
-  100%{
-    transform:translateY(-10px) scale(1.03);
-  }
-}
-
-/* =========================================================
-   WIN
+   WIN EFFECT
 ========================================================= */
 
 .tile.win{
-  z-index:40;
+  z-index:80;
 
-  border-color:#ffe8af;
+  border-color:#ffe6a5;
 
   background:
     radial-gradient(
       circle,
-      rgba(255,213,125,.36),
-      transparent 63%
+      rgba(255,216,143,.35),
+      transparent 60%
     ),
-    linear-gradient(
-      145deg,
-      #48250f,
-      #120704
-    );
+    linear-gradient(145deg,#42230f,#120804);
 
   box-shadow:
-    inset 0 0 25px rgba(255,187,73,.8),
-    0 0 0 2px #f8cf7d,
-    0 0 17px #ffbd5b,
-    0 0 30px #e8347f,
-    0 8px 18px #000;
+    inset 0 0 20px #f8bf67aa,
+    0 0 0 2px #f9d28a,
+    0 0 16px #ffbb57,
+    0 0 32px #e34d89,
+    0 7px 16px #000;
 
   animation:
-    winningTile .6s ease-in-out infinite alternate;
+    winningTile .55s ease-in-out infinite alternate;
 }
 
 .tile.win .symbol{
   animation:
-    winningSymbol .6s ease-in-out infinite alternate;
+    winningSymbol .55s ease-in-out infinite alternate;
 }
 
 @keyframes winningTile{
   from{
-    transform:translateZ(10px) scale(1);
+    transform:translateZ(8px) scale(1);
   }
-
   to{
-    transform:translateZ(45px) scale(1.06);
+    transform:translateZ(30px) scale(1.055);
   }
 }
 
@@ -1217,373 +835,305 @@ button:disabled{
       drop-shadow(0 3px 2px #000)
       drop-shadow(0 0 8px #ffc65e);
   }
-
   to{
     filter:
       drop-shadow(0 3px 2px #000)
-      drop-shadow(0 0 12px white)
-      drop-shadow(0 0 25px #ff5799);
+      drop-shadow(0 0 14px #fff)
+      drop-shadow(0 0 26px #ff5b9b);
   }
 }
 
 /* =========================================================
-   CONTROL BAR
+   CONTROLS
 ========================================================= */
 
 .machine-controls{
-  display:grid;
-
-  grid-template-columns:
-    1.05fr 1fr 1.05fr;
-
-  gap:3px;
-
   margin-top:10px;
 
-  border-radius:15px;
-
-  overflow:hidden;
-
-  border:1px solid #885b2d;
-
-  background:#080403;
-
-  box-shadow:
-    0 0 0 2px #261308,
-    inset 0 1px #fff3;
+  display:grid;
+  grid-template-columns:1fr 1.05fr 1fr;
+  gap:4px;
 }
 
 .control{
-  min-height:61px;
+  min-height:58px;
 
   display:flex;
   align-items:center;
   justify-content:center;
+  gap:7px;
 
-  gap:8px;
+  color:#e9c78e;
 
-  color:#e6c28b;
+  background:linear-gradient(145deg,#241409,#0b0604);
 
-  background:
-    linear-gradient(
-      145deg,
-      #1e1008,
-      #080403
-    );
+  border:1px solid #704a27;
 
-  border-right:1px solid #6c4725;
+  box-shadow:
+    inset 0 1px #fff2,
+    0 4px 8px #0009;
+
+  font-size:10px;
+}
+
+.control:first-child{
+  border-radius:13px 4px 4px 13px;
 }
 
 .control:last-child{
-  border-right:0;
+  border-radius:4px 13px 13px 4px;
 }
 
-.arrow{
-  font-size:30px;
-  color:#e5af61;
-
-  text-shadow:
-    0 0 7px #bd742b;
-}
-
-.control small{
-  font-size:7px;
-  letter-spacing:1.7px;
-  color:#9b7c57;
-}
-
-.control b{
-  font-family:"Cormorant Garamond",serif;
-  font-size:21px;
-  font-weight:600;
-  color:#f1ce91;
+.control .arrow{
+  font-size:18px;
+  color:#d4a664;
 }
 
 .control-main{
+  min-height:58px;
   text-align:center;
 }
 
+.control-label{
+  font-size:7px;
+  letter-spacing:2px;
+  color:#9c815d;
+}
+
+.control-value{
+  margin-top:3px;
+  font:600 21px "Cormorant Garamond",serif;
+  color:#f6d49a;
+}
+
 /* =========================================================
-   SPIN CONTROLS
+   SPIN
 ========================================================= */
 
 .spin-area{
   display:grid;
-
-  grid-template-columns:
-    105px minmax(0,1fr) 105px;
+  grid-template-columns:82px minmax(0,1fr) 82px;
+  gap:9px;
 
   align-items:center;
-
-  gap:10px;
-
-  margin-top:14px;
+  margin-top:11px;
 }
 
-.round{
-  min-height:86px;
+.round-button{
+  min-height:76px;
 
-  border-radius:27px;
+  border-radius:22px;
 
-  color:#f1cc91;
-
-  border:1px solid #a16c35;
+  color:#e7c38a;
 
   background:
-    radial-gradient(
-      circle at 50% 18%,
-      #3c220f,
-      #0c0604 68%
-    );
+    radial-gradient(circle at 50% 20%,#3a210e,#110804 65%);
+
+  border:1px solid #986a37;
 
   box-shadow:
-    inset 0 2px #fff2,
-    inset 0 -9px 14px #000,
-    0 6px 15px #000d,
-    0 0 0 2px #251207;
+    inset 0 2px 2px #fff2,
+    inset 0 -7px 10px #000,
+    0 5px 12px #000c;
 
   font-family:Cinzel,serif;
-
-  font-size:10px;
-
+  font-size:9px;
   letter-spacing:1px;
+
+  transition:.18s;
 }
 
-.round-icon{
+.round-button .icon{
   display:block;
-
+  font-size:27px;
   margin-bottom:5px;
-
-  font-size:30px;
-
-  color:#f4bd65;
-
-  text-shadow:
-    0 0 10px #e69a3c;
+  color:#f0bf68;
+  text-shadow:0 0 10px #db9234;
 }
 
-.round.active{
-  border-color:#f08ab0;
-
-  color:#ffb6d1;
+.round-button.active{
+  color:#ffb1cf;
+  border-color:#ed87ad;
 
   box-shadow:
-    inset 0 0 18px rgba(224,54,113,.25),
-    0 0 18px rgba(229,72,130,.25);
+    inset 0 0 15px #d83e7440,
+    0 0 16px #db528233;
 }
 
 .spin-button{
   position:relative;
 
-  min-height:94px;
+  min-height:82px;
 
-  border-radius:32px;
-
-  overflow:hidden;
+  border-radius:27px;
 
   font-family:Cinzel,Georgia,serif;
+  font-size:clamp(25px,7vw,42px);
+  letter-spacing:6px;
 
-  font-size:
-    clamp(28px,7vw,50px);
-
-  letter-spacing:
-    clamp(4px,1vw,9px);
-
-  color:#241004;
+  color:#1a0c04;
 
   background:
     linear-gradient(
       180deg,
-      #fff4ce 0%,
-      #ffd98e 18%,
-      #e5a956 42%,
-      #fff0ba 55%,
-      #bd7932 80%,
-      #794517 100%
+      #fff0c3 0%,
+      #e9bb72 25%,
+      #fff0bd 45%,
+      #c88d45 75%,
+      #8e5b29 100%
     );
 
-  border:2px solid #ffe6aa;
+  border:2px solid #ffe2a0;
 
   box-shadow:
-    inset 0 2px #fff,
-    inset 0 -9px 12px #774114aa,
-    0 0 0 3px #351c0d,
-    0 0 0 5px #a66e32,
-    0 8px 0 #633a19,
-    0 13px 25px #000e,
-    0 0 30px rgba(239,165,69,.35);
+    inset 0 2px 2px #fff,
+    inset 0 -8px 10px #6b3d16aa,
+    0 0 0 3px #3b2110,
+    0 0 0 5px #9c682e,
+    0 7px 0 #5c3518,
+    0 12px 22px #000d,
+    0 0 25px #e7a94b35;
 
   text-shadow:
-    0 1px #fff8,
-    0 2px 1px #8a5423;
+    0 1px #fff5,
+    0 2px 1px #8d5927;
+
+  overflow:hidden;
+
+  transition:transform .12s;
 }
 
 .spin-button:before{
   content:"";
 
   position:absolute;
+  left:-50%;
+  top:-80%;
 
-  top:-90%;
-  left:-45%;
+  width:35%;
+  height:260%;
 
-  width:27%;
-  height:280%;
+  transform:rotate(25deg);
 
-  transform:rotate(24deg);
+  background:linear-gradient(
+    90deg,
+    transparent,
+    rgba(255,255,255,.65),
+    transparent
+  );
 
-  background:
-    linear-gradient(
-      90deg,
-      transparent,
-      rgba(255,255,255,.7),
-      transparent
-    );
-
-  animation:
-    spinShine 3s linear infinite;
+  animation:spinReflection 3s linear infinite;
 }
 
-@keyframes spinShine{
-  from{
-    left:-50%;
-  }
-
-  to{
-    left:140%;
-  }
+@keyframes spinReflection{
+  from{left:-50%}
+  to{left:135%}
 }
 
 .spin-button:active{
-  transform:translateY(5px);
-
-  box-shadow:
-    inset 0 2px #fff,
-    inset 0 -5px 8px #704016aa,
-    0 0 0 3px #351c0d,
-    0 0 0 5px #a66e32,
-    0 3px 0 #633a19,
-    0 7px 14px #000d;
+  transform:translateY(4px);
 }
 
 .spin-button:disabled{
-  opacity:.7;
+  opacity:.62;
 }
 
 .spin-crown{
   display:block;
-
-  margin-bottom:-3px;
-
-  font-size:17px;
-
+  font-size:16px;
   letter-spacing:0;
-
-  color:#59300f;
+  margin-bottom:-2px;
+  color:#4b2911;
 }
 
 /* =========================================================
-   BET PANEL
+   BETS
 ========================================================= */
 
 .bet-panel{
-  margin-top:12px;
+  margin-top:11px;
 
-  padding:12px;
-
+  border:1px solid #634321;
   border-radius:16px;
 
-  border:1px solid #664320;
+  padding:11px;
 
-  background:
-    linear-gradient(
-      145deg,
-      #1b0d07,
-      #070403
-    );
+  background:linear-gradient(145deg,#1b0e08,#090504);
 
   box-shadow:
-    inset 0 1px #fff2,
-    0 6px 18px #0009;
+    inset 0 1px #fff1,
+    0 6px 18px #0008;
 }
 
-.bet-head{
+.bet-title{
   display:flex;
   justify-content:space-between;
 
   margin-bottom:8px;
 
   font-size:8px;
-
-  letter-spacing:1.6px;
-
-  color:#a98a63;
+  letter-spacing:1.5px;
+  color:#a98b65;
 }
 
 .bet-buttons{
   display:grid;
-
-  grid-template-columns:
-    repeat(4,1fr);
-
+  grid-template-columns:repeat(4,1fr);
   gap:6px;
 }
 
 .bet-button{
-  min-height:43px;
+  min-height:41px;
 
-  border-radius:10px;
+  border-radius:9px;
 
-  color:#d4b687;
+  color:#d7bd91;
 
-  background:
-    linear-gradient(
-      145deg,
-      #211108,
-      #0b0503
-    );
+  background:linear-gradient(145deg,#1c1009,#0c0604);
 
-  border:1px solid #674421;
+  border:1px solid #5f3f22;
 
-  box-shadow:
-    inset 0 1px #fff2;
+  font-size:12px;
+
+  box-shadow:inset 0 1px #fff1;
+
+  transition:.15s;
 }
 
 .bet-button.active{
-  color:#241004;
-
-  border-color:#ffe4a8;
+  color:#211006;
 
   background:
     linear-gradient(
       180deg,
-      #fff0c1,
-      #e7b66c 50%,
-      #b77939
+      #fff0c4,
+      #e5b873 48%,
+      #b97e3e
     );
+
+  border-color:#ffe4a8;
 
   box-shadow:
     inset 0 2px #fff,
-    0 0 15px rgba(227,164,79,.3);
+    0 0 13px #e5ae5d33;
 }
 
 .max-button{
   width:100%;
+  margin-top:7px;
 
   min-height:38px;
 
-  margin-top:7px;
+  border-radius:9px;
 
-  border-radius:10px;
+  color:#e6c28b;
 
-  color:#e6c18a;
+  background:#0e0704;
 
-  background:#0c0604;
-
-  border:1px solid #795029;
+  border:1px solid #79512b;
 
   font-size:9px;
-
-  letter-spacing:1.5px;
+  letter-spacing:1.4px;
 }
 
 /* =========================================================
@@ -1591,7 +1141,7 @@ button:disabled{
 ========================================================= */
 
 .status{
-  min-height:27px;
+  min-height:26px;
 
   display:flex;
   align-items:center;
@@ -1599,24 +1149,138 @@ button:disabled{
 
   text-align:center;
 
-  padding-top:7px;
+  color:#db93ad;
 
   font-size:9px;
+  letter-spacing:1.5px;
 
-  letter-spacing:1.4px;
-
-  color:#ce8fa6;
+  padding:8px 2px 2px;
 }
 
 .status.win{
-  color:#ffe09c;
-
-  text-shadow:
-    0 0 12px #df9b40;
+  color:#ffd993;
+  text-shadow:0 0 10px #d48c36;
 }
 
 .status.error{
-  color:#ff769b;
+  color:#ff829f;
+}
+
+/* =========================================================
+   WIN OVERLAY
+========================================================= */
+
+.win-overlay{
+  position:fixed;
+  z-index:300;
+
+  inset:0;
+
+  display:flex;
+  align-items:center;
+  justify-content:center;
+
+  padding:20px;
+
+  background:rgba(3,1,1,.78);
+
+  backdrop-filter:blur(7px);
+
+  opacity:0;
+  pointer-events:none;
+
+  transition:opacity .2s;
+}
+
+.win-overlay.show{
+  opacity:1;
+  pointer-events:auto;
+}
+
+.win-box{
+  position:relative;
+
+  width:min(92vw,430px);
+
+  padding:30px 22px;
+
+  text-align:center;
+
+  border-radius:25px;
+
+  border:1px solid #d9a65d;
+
+  background:
+    radial-gradient(circle at 50% 0%,#4a260f,transparent 45%),
+    linear-gradient(145deg,#1e0e07,#080403);
+
+  box-shadow:
+    0 0 0 2px #39200f,
+    0 0 50px rgba(228,94,141,.25),
+    0 25px 70px #000;
+}
+
+.win-crown{
+  font-size:34px;
+  color:#f5d08a;
+  text-shadow:0 0 20px #d88d34;
+}
+
+.win-title{
+  margin-top:5px;
+
+  font-family:Cinzel,serif;
+  font-size:25px;
+  letter-spacing:4px;
+
+  color:#f8d89d;
+}
+
+.win-amount{
+  margin-top:7px;
+
+  font:700 39px "Cormorant Garamond",serif;
+
+  background:linear-gradient(
+    180deg,
+    #fff3c9,
+    #e8b86d,
+    #a86b2b
+  );
+
+  -webkit-background-clip:text;
+  background-clip:text;
+  color:transparent;
+}
+
+.win-copy{
+  margin-top:5px;
+  font-size:8px;
+  letter-spacing:2px;
+  color:#aa8b63;
+}
+
+.win-close{
+  margin-top:19px;
+
+  min-width:140px;
+  min-height:40px;
+
+  border-radius:12px;
+
+  color:#241106;
+
+  background:linear-gradient(
+    180deg,
+    #fff0c1,
+    #dba85e
+  );
+
+  border:1px solid #ffe0a0;
+
+  font-family:Cinzel,serif;
+  font-size:10px;
+  letter-spacing:1.5px;
 }
 
 /* =========================================================
@@ -1625,80 +1289,46 @@ button:disabled{
 
 .lower-cards{
   display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:8px;
 
-  grid-template-columns:
-    repeat(3,1fr);
-
-  gap:9px;
-
-  margin-top:14px;
+  margin-top:13px;
 }
 
 .lower-card{
-  min-height:77px;
+  min-height:70px;
+  padding:11px 9px;
 
-  display:flex;
-  align-items:center;
-  gap:10px;
+  border:1px solid #654321;
+  border-radius:14px;
 
-  padding:10px;
-
-  border:1px solid #754c27;
-
-  border-radius:15px;
-
-  background:
-    linear-gradient(
-      145deg,
-      #1e1008,
-      #080403
-    );
+  background:linear-gradient(145deg,#1d1009,#090504);
 
   box-shadow:
-    inset 0 1px #fff2,
-    0 7px 18px #0009;
+    inset 0 1px #fff1,
+    0 6px 18px #0008;
 }
 
 .lower-icon{
-  width:42px;
-  height:42px;
-
-  flex:none;
-
-  display:grid;
-  place-items:center;
-
-  border-radius:50%;
-
-  font-size:22px;
-
-  border:1px solid #9a6833;
-
-  background:
-    radial-gradient(circle,#4b2a12,#0b0503);
-
-  color:#f2c77d;
-
-  text-shadow:
-    0 0 9px #d58d37;
+  font-size:19px;
+  color:#e5b86e;
 }
 
 .lower-title{
+  margin-top:5px;
+
   font-family:Cinzel,serif;
-
-  font-size:10px;
-
-  letter-spacing:.7px;
-
-  color:#f0d09a;
+  font-size:9px;
+  letter-spacing:.8px;
+  color:#e9c995;
 }
 
 .lower-copy{
   margin-top:3px;
 
-  font-size:7px;
-
-  color:#967b58;
+  font-size:6.5px;
+  letter-spacing:.6px;
+  color:#927a5b;
 }
 
 /* =========================================================
@@ -1706,24 +1336,18 @@ button:disabled{
 ========================================================= */
 
 .leaderboard{
-  margin-top:14px;
+  margin-top:13px;
+
+  border:1px solid #654321;
+  border-radius:16px;
 
   padding:13px;
 
-  border:1px solid #754c27;
-
-  border-radius:17px;
-
-  background:
-    linear-gradient(
-      145deg,
-      #1c0f08,
-      #070403
-    );
+  background:linear-gradient(145deg,#1c1009,#090504);
 
   box-shadow:
-    inset 0 1px #fff2,
-    0 7px 20px #0009;
+    inset 0 1px #fff1,
+    0 6px 20px #0008;
 }
 
 .leader-head{
@@ -1731,86 +1355,68 @@ button:disabled{
   justify-content:space-between;
   align-items:center;
 
-  padding-bottom:9px;
+  padding-bottom:8px;
 
-  border-bottom:1px solid #493019;
+  border-bottom:1px solid #4a301a;
 }
 
 .leader-title{
   font-family:Cinzel,serif;
-
   font-size:13px;
-
   letter-spacing:1px;
-
-  color:#efcf98;
+  color:#e9cb94;
 }
 
 .leader-view{
-  font-size:8px;
-
+  font-size:7px;
   letter-spacing:1px;
-
-  color:#b49367;
+  color:#b08e61;
 }
 
 .player{
   display:grid;
-
-  grid-template-columns:
-    34px minmax(0,1fr) auto;
-
+  grid-template-columns:31px 1fr auto;
   align-items:center;
-
   gap:8px;
 
-  min-height:48px;
+  min-height:43px;
 
-  border-bottom:1px solid rgba(255,255,255,.035);
+  border-bottom:1px solid #ffffff09;
 }
 
 .player:last-child{
   border-bottom:0;
 }
 
-.rank{
-  width:29px;
-  height:29px;
+.player-rank{
+  width:27px;
+  height:27px;
 
   display:grid;
   place-items:center;
 
   border-radius:50%;
 
-  color:#f3cc86;
-
-  background:
-    radial-gradient(circle,#42240f,#0d0604);
-
-  border:1px solid #8b5b2c;
+  color:#f4ce8b;
+  background:#180d07;
+  border:1px solid #704923;
 
   font-family:Cinzel,serif;
   font-size:10px;
 }
 
 .player-name{
-  overflow:hidden;
-
-  white-space:nowrap;
-
-  text-overflow:ellipsis;
-
   font-size:10px;
+  color:#d7bd93;
 
-  color:#d9bf95;
+  overflow:hidden;
+  text-overflow:ellipsis;
+  white-space:nowrap;
 }
 
 .player-balance{
-  font-family:"Cormorant Garamond",serif;
-
-  font-size:15px;
-
-  color:#e9c78b;
+  font:500 13px "Cormorant Garamond",serif;
+  color:#e8c487;
 }
 
 /* =========================================================
@@ -1819,7 +1425,6 @@ button:disabled{
 
 .bottom-nav{
   position:fixed;
-
   z-index:100;
 
   left:0;
@@ -1827,25 +1432,22 @@ button:disabled{
   bottom:0;
 
   display:grid;
-
-  grid-template-columns:
-    repeat(5,1fr);
+  grid-template-columns:repeat(5,1fr);
 
   padding:
-    7px 6px
-    calc(7px + env(safe-area-inset-bottom));
+    8px 5px
+    calc(8px + env(safe-area-inset-bottom));
 
   background:
     linear-gradient(
       180deg,
-      rgba(15,8,5,.96),
-      rgba(3,2,1,.99)
+      rgba(14,8,5,.92),
+      rgba(5,3,2,.99)
     );
 
-  border-top:1px solid #795029;
+  border-top:1px solid #6e4825;
 
-  box-shadow:
-    0 -12px 30px #000d;
+  box-shadow:0 -10px 25px #000b;
 
   backdrop-filter:blur(15px);
 }
@@ -1853,149 +1455,101 @@ button:disabled{
 .nav{
   text-align:center;
 
-  color:#886d4e;
+  color:#917452;
 
   font-size:7px;
+  letter-spacing:1px;
 
-  letter-spacing:1.3px;
+  transition:.15s;
 }
 
 .nav-icon{
   display:block;
 
-  margin-bottom:4px;
+  font-size:20px;
+  margin-bottom:3px;
 
-  font-size:23px;
+  color:#c69a5a;
 
-  color:#bc8b4c;
-
-  text-shadow:
-    0 0 8px #bb7430;
+  text-shadow:0 0 7px #c48439;
 }
 
 .nav.active{
-  color:#f2d29b;
+  color:#f3d092;
 }
 
 .nav.active .nav-icon{
-  color:#ffe1a2;
+  color:#ffe2a2;
 }
 
 /* =========================================================
-   DESKTOP
+   RESPONSIVE
 ========================================================= */
 
-@media(min-width:700px){
+@media(min-width:600px){
 
   .app{
-    padding-left:24px;
-    padding-right:24px;
+    padding-left:20px;
+    padding-right:20px;
   }
 
-  .machine{
-    padding:16px;
-    border-radius:45px;
-  }
-
-  .machine-inner{
-    padding:21px 19px 18px;
-  }
-
-  .reels{
-    gap:7px;
-  }
-
+  .reels,
   .reel{
-    gap:7px;
+    gap:6px;
   }
 
   .tile{
-    border-radius:11px;
+    border-radius:10px;
+  }
+
+  .cabinet{
+    padding:12px;
+  }
+
+  .cabinet-inner{
+    padding:17px 14px;
   }
 }
 
-/* =========================================================
-   SMALL PHONES
-========================================================= */
-
-@media(max-width:430px){
+@media(max-width:370px){
 
   .app{
     padding-left:7px;
     padding-right:7px;
   }
 
-  .profile-copy{
+  .profile-info{
     display:none;
   }
 
-  .avatar{
-    width:51px;
-    height:51px;
-  }
-
-  .balance{
-    min-width:145px;
-  }
-
-  .balance-value{
-    font-size:20px;
-  }
-
-  .menu-button{
-    left:12px;
-    top:78px;
-
-    width:49px;
-    height:49px;
-  }
-
-  .brand{
-    padding-top:13px;
+  .money{
+    min-width:125px;
   }
 
   .brand h1{
-    font-size:44px;
+    font-size:40px;
   }
 
   .brand h2{
-    font-size:22px;
-    letter-spacing:8px;
+    font-size:18px;
   }
 
-  .tagline{
-    font-size:7px;
-    letter-spacing:3px;
-  }
-
-  .machine{
+  .cabinet{
+    border-radius:25px;
     padding:7px;
-    border-radius:27px;
   }
 
-  .machine-inner{
-    padding:12px 7px 11px;
-    border-radius:22px;
+  .cabinet-inner{
+    border-radius:20px;
+    padding:9px 6px;
   }
 
-  .machine-top{
-    height:27px;
-  }
-
-  .machine-crown{
-    width:43px;
-    height:29px;
-    font-size:21px;
-  }
-
-  .reel-window{
+  .reel-frame{
     padding:6px;
-    border-radius:17px;
   }
 
   .reel-glass{
     padding:3px;
-    border-radius:11px;
   }
 
   .reels,
@@ -2008,84 +1562,17 @@ button:disabled{
   }
 
   .spin-area{
-    grid-template-columns:
-      66px minmax(0,1fr) 66px;
-
+    grid-template-columns:62px minmax(0,1fr) 62px;
     gap:5px;
   }
 
-  .round{
-    min-height:70px;
-    border-radius:19px;
-    font-size:8px;
-  }
-
-  .round-icon{
-    font-size:23px;
+  .round-button{
+    min-height:67px;
   }
 
   .spin-button{
-    min-height:76px;
-    border-radius:23px;
+    min-height:72px;
     letter-spacing:3px;
-    font-size:27px;
-  }
-
-  .lower-cards{
-    gap:5px;
-  }
-
-  .lower-card{
-    padding:7px;
-    min-height:65px;
-    gap:5px;
-  }
-
-  .lower-icon{
-    width:32px;
-    height:32px;
-    font-size:17px;
-  }
-
-  .lower-title{
-    font-size:8px;
-  }
-
-  .lower-copy{
-    font-size:5.5px;
-  }
-}
-
-@media(max-width:350px){
-
-  .balance{
-    min-width:125px;
-  }
-
-  .coins{
-    display:none;
-  }
-
-  .brand h1{
-    font-size:38px;
-  }
-
-  .brand h2{
-    font-size:19px;
-  }
-
-  .spin-area{
-    grid-template-columns:
-      59px minmax(0,1fr) 59px;
-  }
-
-  .round{
-    min-height:65px;
-  }
-
-  .spin-button{
-    min-height:70px;
-    font-size:24px;
   }
 }
 </style>
@@ -2095,657 +1582,332 @@ button:disabled{
 
 <div class="app">
 
-  <!-- =====================================================
-       HEADER
-  ====================================================== -->
+<header class="top">
 
-  <header class="top">
+  <div class="profile-card">
 
-    <div class="profile">
+    <div class="profile-photo" id="avatar">K</div>
 
-      <div class="avatar" id="avatar">K</div>
+    <div class="profile-info">
 
-      <div class="profile-copy">
+      <div class="profile-name" id="username">KIMIA</div>
 
-        <div class="profile-name" id="username">
-          KIMIA
-        </div>
+      <div class="profile-level">
+        VIP LEVEL <span id="vipLevel">0</span>
+      </div>
 
-        <div class="profile-vip">
-          VIP LEVEL <span id="vipLevel">3</span>
-        </div>
-
-        <div class="vip-row">
-
-          <div class="vip-bar">
-            <div class="vip-fill"></div>
-          </div>
-
-          <div class="vip-percent">
-            42%
-          </div>
-
-        </div>
-
+      <div class="vip-meter">
+        <div class="vip-fill" id="vipFill"></div>
       </div>
 
     </div>
 
+  </div>
 
-    <div class="header-crown">
+  <div class="top-brand">
+    <div class="crown">♛</div>
+    <div class="tiny">VIP</div>
+  </div>
 
-      ♛
+  <div class="money">
 
-      <small>VIP</small>
+    <div class="coin-stack">🪙</div>
 
+    <div>
+      <div class="money-label">BALANCE</div>
+      <div class="money-value" id="balance">—</div>
     </div>
 
+    <div class="plus">+</div>
 
-    <div class="balance">
+  </div>
 
-      <div class="coins">
-        🪙
-      </div>
+</header>
 
-      <div class="balance-copy">
 
-        <div class="balance-label">
-          BALANCE
-        </div>
+<section class="brand">
 
-        <div class="balance-value" id="balance">
-          —
-        </div>
+  <div class="brand-crown">♛</div>
 
-      </div>
+  <h1>KIMIA</h1>
 
-      <div class="plus">
-        +
-      </div>
+  <h2>PRIVÉ</h2>
 
+  <div class="brand-sub">
+    PRIVATE FORTUNE CLUB
+  </div>
+
+</section>
+
+
+<section class="bonus">
+
+  <div class="info-card">
+
+    <div class="info-icon">🎁</div>
+
+    <div>
+      <div class="info-label">DAILY BONUS</div>
+      <div class="info-value">FREE COINS</div>
     </div>
 
-  </header>
+  </div>
 
+  <div class="info-card">
 
-  <!-- =====================================================
-       MENU
-  ====================================================== -->
+    <div class="info-icon">💎</div>
 
-  <button class="menu-button" aria-label="Menu">
-    ☰
-  </button>
-
-
-  <!-- =====================================================
-       BRAND
-  ====================================================== -->
-
-  <section class="brand">
-
-    <div class="crown">
-      ♛
+    <div>
+      <div class="info-label">JACKPOT</div>
+      <div class="info-value">1,248,730</div>
     </div>
 
-    <h1>KIMIA</h1>
+  </div>
 
-    <h2>PRIVÉ</h2>
+</section>
 
-    <div class="tagline">
-      PRIVATE FORTUNE CLUB
-    </div>
 
-  </section>
+<main class="cabinet">
 
+<div class="cabinet-inner">
 
-  <!-- =====================================================
-       QUICK CARDS
-  ====================================================== -->
+<div class="cabinet-label">
+  PRIVÉ ROYALE · FIVE REELS
+</div>
 
-  <section class="quick">
 
-    <div class="quick-card">
+<div class="reel-frame">
 
-      <div class="quick-icon">
-        🎁
-      </div>
+<div class="reel-glass" id="reelGlass">
 
-      <div>
+<div class="reels" id="reels">
 
-        <div class="quick-label">
-          DAILY BONUS
-        </div>
+<div class="reel">
+  <div class="tile"><div class="symbol kp">KP</div></div>
+  <div class="tile"><div class="symbol heart">♥</div></div>
+  <div class="tile"><div class="symbol cherry">🍒</div></div>
+</div>
 
-        <div class="quick-value">
-          FREE COINS
-        </div>
+<div class="reel">
+  <div class="tile"><div class="symbol crown">♛</div></div>
+  <div class="tile"><div class="symbol seven">7</div></div>
+  <div class="tile"><div class="symbol bell">♧</div></div>
+</div>
 
-      </div>
+<div class="reel">
+  <div class="tile"><div class="symbol bell">♧</div></div>
+  <div class="tile"><div class="symbol kp">KP</div></div>
+  <div class="tile"><div class="symbol diamond">♦</div></div>
+</div>
 
-    </div>
+<div class="reel">
+  <div class="tile"><div class="symbol cherry">🍒</div></div>
+  <div class="tile"><div class="symbol diamond">♦</div></div>
+  <div class="tile"><div class="symbol heart">♥</div></div>
+</div>
 
+<div class="reel">
+  <div class="tile"><div class="symbol diamond">♦</div></div>
+  <div class="tile"><div class="symbol bell">♧</div></div>
+  <div class="tile"><div class="symbol seven">7</div></div>
+</div>
 
-    <div class="quick-card">
+</div>
 
-      <div class="quick-icon">
-        💎
-      </div>
+<div class="payline"></div>
 
-      <div>
+</div>
+</div>
 
-        <div class="quick-label">
-          JACKPOT
-        </div>
 
-        <div class="quick-value">
-          1,248,730
-        </div>
+<div class="machine-controls">
 
-      </div>
+<button class="control" id="lineDown">
+  <span class="arrow">‹</span>
+  <span>
+    <small>LINES</small><br>
+    <b id="lineCount">5</b>
+  </span>
+  <span class="arrow">›</span>
+</button>
 
-    </div>
+<div class="control control-main">
 
-  </section>
+  <div>
+    <div class="control-label">BET</div>
+    <div class="control-value" id="controlBet">300</div>
+  </div>
 
+</div>
 
-  <!-- =====================================================
-       SLOT MACHINE
-  ====================================================== -->
+<div class="control">
 
-  <main class="machine">
+  <span>
+    <small>TOTAL BET</small><br>
+    <b id="totalBetControl">300</b>
+  </span>
 
-    <div class="machine-inner">
-
-      <div class="machine-top">
-
-        <div class="machine-crown">
-          ♛
-        </div>
-
-      </div>
-
-
-      <!-- REELS -->
-
-      <div class="reel-window">
-
-        <div class="reel-glass" id="reelGlass">
-
-          <div class="reels" id="reels">
-
-            <!-- column 1 -->
-
-            <div class="reel">
-
-              <div class="tile">
-                <div class="symbol kp-symbol">
-                  KP
-                </div>
-              </div>
-
-              <div class="tile">
-                <div class="symbol heart-symbol">
-                  ♥
-                </div>
-              </div>
-
-              <div class="tile">
-                <div class="symbol cherry-symbol">
-                  🍒
-                </div>
-              </div>
-
-            </div>
-
-
-            <!-- column 2 -->
-
-            <div class="reel">
-
-              <div class="tile">
-                <div class="symbol crown-symbol">
-                  ♛
-                </div>
-              </div>
-
-              <div class="tile">
-                <div class="symbol seven-symbol">
-                  7
-                </div>
-              </div>
-
-              <div class="tile">
-                <div class="symbol bell-symbol">
-                  ♧
-                </div>
-              </div>
-
-            </div>
-
-
-            <!-- column 3 -->
-
-            <div class="reel">
-
-              <div class="tile">
-                <div class="symbol bell-symbol">
-                  ♧
-                </div>
-              </div>
-
-              <div class="tile">
-                <div class="symbol kp-symbol">
-                  KP
-                </div>
-              </div>
-
-              <div class="tile">
-                <div class="symbol diamond-symbol">
-                  ♦
-                </div>
-              </div>
-
-            </div>
-
-
-            <!-- column 4 -->
-
-            <div class="reel">
-
-              <div class="tile">
-                <div class="symbol cherry-symbol">
-                  🍒
-                </div>
-              </div>
-
-              <div class="tile">
-                <div class="symbol diamond-symbol">
-                  ♦
-                </div>
-              </div>
-
-              <div class="tile">
-                <div class="symbol heart-symbol">
-                  ♥
-                </div>
-              </div>
-
-            </div>
-
-
-            <!-- column 5 -->
-
-            <div class="reel">
-
-              <div class="tile">
-                <div class="symbol diamond-symbol">
-                  ♦
-                </div>
-              </div>
-
-              <div class="tile">
-                <div class="symbol bell-symbol">
-                  ♧
-                </div>
-              </div>
-
-              <div class="tile">
-                <div class="symbol seven-symbol">
-                  7
-                </div>
-              </div>
-
-            </div>
-
-          </div>
-
-
-          <div class="payline"></div>
-
-        </div>
-
-      </div>
-
-
-      <!-- =================================================
-           MACHINE CONTROLS
-      ================================================== -->
-
-      <div class="machine-controls">
-
-        <button class="control" id="lineDown">
-
-          <span class="arrow">
-            ‹
-          </span>
-
-          <span>
-            <small>LINES</small><br>
-            <b id="lineCount">5</b>
-          </span>
-
-          <span class="arrow">
-            ›
-          </span>
-
-        </button>
-
-
-        <div class="control control-main">
-
-          <span>
-            <small>BET</small><br>
-            <b id="controlBet">300</b>
-          </span>
-
-        </div>
-
-
-        <div class="control">
-
-          <span class="arrow">
-            🪙
-          </span>
-
-          <span>
-            <small>TOTAL BET</small><br>
-            <b id="totalBetControl">300</b>
-          </span>
-
-          <span class="arrow">
-            ›
-          </span>
-
-        </div>
-
-      </div>
-
-
-      <!-- =================================================
-           SPIN
-      ================================================== -->
-
-      <div class="spin-area">
-
-        <button class="round" id="autoBtn">
-
-          <span class="round-icon">
-            ↻
-          </span>
-
-          AUTO
-
-        </button>
-
-
-        <button class="spin-button" id="spinBtn">
-
-          <span class="spin-crown">
-            ♛
-          </span>
-
-          SPIN
-
-        </button>
-
-
-        <button class="round" id="turboBtn">
-
-          <span class="round-icon">
-            ⚡
-          </span>
-
-          TURBO
-
-        </button>
-
-      </div>
-
-
-      <!-- =================================================
-           BET PANEL
-      ================================================== -->
-
-      <section class="bet-panel">
-
-        <div class="bet-head">
-
-          <span>
-            SELECT YOUR BET
-          </span>
-
-          <span>
-            CHIPS PER SPIN
-          </span>
-
-        </div>
-
-
-        <div class="bet-buttons" id="betButtons">
-
-          <button
-            class="bet-button active"
-            data-bet="300">
-            300
-          </button>
-
-          <button
-            class="bet-button"
-            data-bet="600">
-            600
-          </button>
-
-          <button
-            class="bet-button"
-            data-bet="1500">
-            1,500
-          </button>
-
-          <button
-            class="bet-button"
-            data-bet="3000">
-            3,000
-          </button>
-
-        </div>
-
-
-        <button
-          class="max-button"
-          id="maxBet">
-
-          ♛ MAX BET · 3,000 CHIPS
-
-        </button>
-
-      </section>
-
-
-      <div
-        class="status"
-        id="status">
-
-        YOUR PRIVATE FORTUNE AWAITS
-
-      </div>
-
-    </div>
-
-  </main>
-
-
-  <!-- =====================================================
-       LOWER FEATURE CARDS
-  ====================================================== -->
-
-  <section class="lower-cards">
-
-    <div class="lower-card">
-
-      <div class="lower-icon">
-        🎁
-      </div>
-
-      <div>
-
-        <div class="lower-title">
-          DAILY BONUS
-        </div>
-
-        <div class="lower-copy">
-          FREE COINS & REWARDS
-        </div>
-
-      </div>
-
-    </div>
-
-
-    <div class="lower-card">
-
-      <div class="lower-icon">
-        💎
-      </div>
-
-      <div>
-
-        <div class="lower-title">
-          JACKPOT
-        </div>
-
-        <div class="lower-copy">
-          💎 1,248,730
-        </div>
-
-      </div>
-
-    </div>
-
-
-    <div class="lower-card">
-
-      <div class="lower-icon">
-        ♛
-      </div>
-
-      <div>
-
-        <div class="lower-title">
-          TOP WINS
-        </div>
-
-        <div class="lower-copy">
-          SEE BIGGEST WINS
-        </div>
-
-      </div>
-
-    </div>
-
-  </section>
-
-
-  <!-- =====================================================
-       LEADERBOARD
-  ====================================================== -->
-
-  <section class="leaderboard">
-
-    <div class="leader-head">
-
-      <div class="leader-title">
-        ♛ TOP PLAYERS
-      </div>
-
-      <div class="leader-view">
-        VIEW ALL ›
-      </div>
-
-    </div>
-
-
-    <div id="leaderboard">
-
-      <div class="player">
-        Loading leaderboard…
-      </div>
-
-    </div>
-
-  </section>
+</div>
 
 </div>
 
 
-<!-- =======================================================
-     BOTTOM NAV
-======================================================= -->
+<div class="spin-area">
+
+<button class="round-button" id="autoBtn">
+  <span class="icon">↻</span>
+  AUTO
+</button>
+
+<button class="spin-button" id="spinBtn">
+  <span class="spin-crown">♛</span>
+  SPIN
+</button>
+
+<button class="round-button" id="turboBtn">
+  <span class="icon">ϟ</span>
+  TURBO
+</button>
+
+</div>
+
+
+<section class="bet-panel">
+
+<div class="bet-title">
+  <span>SELECT YOUR BET</span>
+  <span>CHIPS PER SPIN</span>
+</div>
+
+<div class="bet-buttons">
+
+<button class="bet-button active" data-bet="300">300</button>
+<button class="bet-button" data-bet="600">600</button>
+<button class="bet-button" data-bet="1500">1,500</button>
+<button class="bet-button" data-bet="3000">3,000</button>
+
+</div>
+
+<button class="max-button" id="maxBet">
+  ♛ MAX BET · 3,000 CHIPS
+</button>
+
+</section>
+
+
+<div class="status" id="status">
+  YOUR PRIVATE FORTUNE AWAITS
+</div>
+
+</div>
+</main>
+
+
+<section class="lower-cards">
+
+<div class="lower-card">
+  <div class="lower-icon">🎁</div>
+  <div class="lower-title">DAILY BONUS</div>
+  <div class="lower-copy">FREE COINS & REWARDS</div>
+</div>
+
+<div class="lower-card">
+  <div class="lower-icon">💎</div>
+  <div class="lower-title">JACKPOT</div>
+  <div class="lower-copy">BIGGEST WINS</div>
+</div>
+
+<div class="lower-card">
+  <div class="lower-icon">♛</div>
+  <div class="lower-title">TOP WINS</div>
+  <div class="lower-copy">SEE BIGGEST WINS</div>
+</div>
+
+</section>
+
+
+<section class="leaderboard">
+
+<div class="leader-head">
+
+  <div class="leader-title">♛ TOP PLAYERS</div>
+
+  <div class="leader-view">VIEW ALL ›</div>
+
+</div>
+
+<div id="leaderboard">
+  <div class="player">Loading leaderboard…</div>
+</div>
+
+</section>
+
+</div>
+
 
 <nav class="bottom-nav">
 
-  <div class="nav active">
+<div class="nav active">
+  <span class="nav-icon">⌂</span>
+  HOME
+</div>
 
-    <span class="nav-icon">
-      ⌂
-    </span>
+<div class="nav">
+  <span class="nav-icon">♜</span>
+  SLOTS
+</div>
 
-    HOME
+<div class="nav">
+  <span class="nav-icon">♛</span>
+  LEADERBOARD
+</div>
 
-  </div>
+<div class="nav">
+  <span class="nav-icon">◇</span>
+  WALLET
+</div>
 
-
-  <div class="nav">
-
-    <span class="nav-icon">
-      🎰
-    </span>
-
-    SLOTS
-
-  </div>
-
-
-  <div class="nav">
-
-    <span class="nav-icon">
-      ♛
-    </span>
-
-    LEADERBOARD
-
-  </div>
-
-
-  <div class="nav">
-
-    <span class="nav-icon">
-      ◇
-    </span>
-
-    WALLET
-
-  </div>
-
-
-  <div class="nav">
-
-    <span class="nav-icon">
-      ♙
-    </span>
-
-    PROFILE
-
-  </div>
+<div class="nav">
+  <span class="nav-icon">♙</span>
+  PROFILE
+</div>
 
 </nav>
+
+
+<div class="win-overlay" id="winOverlay">
+
+<div class="win-box">
+
+  <div class="win-crown">♛</div>
+
+  <div class="win-title">
+    PRIVÉ WIN
+  </div>
+
+  <div class="win-amount" id="winAmount">
+    +0
+  </div>
+
+  <div class="win-copy">
+    VIRTUAL CHIPS
+  </div>
+
+  <button class="win-close" id="winClose">
+    CONTINUE
+  </button>
+
+</div>
+
+</div>
 
 
 <script>
 "use strict";
 
+
 /* =========================================================
-   KIMIA PRIVÉ
-   VISUAL FRONTEND + EXISTING API
+   CONFIG
 ========================================================= */
 
 const API =
@@ -2759,8 +1921,8 @@ const tg =
     : null;
 
 
-const $ = id =>
-  document.getElementById(id);
+const $ =
+  id => document.getElementById(id);
 
 
 /* =========================================================
@@ -2775,6 +1937,9 @@ let autoMode = false;
 let turboMode = false;
 
 let autoTimer = null;
+let spinAnimationTimer = null;
+
+let playerBalance = 0;
 
 
 /* =========================================================
@@ -2833,8 +1998,8 @@ if(tg){
 
     tg.expand();
 
-    tg.setHeaderColor("#050302");
-    tg.setBackgroundColor("#050302");
+    tg.setHeaderColor("#080503");
+    tg.setBackgroundColor("#080503");
 
   }catch(e){}
 
@@ -2851,9 +2016,7 @@ function formatNumber(value){
     Number(value);
 
   if(!Number.isFinite(number)){
-
     return "—";
-
   }
 
   return Math.floor(number)
@@ -2876,9 +2039,7 @@ function setStatus(text,type=""){
   );
 
   if(type){
-
     status.classList.add(type);
-
   }
 
 }
@@ -2886,10 +2047,13 @@ function setStatus(text,type=""){
 
 function telegramInitData(){
 
-  if(!tg || !tg.initData){
+  if(
+    !tg ||
+    !tg.initData
+  ){
 
     throw new Error(
-      "OPEN KIMIA PRIVÉ FROM YOUR TELEGRAM BOT"
+      "OPEN KIMIA PRIVÉ FROM YOUR TELEGRAM BOT."
     );
 
   }
@@ -2934,7 +2098,7 @@ async function api(
   }catch(e){
 
     throw new Error(
-      "The server returned an invalid response."
+      "SERVER RETURNED AN INVALID RESPONSE."
     );
 
   }
@@ -2948,7 +2112,7 @@ async function api(
     throw new Error(
       data.error ||
       data.message ||
-      "Request failed."
+      "REQUEST FAILED."
     );
 
   }
@@ -2982,14 +2146,28 @@ async function loadPlayer(){
     );
 
 
-  $("balance").textContent =
-    formatNumber(
-      data.balance
-    );
+  playerBalance =
+    Number(data.balance || 0);
+
+
+  updateBalance(
+    playerBalance
+  );
 
 
   $("vipLevel").textContent =
     data.vipLevel ?? 0;
+
+
+  const vip =
+    Number(data.vipLevel || 0);
+
+
+  $("vipFill").style.width =
+    Math.min(
+      100,
+      20 + vip * 12
+    ) + "%";
 
 
   const username =
@@ -3009,7 +2187,31 @@ async function loadPlayer(){
       .replace("@","")
       .slice(0,1)
       .toUpperCase() ||
-    "K";
+      "K";
+
+}
+
+
+/* =========================================================
+   BALANCE
+========================================================= */
+
+function updateBalance(value){
+
+  if(
+    value === undefined ||
+    value === null
+  ){
+    return;
+  }
+
+
+  playerBalance =
+    Number(value);
+
+
+  $("balance").textContent =
+    formatNumber(playerBalance);
 
 }
 
@@ -3073,7 +2275,7 @@ async function loadLeaderboard(){
             );
 
           rank.className =
-            "rank";
+            "player-rank";
 
           rank.textContent =
             player.rank ??
@@ -3091,9 +2293,7 @@ async function loadLeaderboard(){
 
           const username =
             player.username
-              ? String(
-                  player.username
-                )
+              ? String(player.username)
               : "Anonymous Player";
 
 
@@ -3152,22 +2352,17 @@ async function loadLeaderboard(){
 function setBet(value){
 
   const allowed =
-    [
-      300,
-      600,
-      1500,
-      3000
-    ];
+    [300,600,1500,3000];
 
 
   value =
     Number(value);
 
 
-  if(!allowed.includes(value)){
-
+  if(
+    !allowed.includes(value)
+  ){
     value = 300;
-
   }
 
 
@@ -3176,15 +2371,11 @@ function setBet(value){
 
 
   $("controlBet").textContent =
-    formatNumber(
-      currentBet
-    );
+    formatNumber(currentBet);
 
 
   $("totalBetControl").textContent =
-    formatNumber(
-      currentBet
-    );
+    formatNumber(currentBet);
 
 
   document
@@ -3217,61 +2408,9 @@ function makeSymbol(symbol){
     );
 
 
-  if(symbol.type === "kp"){
-
-    element.className =
-      "symbol kp-symbol";
-
-  }
-
-  else if(symbol.type === "crown"){
-
-    element.className =
-      "symbol crown-symbol";
-
-  }
-
-  else if(symbol.type === "bell"){
-
-    element.className =
-      "symbol bell-symbol";
-
-  }
-
-  else if(symbol.type === "cherry"){
-
-    element.className =
-      "symbol cherry-symbol";
-
-  }
-
-  else if(symbol.type === "diamond"){
-
-    element.className =
-      "symbol diamond-symbol";
-
-  }
-
-  else if(symbol.type === "heart"){
-
-    element.className =
-      "symbol heart-symbol";
-
-  }
-
-  else if(symbol.type === "seven"){
-
-    element.className =
-      "symbol seven-symbol";
-
-  }
-
-  else{
-
-    element.className =
-      "symbol";
-
-  }
+  element.className =
+    "symbol " +
+    symbol.type;
 
 
   element.textContent =
@@ -3296,68 +2435,6 @@ function randomSymbol(){
 
 
 /* =========================================================
-   BUILD REELS
-========================================================= */
-
-function buildReels(){
-
-  const root =
-    $("reels");
-
-
-  root.innerHTML = "";
-
-
-  for(
-    let column=0;
-    column<5;
-    column++
-  ){
-
-    const reel =
-      document.createElement(
-        "div"
-      );
-
-    reel.className =
-      "reel";
-
-
-    for(
-      let row=0;
-      row<3;
-      row++
-    ){
-
-      const tile =
-        document.createElement(
-          "div"
-        );
-
-      tile.className =
-        "tile";
-
-
-      tile.appendChild(
-        makeSymbol(
-          randomSymbol()
-        )
-      );
-
-
-      reel.appendChild(tile);
-
-    }
-
-
-    root.appendChild(reel);
-
-  }
-
-}
-
-
-/* =========================================================
    NORMALIZE SERVER SYMBOL
 ========================================================= */
 
@@ -3367,9 +2444,7 @@ function normalizeSymbol(value){
     value === null ||
     value === undefined
   ){
-
     return randomSymbol();
-
   }
 
 
@@ -3482,6 +2557,68 @@ function normalizeSymbol(value){
 
 
 /* =========================================================
+   BUILD REELS
+========================================================= */
+
+function buildReels(){
+
+  const reels =
+    $("reels");
+
+
+  reels.innerHTML = "";
+
+
+  for(
+    let column=0;
+    column<5;
+    column++
+  ){
+
+    const reel =
+      document.createElement(
+        "div"
+      );
+
+    reel.className =
+      "reel";
+
+
+    for(
+      let row=0;
+      row<3;
+      row++
+    ){
+
+      const tile =
+        document.createElement(
+          "div"
+        );
+
+      tile.className =
+        "tile";
+
+
+      tile.appendChild(
+        makeSymbol(
+          randomSymbol()
+        )
+      );
+
+
+      reel.appendChild(tile);
+
+    }
+
+
+    reels.appendChild(reel);
+
+  }
+
+}
+
+
+/* =========================================================
    DISPLAY RESULT
 ========================================================= */
 
@@ -3493,7 +2630,7 @@ function displayResult(symbols){
   ){
 
     throw new Error(
-      "The server returned fewer than 15 symbols."
+      "SERVER RETURNED FEWER THAN 15 SYMBOLS."
     );
 
   }
@@ -3514,7 +2651,9 @@ function displayResult(symbols){
           tiles[index];
 
 
-        if(!tile) return;
+        if(!tile){
+          return;
+        }
 
 
         tile.innerHTML = "";
@@ -3522,9 +2661,7 @@ function displayResult(symbols){
 
         tile.appendChild(
           makeSymbol(
-            normalizeSymbol(
-              value
-            )
+            normalizeSymbol(value)
           )
         );
 
@@ -3535,27 +2672,46 @@ function displayResult(symbols){
 
 
 /* =========================================================
+   CLEAR WINS
+========================================================= */
+
+function clearWins(){
+
+  document
+    .querySelectorAll(
+      ".tile.win"
+    )
+    .forEach(tile=>{
+
+      tile.classList.remove(
+        "win"
+      );
+
+    });
+
+}
+
+
+/* =========================================================
    WINNING LINES
 ========================================================= */
 
-function highlightWinningLines(
-  lines
-){
+function highlightWinningLines(lines){
+
+  clearWins();
+
+
+  if(
+    !Array.isArray(lines)
+  ){
+    return;
+  }
+
 
   const tiles =
     document.querySelectorAll(
       ".tile"
     );
-
-
-  tiles.forEach(tile=>{
-    tile.classList.remove("win");
-  });
-
-
-  if(!Array.isArray(lines)){
-    return;
-  }
 
 
   lines.forEach(line=>{
@@ -3582,9 +2738,7 @@ function highlightWinningLines(
     if(
       !Number.isInteger(row)
     ){
-
       return;
-
     }
 
 
@@ -3603,7 +2757,9 @@ function highlightWinningLines(
           row * 5 + column;
 
 
-        if(tiles[index]){
+        if(
+          tiles[index]
+        ){
 
           tiles[index]
             .classList.add(
@@ -3622,59 +2778,54 @@ function highlightWinningLines(
 
 
 /* =========================================================
-   SPIN ANIMATION
+   REEL ANIMATION
 ========================================================= */
 
-function beginSpinAnimation(){
+function startReels(){
 
   const reels =
-    $("reels");
-
-
-  reels.classList.add(
-    "spinning"
-  );
-
-
-  const glass =
-    $("reelGlass");
-
-
-  glass.classList.remove(
-    "flash"
-  );
-
-
-  void glass.offsetWidth;
-
-
-  glass.classList.add(
-    "flash"
-  );
-
-
-  const tiles =
     document.querySelectorAll(
-      ".tile"
+      ".reel"
     );
 
 
-  const interval =
+  reels.forEach(
+    reel=>{
+      reel.classList.add(
+        "spinning"
+      );
+    }
+  );
+
+
+  $("reelGlass")
+    .classList.add(
+      "flash"
+    );
+
+
+  /*
+    Keep the symbols changing while
+    the real server result is pending.
+  */
+
+  spinAnimationTimer =
     setInterval(()=>{
 
       if(!spinning){
-
-        clearInterval(interval);
-
         return;
-
       }
+
+
+      const tiles =
+        document.querySelectorAll(
+          ".tile"
+        );
 
 
       tiles.forEach(tile=>{
 
         tile.innerHTML = "";
-
 
         tile.appendChild(
           makeSymbol(
@@ -3684,41 +2835,128 @@ function beginSpinAnimation(){
 
       });
 
-    }, turboMode ? 65 : 90);
-
-
-  return interval;
+    },85);
 
 }
 
 
-function endSpinAnimation(){
+function stopReels(){
 
-  $("reels")
+  if(spinAnimationTimer){
+
+    clearInterval(
+      spinAnimationTimer
+    );
+
+    spinAnimationTimer =
+      null;
+
+  }
+
+
+  const reels =
+    document.querySelectorAll(
+      ".reel"
+    );
+
+
+  reels.forEach(
+    reel=>{
+      reel.classList.remove(
+        "spinning"
+      );
+
+      reel.classList.add(
+        "stopped"
+      );
+
+      setTimeout(
+        ()=>{
+          reel.classList.remove(
+            "stopped"
+          );
+        },
+        350
+      );
+
+    }
+  );
+
+
+  $("reelGlass")
     .classList.remove(
-      "spinning"
+      "flash"
     );
 
 }
 
 
 /* =========================================================
-   BALANCE
+   WIN POPUP
 ========================================================= */
 
-function updateBalance(value){
+function showWin(amount){
 
-  if(
-    value !== undefined &&
-    value !== null
-  ){
+  $("winAmount").textContent =
+    "+" +
+    formatNumber(amount);
 
-    $("balance").textContent =
-      formatNumber(value);
+
+  $("winOverlay")
+    .classList.add(
+      "show"
+    );
+
+
+  if(tg?.HapticFeedback){
+
+    try{
+
+      tg.HapticFeedback
+        .notificationOccurred(
+          "success"
+        );
+
+    }catch(e){}
 
   }
 
 }
+
+
+function hideWin(){
+
+  $("winOverlay")
+    .classList.remove(
+      "show"
+    );
+
+}
+
+
+$("winClose")
+  .addEventListener(
+    "click",
+    hideWin
+  );
+
+
+$("winOverlay")
+  .addEventListener(
+    "click",
+    event=>{
+
+      if(
+        event.target ===
+        $("winOverlay")
+      ){
+
+        hideWin();
+
+      }
+
+    }
+  );
 
 
 /* =========================================================
@@ -3732,10 +2970,38 @@ async function spin(){
   }
 
 
+  /*
+    Client-side convenience check.
+    The backend remains the authority.
+  */
+
+  if(
+    Number.isFinite(
+      playerBalance
+    ) &&
+    playerBalance < currentBet
+  ){
+
+    setStatus(
+      "INSUFFICIENT CHIPS",
+      "error"
+    );
+
+    return;
+
+  }
+
+
   spinning = true;
 
 
+  clearWins();
+
+
   $("spinBtn").disabled =
+    true;
+
+  $("maxBet").disabled =
     true;
 
 
@@ -3743,33 +3009,21 @@ async function spin(){
     .querySelectorAll(
       ".bet-button"
     )
-    .forEach(button=>{
-      button.disabled = true;
-    });
-
-
-  $("maxBet").disabled =
-    true;
-
-
-  const oldTiles =
-    document.querySelectorAll(
-      ".tile"
+    .forEach(
+      button=>{
+        button.disabled = true;
+      }
     );
 
 
-  oldTiles.forEach(tile=>{
-    tile.classList.remove("win");
-  });
-
-
   setStatus(
-    "THE PRIVÉ REELS ARE TURNING…"
+    turboMode
+      ? "TURBO REELS ACTIVATED…"
+      : "THE PRIVÉ REELS ARE TURNING…"
   );
 
 
-  const animation =
-    beginSpinAnimation();
+  startReels();
 
 
   try{
@@ -3785,14 +3039,29 @@ async function spin(){
           method:"POST",
 
           body:JSON.stringify({
-
             initData,
-
             bet:currentBet
-
           })
         }
       );
+
+
+    /*
+      Slight pause makes the reel
+      landing feel intentional.
+    */
+
+    if(!turboMode){
+
+      await new Promise(
+        resolve =>
+          setTimeout(
+            resolve,
+            280
+          )
+      );
+
+    }
 
 
     displayResult(
@@ -3826,35 +3095,24 @@ async function spin(){
       );
 
 
-      if(
-        tg &&
-        tg.HapticFeedback
-      ){
+      setTimeout(
+        ()=>{
+          if(!spinning){
+            showWin(win);
+          }
+        },
+        250
+      );
 
-        try{
 
-          tg.HapticFeedback
-            .notificationOccurred(
-              "success"
-            );
-
-        }catch(e){}
-
-      }
-
-    }
-
-    else{
+    }else{
 
       setStatus(
         "NO WIN THIS TIME · TRY YOUR LUCK"
       );
 
 
-      if(
-        tg &&
-        tg.HapticFeedback
-      ){
+      if(tg?.HapticFeedback){
 
         try{
 
@@ -3889,12 +3147,7 @@ async function spin(){
 
   }finally{
 
-    clearInterval(
-      animation
-    );
-
-
-    endSpinAnimation();
+    stopReels();
 
 
     spinning = false;
@@ -3903,40 +3156,50 @@ async function spin(){
     $("spinBtn").disabled =
       false;
 
+    $("maxBet").disabled =
+      false;
+
 
     document
       .querySelectorAll(
         ".bet-button"
       )
-      .forEach(button=>{
-        button.disabled = false;
-      });
-
-
-    $("maxBet").disabled =
-      false;
+      .forEach(
+        button=>{
+          button.disabled =
+            false;
+        }
+      );
 
 
     if(
-      autoMode &&
-      !autoTimer
+      autoMode
     ){
 
+      if(autoTimer){
+
+        clearTimeout(
+          autoTimer
+        );
+
+      }
+
+
       autoTimer =
-        setTimeout(()=>{
+        setTimeout(
+          ()=>{
+            autoTimer = null;
 
-          autoTimer = null;
+            if(
+              autoMode
+            ){
+              spin();
+            }
 
-          if(autoMode){
-
-            spin();
-
-          }
-
-        },
-        turboMode
-          ? 300
-          : 1400
+          },
+          turboMode
+            ? 450
+            : 1700
         );
 
     }
@@ -3984,7 +3247,6 @@ $("autoBtn")
           "AUTO MODE STOPPED"
         );
 
-
         return;
 
       }
@@ -3996,9 +3258,7 @@ $("autoBtn")
 
 
       if(!spinning){
-
         spin();
-
       }
 
     }
@@ -4062,29 +3322,31 @@ document
   .querySelectorAll(
     ".bet-button"
   )
-  .forEach(button=>{
+  .forEach(
+    button=>{
 
-    button.addEventListener(
-      "click",
-      ()=>{
+      button.addEventListener(
+        "click",
+        ()=>{
 
-        setBet(
-          button.dataset.bet
-        );
+          setBet(
+            button.dataset.bet
+          );
 
 
-        setStatus(
-          "BET SET TO " +
-          formatNumber(
-            currentBet
-          ) +
-          " CHIPS"
-        );
+          setStatus(
+            "BET SET TO " +
+            formatNumber(
+              currentBet
+            ) +
+            " CHIPS"
+          );
 
-      }
-    );
+        }
+      );
 
-  });
+    }
+  );
 
 
 /* =========================================================
@@ -4129,6 +3391,60 @@ $("spinBtn")
 
 
 /* =========================================================
+   BOTTOM NAV
+========================================================= */
+
+document
+  .querySelectorAll(
+    ".nav"
+  )
+  .forEach(
+    nav=>{
+
+      nav.addEventListener(
+        "click",
+        ()=>{
+
+          document
+            .querySelectorAll(
+              ".nav"
+            )
+            .forEach(
+              item=>{
+                item.classList.remove(
+                  "active"
+                );
+              }
+            );
+
+
+          nav.classList.add(
+            "active"
+          );
+
+
+          const label =
+            nav.textContent
+              .trim();
+
+
+          if(label !== "HOME"){
+
+            setStatus(
+              label +
+              " · COMING SOON"
+            );
+
+          }
+
+        }
+      );
+
+    }
+  );
+
+
+/* =========================================================
    INITIALIZE
 ========================================================= */
 
@@ -4142,7 +3458,6 @@ setBet(300);
   try{
 
     await loadPlayer();
-
 
     setStatus(
       "YOUR PRIVATE FORTUNE AWAITS"
