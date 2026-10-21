@@ -1,10 +1,12 @@
 
 const express = require("express");
 const cors = require("cors");
+const crypto = require("crypto");
 const { Pool } = require("pg");
 
 const app = express();
 const PORT = process.env.PORT || 3000;
+const BOT_TOKEN = process.env.TELEGRAM_BOT_TOKEN;
 
 const pool = new Pool({
   connectionString: process.env.DATABASE_URL,
@@ -14,13 +16,12 @@ const pool = new Pool({
 });
 
 app.use(cors());
-app.use(express.json());
+app.use(express.json({ limit: "20kb" }));
 
 app.get("/", (req, res) => {
   res.json({
     status: "online",
-    game: "KIMIA PRIVÉ",
-    message: "KIMIA PRIVÉ API is running."
+    game: "KIMIA PRIVÉ"
   });
 });
 
@@ -29,39 +30,175 @@ app.get("/api/health", async (req, res) => {
     await pool.query("SELECT 1");
     res.json({ status: "ok", database: "connected" });
   } catch (error) {
-    console.error("Database health check failed:", error.message);
+    console.error("Health check failed:", error.message);
     res.status(503).json({
       status: "error",
       database: "unavailable"
     });
   }
 });
-app.use((req, res, next) => {
-  if (req.path === "/api/setup") {
-    return res.status(403).json({ error: "Setup disabled" });
-  }
-  next();
-});
-app.post("/api/setup", async (req, res) => {
-  try {
-    await pool.query(`
-      CREATE TABLE IF NOT EXISTS players (
-        id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
-        telegram_id BIGINT UNIQUE NOT NULL,
-        username TEXT,
-        balance BIGINT NOT NULL DEFAULT 1000,
-        vip_level INTEGER NOT NULL DEFAULT 0,
-        created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
-      )
-    `);
 
+function verifyTelegram(initData) {
+  if (!BOT_TOKEN || !initData || typeof initData !== "string") {
+    throw new Error("Telegram authentication is not configured.");
+  }
+
+  const params = new URLSearchParams(initData);
+  const receivedHash = params.get("hash");
+  const authDate = Number(params.get("auth_date"));
+
+  if (!receivedHash || !Number.isFinite(authDate)) {
+    throw new Error("Invalid Telegram login data.");
+  }
+
+  if (Math.abs(Date.now() / 1000 - authDate) > 86400) {
+    throw new Error("Telegram login expired. Reopen the game.");
+  }
+
+  params.delete("hash");
+  params.delete("signature");
+
+  const dataCheckString = [...params.entries()]
+    .sort(([a], [b]) => a.localeCompare(b))
+    .map(([key, value]) => `${key}=${value}`)
+    .join("\n");
+
+  const secretKey = crypto
+    .createHmac("sha256", "WebAppData")
+    .update(BOT_TOKEN)
+    .digest();
+
+  const expectedHash = crypto
+    .createHmac("sha256", secretKey)
+    .update(dataCheckString)
+    .digest("hex");
+
+  const expected = Buffer.from(expectedHash, "hex");
+  const received = Buffer.from(receivedHash, "hex");
+
+  if (
+    received.length !== expected.length ||
+    !crypto.timingSafeEqual(received, expected)
+  ) {
+    throw new Error("Telegram verification failed.");
+  }
+
+  const userText = params.get("user");
+  if (!userText) throw new Error("Telegram user is missing.");
+
+  const user = JSON.parse(userText);
+
+  if (!user.id) throw new Error("Invalid Telegram player.");
+
+  return {
+    id: String(user.id),
+    username: typeof user.username === "string"
+      ? user.username.slice(0, 64)
+      : null
+  };
+}
+
+async function getPlayer(initData) {
+  const user = verifyTelegram(initData);
+
+  const result = await pool.query(
+    `INSERT INTO players (telegram_id, username)
+     VALUES ($1, $2)
+     ON CONFLICT (telegram_id)
+     DO UPDATE SET username = EXCLUDED.username
+     RETURNING telegram_id, username, balance, vip_level`,
+    [user.id, user.username]
+  );
+
+  return result.rows[0];
+}
+
+app.post("/api/me", async (req, res) => {
+  try {
+    const player = await getPlayer(req.body?.initData);
     res.json({
-      status: "ok",
-      message: "Players table is ready."
+      id: player.telegram_id,
+      username: player.username,
+      balance: Number(player.balance),
+      vipLevel: player.vip_level
     });
   } catch (error) {
-    console.error("Database setup failed:", error.message);
-    res.status(500).json({ status: "error" });
+    console.error("Player login failed:", error.message);
+    res.status(401).json({ error: error.message });
+  }
+});
+
+app.post("/api/spin", async (req, res) => {
+  const client = await pool.connect();
+
+  try {
+    const user = verifyTelegram(req.body?.initData);
+
+    await client.query("BEGIN");
+
+    const playerResult = await client.query(
+      `INSERT INTO players (telegram_id, username)
+       VALUES ($1, $2)
+       ON CONFLICT (telegram_id)
+       DO UPDATE SET username = EXCLUDED.username
+       RETURNING telegram_id, username, balance, vip_level`,
+      [user.id, user.username]
+    );
+
+    const player = playerResult.rows[0];
+    const cost = 300;
+    const balance = Number(player.balance);
+
+    if (balance < cost) {
+      await client.query("ROLLBACK");
+      return res.status(400).json({
+        error: "Not enough chips.",
+        balance
+      });
+    }
+
+    const symbols = ["💎", "7️⃣", "💗", "🌹", "♠️", "✨"];
+    const output = Array.from(
+      { length: 3 },
+      () => symbols[crypto.randomInt(symbols.length)]
+    );
+
+    let win = 0;
+
+    if (output.every(symbol => symbol === output[0])) {
+      win = output[0] === "7️⃣" ? 15000
+        : output[0] === "💎" ? 7500
+        : output[0] === "💗" ? 4500
+        : 3000;
+    } else if (
+      output[0] === output[1] ||
+      output[1] === output[2] ||
+      output[0] === output[2]
+    ) {
+      win = 600;
+    }
+
+    const updated = await client.query(
+      `UPDATE players
+       SET balance = balance - $1 + $2
+       WHERE telegram_id = $3
+       RETURNING balance`,
+      [cost, win, user.id]
+    );
+
+    await client.query("COMMIT");
+
+    res.json({
+      symbols: output,
+      win,
+      balance: Number(updated.rows[0].balance)
+    });
+  } catch (error) {
+    await client.query("ROLLBACK").catch(() => {});
+    console.error("Spin failed:", error.message);
+    res.status(401).json({ error: "Unable to complete spin. Reopen the game and try again." });
+  } finally {
+    client.release();
   }
 });
 
@@ -76,6 +213,7 @@ async function initializeDatabase() {
       created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
     )
   `);
+
   console.log("Players table is ready.");
 }
 
