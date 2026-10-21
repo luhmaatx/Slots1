@@ -36,7 +36,12 @@ app.get("/api/health", async (req, res) => {
     });
   }
 });
-
+app.use((req, res, next) => {
+  if (req.path === "/api/setup") {
+    return res.status(403).json({ error: "Setup disabled" });
+  }
+  next();
+});
 app.post("/api/setup", async (req, res) => {
   try {
     await pool.query(`
