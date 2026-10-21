@@ -1,103 +1,404 @@
+
 <!doctype html>
 <html lang="en">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#090706">
 <title>KIMIA PRIVÉ</title>
+<script src="https://telegram.org/js/telegram-web-app.js"></script>
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600&family=Inter:wght@400;500;600&display=swap');
 :root{--gold:#e9c98d;--rose:#e99ab2;--cream:#fff2dc;--bg:#090706}
-*{box-sizing:border-box}body{margin:0;background:#050403;color:var(--cream);font-family:Inter,Arial,sans-serif}
-button{font:inherit}.shell{width:min(480px,100%);min-height:100vh;margin:auto;background:
-radial-gradient(circle at 50% 18%,rgba(229,157,104,.15),transparent 28%),
-radial-gradient(circle at 10% 45%,rgba(233,154,178,.08),transparent 25%),
-linear-gradient(180deg,#120c09,#070605 52%,#0c0807);position:relative;overflow:hidden;padding-bottom:84px}
+*{box-sizing:border-box}
+body{margin:0;background:#050403;color:var(--cream);font-family:Inter,Arial,sans-serif}
+button{font:inherit;cursor:pointer}
+button:disabled{opacity:.55;cursor:wait}
+.shell{width:min(480px,100%);min-height:100vh;margin:auto;background:radial-gradient(circle at 50% 18%,rgba(229,157,104,.15),transparent 28%),radial-gradient(circle at 10% 45%,rgba(233,154,178,.08),transparent 25%),linear-gradient(180deg,#120c09,#070605 52%,#0c0807);position:relative;overflow:hidden;padding-bottom:84px}
 .noise{position:absolute;inset:0;opacity:.06;background-image:radial-gradient(#fff 1px,transparent 1px);background-size:5px 5px;pointer-events:none}
 .header{position:relative;padding:22px 20px 10px;display:flex;justify-content:space-between;align-items:center}
 .menu{width:42px;height:42px;border-radius:50%;border:1px solid #765c39;background:#100b08;color:var(--gold);font-size:19px}
+.tiny{font-size:8px;letter-spacing:.15em;color:#8e806d}
 .avatar{width:42px;height:42px;border-radius:50%;border:1px solid var(--gold);display:grid;place-items:center;background:linear-gradient(145deg,#28160f,#c78b76);font-family:Georgia;font-size:17px}
-.brand{text-align:center;margin:6px 20px 8px;position:relative}.crown{font-size:24px;color:var(--gold);text-shadow:0 0 18px #d49b51}
-.brand h1{font:500 49px/ .75 'Cormorant Garamond',Georgia,serif;letter-spacing:.06em;margin:6px 0;background:linear-gradient(#fff0ce,#c28f4b);-webkit-background-clip:text;color:transparent}
+.brand{text-align:center;margin:6px 20px 8px;position:relative}
+.crown{font-size:24px;color:var(--gold);text-shadow:0 0 18px #d49b51}
+.brand h1{font:500 49px/.75 'Cormorant Garamond',Georgia,serif;letter-spacing:.06em;margin:6px 0;background:linear-gradient(#fff0ce,#c28f4b);-webkit-background-clip:text;color:transparent}
 .brand .prive{font:500 27px/1 'Cormorant Garamond',Georgia,serif;letter-spacing:.34em;margin-left:.34em;color:#f2d9bf}
 .brand .tag{margin-top:9px;font-size:8px;letter-spacing:.34em;color:#caa66c}
-.balance{margin:15px 20px 0;border:1px solid #5d482e;border-radius:14px;background:linear-gradient(90deg,rgba(28,18,12,.92),rgba(17,11,8,.92));padding:12px 15px;display:flex;justify-content:space-between;align-items:center}.balance small{display:block;color:#8e806d;font-size:8px;letter-spacing:.18em}.balance strong{font:500 22px 'Cormorant Garamond';color:#fff0d2}.balance .vip{color:var(--gold);font-size:9px;letter-spacing:.13em}
-.jackpot{margin:17px 20px 0;text-align:center}.jackpot .label{font-size:8px;letter-spacing:.3em;color:#a88b5f}.jackpot .number{font:500 32px 'Cormorant Garamond';letter-spacing:.06em;color:var(--gold);text-shadow:0 0 22px rgba(233,201,141,.28)}
+.balance{margin:15px 20px 0;border:1px solid #5d482e;border-radius:14px;background:linear-gradient(90deg,rgba(28,18,12,.92),rgba(17,11,8,.92));padding:12px 15px;display:flex;justify-content:space-between;align-items:center}
+.balance small{display:block;color:#8e806d;font-size:8px;letter-spacing:.18em}
+.balance strong{font:500 22px 'Cormorant Garamond';color:#fff0d2}
+.balance .vip{color:var(--gold);font-size:9px;letter-spacing:.13em}
+.jackpot{margin:17px 20px 0;text-align:center}
+.jackpot .label{font-size:8px;letter-spacing:.3em;color:#a88b5f}
+.jackpot .number{font:500 32px 'Cormorant Garamond';letter-spacing:.06em;color:var(--gold);text-shadow:0 0 22px rgba(233,201,141,.28)}
 .jackpot .line{height:1px;background:linear-gradient(90deg,transparent,#82633c,transparent);margin-top:5px}
 .machine{margin:12px 15px 0;padding:13px;border-radius:30px;background:linear-gradient(145deg,#302016,#120c09 42%,#24170e);border:1px solid #977546;box-shadow:0 25px 65px #000,0 0 45px rgba(233,154,178,.07);position:relative}
 .machine:before{content:"K  P";position:absolute;inset:7px;border:1px solid rgba(232,201,141,.22);border-radius:24px;color:rgba(232,201,141,.13);font:70px Georgia;letter-spacing:100px;padding:38px 0 0 35px;pointer-events:none}
 .reelbox{position:relative;z-index:1;background:#050403;border:1px solid #5c452b;border-radius:21px;padding:10px;box-shadow:inset 0 0 30px #000}
 .reels{display:grid;grid-template-columns:repeat(3,1fr);gap:6px}
-.reel{height:150px;border-radius:15px;background:linear-gradient(145deg,#fff6e7,#c8ad82 48%,#f4e4cb);display:grid;place-items:center;font-size:52px;color:#1a110b;border:2px solid #a57b42;box-shadow:inset 0 0 18px rgba(75,45,20,.35),0 8px 18px #000;position:relative;overflow:hidden}
-.reel:after{content:"";position:absolute;inset:0;background:linear-gradient(105deg,transparent 35%,rgba(255,255,255,.55) 48%,transparent 61%);transform:translateX(-120%)}.reel.spin:after{animation:sheen .28s linear infinite}@keyframes sheen{to{transform:translateX(120%)}}
-.reel.spin{filter:blur(1.4px);animation:bounce .09s infinite alternate}@keyframes bounce{to{transform:translateY(5px)}}.reel.win{animation:pop .55s 2}@keyframes pop{50%{transform:scale(1.08);filter:brightness(1.35)}}
+.reel{height:150px;border-radius:15px;background:linear-gradient(145deg,#fff6e7,#c8ad82 48%,#f4e4cb);display:grid;place-items:center;font-size:clamp(30px,10vw,52px);color:#1a110b;border:2px solid #a57b42;box-shadow:inset 0 0 18px rgba(75,45,20,.35),0 8px 18px #000;position:relative;overflow:hidden}
+.reel:after{content:"";position:absolute;inset:0;background:linear-gradient(105deg,transparent 35%,rgba(255,255,255,.55) 48%,transparent 61%);transform:translateX(-120%)}
+.reel.spin:after{animation:sheen .28s linear infinite}
+@keyframes sheen{to{transform:translateX(120%)}}
+.reel.spin{filter:blur(1.4px);animation:bounce .09s infinite alternate}
+@keyframes bounce{to{transform:translateY(5px)}}
+.reel.win{animation:pop .55s 2}
+@keyframes pop{50%{transform:scale(1.08);filter:brightness(1.35)}}
 .payline{position:absolute;left:17px;right:17px;top:50%;height:2px;background:linear-gradient(90deg,transparent,var(--rose),transparent);z-index:2;box-shadow:0 0 12px var(--rose);opacity:.75}
-.bets{display:grid;grid-template-columns:1fr 1fr 1fr;margin-top:10px;border-top:1px solid #483723;border-bottom:1px solid #483723}.bet{padding:9px 4px;text-align:center;border-right:1px solid #483723;font-size:8px;letter-spacing:.13em;color:#8e806d;text-transform:uppercase}.bet:last-child{border:0}.bet b{display:block;color:#e7d2b0;font:500 15px Georgia;margin-top:2px}
-.message{text-align:center;height:30px;padding-top:11px;color:#caa66c;font-size:9px;letter-spacing:.25em}.message.hot{color:#f0a2ba;text-shadow:0 0 15px #e98ea9}
-.controls{display:grid;grid-template-columns:65px 1fr 65px;gap:8px;align-items:center}.round{height:57px;border-radius:16px;border:1px solid #604a2f;background:#100b08;color:#caa66c;font-size:9px;letter-spacing:.08em}.round span{font-size:18px}.spin{height:68px;border-radius:18px;border:1px solid #f5d79d;background:radial-gradient(circle at 50% 15%,#fff0c9,#c29352 58%,#86602f);box-shadow:0 0 25px rgba(233,201,141,.18),inset 0 1px #fff7e5;color:#160e08;font:500 25px 'Cormorant Garamond';letter-spacing:.16em}
-.features{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:13px 15px}.feature{border:1px solid #443423;background:linear-gradient(135deg,#16100c,#0b0806);border-radius:15px;padding:13px}.feature .icon{font-size:21px}.feature b{font:500 15px 'Cormorant Garamond';display:block;color:#ecd7b7;margin-top:3px}.feature span{font-size:8px;color:#8e806d;letter-spacing:.09em}
-.vipcard{margin:13px 15px;padding:16px;border:1px solid #715735;border-radius:18px;background:linear-gradient(120deg,#21140d,#0c0806);display:flex;justify-content:space-between;align-items:center}.vipcard .title{font:500 19px 'Cormorant Garamond';color:#f0d5aa}.vipcard p{margin:2px 0 0;font-size:8px;color:#91816e;letter-spacing:.12em}.progress{width:115px;height:5px;background:#2c2117;border-radius:9px;margin-top:9px;overflow:hidden}.progress i{display:block;width:42%;height:100%;background:linear-gradient(90deg,#b07e42,#f0c985)}
-.leader{margin:13px 15px;border:1px solid #443423;border-radius:18px;padding:14px;background:#0b0806}.leaderhead{display:flex;justify-content:space-between;font-size:9px;letter-spacing:.16em;color:#cba96f}.rows{margin-top:8px}.row{display:flex;align-items:center;gap:9px;padding:8px 0;border-bottom:1px solid #211a13}.row:last-child{border:0}.rank{width:18px;color:#b99660;font-size:9px}.mini{width:31px;height:31px;border-radius:50%;border:1px solid #80633e;display:grid;place-items:center;background:#22150e;font-family:Georgia}.who{flex:1;font-size:10px}.score{font-size:9px;color:#9d8c76}
-nav{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:min(480px,100%);background:rgba(7,5,4,.97);border-top:1px solid #493a28;display:grid;grid-template-columns:repeat(5,1fr);padding:9px 7px calc(8px + env(safe-area-inset-bottom));z-index:8;backdrop-filter:blur(15px)}nav button{border:0;background:none;color:#776958;font-size:8px;letter-spacing:.08em}nav button:first-child{color:var(--gold)}nav i{font-style:normal;font-size:19px;display:block;margin-bottom:3px}
-.overlay{position:fixed;inset:0;background:rgba(2,1,1,.84);z-index:20;display:grid;place-items:center;opacity:0;pointer-events:none;transition:.25s}.overlay.show{opacity:1;pointer-events:auto}.win{width:min(370px,90%);padding:28px;text-align:center;border:1px solid var(--gold);border-radius:26px;background:radial-gradient(circle at 50% 0,#3a2417,#0d0806 65%);box-shadow:0 0 70px rgba(233,154,178,.25)}.win .icon{font-size:55px}.win h2{font:500 38px 'Cormorant Garamond';color:#f1d09a;margin:4px}.win p{font-size:10px;color:#a89782;letter-spacing:.08em}.close{border:1px solid var(--gold);background:transparent;color:var(--gold);border-radius:11px;padding:10px 24px;font-size:9px;letter-spacing:.12em}
-.toast{position:fixed;top:15px;left:50%;transform:translate(-50%,-80px);z-index:30;background:#efd19a;color:#120d08;padding:10px 18px;border-radius:99px;font-size:9px;font-weight:700;letter-spacing:.1em;transition:.3s;white-space:nowrap}.toast.show{transform:translate(-50%,0)}
-@media(max-width:360px){.brand h1{font-size:41px}.reel{height:130px;font-size:45px}}
+.bets{display:grid;grid-template-columns:1fr 1fr 1fr;margin-top:10px;border-top:1px solid #483723;border-bottom:1px solid #483723}
+.bet{padding:9px 4px;text-align:center;border-right:1px solid #483723;font-size:8px;letter-spacing:.13em;color:#8e806d;text-transform:uppercase}
+.bet:last-child{border:0}
+.bet b{display:block;color:#e7d2b0;font:500 15px Georgia;margin-top:2px}
+.message{text-align:center;min-height:30px;padding-top:11px;color:#caa66c;font-size:9px;letter-spacing:.16em}
+.message.hot{color:#f0a2ba;text-shadow:0 0 15px #e98ea9}
+.controls{display:grid;grid-template-columns:65px 1fr 65px;gap:8px;align-items:center}
+.round{height:57px;border-radius:16px;border:1px solid #604a2f;background:#100b08;color:#caa66c;font-size:9px;letter-spacing:.08em}
+.round span{font-size:18px}
+.spin{height:68px;border-radius:18px;border:1px solid #f5d79d;background:radial-gradient(circle at 50% 15%,#fff0c9,#c29352 58%,#86602f);box-shadow:0 0 25px rgba(233,201,141,.18),inset 0 1px #fff7e5;color:#160e08;font:500 25px 'Cormorant Garamond';letter-spacing:.16em}
+.features{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:13px 15px}
+.feature{border:1px solid #443423;background:linear-gradient(135deg,#16100c,#0b0806);border-radius:15px;padding:13px}
+.feature .icon{font-size:21px}
+.feature b{font:500 15px 'Cormorant Garamond';display:block;color:#ecd7b7;margin-top:3px}
+.feature span{font-size:8px;color:#8e806d;letter-spacing:.09em}
+.vipcard{margin:13px 15px;padding:16px;border:1px solid #715735;border-radius:18px;background:linear-gradient(120deg,#21140d,#0c0806);display:flex;justify-content:space-between;align-items:center}
+.vipcard .title{font:500 19px 'Cormorant Garamond';color:#f0d5aa}
+.vipcard p{margin:2px 0 0;font-size:8px;color:#91816e;letter-spacing:.12em}
+.progress{width:115px;height:5px;background:#2c2117;border-radius:9px;margin-top:9px;overflow:hidden}
+.progress i{display:block;width:42%;height:100%;background:linear-gradient(90deg,#b07e42,#f0c985)}
+.leader{margin:13px 15px;border:1px solid #443423;border-radius:18px;padding:14px;background:#0b0806}
+.leaderhead{display:flex;justify-content:space-between;font-size:9px;letter-spacing:.16em;color:#cba96f}
+.rows{margin-top:8px}
+.row{display:flex;align-items:center;gap:9px;padding:8px 0;border-bottom:1px solid #211a13}
+.row:last-child{border:0}
+.rank{width:18px;color:#b99660;font-size:9px}
+.mini{width:31px;height:31px;border-radius:50%;border:1px solid #80633e;display:grid;place-items:center;background:#22150e;font-family:Georgia}
+.who{flex:1;font-size:10px}
+.score{font-size:9px;color:#9d8c76}
+nav{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:min(480px,100%);background:rgba(7,5,4,.97);border-top:1px solid #493a28;display:grid;grid-template-columns:repeat(5,1fr);padding:9px 7px calc(8px + env(safe-area-inset-bottom));z-index:8;backdrop-filter:blur(15px)}
+nav button{border:0;background:none;color:#776958;font-size:8px;letter-spacing:.08em}
+nav button:first-child{color:var(--gold)}
+nav i{font-style:normal;font-size:19px;display:block;margin-bottom:3px}
+.overlay{position:fixed;inset:0;background:rgba(2,1,1,.84);z-index:20;display:grid;place-items:center;opacity:0;pointer-events:none;transition:.25s}
+.overlay.show{opacity:1;pointer-events:auto}
+.win{width:min(370px,90%);padding:28px;text-align:center;border:1px solid var(--gold);border-radius:26px;background:radial-gradient(circle at 50% 0,#3a2417,#0d0806 65%);box-shadow:0 0 70px rgba(233,154,178,.25)}
+.win .icon{font-size:55px}
+.win h2{font:500 38px 'Cormorant Garamond';color:#f1d09a;margin:4px}
+.win p{font-size:10px;color:#a89782;letter-spacing:.08em}
+.close{border:1px solid var(--gold);background:transparent;color:var(--gold);border-radius:11px;padding:10px 24px;font-size:9px;letter-spacing:.12em}
+.toast{position:fixed;top:15px;left:50%;transform:translate(-50%,-100px);z-index:30;background:#efd19a;color:#120d08;padding:10px 18px;border-radius:99px;font-size:9px;font-weight:700;letter-spacing:.1em;transition:.3s;white-space:normal;width:max-content;max-width:90%;text-align:center}
+.toast.show{transform:translate(-50%,0)}
+@media(max-width:360px){.brand h1{font-size:41px}.reel{height:120px}}
 </style>
 </head>
 <body>
 <div class="toast" id="toast"></div>
-<div class="overlay" id="overlay"><div class="win"><div class="icon" id="wi">♛</div><h2 id="wt">JACKPOT</h2><p id="wx">15,000 virtual chips</p><button class="close" id="close">CONTINUE</button></div></div>
-<div class="shell"><div class="noise"></div>
-<header class="header"><button class="menu">☰</button><div class="tiny">VIP CLUB</div><div class="avatar">K</div></header>
-<section class="brand"><div class="crown">♕</div><h1>KIMIA</h1><div class="prive">PRIVÉ</div><div class="tag">PRIVATE FORTUNE CLUB</div></section>
-<div class="balance"><div><small>AVAILABLE CHIPS</small><strong id="bal">12,480</strong> 🪙</div><div style="text-align:right"><div class="vip">♛ VIP LEVEL 3</div><div class="tiny">42% TO NEXT LEVEL</div></div></div>
-<section class="jackpot"><div class="label">PRIVÉ PROGRESSIVE JACKPOT</div><div class="number" id="jack">1,248,730</div><div class="line"></div></section>
-<section class="machine" id="machine"><div class="reelbox"><div class="payline"></div><div class="reels"><div class="reel" id="r0">💎</div><div class="reel" id="r1">7️⃣</div><div class="reel" id="r2">💗</div></div></div>
-<div class="bets"><div class="bet">LINES<b>3</b></div><div class="bet">BET<b>100</b></div><div class="bet">TOTAL<b>300</b></div></div>
-<div class="message" id="msg">YOUR LUCK IS WAITING</div>
-<div class="controls"><button class="round" id="auto"><span>↻</span><br>AUTO</button><button class="spin" id="spin">SPIN</button><button class="round" id="turbo"><span>ϟ</span><br>TURBO</button></div></section>
-<section class="features"><div class="feature"><div class="icon">🎁</div><b>Privé Daily</b><span>500 FREE CHIPS</span></div><div class="feature"><div class="icon">💎</div><b>Jackpot Room</b><span>BIGGEST WINS</span></div></section>
-<section class="vipcard"><div><div class="title">KIMIA PRIVÉ VIP</div><p>UNLOCK EXCLUSIVE REWARDS</p><div class="progress"><i></i></div></div><div style="font-size:23px;color:#d5b36f">♛</div></section>
-<section class="leader"><div class="leaderhead"><span>♛ TOP PLAYERS</span><span>VIEW ALL</span></div><div class="rows">
-<div class="row"><div class="rank">01</div><div class="mini">G</div><div class="who">GoddessK</div><div class="score">2,984,500 🪙</div></div>
-<div class="row"><div class="rank">02</div><div class="mini">P</div><div class="who">PrettyRich</div><div class="score">1,865,320 🪙</div></div>
-<div class="row"><div class="rank">03</div><div class="mini">L</div><div class="who">LuhBae</div><div class="score">1,432,910 🪙</div></div>
-</div></section>
-<nav><button> <i>⌂</i>HOME</button><button><i>▣</i>SLOTS</button><button><i>♛</i>RANK</button><button><i>◈</i>WALLET</button><button><i>♙</i>PROFILE</button></nav>
-</div>
-<script>
-const symbols=["💎","7️⃣","💗","🌹","♠️","✨"],reels=[0,1,2].map(i=>document.getElementById("r"+i));
-let balance=12480,busy=false,auto=false,turbo=false;
-const bal=document.getElementById("bal"),msg=document.getElementById("msg"),spin=document.getElementById("spin"),machine=document.getElementById("machine"),overlay=document.getElementById("overlay"),toast=document.getElementById("toast");
-const fmt=n=>n.toLocaleString("en-US"),pick=()=>symbols[Math.floor(Math.random()*symbols.length)];
-function note(t){toast.textContent=t;toast.classList.add("show");setTimeout(()=>toast.classList.remove("show"),1400)}
-function audio(freq,dur=.14){try{let C=AudioContext||webkitAudioContext,c=new C,o=c.createOscillator(),g=c.createGain();o.connect(g);g.connect(c.destination);o.frequency.value=freq;g.gain.value=.05;o.start();o.stop(c.currentTime+dur)}catch(e){}}
-function show(title,text,icon){document.getElementById("wt").textContent=title;document.getElementById("wx").textContent=text;document.getElementById("wi").textContent=icon;overlay.classList.add("show")}
-function go(){
- if(busy||balance<300){if(balance<300)msg.textContent="NOT ENOUGH CHIPS";return}
- busy=true;spin.disabled=true;balance-=300;bal.textContent=fmt(balance);msg.textContent="SPINNING…";msg.classList.remove("hot");reels.forEach(x=>x.classList.add("spin"));audio(330,.08);
- setTimeout(()=>{let out=[pick(),pick(),pick()];reels.forEach((x,i)=>{x.textContent=out[i];x.classList.remove("spin")});let win=0,j=0;
- if(out.every(x=>x===out[0])){win=out[0]=="7️⃣"?15000:out[0]=="💎"?7500:out[0]=="💗"?4500:3000;j=out[0]=="7️⃣"}else if(out[0]==out[1]||out[1]==out[2]||out[0]==out[2])win=600;
- balance+=win;bal.textContent=fmt(balance);
- if(win){reels.forEach(x=>x.classList.add("win"));msg.classList.add("hot");setTimeout(()=>reels.forEach(x=>x.classList.remove("win")),1100)}
- if(j){msg.textContent="♛ JACKPOT ♛";audio(880,.7);show("JACKPOT","15,000 virtual chips added to your balance.","♛")}else if(win){msg.textContent="WIN · +"+fmt(win)+" CHIPS";audio(660);note("YOU WON "+fmt(win)+" 🪙")}else msg.textContent="NO MATCH · TRY AGAIN";
- busy=false;spin.disabled=false;if(auto)setTimeout(go,turbo?100:650)},turbo?380:900)
-}
-spin.onclick=go;document.getElementById("auto").onclick=()=>{auto=!auto;note(auto?"AUTO SPIN ON":"AUTO SPIN OFF");if(auto&&!busy)go()};document.getElementById("turbo").onclick=()=>{turbo=!turbo;note(turbo?"TURBO MODE ON":"TURBO MODE OFF")};document.getElementById("close").onclick=()=>overlay.classList.remove("show");
-</script>
-<script>
-const KIMIA_API = "https://kimia-prive-api.onrender.com";
 
-async function checkKimiaAPI() {
+<div class="overlay" id="overlay">
+  <div class="win">
+    <div class="icon" id="wi">♛</div>
+    <h2 id="wt">JACKPOT</h2>
+    <p id="wx">Virtual chips awarded!</p>
+    <button class="close" id="close">CONTINUE</button>
+  </div>
+</div>
+
+<div class="shell">
+<div class="noise"></div>
+
+<header class="header">
+  <button class="menu" aria-label="Menu">☰</button>
+  <div class="tiny">VIP CLUB</div>
+  <div class="avatar">K</div>
+</header>
+
+<section class="brand">
+  <div class="crown">♕</div>
+  <h1>KIMIA</h1>
+  <div class="prive">PRIVÉ</div>
+  <div class="tag">PRIVATE FORTUNE CLUB</div>
+</section>
+
+<div class="balance">
+  <div><small>AVAILABLE CHIPS</small><strong id="bal">Loading…</strong> 🪙</div>
+  <div style="text-align:right">
+    <div class="vip" id="vip">♛ VIP LEVEL 0</div>
+    <div class="tiny" id="playerName">CONNECTING TO TELEGRAM</div>
+  </div>
+</div>
+
+<section class="jackpot">
+  <div class="label">PRIVÉ PROGRESSIVE JACKPOT</div>
+  <div class="number" id="jack">1,248,730</div>
+  <div class="line"></div>
+</section>
+
+<section class="machine" id="machine">
+  <div class="reelbox">
+    <div class="payline"></div>
+    <div class="reels">
+      <div class="reel" id="r0">💎</div>
+      <div class="reel" id="r1">7️⃣</div>
+      <div class="reel" id="r2">💗</div>
+    </div>
+  </div>
+  <div class="bets">
+    <div class="bet">LINES<b>3</b></div>
+    <div class="bet">BET<b>100</b></div>
+    <div class="bet">TOTAL<b>300</b></div>
+  </div>
+  <div class="message" id="msg">CONNECTING…</div>
+  <div class="controls">
+    <button class="round" id="auto"><span>↻</span><br>AUTO</button>
+    <button class="spin" id="spin" disabled>SPIN</button>
+    <button class="round" id="turbo"><span>ϟ</span><br>TURBO</button>
+  </div>
+</section>
+
+<section class="features">
+  <div class="feature"><div class="icon">🎁</div><b>Privé Daily</b><span>500 FREE CHIPS</span></div>
+  <div class="feature"><div class="icon">💎</div><b>Jackpot Room</b><span>BIGGEST WINS</span></div>
+</section>
+
+<section class="vipcard">
+  <div>
+    <div class="title">KIMIA PRIVÉ VIP</div>
+    <p>UNLOCK EXCLUSIVE REWARDS</p>
+    <div class="progress"><i id="progressBar"></i></div>
+  </div>
+  <div style="font-size:23px;color:#d5b36f">♛</div>
+</section>
+
+<section class="leader">
+  <div class="leaderhead"><span>♛ TOP PLAYERS</span><span>VIRTUAL CHIPS</span></div>
+  <div class="rows">
+    <div class="row"><div class="rank">01</div><div class="mini">G</div><div class="who">GoddessK</div><div class="score">— 🪙</div></div>
+    <div class="row"><div class="rank">02</div><div class="mini">P</div><div class="who">PrettyRich</div><div class="score">— 🪙</div></div>
+    <div class="row"><div class="rank">03</div><div class="mini">L</div><div class="who">LuhBae</div><div class="score">— 🪙</div></div>
+  </div>
+</section>
+
+<nav>
+  <button><i>⌂</i>HOME</button>
+  <button><i>▣</i>SLOTS</button>
+  <button><i>♛</i>RANK</button>
+  <button><i>◈</i>WALLET</button>
+  <button><i>♙</i>PROFILE</button>
+</nav>
+</div>
+
+<script>
+"use strict";
+
+const KIMIA_API = "https://kimia-prive-api.onrender.com";
+const tg = window.Telegram && window.Telegram.WebApp;
+const reels = [0, 1, 2].map(i => document.getElementById("r" + i));
+
+let balance = 0;
+let busy = true;
+let auto = false;
+let turbo = false;
+let loggedIn = false;
+
+const bal = document.getElementById("bal");
+const msg = document.getElementById("msg");
+const spin = document.getElementById("spin");
+const overlay = document.getElementById("overlay");
+const toast = document.getElementById("toast");
+
+const fmt = n => Number(n).toLocaleString("en-US");
+
+function note(text) {
+  toast.textContent = text;
+  toast.classList.add("show");
+  setTimeout(() => toast.classList.remove("show"), 2200);
+}
+
+function audio(freq, dur = 0.14) {
   try {
-    const response = await fetch(KIMIA_API + "/api/health");
-    const data = await response.json();
-    console.log("KIMIA PRIVÉ API:", data);
+    const C = window.AudioContext || window.webkitAudioContext;
+    const c = new C();
+    const o = c.createOscillator();
+    const g = c.createGain();
+    o.connect(g);
+    g.connect(c.destination);
+    o.frequency.value = freq;
+    g.gain.value = 0.05;
+    o.start();
+    o.stop(c.currentTime + dur);
+    o.onended = () => c.close();
+  } catch (e) {}
+}
+
+function show(title, text, icon) {
+  document.getElementById("wt").textContent = title;
+  document.getElementById("wx").textContent = text;
+  document.getElementById("wi").textContent = icon;
+  overlay.classList.add("show");
+}
+
+async function api(path) {
+  if (!tg || !tg.initData) {
+    throw new Error("Open the game from your Telegram bot.");
+  }
+
+  const response = await fetch(KIMIA_API + path, {
+    method: "POST",
+    headers: {"Content-Type": "application/json"},
+    body: JSON.stringify({initData: tg.initData})
+  });
+
+  let data;
+  try {
+    data = await response.json();
+  } catch (e) {
+    throw new Error("The game server returned an invalid response.");
+  }
+
+  if (!response.ok) {
+    throw new Error(data.error || "Request failed. Please try again.");
+  }
+
+  return data;
+}
+
+async function login() {
+  if (!tg || !tg.initData) {
+    balance = 0;
+    bal.textContent = "—";
+    msg.textContent = "OPEN THROUGH TELEGRAM";
+    spin.disabled = true;
+    busy = true;
+    note("Open KIMIA PRIVÉ from your Telegram bot.");
+    return;
+  }
+
+  tg.ready();
+  tg.expand();
+
+  try {
+    msg.textContent = "VERIFYING TELEGRAM…";
+    const player = await api("/api/me");
+
+    balance = Number(player.balance);
+    bal.textContent = fmt(balance);
+
+    document.getElementById("vip").textContent =
+      "♛ VIP LEVEL " + player.vipLevel;
+
+    const name = player.username
+      ? "@" + player.username
+      : "TELEGRAM PLAYER";
+
+    document.getElementById("playerName").textContent = name;
+
+    loggedIn = true;
+    busy = false;
+    spin.disabled = false;
+    msg.textContent = "YOUR LUCK IS WAITING";
   } catch (error) {
-    console.error("KIMIA PRIVÉ API connection failed:", error);
+    console.error("KIMIA login error:", error);
+    loggedIn = false;
+    busy = true;
+    spin.disabled = true;
+    msg.textContent = "LOGIN FAILED · REOPEN GAME";
+    note(error.message);
   }
 }
 
-checkKimiaAPI();
-</script>
+async function go() {
+  if (busy || !loggedIn) return;
 
-</body></html>
+  if (balance < 300) {
+    msg.textContent = "NOT ENOUGH CHIPS";
+    note("You need 300 virtual chips to spin.");
+    auto = false;
+    return;
+  }
+
+  busy = true;
+  spin.disabled = true;
+  msg.textContent = "SPINNING…";
+  msg.classList.remove("hot");
+  reels.forEach(x => x.classList.add("spin"));
+  audio(330, 0.08);
+
+  try {
+    const result = await api("/api/spin");
+
+    if (!Array.isArray(result.symbols) || result.symbols.length !== 3) {
+      throw new Error("Invalid spin result from the server.");
+    }
+
+    const out = result.symbols;
+    const win = Number(result.win);
+    const newBalance = Number(result.balance);
+
+    reels.forEach((x, i) => {
+      x.textContent = out[i];
+      x.classList.remove("spin");
+    });
+
+    balance = newBalance;
+    bal.textContent = fmt(balance);
+
+    const jackpot = out.every(x => x === out[0]) && out[0] === "7️⃣";
+
+    if (win > 0) {
+      reels.forEach(x => x.classList.add("win"));
+      msg.classList.add("hot");
+      setTimeout(() => {
+        reels.forEach(x => x.classList.remove("win"));
+      }, 1100);
+    }
+
+    if (jackpot) {
+      msg.textContent = "♛ JACKPOT ♛";
+      audio(880, 0.7);
+      show("JACKPOT", fmt(win) + " virtual chips awarded!", "♛");
+    } else if (win > 0) {
+      msg.textContent = "WIN · +" + fmt(win) + " CHIPS";
+      audio(660);
+      note("YOU WON " + fmt(win) + " 🪙");
+    } else {
+      msg.textContent = "NO MATCH · TRY AGAIN";
+    }
+  } catch (error) {
+    console.error("KIMIA spin error:", error);
+    msg.textContent = "SPIN FAILED · TRY AGAIN";
+    note(error.message);
+  } finally {
+    reels.forEach(x => x.classList.remove("spin"));
+    busy = false;
+    spin.disabled = !loggedIn;
+
+    if (auto && loggedIn) {
+      setTimeout(() => {
+        if (auto && loggedIn && !busy) go();
+      }, turbo ? 100 : 650);
+    }
+  }
+}
+
+spin.addEventListener("click", go);
+
+document.getElementById("auto").addEventListener("click", () => {
+  auto = !auto;
+  note(auto ? "AUTO SPIN ON" : "AUTO SPIN OFF");
+
+  if (auto && !busy && loggedIn) go();
+});
+
+document.getElementById("turbo").addEventListener("click", () => {
+  turbo = !turbo;
+  note(turbo ? "TURBO MODE ON" : "TURBO MODE OFF");
+});
+
+document.getElementById("close").addEventListener("click", () => {
+  overlay.classList.remove("show");
+});
+
+login();
+</script>
+</body>
+</html>
