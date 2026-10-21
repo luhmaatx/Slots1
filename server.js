@@ -2,168 +2,89 @@
 const express = require("express");
 const cors = require("cors");
 const crypto = require("crypto");
-const path = require("path");
-const fs = require("fs");
 const { Pool } = require("pg");
 
 const app = express();
-
 const PORT = process.env.PORT || 3000;
 const BOT_TOKEN = process.env.TELEGRAM_BOT_TOKEN;
-const DATABASE_URL = process.env.DATABASE_URL;
-const ADMIN_TELEGRAM_ID = process.env.ADMIN_TELEGRAM_ID || "";
 
-const STARTING_BALANCE = 12480;
-const DAILY_BONUS = 1000;
-const JACKPOT_START = 1248730;
+const BET_OPTIONS = [300, 600, 1500, 3000];
+const DEFAULT_BET = 300;
 
-const BETS = [300, 600, 1500, 3000];
+const SYMBOLS = ["💎", "7️⃣", "💗", "🌹", "♠️", "✨"];
+
+// Five reels, three rows, five paylines.
+const PAYLINES = [
+  [0, 1, 2, 3, 4],       // Top row
+  [5, 6, 7, 8, 9],       // Middle row
+  [10, 11, 12, 13, 14],  // Bottom row
+  [0, 6, 12, 8, 4],      // V shape
+  [10, 6, 2, 8, 14]      // Inverted V
+];
+
+// Five matching symbols pay the original top prizes.
+// Three and four matching symbols pay smaller prizes.
+// All payouts scale with the selected bet.
+const FIVE_MATCH_PAYOUTS = {
+  "7️⃣": 15000,
+  "💎": 7500,
+  "💗": 4500,
+  "🌹": 3000,
+  "♠️": 3000,
+  "✨": 3000
+};
 
 const pool = new Pool({
-  connectionString: DATABASE_URL,
-  ssl: DATABASE_URL ? { rejectUnauthorized: false } : false
+  connectionString: process.env.DATABASE_URL,
+  ssl: process.env.DATABASE_URL
+    ? { rejectUnauthorized: false }
+    : false
 });
 
 app.use(cors());
-app.use(express.json({ limit: "1mb" }));
-app.use(express.urlencoded({ extended: true }));
+app.use(express.json({ limit: "20kb" }));
 
-/* =========================================================
-   DEMO STORAGE
-========================================================= */
+app.get("/", (req, res) => {
+  res.json({
+    status: "online",
+    game: "KIMIA PRIVÉ",
+    reels: 5,
+    rows: 3,
+    bets: BET_OPTIONS
+  });
+});
 
-const demoUsers = new Map();
-let demoJackpot = JACKPOT_START;
-
-/* =========================================================
-   SLOT SYMBOLS
-========================================================= */
-
-const SYMBOLS = [
-  { id: "kp", weight: 15, payouts: { 3: 8, 4: 25, 5: 100 } },
-  { id: "crown", weight: 14, payouts: { 3: 10, 4: 30, 5: 120 } },
-  { id: "bell", weight: 16, payouts: { 3: 12, 4: 35, 5: 150 } },
-  { id: "cherry", weight: 18, payouts: { 3: 15, 4: 45, 5: 180 } },
-  { id: "diamond", weight: 10, payouts: { 3: 20, 4: 60, 5: 250 } },
-  { id: "heart", weight: 12, payouts: { 3: 25, 4: 75, 5: 300 } },
-  { id: "seven", weight: 15, payouts: { 3: 30, 4: 100, 5: 500 } }
-];
-
-/* =========================================================
-   FIVE PAYLINES
-========================================================= */
-
-const PAYLINES = [
-  [0, 0, 0, 0, 0],
-  [1, 1, 1, 1, 1],
-  [2, 2, 2, 2, 2],
-  [0, 1, 2, 1, 0],
-  [2, 1, 0, 1, 2]
-];
-
-/* =========================================================
-   RANDOM SYMBOL
-========================================================= */
-
-function weightedSymbol() {
-  const total = SYMBOLS.reduce((sum, symbol) => sum + symbol.weight, 0);
-  let random = crypto.randomInt(0, total);
-
-  for (const symbol of SYMBOLS) {
-    if (random < symbol.weight) return symbol.id;
-    random -= symbol.weight;
-  }
-
-  return SYMBOLS[0].id;
-}
-
-/* =========================================================
-   CREATE FIVE REELS, THREE ROWS EACH
-========================================================= */
-
-function makeReels() {
-  return Array.from({ length: 5 }, () =>
-    Array.from({ length: 3 }, () => weightedSymbol())
-  );
-}
-
-function symbolById(id) {
-  return SYMBOLS.find(symbol => symbol.id === id) || SYMBOLS[0];
-}
-
-/* =========================================================
-   CALCULATE WIN
-========================================================= */
-
-function evaluate(reels, bet) {
-  let totalWin = 0;
-  const winningLines = [];
-  const wins = [];
-
-  for (let lineIndex = 0; lineIndex < PAYLINES.length; lineIndex++) {
-    const line = PAYLINES[lineIndex];
-    const sequence = line.map((row, column) => reels[column][row]);
-    const firstSymbol = sequence[0];
-
-    let count = 1;
-
-    for (let i = 1; i < sequence.length; i++) {
-      if (sequence[i] === firstSymbol) count++;
-      else break;
-    }
-
-    if (count >= 3) {
-      const symbol = symbolById(firstSymbol);
-      const multiplier = symbol.payouts[count] || 0;
-      const amount = Math.floor(bet * multiplier / 100);
-
-      if (amount > 0) {
-        totalWin += amount;
-        winningLines.push(lineIndex);
-        wins.push({
-          line: lineIndex + 1,
-          symbol: firstSymbol,
-          count,
-          amount
-        });
-      }
-    }
-  }
-
-  const diamondCount = reels.flat().filter(symbol => symbol === "diamond").length;
-
-  if (diamondCount >= 3) {
-    let multiplier = 1;
-    if (diamondCount === 4) multiplier = 3;
-    if (diamondCount >= 5) multiplier = 10;
-
-    const scatterWin = bet * multiplier;
-    totalWin += scatterWin;
-
-    wins.push({
-      line: 0,
-      symbol: "diamond",
-      count: diamondCount,
-      amount: scatterWin,
-      scatter: true
+app.get("/api/health", async (req, res) => {
+  try {
+    await pool.query("SELECT 1");
+    res.json({ status: "ok", database: "connected" });
+  } catch (error) {
+    console.error("Health check failed:", error.message);
+    res.status(503).json({
+      status: "error",
+      database: "unavailable"
     });
   }
+});
 
-  return { totalWin, winningLines, wins };
-}
-
-/* =========================================================
-   TELEGRAM INIT DATA VALIDATION
-========================================================= */
-
-function telegramUserFromInitData(initData) {
-  if (!initData || !BOT_TOKEN) return null;
+function verifyTelegram(initData) {
+  if (!BOT_TOKEN || !initData || typeof initData !== "string") {
+    throw new Error("Telegram authentication is not configured.");
+  }
 
   const params = new URLSearchParams(initData);
-  const hash = params.get("hash");
+  const receivedHash = params.get("hash");
+  const authDate = Number(params.get("auth_date"));
 
-  if (!hash) return null;
+  if (!receivedHash || !Number.isFinite(authDate)) {
+    throw new Error("Invalid Telegram login data.");
+  }
 
+  if (Math.abs(Date.now() / 1000 - authDate) > 86400) {
+    throw new Error("Telegram login expired. Reopen the game.");
+  }
+
+  // Keep all other authentication fields, including signature.
   params.delete("hash");
 
   const dataCheckString = [...params.entries()]
@@ -181,591 +102,254 @@ function telegramUserFromInitData(initData) {
     .update(dataCheckString)
     .digest("hex");
 
+  const expected = Buffer.from(expectedHash, "hex");
+  const received = Buffer.from(receivedHash, "hex");
+
   if (
-    expectedHash.length !== hash.length ||
-    !crypto.timingSafeEqual(Buffer.from(expectedHash), Buffer.from(hash))
+    received.length !== expected.length ||
+    !crypto.timingSafeEqual(received, expected)
   ) {
-    return null;
+    throw new Error("Telegram verification failed.");
   }
 
-  const authDate = Number(params.get("auth_date")) || 0;
-  const age = Math.floor(Date.now() / 1000) - authDate;
+  const userText = params.get("user");
+  if (!userText) throw new Error("Telegram user is missing.");
 
-  if (!authDate || age > 86400) return null;
+  const user = JSON.parse(userText);
+  if (!user.id) throw new Error("Invalid Telegram player.");
 
-  try {
-    return JSON.parse(params.get("user") || "null");
-  } catch {
-    return null;
-  }
+  return {
+    id: String(user.id),
+    username: typeof user.username === "string"
+      ? user.username.slice(0, 64)
+      : null
+  };
 }
 
-/* =========================================================
-   DATABASE SCHEMA
-========================================================= */
-
-async function ensureSchema() {
-  if (!DATABASE_URL) {
-    console.warn("DATABASE_URL not configured. Running demo storage.");
-    return;
-  }
-
-  await pool.query(`
-    CREATE TABLE IF NOT EXISTS kimia_users (
-      telegram_id BIGINT PRIMARY KEY,
-      username TEXT,
-      first_name TEXT,
-      last_name TEXT,
-      balance BIGINT NOT NULL DEFAULT ${STARTING_BALANCE},
-      vip_level INTEGER NOT NULL DEFAULT 3,
-      vip_progress INTEGER NOT NULL DEFAULT 42,
-      total_won BIGINT NOT NULL DEFAULT 0,
-      total_spins BIGINT NOT NULL DEFAULT 0,
-      last_bonus_at TIMESTAMPTZ,
-      created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
-      updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
-    );
-
-    CREATE TABLE IF NOT EXISTS kimia_spins (
-      id BIGSERIAL PRIMARY KEY,
-      telegram_id BIGINT NOT NULL
-        REFERENCES kimia_users(telegram_id) ON DELETE CASCADE,
-      bet BIGINT NOT NULL,
-      win BIGINT NOT NULL,
-      reels JSONB NOT NULL,
-      winning_lines JSONB NOT NULL,
-      created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
-    );
-
-    CREATE TABLE IF NOT EXISTS kimia_settings (
-      key TEXT PRIMARY KEY,
-      value BIGINT NOT NULL
-    );
-
-    INSERT INTO kimia_settings(key, value)
-    VALUES ('jackpot', ${JACKPOT_START})
-    ON CONFLICT (key) DO NOTHING;
-  `);
-}
-
-/* =========================================================
-   CREATE OR GET USER
-========================================================= */
-
-async function getOrCreateUser(tgUser) {
-  if (!DATABASE_URL) {
-    const key = String(tgUser.id);
-
-    if (!demoUsers.has(key)) {
-      demoUsers.set(key, {
-        telegram_id: tgUser.id,
-        username: tgUser.username || "",
-        first_name: tgUser.first_name || "Guest",
-        last_name: tgUser.last_name || "",
-        balance: STARTING_BALANCE,
-        vip_level: 3,
-        vip_progress: 42,
-        total_won: 0,
-        total_spins: 0,
-        last_bonus_at: null
-      });
-    }
-
-    return demoUsers.get(key);
-  }
+async function getPlayer(initData) {
+  const user = verifyTelegram(initData);
 
   const result = await pool.query(
-    `
-    INSERT INTO kimia_users(telegram_id, username, first_name, last_name)
-    VALUES($1, $2, $3, $4)
-    ON CONFLICT (telegram_id)
-    DO UPDATE SET
-      username = EXCLUDED.username,
-      first_name = EXCLUDED.first_name,
-      last_name = EXCLUDED.last_name,
-      updated_at = NOW()
-    RETURNING *
-    `,
-    [
-      tgUser.id,
-      tgUser.username || "",
-      tgUser.first_name || "Guest",
-      tgUser.last_name || ""
-    ]
+    `INSERT INTO players (telegram_id, username)
+     VALUES ($1, $2)
+     ON CONFLICT (telegram_id)
+     DO UPDATE SET username = EXCLUDED.username
+     RETURNING telegram_id, username, balance, vip_level`,
+    [user.id, user.username]
   );
 
   return result.rows[0];
 }
 
-/* =========================================================
-   AUTH MIDDLEWARE
-========================================================= */
-
-async function auth(req, res, next) {
+app.post("/api/me", async (req, res) => {
   try {
-    const initData =
-      req.header("X-Telegram-Init-Data") ||
-      req.body?.initData ||
-      "";
+    const player = await getPlayer(req.body?.initData);
 
-    let tgUser = telegramUserFromInitData(initData);
-
-    if (!tgUser && process.env.ALLOW_DEMO !== "false") {
-      tgUser = {
-        id: 999999999,
-        username: "demo",
-        first_name: "Kimia",
-        last_name: ""
-      };
-    }
-
-    if (!tgUser?.id) {
-      return res.status(401).json({
-        ok: false,
-        error: "LOGIN FAILED · REOPEN GAME"
-      });
-    }
-
-    req.tgUser = tgUser;
-    req.player = await getOrCreateUser(tgUser);
-
-    next();
+    res.set("Cache-Control", "no-store");
+    res.json({
+      id: player.telegram_id,
+      username: player.username,
+      balance: Number(player.balance),
+      vipLevel: player.vip_level
+    });
   } catch (error) {
-    console.error(error);
-    res.status(500).json({ ok: false, error: "AUTH ERROR" });
+    console.error("Player login failed:", error.message);
+    res.status(401).json({ error: error.message });
   }
-}
+});
 
-/* =========================================================
-   PUBLIC USER
-========================================================= */
+app.get("/api/leaderboard", async (req, res) => {
+  try {
+    const result = await pool.query(`
+      SELECT username, balance
+      FROM players
+      ORDER BY balance DESC, created_at ASC
+      LIMIT 10
+    `);
 
-function publicUser(row) {
-  return {
-    id: String(row.telegram_id),
-    username: row.username || "",
-    name: row.first_name || row.username || "Guest",
-    balance: Number(row.balance),
-    vipLevel: Number(row.vip_level),
-    vipProgress: Number(row.vip_progress),
-    totalWon: Number(row.total_won),
-    totalSpins: Number(row.total_spins),
-    lastBonusAt: row.last_bonus_at
-  };
-}
-
-/* =========================================================
-   GAME STATE
-========================================================= */
-
-async function stateFor(player) {
-  if (!DATABASE_URL) {
-    return {
-      user: publicUser(player),
-      jackpot: demoJackpot,
-      leaderboard: [
-        { rank: 1, name: "GoddessSK", balance: 2984500 },
-        { rank: 2, name: "PrettyRich", balance: 1865320 },
-        { rank: 3, name: "LuhBae", balance: 1432910 },
-        { rank: 4, name: "BossBabe", balance: 1021600 },
-        { rank: 5, name: "Mami", balance: 876230 }
-      ]
-    };
-  }
-
-  const [userQuery, jackpotQuery, leaderboardQuery] = await Promise.all([
-    pool.query(
-      "SELECT * FROM kimia_users WHERE telegram_id=$1",
-      [player.telegram_id]
-    ),
-    pool.query(
-      "SELECT value FROM kimia_settings WHERE key='jackpot'"
-    ),
-    pool.query(`
-      SELECT first_name, username, balance
-      FROM kimia_users
-      ORDER BY balance DESC
-      LIMIT 5
-    `)
-  ]);
-
-  return {
-    user: publicUser(userQuery.rows[0]),
-    jackpot: Number(jackpotQuery.rows[0]?.value || JACKPOT_START),
-    leaderboard: leaderboardQuery.rows.map((row, index) => ({
+    const players = result.rows.map((player, index) => ({
       rank: index + 1,
-      name: row.first_name || row.username || "Player",
-      balance: Number(row.balance)
-    }))
-  };
-}
+      username: player.username || "Anonymous Player",
+      balance: Number(player.balance)
+    }));
 
-/* =========================================================
-   API HEALTH
-========================================================= */
-
-app.get("/api/health", (req, res) => {
-  res.json({ ok: true, game: "KIMIA PRIVÉ" });
-});
-
-/* =========================================================
-   GET GAME STATE
-========================================================= */
-
-app.get("/api/state", auth, async (req, res) => {
-  try {
-    const state = await stateFor(req.player);
-    res.json({ ok: true, ...state });
+    res.set("Cache-Control", "no-store");
+    res.json({ players });
   } catch (error) {
-    console.error(error);
-    res.status(500).json({ ok: false, error: "STATE ERROR" });
-  }
-});
-
-/* =========================================================
-   DAILY BONUS
-========================================================= */
-
-app.post("/api/bonus", auth, async (req, res) => {
-  try {
-    if (!DATABASE_URL) {
-      const player = req.player;
-      const now = Date.now();
-      const last = player.last_bonus_at
-        ? new Date(player.last_bonus_at).getTime()
-        : 0;
-
-      if (last && now - last < 86400000) {
-        return res.json({
-          ok: true,
-          claimed: false,
-          ...await stateFor(player)
-        });
-      }
-
-      player.balance += DAILY_BONUS;
-      player.last_bonus_at = new Date();
-
-      return res.json({
-        ok: true,
-        claimed: true,
-        amount: DAILY_BONUS,
-        ...await stateFor(player)
-      });
-    }
-
-    const client = await pool.connect();
-
-    try {
-      await client.query("BEGIN");
-
-      const query = await client.query(
-        "SELECT * FROM kimia_users WHERE telegram_id=$1 FOR UPDATE",
-        [req.player.telegram_id]
-      );
-
-      const user = query.rows[0];
-      const now = Date.now();
-      const last = user.last_bonus_at
-        ? new Date(user.last_bonus_at).getTime()
-        : 0;
-
-      if (last && now - last < 86400000) {
-        const remaining = 86400000 - (now - last);
-        await client.query("ROLLBACK");
-
-        return res.json({
-          ok: true,
-          claimed: false,
-          remainingMs: remaining,
-          ...await stateFor(user)
-        });
-      }
-
-      await client.query(
-        `
-        UPDATE kimia_users
-        SET balance = balance + $1,
-            last_bonus_at = NOW(),
-            updated_at = NOW()
-        WHERE telegram_id=$2
-        `,
-        [DAILY_BONUS, req.player.telegram_id]
-      );
-
-      await client.query("COMMIT");
-
-      const fresh = (
-        await pool.query(
-          "SELECT * FROM kimia_users WHERE telegram_id=$1",
-          [req.player.telegram_id]
-        )
-      ).rows[0];
-
-      res.json({
-        ok: true,
-        claimed: true,
-        amount: DAILY_BONUS,
-        ...await stateFor(fresh)
-      });
-    } catch (error) {
-      await client.query("ROLLBACK");
-      throw error;
-    } finally {
-      client.release();
-    }
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ ok: false, error: "BONUS ERROR" });
-  }
-});
-
-/* =========================================================
-   SPIN
-========================================================= */
-
-app.post("/api/spin", auth, async (req, res) => {
-  const bet = Number(req.body?.bet);
-
-  if (!BETS.includes(bet)) {
-    return res.status(400).json({
-      ok: false,
-      error: "INVALID BET"
+    console.error("Leaderboard failed:", error.message);
+    res.status(500).json({
+      error: "Unable to load leaderboard."
     });
   }
-
-  try {
-    const reels = makeReels();
-    const result = evaluate(reels, bet);
-
-    if (!DATABASE_URL) {
-      const player = req.player;
-
-      if (Number(player.balance) < bet) {
-        return res.status(400).json({
-          ok: false,
-          error: "NOT ENOUGH CHIPS"
-        });
-      }
-
-      player.balance = Number(player.balance) - bet + result.totalWin;
-      player.totalSpins += 1;
-      player.total_won = Number(player.total_won || 0) + result.totalWin;
-      demoJackpot += Math.floor(bet * 0.03);
-
-      const fiveDiamonds =
-        reels.flat().filter(symbol => symbol === "diamond").length >= 5;
-
-      if (fiveDiamonds) {
-        result.totalWin += demoJackpot;
-        player.balance += demoJackpot;
-        demoJackpot = JACKPOT_START;
-      }
-
-      return res.json({
-        ok: true,
-        reels,
-        ...result,
-        balance: player.balance,
-        jackpot: demoJackpot
-      });
-    }
-
-    const client = await pool.connect();
-
-    try {
-      await client.query("BEGIN");
-
-      const userQuery = await client.query(
-        "SELECT * FROM kimia_users WHERE telegram_id=$1 FOR UPDATE",
-        [req.player.telegram_id]
-      );
-
-      const user = userQuery.rows[0];
-
-      if (Number(user.balance) < bet) {
-        await client.query("ROLLBACK");
-
-        return res.status(400).json({
-          ok: false,
-          error: "NOT ENOUGH CHIPS",
-          balance: Number(user.balance)
-        });
-      }
-
-      const jackpotQuery = await client.query(
-        "SELECT value FROM kimia_settings WHERE key='jackpot' FOR UPDATE"
-      );
-
-      let jackpot = Number(jackpotQuery.rows[0]?.value || JACKPOT_START);
-      jackpot += Math.floor(bet * 0.03);
-
-      const fiveDiamonds =
-        reels.flat().filter(symbol => symbol === "diamond").length >= 5;
-
-      if (fiveDiamonds) {
-        result.totalWin += jackpot;
-        jackpot = JACKPOT_START;
-      }
-
-      const newBalance = Number(user.balance) - bet + result.totalWin;
-
-      let vipProgress =
-        Number(user.vip_progress) + Math.max(1, Math.floor(bet / 300));
-
-      let vipLevel = Number(user.vip_level);
-
-      if (vipProgress >= 100) {
-        vipLevel++;
-        vipProgress = 0;
-      }
-
-      await client.query(
-        `
-        UPDATE kimia_users
-        SET balance=$1,
-            total_won=total_won+$2,
-            total_spins=total_spins+1,
-            vip_progress=$3,
-            vip_level=$4,
-            updated_at=NOW()
-        WHERE telegram_id=$5
-        `,
-        [
-          newBalance,
-          result.totalWin,
-          vipProgress,
-          vipLevel,
-          req.player.telegram_id
-        ]
-      );
-
-      await client.query(
-        `
-        INSERT INTO kimia_spins(
-          telegram_id, bet, win, reels, winning_lines
-        )
-        VALUES($1, $2, $3, $4, $5)
-        `,
-        [
-          req.player.telegram_id,
-          bet,
-          result.totalWin,
-          JSON.stringify(reels),
-          JSON.stringify(result.winningLines)
-        ]
-      );
-
-      await client.query(
-        "UPDATE kimia_settings SET value=$1 WHERE key='jackpot'",
-        [jackpot]
-      );
-
-      await client.query("COMMIT");
-
-      res.json({
-        ok: true,
-        reels,
-        ...result,
-        jackpot,
-        balance: newBalance,
-        vipLevel,
-        vipProgress
-      });
-    } catch (error) {
-      await client.query("ROLLBACK");
-      throw error;
-    } finally {
-      client.release();
-    }
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ ok: false, error: "SPIN ERROR" });
-  }
 });
 
-/* =========================================================
-   SPIN HISTORY
-========================================================= */
+function calculatePayout(line, bet) {
+  const counts = {};
 
-app.get("/api/history", auth, async (req, res) => {
-  if (!DATABASE_URL) {
-    return res.json({ ok: true, spins: [] });
+  for (const symbol of line) {
+    counts[symbol] = (counts[symbol] || 0) + 1;
   }
 
+  const bestCount = Math.max(...Object.values(counts));
+  const winningSymbol = Object.keys(counts)
+    .find(symbol => counts[symbol] === bestCount);
+
+  const scale = bet / DEFAULT_BET;
+
+  if (bestCount >= 5) {
+    return Math.round(
+      FIVE_MATCH_PAYOUTS[winningSymbol] * scale
+    );
+  }
+
+  if (bestCount === 4) {
+    return Math.round(
+      FIVE_MATCH_PAYOUTS[winningSymbol] / 3 * scale
+    );
+  }
+
+  if (bestCount === 3) {
+    return Math.round(
+      FIVE_MATCH_PAYOUTS[winningSymbol] / 10 * scale
+    );
+  }
+
+  if (bestCount === 2) {
+    return Math.round(150 * scale);
+  }
+
+  return 0;
+}
+
+app.post("/api/spin", async (req, res) => {
+  let client;
+  let transactionOpen = false;
+
   try {
-    const query = await pool.query(
-      `
-      SELECT id, bet, win, reels, winning_lines, created_at
-      FROM kimia_spins
-      WHERE telegram_id=$1
-      ORDER BY id DESC
-      LIMIT 20
-      `,
-      [req.player.telegram_id]
+    const user = verifyTelegram(req.body?.initData);
+
+    const bet = req.body?.bet === undefined
+      ? DEFAULT_BET
+      : req.body.bet;
+
+    if (
+      !Number.isSafeInteger(bet) ||
+      !BET_OPTIONS.includes(bet)
+    ) {
+      return res.status(400).json({
+        error: "Invalid bet. Choose 300, 600, 1500, or 3000 chips."
+      });
+    }
+
+    client = await pool.connect();
+    await client.query("BEGIN");
+    transactionOpen = true;
+
+    const playerResult = await client.query(
+      `INSERT INTO players (telegram_id, username)
+       VALUES ($1, $2)
+       ON CONFLICT (telegram_id)
+       DO UPDATE SET username = EXCLUDED.username
+       RETURNING telegram_id, username, balance, vip_level`,
+      [user.id, user.username]
     );
 
-    res.json({ ok: true, spins: query.rows });
+    const player = playerResult.rows[0];
+    const balance = Number(player.balance);
+
+    if (balance < bet) {
+      await client.query("ROLLBACK");
+      transactionOpen = false;
+
+      return res.status(400).json({
+        error: "Not enough chips for this bet.",
+        balance,
+        bet
+      });
+    }
+
+    // Generate a 5-reel x 3-row grid (15 symbols).
+    // Index layout: top row 0-4, middle row 5-9,
+    // bottom row 10-14.
+    const output = Array.from(
+      { length: 15 },
+      () => SYMBOLS[crypto.randomInt(SYMBOLS.length)]
+    );
+
+    let win = 0;
+    const winningLines = [];
+
+    for (let i = 0; i < PAYLINES.length; i++) {
+      const line = PAYLINES[i].map(index => output[index]);
+      const payout = calculatePayout(line, bet);
+
+      if (payout > 0) {
+        win += payout;
+        winningLines.push(i);
+      }
+    }
+
+    const updated = await client.query(
+      `UPDATE players
+       SET balance = balance - $1 + $2
+       WHERE telegram_id = $3
+       RETURNING balance`,
+      [bet, win, user.id]
+    );
+
+    await client.query("COMMIT");
+    transactionOpen = false;
+
+    res.set("Cache-Control", "no-store");
+    res.json({
+      symbols: output,
+      bet,
+      win,
+      winningLines,
+      balance: Number(updated.rows[0].balance),
+      reels: 5,
+      rows: 3
+    });
   } catch (error) {
-    console.error(error);
-    res.status(500).json({ ok: false, error: "HISTORY ERROR" });
+    if (client && transactionOpen) {
+      await client.query("ROLLBACK").catch(() => {});
+    }
+
+    console.error("Spin failed:", error.message);
+    res.status(500).json({
+      error: "Unable to complete spin. Please try again."
+    });
+  } finally {
+    if (client) client.release();
   }
 });
 
-/* =========================================================
-   SERVE THE GAME PAGE AND STATIC ASSETS
-   index.html is expected to be beside server.js.
-========================================================= */
+async function initializeDatabase() {
+  // Keep the existing table and its player balances.
+  await pool.query(`
+    CREATE TABLE IF NOT EXISTS players (
+      id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+      telegram_id BIGINT UNIQUE NOT NULL,
+      username TEXT,
+      balance BIGINT NOT NULL DEFAULT 1000,
+      vip_level INTEGER NOT NULL DEFAULT 0,
+      created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+    )
+  `);
 
-const indexPath = path.join(__dirname, "index.html");
-
-if (!fs.existsSync(indexPath)) {
-  console.error("WARNING: index.html was not found at:", indexPath);
+  console.log("Players table is ready.");
 }
 
-/*
-  This middleware serves index.html, CSS, JavaScript, images,
-  and other files from the repository directory.
-
-  API routes above remain registered and are not replaced.
-*/
-app.use(express.static(__dirname));
-
-/* Explicit root route, with a clear error if the file is missing. */
-app.get("/", (req, res) => {
-  res.sendFile(indexPath, error => {
-    if (error && !res.headersSent) {
-      console.error("Could not send index.html:", error);
-      res.status(500).send("Game page could not be loaded. Check the Render logs.");
-    }
+initializeDatabase()
+  .then(() => {
+    app.listen(PORT, "0.0.0.0", () => {
+      console.log("KIMIA PRIVÉ API running on port " + PORT);
+    });
+  })
+  .catch(error => {
+    console.error(
+      "Database initialization failed:",
+      error.message
+    );
+    process.exit(1);
   });
-});
-
-/* Explicit index.html route for direct browser access. */
-app.get("/index.html", (req, res) => {
-  res.sendFile(indexPath, error => {
-    if (error && !res.headersSent) {
-      console.error("Could not send index.html:", error);
-      res.status(500).send("Game page could not be loaded. Check the Render logs.");
-    }
-  });
-});
-
-/* =========================================================
-   START SERVER
-========================================================= */
-
-async function startServer() {
-  await ensureSchema();
-
-  app.listen(PORT, () => {
-    console.log(`KIMIA PRIVÉ running on port ${PORT}`);
-    console.log(`Game HTML path: ${indexPath}`);
-    console.log(`Game HTML exists: ${fs.existsSync(indexPath)}`);
-  });
-}
-
-startServer().catch(error => {
-  console.error("Server initialization failed:", error);
-  process.exit(1);
-});
