@@ -3,461 +3,72 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta name="theme-color" content="#080504">
+<meta name="theme-color" content="#090706">
 <title>KIMIA PRIVÉ</title>
 <script src="https://telegram.org/js/telegram-web-app.js"></script>
+
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap');
 
 :root {
-  --gold:#f7dba5;
-  --gold2:#bd8644;
-  --rose:#e68ca9;
-  --bg:#080504;
-  --cream:#fff0d8;
+  --gold:#e9c98d;
+  --gold2:#a8783d;
+  --rose:#e99ab2;
+  --cream:#fff2dc;
+  --bg:#080605;
 }
-*{box-sizing:border-box}
-body{
-  margin:0;background:#030202;color:var(--cream);
+* { box-sizing:border-box }
+html { background:#050403; scroll-behavior:smooth }
+body {
+  margin:0;
+  color:var(--cream);
+  background:#050403;
   font-family:Inter,Arial,sans-serif;
 }
-button{font:inherit;cursor:pointer}
-button:disabled{opacity:.5;cursor:wait}
-button:focus-visible{outline:2px solid var(--gold);outline-offset:3px}
-.shell{
-  width:min(520px,100%);min-height:100vh;margin:auto;
-  position:relative;overflow:hidden;padding-bottom:92px;
+button { font:inherit; cursor:pointer; touch-action:manipulation }
+button:disabled { opacity:.45; cursor:wait }
+
+.shell {
+  width:min(480px,100%);
+  min-height:100vh;
+  margin:auto;
+  padding-bottom:100px;
+  position:relative;
+  overflow:hidden;
   background:
-    radial-gradient(ellipse at 50% 20%,#3b2017 0,transparent 34%),
-    radial-gradient(ellipse at 0% 35%,#28100f 0,transparent 28%),
-    radial-gradient(ellipse at 100% 45%,#30170f 0,transparent 28%),
-    linear-gradient(180deg,#100906,#050303 62%,#100805);
+    radial-gradient(ellipse at 50% 20%,rgba(191,115,72,.20),transparent 33%),
+    radial-gradient(ellipse at 0% 45%,rgba(233,154,178,.08),transparent 35%),
+    linear-gradient(180deg,#150d09,#080605 58%,#100906);
+  box-shadow:0 0 70px #000;
 }
-.shell:before{
-  content:"";position:absolute;inset:0;pointer-events:none;opacity:.2;
-  background:
-    repeating-linear-gradient(115deg,transparent 0 45px,rgba(227,176,112,.07) 46px,transparent 48px),
-    radial-gradient(ellipse at 50% 0,rgba(255,205,133,.2),transparent 45%);
+.noise {
+  position:absolute;
+  inset:0;
+  opacity:.035;
+  pointer-events:none;
+  background-image:radial-gradient(#fff 1px,transparent 1px);
+  background-size:5px 5px;
 }
-button,.header,.brand,.balance,.jackpot,.machine,.extras,.leader,.vipcard{position:relative}
-.header{
-  display:flex;align-items:center;justify-content:space-between;
-  padding:15px 16px 6px;gap:10px;
+.header {
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:18px 20px 5px;
+  position:relative;
 }
-.profile{display:flex;align-items:center;gap:9px;min-width:0}
-.avatar{
-  flex-shrink:0;width:48px;height:48px;border-radius:50%;
-  display:grid;place-items:center;border:1px solid var(--gold);
-  background:radial-gradient(circle at 35% 25%,#9c6650,#21100b 65%);
-  box-shadow:0 0 18px #c98a4430;font:24px Georgia;color:var(--gold);
+.menu,.avatar {
+  width:42px;
+  height:42px;
+  border-radius:50%;
+  display:grid;
+  place-items:center;
 }
-.profile-info{font-size:11px;line-height:1.8;color:#f3d7b3}
-.profile-info strong{font-size:14px;font-weight:500}
-.muted{color:#a99886;font-size:9px}
-.progress{height:4px;width:105px;margin-top:3px;background:#38251a;border-radius:5px;overflow:hidden}
-.progress i{display:block;width:42%;height:100%;background:linear-gradient(90deg,#b57b3b,#ffe0a3)}
-.menu{
-  width:42px;height:42px;flex-shrink:0;border-radius:50%;
-  background:#100906;border:1px solid #76563a;color:var(--gold);font-size:20px;
+.menu {
+  border:1px solid #765c39;
+  color:var(--gold);
+  background:#100b08;
+  font-size:19px;
 }
-.brand{text-align:center;margin:13px 10px 16px}
-.crown{font-size:27px;color:var(--gold);text-shadow:0 0 18px #e9a55c}
-.brand h1{
-  font:500 clamp(49px,13vw,70px)/.8 'Cormorant Garamond',Georgia,serif;
-  letter-spacing:.045em;margin:9px 0 7px;
-  background:linear-gradient(#fff8e7 8%,#edc98b 43%,#a76a36 65%,#fff0c6);
-  -webkit-background-clip:text;background-clip:text;color:transparent;
-  filter:drop-shadow(0 4px 12px #d88c483b);
-}
-.prive{
-  font:500 31px/1 'Cormorant Garamond',Georgia,serif;
-  letter-spacing:.31em;padding-left:.31em;color:#f8dec1;
-}
-.tag{margin-top:11px;color:#c7a47b;font-size:9px;letter-spacing:.34em}
-.balance{
-  margin:0 13px 12px;padding:12px 14px;
-  border:1px solid #745337;border-radius:16px;
-  background:linear-gradient(110deg,#21130d,#090605 75%);
-  display:flex;justify-content:space-between;align-items:center;gap:8px;
-  box-shadow:inset 0 1px #fff1d115,0 8px 24px #0008;
-}
-.balance small{display:block;color:#a18b74;font-size:8px;letter-spacing:.16em}
-.balance strong{font:500 24px 'Cormorant Garamond',Georgia;color:#fff0d3}
-.balance .plus{
-  border:1px solid #b78b55;background:#130b07;color:var(--gold);
-  width:34px;height:34px;border-radius:50%;font-size:22px;
-}
-.jackpot{text-align:center;margin:12px 18px 8px}
-.jackpot .label{font-size:8px;letter-spacing:.3em;color:#c2a16e}
-.jackpot .number{
-  font:500 29px 'Cormorant Garamond',Georgia;color:var(--gold);
-  text-shadow:0 0 20px #d5a25a55;
-}
-.jackpot .rule{height:1px;background:linear-gradient(90deg,transparent,#b68a52,transparent)}
-.machine{
-  margin:12px 9px 0;padding:10px 9px 12px;
-  border-radius:27px;border:2px solid #b38a55;
-  background:linear-gradient(145deg,#5b3925 0%,#170d09 13%,#080504 52%,#392219 100%);
-  box-shadow:0 0 0 3px #1b100a,0 0 0 4px #7d5736,
-    inset 0 0 0 2px #f5d6a12b,0 15px 35px #000,0 0 30px #d5a45a18;
-}
-.machine:before{
-  content:"";position:absolute;inset:5px;border:1px solid #e5bc7b48;
-  border-radius:21px;pointer-events:none;
-}
-.machine-label{
-  text-align:center;letter-spacing:.28em;font-size:8px;color:#d7b680;
-  padding:5px 0 10px;
-}
-.reel-frame{
-  position:relative;padding:6px;border-radius:17px;
-  border:1px solid #c49a5f;
-  background:linear-gradient(120deg,#5d3b24,#0a0604 15%,#25150d 50%,#070504 85%,#8a6036);
-  box-shadow:inset 0 0 17px #000,0 0 12px #e4b66a15;
-}
-.reels{
-  display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:4px;
-  position:relative;isolation:isolate;
-}
-.reel{
-  height:clamp(73px,19vw,92px);min-width:0;overflow:hidden;
-  display:grid;place-items:center;position:relative;
-  border:1px solid #8c653b;border-radius:9px;
-  background:
-    radial-gradient(ellipse at 30% 12%,#fff9e9 0,transparent 30%),
-    linear-gradient(145deg,#f9e9cb,#b58a5b 48%,#f7dfb6 75%,#94704b);
-  color:#1d100a;
-  box-shadow:inset 0 0 10px #4b291e55,inset 0 2px 2px #fff9e9,
-    0 3px 7px #000;
-  font-size:clamp(25px,7.3vw,38px);
-  text-shadow:0 2px 1px #fff6d8;
-  transform:translateZ(0);
-}
-.reel:before{
-  content:"";position:absolute;inset:0;pointer-events:none;
-  background:linear-gradient(110deg,transparent 20%,#ffffff55 43%,transparent 56%);
-  transform:translateX(-150%);
-}
-.reel.spinning:before{animation:shine .3s linear infinite}
-.reel.spinning{animation:shake .1s infinite alternate;filter:blur(1px)}
-@keyframes shine{to{transform:translateX(150%)}}
-@keyframes shake{to{transform:translateY(3px)}}
-.reel.win{
-  z-index:2;border-color:#ffe6a0;
-  box-shadow:0 0 10px #ffe4a0,0 0 22px #e6a94a,
-    inset 0 0 15px #fff4cc;animation:winpop .5s ease-in-out 2;
-}
-@keyframes winpop{50%{transform:scale(1.055);filter:brightness(1.45)}}
-.payline{
-  position:absolute;left:0;right:0;height:2px;z-index:3;
-  pointer-events:none;background:linear-gradient(90deg,transparent,#f7dba5,#fff7df,#f7dba5,transparent);
-  box-shadow:0 0 7px #ffe2a3;opacity:.58;
-}
-.payline.p1{top:16.67%}
-.payline.p2{top:50%}
-.payline.p3{top:83.33%}
-.payline.p4{top:0;bottom:0;height:auto;background:none;border-top:2px solid #e68ca9;clip-path:polygon(0 0,100% 100%,100% 100%,0 0);opacity:.6}
-.payline.p5{top:0;bottom:0;height:auto;background:none;border-top:2px solid #e68ca9;clip-path:polygon(100% 0,0 100%,0 100%,100% 0);opacity:.6}
-.lines-label{font-size:8px;text-align:center;letter-spacing:.2em;color:#b89a70;padding:8px 0 2px}
-.bet-panel{
-  display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-top:10px;
-}
-.bet-box{
-  padding:9px 7px;border:1px solid #62482e;border-radius:10px;
-  background:linear-gradient(120deg,#1c100a,#090605);
-  text-align:center;min-width:0;
-}
-.bet-box small{display:block;font-size:8px;letter-spacing:.15em;color:#b49a79}
-.bet-box strong{display:block;font:500 21px 'Cormorant Garamond',Georgia;color:#f6d8a4;margin:3px}
-.bet-buttons{display:flex;justify-content:center;align-items:center;gap:5px}
-.bet-buttons button{
-  background:#120b07;color:var(--gold);border:1px solid #775432;
-  border-radius:7px;min-width:28px;height:28px;
-}
-.bet-buttons select{
-  min-width:0;width:100%;max-width:108px;
-  color:#f9dfae;background:#130b07;border:1px solid #775432;
-  border-radius:7px;padding:6px 2px;text-align:center;font-size:11px;
-}
-.maxbet{
-  width:100%;margin-top:8px;padding:9px;border:1px solid #b38b56;
-  border-radius:9px;background:linear-gradient(100deg,#392416,#1a0e08);
-  color:#f4d39b;font-size:9px;letter-spacing:.2em;
-}
-.controls{display:grid;grid-template-columns:62px minmax(0,1fr) 62px;gap:7px;align-items:center;margin-top:10px}
-.sidebtn{
-  height:54px;border:1px solid #765536;border-radius:14px;
-  background:linear-gradient(145deg,#24150d,#080504);color:#e9c58c;
-  font-size:9px;letter-spacing:.06em;
-  box-shadow:inset 0 1px #fff2d116,0 5px 10px #000;
-}
-.sidebtn span{font-size:20px}
-.spinbtn{
-  height:65px;border-radius:18px;border:2px solid #e7c58a;
-  color:#1a0c06;font:500 29px 'Cormorant Garamond',Georgia;
-  letter-spacing:.18em;
-  background:linear-gradient(180deg,#fff0c9,#e9c17e 35%,#b17b40 78%,#f4d9a1);
-  box-shadow:inset 0 2px #fff9e9,0 0 0 3px #25150c,0 0 0 4px #9d713f,0 5px 20px #000;
-}
-.message{
-  min-height:29px;padding:10px 2px 2px;text-align:center;
-  color:#c9a777;font-size:9px;letter-spacing:.1em;line-height:1.5;
-}
-.message.hot{color:#ffb1c8;text-shadow:0 0 12px #e98ea9}
-.extras{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px;margin:13px 9px}
-.extra{
-  border:1px solid #6a4b30;border-radius:12px;padding:12px 5px;
-  text-align:center;background:linear-gradient(145deg,#20120c,#080504);
-  color:#f3d4a0;min-width:0;
-}
-.extra .ico{font-size:23px}
-.extra strong{display:block;font:500 14px 'Cormorant Garamond',Georgia;margin:5px 0}
-.extra small{display:block;color:#a7937b;font-size:7px;letter-spacing:.08em}
-.vipcard,.leader{
-  margin:12px 9px;padding:13px;border:1px solid #65482f;
-  border-radius:15px;background:linear-gradient(120deg,#1d110b,#080504);
-}
-.vip-head{display:flex;align-items:center;justify-content:space-between;gap:8px}
-.vip-title{font:500 18px 'Cormorant Garamond',Georgia;color:#f2d5a4}
-.vipcard .progress{width:100%;max-width:180px;height:5px;margin-top:9px}
-.vipcard .progress i{width:42%}
-.leader-head{display:flex;justify-content:space-between;align-items:center;gap:6px;color:#e8c78f;font-size:9px;letter-spacing:.13em}
-.leader-head button{background:none;border:0;color:#d7b582;font-size:8px}
-.rows{margin-top:9px}
-.player-row{
-  display:flex;align-items:center;gap:8px;padding:8px 0;
-  border-bottom:1px solid #352217;min-width:0;
-}
-.player-row:last-child{border-bottom:0}
-.rank{width:19px;color:#e5bd7e;font-size:10px;flex-shrink:0}
-.mini{
-  width:31px;height:31px;flex-shrink:0;border:1px solid #9c7447;
-  border-radius:50%;display:grid;place-items:center;
-  background:radial-gradient(circle at 35% 25%,#7c5140,#150a07);
-  color:#f4d6a1;font:14px Georgia;
-}
-.who{font-size:10px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;flex:1}
-.score{font-size:9px;color:#d2b58d;white-space:nowrap}
-.empty{padding:16px 3px;text-align:center;color:#a18a70;font-size:10px}
-nav{
-  position:fixed;bottom:0;left:50%;transform:translateX(-50%);
-  width:min(520px,100%);z-index:8;display:grid;grid-template-columns:repeat(5,1fr);
-  padding:9px 4px calc(7px + env(safe-area-inset-bottom));
-  background:rgba(5,3,2,.97);border-top:1px solid #5c4028;
-  backdrop-filter:blur(14px);
-}
-nav button{border:0;background:none;color:#a18d79;font-size:8px;letter-spacing:.04em}
-nav button i{font-style:normal;font-size:20px;display:block;margin-bottom:4px}
-nav button.active{color:#ffdfa4;text-shadow:0 0 12px #c78e48}
-.overlay{
-  position:fixed;inset:0;z-index:20;display:grid;place-items:center;
-  background:#030201dd;padding:20px;opacity:0;pointer-events:none;transition:opacity .25s;
-}
-.overlay.show{opacity:1;pointer-events:auto}
-.winbox{
-  width:min(370px,100%);padding:26px;text-align:center;
-  border:1px solid #e9c98d;border-radius:23px;
-  background:radial-gradient(circle at 50% 0,#482b1b,#0b0604 70%);
-  box-shadow:0 0 60px #d99a4b30;
-}
-.winicon{font-size:54px}
-.winbox h2{font:500 38px 'Cormorant Garamond',Georgia;color:#f6d7a1;margin:5px}
-.winbox p{font-size:11px;color:#c7b095;line-height:1.7}
-.close{
-  border:1px solid #e9c98d;background:transparent;color:#f4d39b;
-  border-radius:10px;padding:11px 25px;font-size:9px;letter-spacing:.15em;
-}
-.toast{
-  position:fixed;top:12px;left:50%;transform:translate(-50%,-150%);
-  z-index:30;background:#f0d19a;color:#170d06;border-radius:30px;
-  padding:11px 17px;width:max-content;max-width:92%;
-  font-size:10px;font-weight:700;text-align:center;transition:transform .3s;
-}
-.toast.show{transform:translate(-50%,0)}
-@media(min-width:450px){
- .reel{height:92px}
- .machine{margin-left:12px;margin-right:12px;padding:13px}
- .reels{gap:6px}
-}
-@media(max-width:350px){
- .header{padding-left:10px;padding-right:10px}
- .brand h1{font-size:46px}
- .machine{margin-left:6px;margin-right:6px;padding:8px}
- .reel{height:68px;font-size:24px}
- .controls{grid-template-columns:51px minmax(0,1fr) 51px;gap:5px}
- .spinbtn{font-size:24px;height:59px}
- .sidebtn{height:50px}
-}
-</style>
-</head>
-<body>
-<div class="toast" id="toast"></div>
-
-<div class="overlay" id="overlay">
-  <div class="winbox">
-    <div class="winicon" id="winIcon">♛</div>
-    <h2 id="winTitle">BIG WIN</h2>
-    <p id="winText">Virtual chips awarded!</p>
-    <button class="close" id="close">CONTINUE</button>
-  </div>
-</div>
-
-<div class="shell">
-<header class="header">
-  <div class="profile">
-    <div class="avatar" id="avatar">K</div>
-    <div class="profile-info">
-      <strong id="playerName">Kimia</strong>　<span>♛ VIP</span>
-      <div id="level">Level 0</div>
-      <div class="progress"><i id="profileProgress"></i></div>
-    </div>
-  </div>
-  <button class="menu" id="menuBtn" aria-label="Menu">☰</button>
-</header>
-
-<section class="brand">
-  <div class="crown">♕</div>
-  <h1>KIMIA</h1>
-  <div class="prive">PRIVÉ</div>
-  <div class="tag">— PRIVATE FORTUNE CLUB —</div>
-</section>
-
-<div class="balance">
-  <div>
-    <small>AVAILABLE BALANCE</small>
-    <strong id="bal">Loading…</strong> <span>🪙</span>
-  </div>
-  <button class="plus" id="balanceInfo" aria-label="Balance information">+</button>
-</div>
-
-<section class="jackpot">
-  <div class="label">♛　PRIVÉ JACKPOT　♛</div>
-  <div class="number" id="jack">1,248,730</div>
-  <div class="rule"></div>
-</section>
-
-<section class="machine">
-  <div class="machine-label">✦　KIMIA PRIVÉ　✦</div>
-  <div class="reel-frame">
-    <div class="reels" id="reels">
-      <div class="payline p1"></div>
-      <div class="payline p2"></div>
-      <div class="payline p3"></div>
-      <div class="payline p4"></div>
-      <div class="payline p5"></div>
-      <div class="reel" id="r0">♛</div><div class="reel" id="r1">💎</div><div class="reel" id="r2">🔔</div><div class="reel" id="r3">💗</div><div class="reel" id="r4">🍒</div>
-      <div class="reel" id="r5">🍒</div><div class="reel" id="r6">👑</div><div class="reel" id="r7">7️⃣</div><div class="reel" id="r8">💎</div><div class="reel" id="r9">💗</div>
-      <div class="reel" id="r10">💎</div><div class="reel" id="r11">♛</div><div class="reel" id="r12">🍒</div><div class="reel" id="r13">🔔</div><div class="reel" id="r14">👑</div>
-    </div>
-  </div>
-  <div class="lines-label">5 PAYLINES · 3 ROWS · 5 REELS</div>
-
-  <div class="bet-panel">
-    <div class="bet-box">
-      <small>BET PER SPIN</small>
-      <div class="bet-buttons">
-        <button id="betDown" aria-label="Lower bet">−</button>
-        <select id="bet" aria-label="Choose bet">
-          <option value="300">300</option>
-          <option value="600">600</option>
-          <option value="1500">1,500</option>
-          <option value="3000">3,000</option>
-        </select>
-        <button id="betUp" aria-label="Raise bet">+</button>
-      </div>
-    </div>
-    <div class="bet-box">
-      <small>TOTAL BET</small>
-      <strong id="totalBet">300 🪙</strong>
-    </div>
-  </div>
-  <button class="maxbet" id="maxBet">♛　MAX BET · 3,000 CHIPS　♛</button>
-
-  <div class="message" id="msg">CONNECTING TO PRIVÉ…</div>
-  <div class="controls">
-    <button class="sidebtn" id="auto"><span>⟳</span><br>AUTO</button>
-    <button class="spinbtn" id="spin" disabled>SPIN</button>
-    <button class="sidebtn" id="turbo"><span>ϟ</span><br>TURBO</button>
-  </div>
-</section>
-
-<section class="extras">
-  <button class="extra" id="daily">
-    <div class="ico">🎁</div><strong>DAILY BONUS</strong><small>CHECK REWARDS</small>
-  </button>
-  <button class="extra" id="jackpotBtn">
-    <div class="ico">💎</div><strong>JACKPOT</strong><small>PRIVÉ FORTUNE</small>
-  </button>
-  <button class="extra" id="topWins">
-    <div class="ico">♛</div><strong>TOP WINS</strong><small>VIEW PLAYERS</small>
-  </button>
-</section>
-
-<section class="vipcard">
-  <div class="vip-head">
-    <div>
-      <div class="vip-title">♛ KIMIA PRIVÉ VIP</div>
-      <div class="muted">YOUR PRIVATE FORTUNE CLUB</div>
-    </div>
-    <div style="font-size:27px;color:#e7c486">♛</div>
-  </div>
-  <div class="progress"><i id="vipProgress"></i></div>
-</section>
-
-<section class="leader" id="leader">
-  <div class="leader-head">
-    <span>♛ TOP PLAYERS</span>
-    <button id="refreshLeader">REFRESH ↻</button>
-  </div>
-  <div class="rows" id="leaderRows">
-    <div class="empty">Loading leaderboard…</div>
-  </div>
-</section>
-
-<nav>
-  <button class="active" data-tab="home"><i>⌂</i>HOME</button>
-  <button data-tab="slots"><i>▦</i>SLOTS</button>
-  <button data-tab="rank"><i>♛</i>LEADERBOARD</button>
-  <button data-tab="wallet"><i>▱</i>WALLET</button>
-  <button data-tab="profile"><i>♙</i>PROFILE</button>
-</nav>
-</div>
-
-<script>
-"use strict";
-
-const API = "https://kimia-prive-api.onrender.com";
-const tg = window.Telegram && window.Telegram.WebApp;
-const BETS = [300,600,1500,3000];
-const SYMBOLS = ["💎","7️⃣","💗","🌹","♠️","✨","👑","🔔","🍒","♛"];
-const reels = Array.from({length:15},(_,i)=>document.getElementById("r"+i));
-
-let balance = 0;
-let vipLevel = 0;
-let busy = true;
-let loggedIn = false;
-let auto = false;
-let turbo = false;
-
-const bal = document.getElementById("bal");
-const msg = document.getElementById("msg");
-const spin = document.getElementById("spin");
-const betSelect = document.getElementById("bet");
-const toast = document.getElementById("toast");
-const overlay = document.getElementById("overlay");
-
-const fmt = n => Number(n || 0).toLocaleString("en-US");
-
-function note(text){
-  toast.textContent=text;
-  toast.classList.add("show");
-  clearTimeout(note.timer);
-  note.timer=setTimeout(()=>toast.classList.remove("show"),2600);
-}
-
-function sound(freq,duration=.13){
-  try{
-    const C=window.AudioContext||window.webkitAudioContext;
-    const ctx=new C(),osc=ctx.createOscillator(),gain=ctx.createGain();
-    osc.connect(gain);gain.connect(ctx.destination);
-    osc.frequency.value=freq;
+.avatar {
+  border:1px solid var(--gold);
+  color
