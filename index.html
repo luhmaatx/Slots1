@@ -37,7 +37,7 @@ button:disabled{opacity:.55;cursor:wait}
 .machine{margin:12px 12px 0;padding:12px;border-radius:27px;background:linear-gradient(145deg,#302016,#120c09 42%,#24170e);border:1px solid #977546;box-shadow:0 25px 65px #000,0 0 45px rgba(233,154,178,.07);position:relative}
 .machine:before{content:"K  P";position:absolute;inset:7px;border:1px solid rgba(232,201,141,.22);border-radius:22px;color:rgba(232,201,141,.13);font:55px Georgia;letter-spacing:65px;padding:30px 0 0 24px;pointer-events:none}
 .reelbox{position:relative;z-index:1;background:#050403;border:1px solid #5c452b;border-radius:20px;padding:9px;box-shadow:inset 0 0 30px #000}
-.reels{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));grid-template-rows:repeat(3, minmax(65px,1fr));gap:6px;position:relative}
+.reels{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));grid-template-rows:repeat(3,minmax(65px,1fr));gap:6px;position:relative}
 .reel{height:clamp(70px,20vw,92px);min-width:0;border-radius:12px;background:linear-gradient(145deg,#fff6e7,#c8ad82 48%,#f4e4cb);display:grid;place-items:center;font-size:clamp(28px,8vw,43px);color:#1a110b;border:2px solid #a57b42;box-shadow:inset 0 0 13px rgba(75,45,20,.35),0 4px 10px #000;position:relative;overflow:hidden;transition:filter .2s}
 .reel:after{content:"";position:absolute;inset:0;background:linear-gradient(105deg,transparent 35%,rgba(255,255,255,.55) 48%,transparent 61%);transform:translateX(-120%);pointer-events:none}
 .reel.spinning:after{animation:sheen .28s linear infinite}
@@ -77,10 +77,11 @@ button:disabled{opacity:.55;cursor:wait}
 .rows{margin-top:8px}
 .row{display:flex;align-items:center;gap:9px;padding:8px 0;border-bottom:1px solid #211a13}
 .row:last-child{border:0}
-.rank{width:18px;color:#b99660;font-size:9px}
-.mini{width:31px;height:31px;border-radius:50%;border:1px solid #80633e;display:grid;place-items:center;background:#22150e;font-family:Georgia}
-.who{flex:1;font-size:10px}
-.score{font-size:9px;color:#9d8c76}
+.rank{width:22px;flex-shrink:0;color:#b99660;font-size:9px}
+.mini{width:31px;height:31px;flex-shrink:0;border-radius:50%;border:1px solid #80633e;display:grid;place-items:center;background:#22150e;font-family:Georgia}
+.who{flex:1;min-width:0;overflow-wrap:anywhere;font-size:10px}
+.score{font-size:9px;color:#9d8c76;text-align:right;overflow-wrap:anywhere}
+.leaderstatus{font-size:9px;color:#8e806d;text-align:center;padding-top:8px;line-height:1.5}
 nav{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:min(480px,100%);background:rgba(7,5,4,.97);border-top:1px solid #493a28;display:grid;grid-template-columns:repeat(5,1fr);padding:9px 7px calc(8px + env(safe-area-inset-bottom));z-index:8;backdrop-filter:blur(15px)}
 nav button{border:0;background:none;color:#776958;font-size:8px;letter-spacing:.08em}
 nav button:first-child{color:var(--gold)}
@@ -191,12 +192,16 @@ nav i{font-style:normal;font-size:19px;display:block;margin-bottom:3px}
 </section>
 
 <section class="leader">
-  <div class="leaderhead"><span>♛ TOP PLAYERS</span><span>VIRTUAL CHIPS</span></div>
-  <div class="rows">
-    <div class="row"><div class="rank">01</div><div class="mini">G</div><div class="who">GoddessK</div><div class="score">— 🪙</div></div>
-    <div class="row"><div class="rank">02</div><div class="mini">P</div><div class="who">PrettyRich</div><div class="score">— 🪙</div></div>
-    <div class="row"><div class="rank">03</div><div class="mini">L</div><div class="who">LuhBae</div><div class="score">— 🪙</div></div>
+  <div class="leaderhead">
+    <span>♛ TOP PLAYERS</span>
+    <span>VIRTUAL CHIPS</span>
   </div>
+  <div class="rows" id="leaderboardRows">
+    <div class="row">
+      <div class="who">Loading leaderboard…</div>
+    </div>
+  </div>
+  <div class="leaderstatus" id="leaderboardStatus">CONNECTING TO PRIVÉ RANKINGS</div>
 </section>
 
 <nav>
@@ -283,6 +288,73 @@ async function api(path) {
   return data;
 }
 
+async function loadLeaderboard() {
+  const container = document.getElementById("leaderboardRows");
+  const status = document.getElementById("leaderboardStatus");
+
+  try {
+    status.textContent = "UPDATING PRIVÉ RANKINGS…";
+
+    const response = await fetch(KIMIA_API + "/api/leaderboard", {
+      method: "GET",
+      cache: "no-store"
+    });
+
+    if (!response.ok) {
+      throw new Error("Leaderboard request failed: " + response.status);
+    }
+
+    const data = await response.json();
+
+    if (!Array.isArray(data.players)) {
+      throw new Error("Invalid leaderboard response.");
+    }
+
+    container.replaceChildren();
+
+    if (data.players.length === 0) {
+      const empty = document.createElement("div");
+      empty.className = "row";
+      empty.textContent = "No players ranked yet.";
+      container.appendChild(empty);
+      status.textContent = "BE THE FIRST TO JOIN";
+      return;
+    }
+
+    data.players.forEach((player, index) => {
+      const row = document.createElement("div");
+      row.className = "row";
+
+      const rank = document.createElement("div");
+      rank.className = "rank";
+      rank.textContent = String(Number(player.rank) || index + 1).padStart(2, "0");
+
+      const mini = document.createElement("div");
+      mini.className = "mini";
+      const cleanUsername = String(player.username || "Anonymous Player").replace(/^@/, "");
+      mini.textContent = cleanUsername.charAt(0).toUpperCase() || "P";
+
+      const who = document.createElement("div");
+      who.className = "who";
+      who.textContent = player.username
+        ? "@" + String(player.username).replace(/^@/, "")
+        : "Anonymous Player";
+
+      const score = document.createElement("div");
+      score.className = "score";
+      score.textContent = fmt(player.balance) + " 🪙";
+
+      row.append(rank, mini, who, score);
+      container.appendChild(row);
+    });
+
+    status.textContent = "LIVE PLAYER BALANCES · TOP " + data.players.length;
+  } catch(error) {
+    console.error("KIMIA leaderboard error:", error);
+    status.textContent = "RANKINGS TEMPORARILY UNAVAILABLE";
+  }
+}
+
 async function login() {
   if (!tg || !tg.initData) {
     bal.textContent = "—";
@@ -310,6 +382,8 @@ async function login() {
     busy = false;
     spin.disabled = false;
     msg.textContent = "3 PAYLINES · GOOD LUCK";
+
+    await loadLeaderboard();
   } catch(error) {
     console.error("KIMIA login error:", error);
     loggedIn = false;
@@ -334,10 +408,12 @@ async function go() {
   spin.disabled = true;
   msg.textContent = "SPINNING ALL 3 LINES…";
   msg.classList.remove("hot");
+
   reels.forEach(x => {
     x.classList.remove("win");
     x.classList.add("spinning");
   });
+
   audio(330,0.08);
 
   try {
@@ -380,6 +456,9 @@ async function go() {
     } else {
       msg.textContent = "NO MATCH · TRY AGAIN";
     }
+
+    // Update the public rankings using the latest database balances.
+    loadLeaderboard();
 
     if (jackpot) {
       audio(880,0.7);
@@ -430,6 +509,7 @@ document.getElementById("menuBtn").addEventListener("click",() => {
 });
 
 login();
+loadLeaderboard();
 </script>
 </body>
 </html>
