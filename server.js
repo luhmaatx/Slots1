@@ -124,6 +124,31 @@ app.post("/api/me", async (req, res) => {
   }
 });
 
+app.get("/api/leaderboard", async (req, res) => {
+  try {
+    const result = await pool.query(`
+      SELECT username, balance
+      FROM players
+      ORDER BY balance DESC, created_at ASC
+      LIMIT 10
+    `);
+
+    const players = result.rows.map((player, index) => ({
+      rank: index + 1,
+      username: player.username || "Anonymous Player",
+      balance: Number(player.balance)
+    }));
+
+    res.set("Cache-Control", "no-store");
+    res.json({ players });
+  } catch (error) {
+    console.error("Leaderboard failed:", error.message);
+    res.status(500).json({
+      error: "Unable to load leaderboard."
+    });
+  }
+});
+
 app.post("/api/spin", async (req, res) => {
   let client;
 
