@@ -5,511 +5,1023 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#090706">
-<title>KIMIA PRIVÉ</title>
-<script src="https://telegram.org/js/telegram-web-app.js"></script>
-<style>
-@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600&family=Inter:wght@400;500;600&display=swap');
+<title>KIMIA PRIVÉ — The Private Club</title>
 
-:root{--gold:#e9c98d;--rose:#e99ab2;--cream:#fff2dc;--bg:#090706}
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://telegram.org/js/telegram-web-app.js"></script>
+
+<style>
+:root{
+  --bg:#090706;
+  --panel:#110d0a;
+  --panel2:#19110b;
+  --gold:#d7a84d;
+  --gold2:#ffe3a0;
+  --gold3:#8e6024;
+  --rose:#df9baf;
+  --muted:#9a8a77;
+  --line:rgba(215,168,77,.25);
+  --green:#8cdaaa;
+  --red:#ff9a91;
+}
 *{box-sizing:border-box}
-body{margin:0;background:#050403;color:var(--cream);font-family:Inter,Arial,sans-serif}
+html{scroll-behavior:smooth}
+body{
+  margin:0;
+  min-height:100vh;
+  color:#fff5e5;
+  background:
+    radial-gradient(ellipse at 50% -10%,rgba(154,95,30,.25),transparent 44%),
+    radial-gradient(ellipse at 0% 40%,rgba(103,50,23,.12),transparent 40%),
+    var(--bg);
+  font-family:"DM Sans",sans-serif;
+  overflow-x:hidden;
+}
+body:before{
+  content:"";
+  position:fixed;inset:0;pointer-events:none;z-index:0;
+  opacity:.12;
+  background-image:radial-gradient(rgba(255,221,157,.6) .5px,transparent .7px);
+  background-size:8px 8px;
+  mask-image:linear-gradient(to bottom,#000,transparent 75%);
+}
 button{font:inherit;cursor:pointer}
-button:disabled{opacity:.55;cursor:wait}
-.shell{width:min(480px,100%);min-height:100vh;margin:auto;background:radial-gradient(circle at 50% 18%,rgba(229,157,104,.15),transparent 28%),radial-gradient(circle at 10% 45%,rgba(233,154,178,.08),transparent 25%),linear-gradient(180deg,#120c09,#070605 52%,#0c0807);position:relative;overflow:hidden;padding-bottom:85px}
-.noise{position:absolute;inset:0;opacity:.06;background-image:radial-gradient(#fff 1px,transparent 1px);background-size:5px 5px;pointer-events:none}
-.header{position:relative;padding:20px 20px 8px;display:flex;justify-content:space-between;align-items:center}
-.menu{width:42px;height:42px;border-radius:50%;border:1px solid #765c39;background:#100b08;color:var(--gold);font-size:19px}
-.tiny{font-size:8px;letter-spacing:.15em;color:#8e806d}
-.avatar{width:42px;height:42px;border-radius:50%;border:1px solid var(--gold);display:grid;place-items:center;background:linear-gradient(145deg,#28160f,#c78b76);font-family:Georgia;font-size:17px}
-.brand{text-align:center;margin:8px 20px 12px;position:relative}
-.crown{font-size:24px;color:var(--gold);text-shadow:0 0 18px #d49b51}
-.brand h1{font:500 49px/.85 'Cormorant Garamond',Georgia,serif;letter-spacing:.06em;margin:6px 0;background:linear-gradient(#fff0ce,#c28f4b);-webkit-background-clip:text;color:transparent}
-.brand .prive{font:500 27px/1 'Cormorant Garamond',Georgia,serif;letter-spacing:.34em;margin-left:.34em;color:#f2d9bf}
-.brand .tag{margin-top:9px;font-size:8px;letter-spacing:.34em;color:#caa66c}
-.balance{margin:15px 20px 0;border:1px solid #5d482e;border-radius:14px;background:linear-gradient(90deg,rgba(28,18,12,.92),rgba(17,11,8,.92));padding:12px 15px;display:flex;justify-content:space-between;align-items:center;gap:8px}
-.balance small{display:block;color:#8e806d;font-size:8px;letter-spacing:.18em}
-.balance strong{font:500 22px 'Cormorant Garamond';color:#fff0d2}
-.balance .vip{color:var(--gold);font-size:9px;letter-spacing:.13em}
-.jackpot{margin:17px 20px 0;text-align:center}
-.jackpot .label{font-size:8px;letter-spacing:.3em;color:#a88b5f}
-.jackpot .number{font:500 32px 'Cormorant Garamond';letter-spacing:.06em;color:var(--gold);text-shadow:0 0 22px rgba(233,201,141,.28)}
-.jackpot .line{height:1px;background:linear-gradient(90deg,transparent,#82633c,transparent);margin-top:5px}
-.machine{margin:12px 12px 0;padding:12px;border-radius:27px;background:linear-gradient(145deg,#302016,#120c09 42%,#24170e);border:1px solid #977546;box-shadow:0 25px 65px #000,0 0 45px rgba(233,154,178,.07);position:relative}
-.machine:before{content:"K  P";position:absolute;inset:7px;border:1px solid rgba(232,201,141,.22);border-radius:22px;color:rgba(232,201,141,.13);font:55px Georgia;letter-spacing:65px;padding:30px 0 0 24px;pointer-events:none}
-.reelbox{position:relative;z-index:1;background:#050403;border:1px solid #5c452b;border-radius:20px;padding:9px;box-shadow:inset 0 0 30px #000}
-.reels{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));grid-template-rows:repeat(3,minmax(65px,1fr));gap:6px;position:relative}
-.reel{height:clamp(70px,20vw,92px);min-width:0;border-radius:12px;background:linear-gradient(145deg,#fff6e7,#c8ad82 48%,#f4e4cb);display:grid;place-items:center;font-size:clamp(28px,8vw,43px);color:#1a110b;border:2px solid #a57b42;box-shadow:inset 0 0 13px rgba(75,45,20,.35),0 4px 10px #000;position:relative;overflow:hidden;transition:filter .2s}
-.reel:after{content:"";position:absolute;inset:0;background:linear-gradient(105deg,transparent 35%,rgba(255,255,255,.55) 48%,transparent 61%);transform:translateX(-120%);pointer-events:none}
-.reel.spinning:after{animation:sheen .28s linear infinite}
-@keyframes sheen{to{transform:translateX(120%)}}
-.reel.spinning{filter:blur(1.4px);animation:bounce .09s infinite alternate}
-@keyframes bounce{to{transform:translateY(3px)}}
-.reel.win{animation:pop .45s 2}
-@keyframes pop{50%{transform:scale(1.06);filter:brightness(1.35)}}
-.payline{position:absolute;left:0;right:0;height:3px;z-index:3;background:linear-gradient(90deg,transparent,var(--rose) 12%,#ffe0e9 50%,var(--rose) 88%,transparent);box-shadow:0 0 9px var(--rose);opacity:.78;pointer-events:none}
-.payline.one{top:calc((100% - 12px)/6)}
-.payline.two{top:50%}
-.payline.three{top:calc(100% - (100% - 12px)/6)}
-.line-labels{display:grid;grid-template-columns:repeat(3,1fr);gap:5px;margin-top:9px}
-.line-label{border:1px solid #493724;border-radius:8px;padding:7px 2px;text-align:center;color:#caa66c;font-size:8px;letter-spacing:.08em;background:#100b08}
-.line-label b{display:block;color:#f0d9b4;font-size:10px;margin-top:3px}
-.betinfo{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-top:11px;border-top:1px solid #483723;border-bottom:1px solid #483723;padding:10px 2px}
-.betinfo div{text-align:center;flex:1;color:#8e806d;font-size:8px;letter-spacing:.1em}
-.betinfo b{display:block;color:#e7d2b0;font:500 15px Georgia;margin-top:4px}
-.message{text-align:center;min-height:31px;padding-top:12px;color:#caa66c;font-size:9px;letter-spacing:.13em;line-height:1.5}
-.message.hot{color:#f0a2ba;text-shadow:0 0 15px #e98ea9}
-.controls{display:grid;grid-template-columns:58px minmax(0,1fr) 58px;gap:7px;align-items:center}
-.round{height:55px;border-radius:15px;border:1px solid #604a2f;background:#100b08;color:#caa66c;font-size:9px;letter-spacing:.08em}
-.round span{font-size:18px}
-.spinbtn{height:61px;border-radius:17px;border:1px solid #f5d79d;background:radial-gradient(circle at 50% 15%,#fff0c9,#c29352 58%,#86602f);box-shadow:0 0 25px rgba(233,201,141,.18),inset 0 1px #fff7e5;color:#160e08;font:500 25px 'Cormorant Garamond';letter-spacing:.16em}
-.features{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:13px 12px}
-.feature{border:1px solid #443423;background:linear-gradient(135deg,#16100c,#0b0806);border-radius:15px;padding:13px}
-.feature .icon{font-size:21px}
-.feature b{font:500 15px 'Cormorant Garamond';display:block;color:#ecd7b7;margin-top:3px}
-.feature span{font-size:8px;color:#8e806d;letter-spacing:.09em}
-.vipcard{margin:13px 12px;padding:16px;border:1px solid #715735;border-radius:18px;background:linear-gradient(120deg,#21140d,#0c0806);display:flex;justify-content:space-between;align-items:center}
-.vipcard .title{font:500 19px 'Cormorant Garamond';color:#f0d5aa}
-.vipcard p{margin:2px 0 0;font-size:8px;color:#91816e;letter-spacing:.12em}
-.progress{width:115px;height:5px;background:#2c2117;border-radius:9px;margin-top:9px;overflow:hidden}
-.progress i{display:block;width:42%;height:100%;background:linear-gradient(90deg,#b07e42,#f0c985)}
-.leader{margin:13px 12px;border:1px solid #443423;border-radius:18px;padding:14px;background:#0b0806}
-.leaderhead{display:flex;justify-content:space-between;font-size:9px;letter-spacing:.12em;color:#cba96f}
-.rows{margin-top:8px}
-.row{display:flex;align-items:center;gap:9px;padding:8px 0;border-bottom:1px solid #211a13}
-.row:last-child{border:0}
-.rank{width:22px;flex-shrink:0;color:#b99660;font-size:9px}
-.mini{width:31px;height:31px;flex-shrink:0;border-radius:50%;border:1px solid #80633e;display:grid;place-items:center;background:#22150e;font-family:Georgia}
-.who{flex:1;min-width:0;overflow-wrap:anywhere;font-size:10px}
-.score{font-size:9px;color:#9d8c76;text-align:right;overflow-wrap:anywhere}
-.leaderstatus{font-size:9px;color:#8e806d;text-align:center;padding-top:8px;line-height:1.5}
-nav{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:min(480px,100%);background:rgba(7,5,4,.97);border-top:1px solid #493a28;display:grid;grid-template-columns:repeat(5,1fr);padding:9px 7px calc(8px + env(safe-area-inset-bottom));z-index:8;backdrop-filter:blur(15px)}
-nav button{border:0;background:none;color:#776958;font-size:8px;letter-spacing:.08em}
-nav button:first-child{color:var(--gold)}
-nav i{font-style:normal;font-size:19px;display:block;margin-bottom:3px}
-.overlay{position:fixed;inset:0;background:rgba(2,1,1,.84);z-index:20;display:grid;place-items:center;opacity:0;pointer-events:none;transition:.25s}
-.overlay.show{opacity:1;pointer-events:auto}
-.winbox{width:min(370px,90%);padding:28px;text-align:center;border:1px solid var(--gold);border-radius:26px;background:radial-gradient(circle at 50% 0,#3a2417,#0d0806 65%);box-shadow:0 0 70px rgba(233,154,178,.25)}
-.winbox .icon{font-size:55px}
-.winbox h2{font:500 38px 'Cormorant Garamond';color:#f1d09a;margin:4px}
-.winbox p{font-size:10px;color:#a89782;letter-spacing:.08em}
-.close{border:1px solid var(--gold);background:transparent;color:var(--gold);border-radius:11px;padding:10px 24px;font-size:9px;letter-spacing:.12em}
-.toast{position:fixed;top:15px;left:50%;transform:translate(-50%,-130px);z-index:30;background:#efd19a;color:#120d08;padding:10px 18px;border-radius:99px;font-size:9px;font-weight:700;letter-spacing:.1em;transition:.3s;width:max-content;max-width:90%;text-align:center}
-.toast.show{transform:translate(-50%,0)}
-@media(max-width:360px){.brand h1{font-size:41px}.reel{height:68px}.machine{margin-left:8px;margin-right:8px;padding:9px}.reelbox{padding:6px}.controls{grid-template-columns:51px minmax(0,1fr) 51px;gap:5px}.round{height:51px}.spinbtn{height:57px}}
+button:disabled{cursor:not-allowed;opacity:.5}
+button:focus-visible{outline:2px solid var(--gold2);outline-offset:4px}
+button:active:not(:disabled){transform:scale(.97)}
+.app{
+  position:relative;z-index:1;
+  width:min(100%,520px);
+  margin:0 auto;
+  padding:calc(16px + env(safe-area-inset-top)) 15px calc(30px + env(safe-area-inset-bottom));
+}
+.topbar{
+  display:flex;align-items:center;justify-content:space-between;gap:10px;
+  margin-bottom:20px;
+}
+.mini-profile,.wallet{
+  border:1px solid var(--line);
+  background:linear-gradient(145deg,rgba(39,27,16,.95),rgba(11,8,6,.96));
+  border-radius:15px;padding:10px 12px;
+  min-width:0;
+}
+.mini-profile{display:flex;align-items:center;gap:9px;flex:1}
+.avatar{
+  width:36px;height:36px;flex-shrink:0;border-radius:50%;
+  display:grid;place-items:center;
+  color:var(--gold2);
+  border:1px solid var(--gold3);
+  background:radial-gradient(circle,#4c3217,#130d08 75%);
+  font-family:"Cormorant Garamond",serif;font-size:20px;
+}
+.profile-copy{min-width:0}
+.eyebrow{font-size:9px;letter-spacing:2px;color:var(--muted);text-transform:uppercase}
+.player-name{font-size:12px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:145px;margin-top:3px}
+.wallet{display:flex;align-items:center;gap:9px}
+.coin{
+  width:32px;height:32px;border-radius:50%;
+  display:grid;place-items:center;flex-shrink:0;
+  color:#211305;font-size:17px;
+  background:linear-gradient(145deg,#fff0b8,#d49a37 55%,#8b591c);
+  box-shadow:0 0 14px rgba(225,174,76,.14);
+}
+.balance{font-size:15px;font-weight:700;font-variant-numeric:tabular-nums;white-space:nowrap}
+.balance-caption{font-size:8px;letter-spacing:1.5px;color:var(--muted);margin-top:3px}
+.brand{text-align:center;margin:12px 0 22px;position:relative}
+.brand-crown{
+  color:var(--gold);font-size:27px;line-height:1;
+  text-shadow:0 0 24px rgba(215,168,77,.45);
+}
+.brand h1{
+  margin:3px 0 0;
+  font-family:"Cormorant Garamond",serif;
+  font-size:clamp(42px,12vw,62px);
+  line-height:.85;font-weight:500;letter-spacing:8px;
+  padding-left:8px;
+  color:#f8d994;
+  background:linear-gradient(100deg,#a36b25,#ffeab0 40%,#bf8837 65%,#fff0bf);
+  -webkit-background-clip:text;background-clip:text;color:transparent;
+  filter:drop-shadow(0 3px 12px rgba(200,145,52,.14));
+}
+.brand-sub{
+  font-family:"Cormorant Garamond",serif;
+  letter-spacing:10px;padding-left:10px;font-size:20px;
+  margin-top:7px;color:#d6ad6c;
+}
+.brand-tag{
+  margin-top:11px;font-size:8px;letter-spacing:4px;color:var(--muted);
+}
+.brand-tag span{color:var(--gold);padding:0 5px}
+.jackpot{
+  position:relative;overflow:hidden;text-align:center;
+  border:1px solid var(--gold3);border-radius:16px;
+  padding:13px 10px 15px;margin-bottom:14px;
+  background:
+    radial-gradient(ellipse at 50% 0%,rgba(206,151,61,.2),transparent 70%),
+    linear-gradient(110deg,#170f08,#080605 45%,#211307);
+  box-shadow:inset 0 0 0 3px rgba(215,168,77,.045),0 10px 25px #0008;
+}
+.jackpot:before,.jackpot:after{
+  content:"";position:absolute;top:0;bottom:0;width:1px;
+  background:linear-gradient(transparent,var(--gold),transparent);
+  opacity:.6;
+}
+.jackpot:before{left:12px}.jackpot:after{right:12px}
+.jackpot-label{font-size:9px;letter-spacing:4px;color:#d7b777}
+.jackpot-number{
+  margin-top:4px;font-family:"Cormorant Garamond",serif;
+  font-size:clamp(29px,8vw,40px);font-weight:700;line-height:1;
+  letter-spacing:2px;color:#f8d891;
+  text-shadow:0 0 22px rgba(241,179,68,.3);
+}
+.jackpot-note{margin-top:6px;font-size:8px;letter-spacing:1.8px;color:#806d55}
+.game-panel{
+  border:1px solid var(--gold3);border-radius:19px;
+  padding:8px;background:linear-gradient(145deg,#2b1b0c,#090706 30%,#211407);
+  box-shadow:0 15px 40px #0009,inset 0 0 0 2px rgba(255,221,148,.04);
+  position:relative;
+}
+.game-panel:before{
+  content:"";position:absolute;inset:4px;border:1px solid rgba(215,168,77,.14);
+  border-radius:14px;pointer-events:none;
+}
+.game-heading{
+  display:flex;justify-content:space-between;align-items:center;
+  padding:8px 7px 11px;
+}
+.section-label{font-size:9px;letter-spacing:3px;color:#d5b375}
+.ways{font-size:9px;color:var(--muted);letter-spacing:1px}
+.reels-wrap{
+  position:relative;overflow:hidden;
+  border:1px solid #6f4a20;border-radius:11px;
+  padding:7px;
+  background:#050403;
+  box-shadow:inset 0 0 24px #000,0 0 0 1px #000;
+}
+.reels-wrap:before{
+  content:"";position:absolute;z-index:2;pointer-events:none;
+  left:7px;right:7px;top:7px;height:22px;
+  background:linear-gradient(#0008,transparent);
+}
+.reels-wrap:after{
+  content:"";position:absolute;z-index:2;pointer-events:none;
+  left:7px;right:7px;bottom:7px;height:22px;
+  background:linear-gradient(transparent,#0009);
+}
+.reels{
+  display:grid;grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:5px;
+}
+.reel{
+  min-width:0;display:grid;grid-template-rows:repeat(3,1fr);
+  background:linear-gradient(90deg,#090604,#181008 50%,#090604);
+  border-left:1px solid rgba(218,170,77,.28);
+  border-right:1px solid rgba(218,170,77,.28);
+  overflow:hidden;
+}
+.symbol{
+  aspect-ratio:1.04 / 1;
+  min-height:78px;
+  display:grid;place-items:center;
+  font-size:clamp(35px,10vw,52px);
+  position:relative;
+  background:linear-gradient(180deg,rgba(255,224,156,.015),transparent 35%,rgba(0,0,0,.18));
+  border-bottom:1px solid rgba(204,155,67,.12);
+  text-shadow:0 3px 8px #000,0 0 16px rgba(239,183,79,.1);
+  transition:background .25s,filter .25s,transform .25s;
+  user-select:none;
+}
+.symbol:last-child{border-bottom:0}
+.symbol.spinning{
+  filter:blur(2px);
+  animation:reelBlur .12s linear infinite alternate;
+}
+@keyframes reelBlur{
+  from{transform:translateY(-4px);filter:blur(1px)}
+  to{transform:translateY(4px);filter:blur(3px)}
+}
+.symbol.winning{
+  z-index:1;
+  background:radial-gradient(circle,rgba(255,213,111,.28),rgba(199,136,42,.1) 55%,transparent 80%);
+  animation:winPulse .75s ease-in-out infinite alternate;
+}
+@keyframes winPulse{
+  from{filter:brightness(1);text-shadow:0 0 9px #d89b3a}
+  to{filter:brightness(1.8);text-shadow:0 0 24px #ffdf8a,0 0 45px #d89025}
+}
+.game-panel.is-spinning .reels-wrap{
+  border-color:#f2ca76;
+  box-shadow:0 0 25px rgba(215,168,77,.16),inset 0 0 24px #000;
+}
+.status-line{
+  min-height:34px;display:flex;align-items:center;justify-content:center;
+  text-align:center;padding:8px 4px 2px;
+  color:var(--muted);font-size:10px;letter-spacing:.6px;
+}
+.status-line.good{color:var(--gold2)}
+.status-line.bad{color:var(--red)}
+.controls{
+  display:grid;grid-template-columns:1fr 1.5fr 1fr;
+  align-items:center;gap:9px;margin-top:11px;padding:0 2px 4px;
+}
+.bet-box,.side-control{
+  min-height:58px;border:1px solid var(--line);border-radius:12px;
+  background:linear-gradient(145deg,#1d140b,#0b0806);
+}
+.bet-box{display:flex;align-items:center;justify-content:space-between;padding:5px}
+.bet-number{min-width:0;text-align:center}
+.bet-label{font-size:8px;letter-spacing:1.5px;color:var(--muted)}
+.bet-value{font-family:"Cormorant Garamond",serif;font-size:23px;color:var(--gold2);font-weight:700}
+.bet-fixed{font-size:8px;color:#8f795a;margin-top:-2px}
+.bet-step{
+  width:27px;height:34px;flex-shrink:0;border:1px solid rgba(215,168,77,.25);
+  border-radius:7px;color:var(--gold2);background:#120d08;font-size:18px;
+}
+.spin-button{
+  position:relative;overflow:hidden;min-height:68px;border:1px solid #f5d58a;
+  border-radius:13px;color:#1c1004;font-weight:700;letter-spacing:2px;
+  background:linear-gradient(115deg,#a66a20,#ffe8a1 42%,#c28a30 70%,#fbe5a0);
+  box-shadow:0 0 20px rgba(218,164,65,.2),inset 0 1px #fff9d9;
+  transition:box-shadow .25s,filter .25s;
+}
+.spin-button:before{
+  content:"";position:absolute;top:-80%;bottom:-80%;left:-55%;width:28%;
+  transform:rotate(25deg);
+  background:linear-gradient(90deg,transparent,#fff9dbb0,transparent);
+  animation:buttonShine 4s ease-in-out infinite;
+}
+@keyframes buttonShine{
+  0%,55%{left:-55%}100%{left:145%}
+}
+.spin-icon{display:block;font-size:23px;line-height:1;margin-bottom:4px}
+.spin-text{font-size:11px;position:relative}
+.spin-button:disabled:before{animation:none}
+.side-control{
+  display:flex;align-items:center;justify-content:center;flex-direction:column;
+  gap:5px;color:var(--gold2);font-size:10px;letter-spacing:1px;
+}
+.side-control .side-icon{font-size:18px}
+.side-control.active{border-color:var(--gold);background:rgba(180,124,39,.15)}
+.side-control small{font-size:8px;color:var(--muted);letter-spacing:.5px}
+.side-control.active small{color:var(--gold2)}
+.notice{
+  margin-top:11px;padding:10px 12px;
+  border:1px solid rgba(215,168,77,.14);border-radius:10px;
+  color:#95836d;font-size:9px;line-height:1.5;text-align:center;
+}
+.lower-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:15px}
+.info-card{
+  min-width:0;border:1px solid var(--line);border-radius:14px;
+  padding:14px 12px;background:linear-gradient(145deg,#1a120b,#0d0907);
+}
+.card-kicker{font-size:8px;letter-spacing:2px;color:var(--muted);text-transform:uppercase}
+.card-title{font-family:"Cormorant Garamond",serif;font-size:21px;color:#f2d396;margin-top:4px}
+.vip-progress{height:4px;background:#332416;border-radius:8px;margin-top:12px;overflow:hidden}
+.vip-progress-fill{height:100%;width:0;background:linear-gradient(90deg,#946022,#ffe2a0);transition:width .8s}
+.vip-caption{font-size:9px;color:var(--muted);margin-top:7px;line-height:1.4}
+.leaderboard{margin-top:15px;border:1px solid var(--line);border-radius:15px;overflow:hidden;background:rgba(16,11,7,.88)}
+.leader-head{display:flex;justify-content:space-between;align-items:center;padding:15px 14px;border-bottom:1px solid var(--line)}
+.leader-title{font-family:"Cormorant Garamond",serif;font-size:24px;color:#f0d49a}
+.leader-sub{font-size:8px;color:var(--muted);letter-spacing:1.5px;margin-top:3px}
+.refresh-btn{border:1px solid var(--line);border-radius:8px;padding:7px 9px;color:var(--gold2);background:#171007;font-size:10px}
+.leader-row{
+  display:grid;grid-template-columns:32px minmax(0,1fr) auto;
+  gap:9px;align-items:center;padding:11px 14px;border-bottom:1px solid rgba(215,168,77,.08);
+}
+.leader-row:last-child{border-bottom:0}
+.rank{font-family:"Cormorant Garamond",serif;color:var(--gold);font-size:19px;text-align:center}
+.leader-row:nth-child(2) .rank{color:#ffe6a2}
+.leader-row:nth-child(3) .rank{color:#c5c9d0}
+.leader-name{font-size:11px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.leader-chip{font-size:10px;color:#d9b975;font-variant-numeric:tabular-nums;white-space:nowrap}
+.empty-board{text-align:center;padding:20px 10px;color:var(--muted);font-size:10px}
+.footer{text-align:center;margin:23px 0 4px;color:#695744;font-size:8px;letter-spacing:3px;line-height:2}
+.footer strong{font-family:"Cormorant Garamond",serif;font-size:15px;color:#a78a5d;letter-spacing:5px;font-weight:500}
+.toast{
+  position:fixed;z-index:20;left:50%;bottom:calc(22px + env(safe-area-inset-bottom));
+  transform:translate(-50%,18px);opacity:0;pointer-events:none;
+  max-width:calc(100vw - 32px);width:max-content;
+  border:1px solid var(--gold);border-radius:12px;padding:12px 18px;
+  color:#ffe8b0;background:#171007;box-shadow:0 10px 40px #000b;
+  font-size:12px;text-align:center;transition:opacity .25s,transform .25s;
+}
+.toast.show{opacity:1;transform:translate(-50%,0)}
+.win-overlay{
+  display:none;position:fixed;inset:0;z-index:30;
+  align-items:center;justify-content:center;padding:24px;
+  background:rgba(3,2,1,.76);backdrop-filter:blur(7px);
+}
+.win-overlay.show{display:flex;animation:overlayIn .25s ease-out}
+@keyframes overlayIn{from{opacity:0}to{opacity:1}}
+.win-card{
+  position:relative;overflow:hidden;width:min(100%,340px);
+  border:1px solid #edc879;border-radius:23px;padding:31px 20px 25px;text-align:center;
+  background:
+    radial-gradient(ellipse at 50% 30%,rgba(220,155,47,.25),transparent 60%),
+    linear-gradient(145deg,#241608,#080605 70%);
+  box-shadow:0 0 70px rgba(225,163,58,.22),inset 0 0 0 4px rgba(215,168,77,.07);
+  animation:cardPop .55s cubic-bezier(.2,.85,.3,1.25);
+}
+@keyframes cardPop{
+  from{transform:scale(.72) translateY(20px);opacity:0}
+  to{transform:scale(1) translateY(0);opacity:1}
+}
+.win-card:before{
+  content:"";position:absolute;inset:8px;border:1px solid rgba(215,168,77,.22);
+  border-radius:16px;pointer-events:none;
+}
+.win-spark{font-size:39px;animation:sparkle 1s ease-in-out infinite alternate}
+@keyframes sparkle{to{transform:rotate(10deg) scale(1.12);filter:brightness(1.5)}}
+.win-kicker{margin-top:10px;font-size:10px;letter-spacing:5px;color:#e1bc73}
+.win-title{font:700 43px/.95 "Cormorant Garamond",serif;color:#ffe2a0;margin-top:9px;text-shadow:0 0 24px #ca862e70}
+.win-amount{font:700 38px "Cormorant Garamond",serif;color:white;margin:13px 0 4px}
+.win-copy{font-size:10px;letter-spacing:1px;color:#b5a083}
+.win-close{
+  margin-top:23px;position:relative;border:1px solid #edc879;border-radius:10px;
+  padding:12px 30px;background:linear-gradient(110deg,#a66a20,#ffe8a1,#c28a30);
+  color:#1c1004;font-size:10px;font-weight:700;letter-spacing:2px;
+}
+.confetti-layer{position:fixed;inset:0;pointer-events:none;z-index:31;overflow:hidden}
+.confetti{
+  position:absolute;top:-20px;width:6px;height:12px;border-radius:2px;
+  background:var(--gold);animation:confettiFall var(--fall,2s) linear forwards;
+}
+@keyframes confettiFall{
+  to{transform:translate3d(var(--drift,30px),110vh,0) rotate(760deg);opacity:.15}
+}
+@media(max-width:370px){
+  .app{padding-left:10px;padding-right:10px}
+  .symbol{min-height:68px;font-size:34px}
+  .controls{gap:6px}
+  .spin-button{min-height:62px}
+  .mini-profile,.wallet{padding:8px}
+  .player-name{max-width:105px}
+}
+@media(prefers-reduced-motion:reduce){
+  *,*:before,*:after{animation-duration:.01ms!important;animation-iteration-count:1!important;scroll-behavior:auto!important;transition-duration:.01ms!important}
+}
 </style>
 </head>
+
 <body>
-<div class="toast" id="toast"></div>
-
-<div class="overlay" id="overlay">
-  <div class="winbox">
-    <div class="icon" id="winIcon">♛</div>
-    <h2 id="winTitle">WINNER</h2>
-    <p id="winText">Virtual chips awarded!</p>
-    <button class="close" id="close">CONTINUE</button>
-  </div>
-</div>
-
-<div class="shell">
-<div class="noise"></div>
-
-<header class="header">
-  <button class="menu" id="menuBtn" aria-label="Menu">☰</button>
-  <div class="tiny">VIP CLUB</div>
-  <div class="avatar">K</div>
-</header>
-
-<section class="brand">
-  <div class="crown">♕</div>
-  <h1>KIMIA</h1>
-  <div class="prive">PRIVÉ</div>
-  <div class="tag">PRIVATE FORTUNE CLUB</div>
-</section>
-
-<div class="balance">
-  <div><small>AVAILABLE CHIPS</small><strong id="bal">Loading…</strong> 🪙</div>
-  <div style="text-align:right">
-    <div class="vip" id="vip">♛ VIP LEVEL 0</div>
-    <div class="tiny" id="playerName">CONNECTING TO TELEGRAM</div>
-  </div>
-</div>
-
-<section class="jackpot">
-  <div class="label">PRIVÉ PROGRESSIVE JACKPOT</div>
-  <div class="number" id="jack">1,248,730</div>
-  <div class="line"></div>
-</section>
-
-<section class="machine">
-  <div class="reelbox">
-    <div class="reels" id="reels">
-      <div class="payline one"></div>
-      <div class="payline two"></div>
-      <div class="payline three"></div>
-      <div class="reel" id="r0">💎</div>
-      <div class="reel" id="r1">7️⃣</div>
-      <div class="reel" id="r2">💗</div>
-      <div class="reel" id="r3">🌹</div>
-      <div class="reel" id="r4">💎</div>
-      <div class="reel" id="r5">✨</div>
-      <div class="reel" id="r6">♠️</div>
-      <div class="reel" id="r7">💗</div>
-      <div class="reel" id="r8">🌹</div>
+<main class="app">
+  <header class="topbar">
+    <div class="mini-profile">
+      <div class="avatar">♛</div>
+      <div class="profile-copy">
+        <div class="eyebrow">Private member</div>
+        <div class="player-name" id="playerName">Guest Player</div>
+      </div>
     </div>
-    <div class="line-labels">
-      <div class="line-label">LINE 1<b>100 🪙</b></div>
-      <div class="line-label">LINE 2<b>100 🪙</b></div>
-      <div class="line-label">LINE 3<b>100 🪙</b></div>
+    <div class="wallet">
+      <div class="coin">✦</div>
+      <div>
+        <div class="balance" id="balance">—</div>
+        <div class="balance-caption">VIRTUAL CHIPS</div>
+      </div>
     </div>
-  </div>
+  </header>
 
-  <div class="betinfo">
-    <div>ACTIVE LINES<b>3</b></div>
-    <div>BET PER LINE<b>100</b></div>
-    <div>TOTAL BET<b>300 🪙</b></div>
-  </div>
+  <section class="brand">
+    <div class="brand-crown">♛</div>
+    <h1>KIMIA</h1>
+    <div class="brand-sub">PRIVÉ</div>
+    <div class="brand-tag">PLAY <span>✦</span> WIN <span>✦</span> BE PRIVÉ</div>
+  </section>
 
-  <div class="message" id="msg">CONNECTING…</div>
-  <div class="controls">
-    <button class="round" id="auto"><span>↻</span><br>AUTO</button>
-    <button class="spinbtn" id="spin" disabled>SPIN</button>
-    <button class="round" id="turbo"><span>ϟ</span><br>TURBO</button>
-  </div>
-</section>
+  <section class="jackpot">
+    <div class="jackpot-label">THE PRIVÉ JACKPOT</div>
+    <div class="jackpot-number">♛ <span>1,000,000</span> ♛</div>
+    <div class="jackpot-note">A LUXURY EXPERIENCE · VIRTUAL PLAY ONLY</div>
+  </section>
 
-<section class="features">
-  <div class="feature"><div class="icon">🎁</div><b>Privé Daily</b><span>500 FREE CHIPS</span></div>
-  <div class="feature"><div class="icon">💎</div><b>Jackpot Room</b><span>BIGGEST WINS</span></div>
-</section>
-
-<section class="vipcard">
-  <div>
-    <div class="title">KIMIA PRIVÉ VIP</div>
-    <p>UNLOCK EXCLUSIVE REWARDS</p>
-    <div class="progress"><i id="progressBar"></i></div>
-  </div>
-  <div style="font-size:23px;color:#d5b36f">♛</div>
-</section>
-
-<section class="leader">
-  <div class="leaderhead">
-    <span>♛ TOP PLAYERS</span>
-    <span>VIRTUAL CHIPS</span>
-  </div>
-  <div class="rows" id="leaderboardRows">
-    <div class="row">
-      <div class="who">Loading leaderboard…</div>
+  <section class="game-panel" id="gamePanel">
+    <div class="game-heading">
+      <div class="section-label">THE GOLD ROOM</div>
+      <div class="ways">3 REELS · 3 ROWS</div>
     </div>
-  </div>
-  <div class="leaderstatus" id="leaderboardStatus">CONNECTING TO PRIVÉ RANKINGS</div>
-</section>
 
-<nav>
-  <button><i>⌂</i>HOME</button>
-  <button><i>▣</i>SLOTS</button>
-  <button><i>♛</i>RANK</button>
-  <button><i>◈</i>WALLET</button>
-  <button><i>♙</i>PROFILE</button>
-</nav>
+    <div class="reels-wrap">
+      <div class="reels" id="reels" aria-label="Slot machine reels">
+        <div class="reel">
+          <div class="symbol">💎</div><div class="symbol">7️⃣</div><div class="symbol">🌹</div>
+        </div>
+        <div class="reel">
+          <div class="symbol">👑</div><div class="symbol">💗</div><div class="symbol">♠️</div>
+        </div>
+        <div class="reel">
+          <div class="symbol">✨</div><div class="symbol">💎</div><div class="symbol">7️⃣</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="status-line" id="statusLine" role="status" aria-live="polite">
+      Your private table is ready.
+    </div>
+
+    <div class="controls">
+      <button class="side-control" id="autoButton" type="button" aria-pressed="false">
+        <span class="side-icon">⟳</span>
+        <span>AUTO</span>
+        <small id="autoLabel">OFF</small>
+      </button>
+
+      <button class="spin-button" id="spinButton" type="button" disabled>
+        <span class="spin-icon" id="spinIcon">✧</span>
+        <span class="spin-text" id="spinText">LOADING</span>
+      </button>
+
+      <button class="side-control" id="turboButton" type="button" aria-pressed="false">
+        <span class="side-icon">⚡</span>
+        <span>TURBO</span>
+        <small id="turboLabel">OFF</small>
+      </button>
+    </div>
+
+    <div class="notice">
+      EACH SPIN COSTS <strong style="color:#e4c47f">300 VIRTUAL CHIPS</strong>.
+      WINS ARE CALCULATED BY THE GAME SERVER. NO CASH VALUE.
+    </div>
+  </section>
+
+  <section class="lower-grid">
+    <div class="info-card">
+      <div class="card-kicker">Your membership</div>
+      <div class="card-title" id="vipTitle">Privé Guest</div>
+      <div class="vip-progress"><div class="vip-progress-fill" id="vipProgress"></div></div>
+      <div class="vip-caption" id="vipCaption">Your club status will appear here.</div>
+    </div>
+    <div class="info-card">
+      <div class="card-kicker">Your last session</div>
+      <div class="card-title" id="lastWin">0 chips</div>
+      <div class="vip-caption" id="sessionCaption">Your latest spin result will appear here.</div>
+    </div>
+  </section>
+
+  <section class="leaderboard" id="leaderboardSection">
+    <div class="leader-head">
+      <div>
+        <div class="leader-title">The Privé List</div>
+        <div class="leader-sub">TOP PLAYERS BY VIRTUAL CHIP BALANCE</div>
+      </div>
+      <button class="refresh-btn" id="refreshButton" type="button">↻ Refresh</button>
+    </div>
+    <div id="leaderboardRows">
+      <div class="empty-board">Loading the private list…</div>
+    </div>
+  </section>
+
+  <footer class="footer">
+    <strong>K I M I A &nbsp; P R I V É</strong><br>
+    AN EXCLUSIVE VIRTUAL CLUB<br>
+    PLAY <span style="color:#cba35f">✦</span> ENJOY <span style="color:#cba35f">✦</span> REPEAT
+  </footer>
+</main>
+
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+<div class="confetti-layer" id="confettiLayer"></div>
+
+<div class="win-overlay" id="winOverlay" role="dialog" aria-modal="true" aria-labelledby="winTitle">
+  <div class="win-card">
+    <div class="win-spark">✧ ✦ ✧</div>
+    <div class="win-kicker">THE PRIVÉ MOMENT</div>
+    <div class="win-title" id="winTitle">BEAUTIFULLY PLAYED</div>
+    <div class="win-amount" id="winAmount">+0</div>
+    <div class="win-copy" id="winCopy">VIRTUAL CHIPS WON</div>
+    <button class="win-close" id="closeWin" type="button">CONTINUE</button>
+  </div>
 </div>
 
 <script>
-"use strict";
+(() => {
+  "use strict";
 
-const KIMIA_API = "https://kimia-prive-api.onrender.com";
-const tg = window.Telegram && window.Telegram.WebApp;
-const reels = Array.from({length:9}, (_,i) => document.getElementById("r"+i));
+  const API = "https://kimia-prive-api.onrender.com";
+  const COST = 300;
+  const SYMBOLS = ["💎", "7️⃣", "💗", "🌹", "♠️", "✨"];
+  const REDUCED_MOTION = window.matchMedia &&
+    window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
-let balance = 0;
-let busy = true;
-let auto = false;
-let turbo = false;
-let loggedIn = false;
+  const $ = id => document.getElementById(id);
+  const tg = window.Telegram && window.Telegram.WebApp
+    ? window.Telegram.WebApp
+    : null;
 
-const bal = document.getElementById("bal");
-const msg = document.getElementById("msg");
-const spin = document.getElementById("spin");
-const overlay = document.getElementById("overlay");
-const toast = document.getElementById("toast");
+  let initData = "";
+  let player = null;
+  let busy = false;
+  let autoSpin = false;
+  let turbo = false;
+  let autoTimer = null;
+  let toastTimer = null;
+  let lastWinValue = 0;
+  let sessionSpins = 0;
 
-const fmt = n => Number(n).toLocaleString("en-US");
-
-function note(text) {
-  toast.textContent = text;
-  toast.classList.add("show");
-  setTimeout(() => toast.classList.remove("show"), 2400);
-}
-
-function audio(freq, dur=0.14) {
-  try {
-    const C = window.AudioContext || window.webkitAudioContext;
-    const c = new C();
-    const o = c.createOscillator();
-    const g = c.createGain();
-    o.connect(g);
-    g.connect(c.destination);
-    o.frequency.value = freq;
-    g.gain.value = 0.05;
-    o.start();
-    o.stop(c.currentTime + dur);
-    o.onended = () => c.close();
-  } catch(e) {}
-}
-
-function show(title,text,icon) {
-  document.getElementById("winTitle").textContent = title;
-  document.getElementById("winText").textContent = text;
-  document.getElementById("winIcon").textContent = icon;
-  overlay.classList.add("show");
-}
-
-async function api(path) {
-  if (!tg || !tg.initData) {
-    throw new Error("Open the game from your Telegram bot.");
+  if (tg) {
+    tg.ready();
+    tg.expand();
+    try {
+      tg.setHeaderColor("#090706");
+      tg.setBackgroundColor("#090706");
+    } catch (_) {}
+    initData = tg.initData || "";
   }
 
-  const response = await fetch(KIMIA_API + path, {
-    method:"POST",
-    headers:{"Content-Type":"application/json"},
-    body:JSON.stringify({initData:tg.initData})
-  });
-
-  let data;
-  try {
-    data = await response.json();
-  } catch(e) {
-    throw new Error("The game server returned an invalid response.");
+  function formatChips(value) {
+    return Math.floor(Number(value) || 0).toLocaleString("en-US");
   }
 
-  if (!response.ok) {
-    throw new Error(data.error || "Request failed. Please try again.");
+  function setStatus(message, type = "") {
+    const el = $("statusLine");
+    el.textContent = message;
+    el.className = "status-line" + (type ? " " + type : "");
   }
 
-  return data;
-}
+  function toast(message) {
+    const el = $("toast");
+    el.textContent = message;
+    el.classList.add("show");
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(() => el.classList.remove("show"), 2800);
+  }
 
-async function loadLeaderboard() {
-  const container = document.getElementById("leaderboardRows");
-  const status = document.getElementById("leaderboardStatus");
-
-  try {
-    status.textContent = "UPDATING PRIVÉ RANKINGS…";
-
-    const response = await fetch(KIMIA_API + "/api/leaderboard", {
-      method: "GET",
+  async function api(path, options = {}) {
+    const response = await fetch(API + path, {
+      ...options,
+      headers: {
+        "Content-Type": "application/json",
+        ...(options.headers || {})
+      },
       cache: "no-store"
     });
 
+    let data;
+    try {
+      data = await response.json();
+    } catch (_) {
+      throw new Error("The game server returned an unreadable response.");
+    }
+
     if (!response.ok) {
-      throw new Error("Leaderboard request failed: " + response.status);
+      throw new Error(data.error || data.message || "The request could not be completed.");
     }
 
-    const data = await response.json();
+    return data;
+  }
 
-    if (!Array.isArray(data.players)) {
-      throw new Error("Invalid leaderboard response.");
-    }
+  function updatePlayer(data) {
+    player = { ...(player || {}), ...data };
 
-    container.replaceChildren();
+    $("playerName").textContent =
+      player.username ? "@" + player.username : "Privé Member";
 
-    if (data.players.length === 0) {
-      const empty = document.createElement("div");
-      empty.className = "row";
-      empty.textContent = "No players ranked yet.";
-      container.appendChild(empty);
-      status.textContent = "BE THE FIRST TO JOIN";
+    $("balance").textContent = formatChips(player.balance);
+
+    const level = Number(player.vip_level) || 0;
+    const tiers = [
+      { name: "Privé Guest", threshold: 0 },
+      { name: "Gold Member", threshold: 5000 },
+      { name: "Diamond Member", threshold: 20000 },
+      { name: "Royal Privé", threshold: 50000 }
+    ];
+
+    const current = Math.min(level, tiers.length - 1);
+    $("vipTitle").textContent = tiers[current].name;
+
+    const balance = Number(player.balance) || 0;
+    const next = tiers[Math.min(current + 1, tiers.length - 1)];
+    const progress = current === tiers.length - 1
+      ? 100
+      : Math.min(100, Math.max(0, balance / Math.max(1, next.threshold) * 100));
+
+    $("vipProgress").style.width = progress + "%";
+    $("vipCaption").textContent = current === tiers.length - 1
+      ? "You have reached the highest displayed tier."
+      : formatChips(Math.max(0, next.threshold - balance)) +
+        " chips to the next displayed tier.";
+
+    $("spinButton").disabled = busy || balance < COST;
+    $("spinText").textContent = busy ? "SPINNING" :
+      (balance < COST ? "NEED CHIPS" : "SPIN");
+    $("spinIcon").textContent = busy ? "◌" : "✧";
+
+    return player;
+  }
+
+  async function login() {
+    if (!initData) {
+      setStatus("Open this game from the Telegram bot to sign in.", "bad");
+      $("spinButton").disabled = true;
+      $("spinText").textContent = "OPEN IN TELEGRAM";
+      $("playerName").textContent = "Telegram Required";
+      $("balance").textContent = "—";
       return;
     }
 
-    data.players.forEach((player, index) => {
-      const row = document.createElement("div");
-      row.className = "row";
-
-      const rank = document.createElement("div");
-      rank.className = "rank";
-      rank.textContent = String(Number(player.rank) || index + 1).padStart(2, "0");
-
-      const mini = document.createElement("div");
-      mini.className = "mini";
-      const cleanUsername = String(player.username || "Anonymous Player").replace(/^@/, "");
-      mini.textContent = cleanUsername.charAt(0).toUpperCase() || "P";
-
-      const who = document.createElement("div");
-      who.className = "who";
-      who.textContent = player.username
-        ? "@" + String(player.username).replace(/^@/, "")
-        : "Anonymous Player";
-
-      const score = document.createElement("div");
-      score.className = "score";
-      score.textContent = fmt(player.balance) + " 🪙";
-
-      row.append(rank, mini, who, score);
-      container.appendChild(row);
-    });
-
-    status.textContent = "LIVE PLAYER BALANCES · TOP " + data.players.length;
-  } catch(error) {
-    console.error("KIMIA leaderboard error:", error);
-    status.textContent = "RANKINGS TEMPORARILY UNAVAILABLE";
-  }
-}
-
-async function login() {
-  if (!tg || !tg.initData) {
-    bal.textContent = "—";
-    msg.textContent = "OPEN THROUGH TELEGRAM";
-    spin.disabled = true;
-    busy = true;
-    note("Open KIMIA PRIVÉ from your Telegram bot.");
-    return;
-  }
-
-  tg.ready();
-  tg.expand();
-
-  try {
-    msg.textContent = "VERIFYING TELEGRAM…";
-    const player = await api("/api/me");
-
-    balance = Number(player.balance);
-    bal.textContent = fmt(balance);
-    document.getElementById("vip").textContent = "♛ VIP LEVEL " + player.vipLevel;
-    document.getElementById("playerName").textContent =
-      player.username ? "@" + player.username : "TELEGRAM PLAYER";
-
-    loggedIn = true;
-    busy = false;
-    spin.disabled = false;
-    msg.textContent = "3 PAYLINES · GOOD LUCK";
-
-    await loadLeaderboard();
-  } catch(error) {
-    console.error("KIMIA login error:", error);
-    loggedIn = false;
-    busy = true;
-    spin.disabled = true;
-    msg.textContent = "LOGIN FAILED · REOPEN GAME";
-    note(error.message);
-  }
-}
-
-async function go() {
-  if (busy || !loggedIn) return;
-
-  if (balance < 300) {
-    msg.textContent = "NOT ENOUGH CHIPS";
-    note("You need 300 virtual chips to spin.");
-    auto = false;
-    return;
-  }
-
-  busy = true;
-  spin.disabled = true;
-  msg.textContent = "SPINNING ALL 3 LINES…";
-  msg.classList.remove("hot");
-
-  reels.forEach(x => {
-    x.classList.remove("win");
-    x.classList.add("spinning");
-  });
-
-  audio(330,0.08);
-
-  try {
-    const result = await api("/api/spin");
-
-    if (!Array.isArray(result.symbols) || result.symbols.length !== 9) {
-      throw new Error("The server did not return all 9 symbols. Check the backend deployment.");
-    }
-
-    const out = result.symbols;
-    const win = Number(result.win);
-    const newBalance = Number(result.balance);
-
-    reels.forEach((el,i) => {
-      el.textContent = out[i];
-      el.classList.remove("spinning");
-    });
-
-    balance = newBalance;
-    bal.textContent = fmt(balance);
-
-    const lines = Array.isArray(result.winningLines) ? result.winningLines : [];
-    const jackpot = [0,1,2].some(row =>
-      out[row*3] === "7️⃣" &&
-      out[row*3+1] === "7️⃣" &&
-      out[row*3+2] === "7️⃣"
-    );
-
-    if (win > 0) {
-      lines.forEach(line => {
-        if (line >= 0 && line < 3) {
-          [line*3,line*3+1,line*3+2].forEach(index => {
-            reels[index].classList.add("win");
-          });
-        }
+    try {
+      setStatus("Entering the private club…");
+      const data = await api("/api/me", {
+        method: "POST",
+        body: JSON.stringify({ initData })
       });
 
-      msg.classList.add("hot");
-      msg.textContent = "WIN · " + lines.length + " LINE(S) · +" + fmt(win) + " CHIPS";
-    } else {
-      msg.textContent = "NO MATCH · TRY AGAIN";
-    }
-
-    // Update the public rankings using the latest database balances.
-    loadLeaderboard();
-
-    if (jackpot) {
-      audio(880,0.7);
-      show("JACKPOT",fmt(win)+" virtual chips awarded!","♛");
-    } else if (win > 0) {
-      audio(660);
-      note("YOU WON "+fmt(win)+" VIRTUAL CHIPS!");
-    }
-  } catch(error) {
-    console.error("KIMIA spin error:",error);
-    msg.textContent = "SPIN FAILED · TRY AGAIN";
-    note(error.message);
-  } finally {
-    reels.forEach(x => x.classList.remove("spinning"));
-    busy = false;
-    spin.disabled = !loggedIn;
-
-    if (auto && loggedIn && balance >= 300) {
-      setTimeout(() => {
-        if (auto && loggedIn && !busy) go();
-      },turbo ? 100 : 700);
-    } else if (auto && balance < 300) {
-      auto = false;
-      note("AUTO SPIN STOPPED · LOW CHIPS");
+      updatePlayer(data);
+      setStatus("Welcome to your private table.", "good");
+    } catch (error) {
+      console.error("Login failed:", error);
+      setStatus("LOGIN FAILED · " + error.message, "bad");
+      $("spinButton").disabled = true;
+      $("spinText").textContent = "LOGIN FAILED";
     }
   }
-}
 
-spin.addEventListener("click",go);
+  function makeReels() {
+    const container = $("reels");
+    container.innerHTML = "";
 
-document.getElementById("auto").addEventListener("click",() => {
-  auto = !auto;
-  note(auto ? "AUTO SPIN ON" : "AUTO SPIN OFF");
-  if (auto && !busy && loggedIn) go();
-});
+    for (let col = 0; col < 3; col++) {
+      const reel = document.createElement("div");
+      reel.className = "reel";
+      reel.dataset.col = String(col);
 
-document.getElementById("turbo").addEventListener("click",() => {
-  turbo = !turbo;
-  note(turbo ? "TURBO MODE ON" : "TURBO MODE OFF");
-});
+      for (let row = 0; row < 3; row++) {
+        const cell = document.createElement("div");
+        cell.className = "symbol";
+        cell.dataset.row = String(row);
+        cell.textContent = SYMBOLS[Math.floor(Math.random() * SYMBOLS.length)];
+        reel.appendChild(cell);
+      }
+      container.appendChild(reel);
+    }
+  }
 
-document.getElementById("close").addEventListener("click",() => {
-  overlay.classList.remove("show");
-});
+  function allCells() {
+    return [...$("reels").querySelectorAll(".symbol")];
+  }
 
-document.getElementById("menuBtn").addEventListener("click",() => {
-  note("WELCOME TO KIMIA PRIVÉ");
-});
+  function randomSymbols() {
+    return Array.from({ length: 9 }, () =>
+      SYMBOLS[Math.floor(Math.random() * SYMBOLS.length)]
+    );
+  }
 
-login();
-loadLeaderboard();
+  function paintSymbols(symbols) {
+    const cells = allCells();
+    cells.forEach((cell, index) => {
+      cell.textContent = symbols[index] || "✨";
+      cell.classList.remove("spinning", "winning");
+    });
+  }
+
+  function sleep(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+  }
+
+  async function animateSpin(finalSymbols) {
+    const reels = [...$("reels").querySelectorAll(".reel")];
+    const duration = REDUCED_MOTION ? 80 : (turbo ? 650 : 1550);
+
+    reels.forEach(reel => {
+      reel.querySelectorAll(".symbol").forEach(cell => {
+        cell.classList.add("spinning");
+        cell.classList.remove("winning");
+      });
+    });
+
+    const started = Date.now();
+
+    await new Promise(resolve => {
+      const tick = () => {
+        const elapsed = Date.now() - started;
+        reels.forEach((reel, col) => {
+          if (elapsed < duration + col * (REDUCED_MOTION ? 0 : 180)) {
+            reel.querySelectorAll(".symbol").forEach(cell => {
+              cell.textContent = SYMBOLS[Math.floor(Math.random() * SYMBOLS.length)];
+            });
+          }
+        });
+
+        if (elapsed < duration + (REDUCED_MOTION ? 0 : 360)) {
+          requestAnimationFrame(tick);
+        } else {
+          resolve();
+        }
+      };
+      requestAnimationFrame(tick);
+    });
+
+    const cells = allCells();
+    const gap = REDUCED_MOTION ? 0 : (turbo ? 65 : 170);
+
+    for (let col = 0; col < 3; col++) {
+      await sleep(gap);
+      for (let row = 0; row < 3; row++) {
+        const index = row * 3 + col;
+        cells[index].textContent = finalSymbols[index] || "✨";
+        cells[index].classList.remove("spinning");
+        cells[index].animate(
+          [
+            { transform: "translateY(-9px)", opacity: .45 },
+            { transform: "translateY(0)", opacity: 1 }
+          ],
+          { duration: REDUCED_MOTION ? 1 : 220, easing: "cubic-bezier(.2,.8,.3,1)" }
+        );
+      }
+    }
+  }
+
+  function highlightWinningLines(lines) {
+    const cells = allCells();
+    cells.forEach(cell => cell.classList.remove("winning"));
+
+    if (!Array.isArray(lines)) return;
+
+    lines.forEach(line => {
+      let indices = [];
+
+      if (Array.isArray(line)) {
+        indices = line;
+      } else if (line && Array.isArray(line.indices)) {
+        indices = line.indices;
+      } else if (line && Number.isInteger(line.line)) {
+        const lineIndex = line.line;
+        indices = lineIndex === 0 ? [0, 1, 2]
+          : lineIndex === 1 ? [3, 4, 5]
+          : lineIndex === 2 ? [6, 7, 8] : [];
+      } else if (line && Number.isInteger(line.index)) {
+        const lineIndex = line.index;
+        indices = lineIndex === 0 ? [0, 1, 2]
+          : lineIndex === 1 ? [3, 4, 5]
+          : lineIndex === 2 ? [6, 7, 8] : [];
+      }
+
+      indices.forEach(index => {
+        if (Number.isInteger(index) && cells[index]) {
+          cells[index].classList.add("winning");
+        }
+      });
+    });
+  }
+
+  function confetti() {
+    if (REDUCED_MOTION) return;
+
+    const layer = $("confettiLayer");
+    layer.innerHTML = "";
+    const pieces = 65;
+
+    for (let i = 0; i < pieces; i++) {
+      const piece = document.createElement("i");
+      piece.className = "confetti";
+      piece.style.left = Math.random() * 100 + "%";
+      piece.style.setProperty("--fall", (1.5 + Math.random() * 1.8) + "s");
+      piece.style.setProperty("--drift", ((Math.random() - .5) * 180) + "px");
+      piece.style.animationDelay = Math.random() * .6 + "s";
+      piece.style.background = ["#f7d88d", "#b47a2b", "#fff1c4", "#d9a1b0"][
+        Math.floor(Math.random() * 4)
+      ];
+      layer.appendChild(piece);
+    }
+
+    setTimeout(() => { layer.innerHTML = ""; }, 4500);
+  }
+
+  function showWin(amount) {
+    $("winTitle").textContent = amount >= 10000 ? "ROYAL FORTUNE" :
+      amount >= 3000 ? "A GOLDEN MOMENT" : "BEAUTIFULLY PLAYED";
+    $("winAmount").textContent = "+" + formatChips(amount);
+    $("winCopy").textContent = "VIRTUAL CHIPS WON";
+    $("winOverlay").classList.add("show");
+    confetti();
+
+    try {
+      if (tg && tg.HapticFeedback) tg.HapticFeedback.notificationOccurred("success");
+    } catch (_) {}
+  }
+
+  function closeWin() {
+    $("winOverlay").classList.remove("show");
+    if (autoSpin) scheduleAutoSpin();
+  }
+
+  async function spin() {
+    if (busy) return;
+
+    if (!initData || !player) {
+      toast("Please open the game through Telegram and sign in.");
+      return;
+    }
+
+    if (Number(player.balance) < COST) {
+      setStatus("Not enough virtual chips for a spin.", "bad");
+      toast("You need at least 300 virtual chips.");
+      stopAutoSpin();
+      return;
+    }
+
+    busy = true;
+    $("gamePanel").classList.add("is-spinning");
+    $("spinButton").disabled = true;
+    $("spinText").textContent = "SPINNING";
+    $("spinIcon").textContent = "◌";
+    $("autoButton").disabled = true;
+    $("turboButton").disabled = true;
+    setStatus("The reels are turning…");
+    lastWinValue = 0;
+    $("lastWin").textContent = "In progress";
+    $("sessionCaption").textContent = "Good luck at the table.";
+
+    let result;
+
+    try {
+      /*
+       * The server remains authoritative for the balance, symbols,
+       * payout, and winning lines. The animation only presents its result.
+       */
+      const request = api("/api/spin", {
+        method: "POST",
+        body: JSON.stringify({ initData })
+      });
+
+      const response = await request;
+      result = response;
+
+      if (!Array.isArray(result.symbols) || result.symbols.length !== 9) {
+        throw new Error("The server returned an unexpected reel result.");
+      }
+
+      await animateSpin(result.symbols);
+
+      if (result.balance !== undefined) {
+        updatePlayer({ balance: result.balance });
+      }
+
+      const win = Math.max(0, Number(result.win) || 0);
+      lastWinValue = win;
+      sessionSpins++;
+
+      $("lastWin").textContent = formatChips(win) + " chips";
+      $("sessionCaption").textContent = win > 0
+        ? "A winning result on your latest spin."
+        : "No payout on this spin. Try again when ready.";
+
+      highlightWinningLines(result.winningLines);
+
+      if (win > 0) {
+        setStatus("A winning combination — +" + formatChips(win) + " chips!", "good");
+        showWin(win);
+      } else {
+        setStatus("The reels have settled. Your next turn awaits.");
+        try {
+          if (tg && tg.HapticFeedback) tg.HapticFeedback.impactOccurred("light");
+        } catch (_) {}
+      }
+
+      loadLeaderboard();
+    } catch (error) {
+      console.error("Spin failed:", error);
+
+      if (result && Array.isArray(result.symbols)) {
+        paintSymbols(result.symbols);
+      }
+
+      setStatus(error.message || "Spin failed. Please try again.", "bad");
+      toast(error.message || "Unable to complete your spin.");
+
+      // Refresh authoritative balance in case the server completed the spin.
+      try {
+        const refreshed = await api("/api/me", {
+          method: "POST",
+          body: JSON.stringify({ initData })
+        });
+        updatePlayer(refreshed);
+      } catch (_) {}
+    } finally {
+      busy = false;
+      $("gamePanel").classList.remove("is-spinning");
+      $("autoButton").disabled = false;
+      $("turboButton").disabled = false;
+      updatePlayer(player || {});
+      if (Number(player && player.balance) < COST) stopAutoSpin();
+    }
+  }
+
+  function scheduleAutoSpin() {
+    clearTimeout(autoTimer);
+    if (!autoSpin || busy || $("winOverlay").classList.contains("show")) return;
+
+    autoTimer = setTimeout(() => {
+      if (autoSpin && !busy) spin();
+    }, turbo ? 450 : 1000);
+  }
+
+  function stopAutoSpin() {
+    autoSpin = false;
+    clearTimeout(autoTimer);
+    $("autoButton").classList.remove("active");
+    $("autoButton").setAttribute("aria-pressed", "false");
+    $("autoLabel").textContent = "OFF";
+  }
+
+  function toggleAutoSpin() {
+    if (!player || !initData) {
+      toast("Sign in through Telegram first.");
+      return;
+    }
+
+    if (!autoSpin && Number(player.balance) < COST) {
+      toast("You need at least 300 virtual chips.");
+      return;
+    }
+
+    autoSpin = !autoSpin;
+    $("autoButton").classList.toggle("active", autoSpin);
+    $("autoButton").setAttribute("aria-pressed", String(autoSpin));
+    $("autoLabel").textContent = autoSpin ? "ON" : "OFF";
+
+    if (autoSpin) {
+      toast("Auto-spin enabled. Tap AUTO again to stop.");
+      scheduleAutoSpin();
+    } else {
+      clearTimeout(autoTimer);
+      toast("Auto-spin stopped.");
+    }
+  }
+
+  function toggleTurbo() {
+    turbo = !turbo;
+    $("turboButton").classList.toggle("active", turbo);
+    $("turboButton").setAttribute("aria-pressed", String(turbo));
+    $("turboLabel").textContent = turbo ? "ON" : "OFF";
+    toast(turbo ? "Turbo animations enabled." : "Standard animations enabled.");
+  }
+
+  async function loadLeaderboard() {
+    const container = $("leaderboardRows");
+    $("refreshButton").disabled = true;
+
+    try {
+      const data = await api("/api/leaderboard");
+      const players = Array.isArray(data.players) ? data.players : [];
+
+      if (!players.length) {
+        container.innerHTML = '<div class="empty-board">The list is waiting for its first players.</div>';
+        return;
+      }
+
+      container.innerHTML = "";
+
+      players.slice(0, 10).forEach((person, index) => {
+        const row = document.createElement("div");
+        row.className = "leader-row";
+
+        const rank = document.createElement("div");
+        rank.className = "rank";
+        rank.textContent = String(person.rank || index + 1).padStart(2, "0");
+
+        const name = document.createElement("div");
+        name.className = "leader-name";
+        name.textContent = person.username
+          ? (String(person.username).startsWith("@") ? person.username : "@" + person.username)
+          : "Anonymous Player";
+
+        const chips = document.createElement("div");
+        chips.className = "leader-chip";
+        chips.textContent = formatChips(person.balance) + " chips";
+
+        row.append(rank, name, chips);
+        container.appendChild(row);
+      });
+    } catch (error) {
+      console.error("Leaderboard failed:", error);
+      container.innerHTML = '<div class="empty-board">The private list is temporarily unavailable.<br>Please refresh in a moment.</div>';
+    } finally {
+      $("refreshButton").disabled = false;
+    }
+  }
+
+  $("spinButton").addEventListener("click", spin);
+  $("autoButton").addEventListener("click", toggleAutoSpin);
+  $("turboButton").addEventListener("click", toggleTurbo);
+  $("refreshButton").addEventListener("click", loadLeaderboard);
+  $("closeWin").addEventListener("click", closeWin);
+
+  $("winOverlay").addEventListener("click", event => {
+    if (event.target === $("winOverlay")) closeWin();
+  });
+
+  document.addEventListener("visibilitychange", () => {
+    if (document.hidden) {
+      stopAutoSpin();
+    }
+  });
+
+  makeReels();
+  login();
+  loadLeaderboard();
+})();
 </script>
 </body>
 </html>
