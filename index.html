@@ -8,20 +8,22 @@
 
 <script src="https://telegram.org/js/telegram-web-app.js"></script>
 
-<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700&family=Cormorant+Garamond:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 
 <style>
 :root{
-  --bg:#050302;
-  --panel:#100805;
-  --panel2:#190d08;
-  --gold:#c68b3d;
-  --goldLight:#ffe2a0;
-  --goldBright:#fff2c7;
-  --pink:#ed4d91;
-  --pinkLight:#ff9ac7;
-  --cream:#f4dbad;
-  --muted:#957652;
+  --black:#030201;
+  --black2:#090604;
+  --black3:#120b07;
+  --gold:#c98a3e;
+  --gold2:#f0bd69;
+  --gold3:#ffe5a5;
+  --gold4:#fff4d0;
+  --pink:#ff3f91;
+  --pink2:#ff9fc7;
+  --cream:#f8e4bd;
+  --muted:#9b805d;
+  --line:#80552b;
 }
 
 *{
@@ -29,37 +31,63 @@
   -webkit-tap-highlight-color:transparent;
 }
 
-html,body{
+html,
+body{
   margin:0;
+  width:100%;
   min-height:100%;
-  background:#030201;
+  background:#020101;
 }
 
 body{
   color:var(--cream);
   font-family:Inter,Arial,sans-serif;
   overflow-x:hidden;
+
   background:
-    radial-gradient(circle at 50% -5%,#44220d 0%,transparent 32%),
-    radial-gradient(circle at 0% 45%,#32100f 0%,transparent 27%),
-    radial-gradient(circle at 100% 50%,#32100f 0%,transparent 27%),
-    linear-gradient(180deg,#110804,#070403 55%,#020101);
+    radial-gradient(circle at 50% 8%,rgba(255,166,65,.19),transparent 25%),
+    radial-gradient(circle at 12% 34%,rgba(126,34,40,.17),transparent 28%),
+    radial-gradient(circle at 90% 38%,rgba(132,39,45,.18),transparent 27%),
+    linear-gradient(180deg,#130b07 0%,#080403 42%,#020101 100%);
+}
+
+/* luxury atmosphere */
+
+body:before{
+  content:"";
+  position:fixed;
+  z-index:-3;
+  inset:0;
+
+  background:
+    radial-gradient(ellipse at 50% 20%,transparent 20%,rgba(0,0,0,.55) 80%),
+    repeating-linear-gradient(
+      105deg,
+      transparent 0,
+      transparent 100px,
+      rgba(255,190,100,.025) 101px,
+      transparent 103px
+    );
 }
 
 body:after{
   content:"";
   position:fixed;
-  inset:0;
-  pointer-events:none;
-  opacity:.12;
+  z-index:-2;
+  left:50%;
+  top:0;
+  width:500px;
+  height:700px;
+  transform:translateX(-50%);
+
   background:
-    repeating-linear-gradient(
-      115deg,
-      transparent 0,
-      transparent 80px,
-      rgba(255,220,160,.035) 81px,
-      transparent 82px
+    radial-gradient(
+      ellipse at center top,
+      rgba(255,183,83,.13),
+      transparent 60%
     );
+
+  pointer-events:none;
 }
 
 button{
@@ -72,188 +100,327 @@ button:disabled{
   cursor:default;
 }
 
-/* =========================
-   APP
-========================= */
-
 .app{
-  width:min(100%,820px);
+  width:min(100%,1040px);
   margin:auto;
-  padding:9px 10px 115px;
+  padding:8px 10px 120px;
 }
 
-/* =========================
-   TOP BAR
-========================= */
+/* =========================================================
+   TOP HEADER
+========================================================= */
 
 .top{
   display:grid;
   grid-template-columns:1fr auto 1fr;
   align-items:center;
-  gap:8px;
+  gap:10px;
+  min-height:72px;
 }
 
 .profile{
+  justify-self:start;
   display:flex;
   align-items:center;
-  gap:8px;
+  gap:10px;
 }
 
 .avatar{
-  width:46px;
-  height:46px;
-  border-radius:50%;
-  display:grid;
-  place-items:center;
+  width:58px;
+  height:58px;
   flex:none;
 
-  font-family:Cinzel,serif;
-  font-size:17px;
-  color:#ffe4a8;
+  border-radius:50%;
+
+  display:grid;
+  place-items:center;
+
+  border:1px solid var(--gold3);
 
   background:
-    radial-gradient(circle at 32% 25%,#8c5529,#32170b 50%,#090403);
-
-  border:1px solid #f1c878;
+    radial-gradient(
+      circle at 40% 25%,
+      #8b542b,
+      #241208 55%,
+      #050302
+    );
 
   box-shadow:
-    0 0 0 3px #100704,
-    0 0 0 4px #765027,
-    0 0 18px #d78d3a44;
+    0 0 0 2px #050302,
+    0 0 0 3px #9c672f,
+    0 0 20px rgba(240,174,83,.25);
+
+  font-family:Cinzel,serif;
+  font-size:20px;
+  color:var(--gold3);
+}
+
+.profile-copy{
+  min-width:120px;
 }
 
 .profile-name{
   font-family:Cinzel,serif;
-  font-size:10px;
-  letter-spacing:1.2px;
-  color:#f7dca8;
-  white-space:nowrap;
+  font-size:14px;
+  letter-spacing:1.5px;
+  color:#f6dfb5;
 }
 
-.profile-level{
-  margin-top:3px;
-  font-size:7px;
-  letter-spacing:1px;
-  color:#9e805b;
+.profile-vip{
+  margin-top:2px;
+  font-size:11px;
+  color:#e4c28e;
 }
 
-.vip{
-  width:90px;
-  height:4px;
+.vip-row{
+  display:flex;
+  align-items:center;
+  gap:7px;
   margin-top:5px;
-  border:1px solid #5b3b20;
-  background:#0b0604;
+}
+
+.vip-bar{
+  width:105px;
+  height:6px;
+
   overflow:hidden;
+
+  border-radius:10px;
+  border:1px solid #67431f;
+
+  background:#0a0604;
 }
 
-.vip div{
-  width:45%;
+.vip-fill{
+  width:42%;
   height:100%;
-  background:linear-gradient(90deg,#8c4f20,#ffe2a0);
-  box-shadow:0 0 8px #e2a34e;
+
+  background:
+    linear-gradient(
+      90deg,
+      #b06d2e,
+      #ffe0a0
+    );
+
+  box-shadow:
+    0 0 8px #f0ad55;
 }
 
-.crown-top{
+.vip-percent{
+  font-size:10px;
+  color:#d8b27a;
+}
+
+.header-crown{
   text-align:center;
-  font-size:24px;
-  color:#f3cd85;
-  text-shadow:0 0 15px #e3a14d;
+  font-size:30px;
+  color:var(--gold3);
+  text-shadow:
+    0 0 8px #ffca6c,
+    0 0 24px #a85d24;
 }
 
-.crown-top small{
+.header-crown small{
   display:block;
-  margin-top:-3px;
-  font-size:6px;
+  margin-top:-4px;
+
+  font-family:Cinzel,serif;
+  font-size:8px;
   letter-spacing:3px;
-  color:#a98a63;
+  color:#d7ae72;
 }
 
 .balance{
   justify-self:end;
 
+  min-width:165px;
+
   display:flex;
   align-items:center;
-  gap:7px;
+  gap:9px;
 
-  min-width:135px;
-  padding:7px 9px;
+  padding:8px 9px;
 
-  border-radius:30px;
+  border:1px solid #87582b;
+  border-radius:35px;
 
   background:
-    linear-gradient(145deg,#241208,#0a0503);
-
-  border:1px solid #80552b;
+    linear-gradient(
+      145deg,
+      rgba(39,22,11,.96),
+      rgba(7,4,3,.96)
+    );
 
   box-shadow:
-    inset 0 1px #fff3,
-    0 5px 18px #000b;
+    inset 0 1px rgba(255,238,190,.18),
+    0 6px 18px #000b;
 }
 
-.coin{
-  font-size:20px;
-  filter:drop-shadow(0 0 7px #e0a04a);
+.coins{
+  width:39px;
+  height:39px;
+
+  display:grid;
+  place-items:center;
+
+  border-radius:50%;
+
+  font-size:22px;
+
+  background:
+    radial-gradient(circle at 35% 25%,#ffe4a1,#a96724 65%,#3b1c09);
+
+  box-shadow:
+    inset 0 1px #fff8,
+    0 0 12px rgba(236,161,62,.35);
+}
+
+.balance-copy{
+  flex:1;
 }
 
 .balance-label{
-  font-size:6px;
-  letter-spacing:1.5px;
-  color:#967955;
+  font-size:8px;
+  letter-spacing:1.6px;
+  color:#a98a63;
 }
 
 .balance-value{
   margin-top:1px;
-  font-family:Cinzel,serif;
-  font-size:13px;
-  color:#f8dba4;
+
+  font-family:"Cormorant Garamond",serif;
+  font-size:24px;
+  font-weight:700;
+
+  color:#f8d99f;
 }
 
 .plus{
-  margin-left:auto;
-  width:25px;
-  height:25px;
+  width:34px;
+  height:34px;
+
   border-radius:50%;
+
   display:grid;
   place-items:center;
+
   color:#ffe0a0;
-  border:1px solid #9c6a37;
-  background:#170b06;
+
+  border:1px solid #a87538;
+
+  background:
+    radial-gradient(circle,#34200f,#0b0604);
+
+  font-size:24px;
 }
 
-/* =========================
+/* =========================================================
+   MOBILE MENU
+========================================================= */
+
+.menu-button{
+  position:absolute;
+  left:18px;
+  top:84px;
+
+  width:57px;
+  height:57px;
+
+  border-radius:50%;
+
+  color:#f5d29a;
+
+  border:1px solid #a16d35;
+
+  background:
+    radial-gradient(circle at 40% 25%,#2e1a0d,#080403 70%);
+
+  box-shadow:
+    inset 0 1px #fff3,
+    0 0 0 2px #120905,
+    0 5px 15px #000c;
+
+  font-size:27px;
+  z-index:5;
+}
+
+/* =========================================================
    BRAND
-========================= */
+========================================================= */
 
 .brand{
+  position:relative;
+
   text-align:center;
-  padding:8px 0 14px;
+
+  padding:
+    15px
+    0
+    20px;
 }
 
-.brand-crown{
-  font-size:26px;
-  color:#f8d28b;
+.brand:before,
+.brand:after{
+  content:"";
+
+  position:absolute;
+  top:57%;
+
+  width:20%;
+  height:1px;
+
+  background:
+    linear-gradient(
+      90deg,
+      transparent,
+      #d09a52,
+      transparent
+    );
+}
+
+.brand:before{
+  left:0;
+}
+
+.brand:after{
+  right:0;
+}
+
+.crown{
+  color:#f6ce84;
+
+  font-size:39px;
+
+  line-height:1;
+
   text-shadow:
-    0 0 7px #fff0bd,
-    0 0 25px #d17f32;
+    0 0 7px #ffe0a0,
+    0 0 20px #cf812f;
 }
 
 .brand h1{
-  margin:1px 0 0;
+  margin:0;
 
-  font-family:Cinzel,serif;
-  font-size:clamp(38px,11vw,67px);
-  line-height:.88;
-  letter-spacing:6px;
-  font-weight:600;
+  font-family:Cinzel,Georgia,serif;
+
+  font-size:
+    clamp(48px,11vw,92px);
+
+  font-weight:500;
+
+  letter-spacing:
+    clamp(5px,1.5vw,13px);
+
+  line-height:.9;
 
   background:
     linear-gradient(
       180deg,
-      #fff4cf 0%,
-      #f1c57c 24%,
-      #fff1c0 46%,
-      #bd7b34 76%,
-      #714117 100%
+      #fff7d8 0%,
+      #e9b566 25%,
+      #fff0bd 45%,
+      #b96f2d 72%,
+      #ffe3a0 100%
     );
 
   -webkit-background-clip:text;
@@ -261,268 +428,356 @@ button:disabled{
   color:transparent;
 
   filter:
-    drop-shadow(0 4px 2px #000)
-    drop-shadow(0 0 10px #d08b3d33);
+    drop-shadow(0 5px 2px #000)
+    drop-shadow(0 0 13px rgba(255,190,85,.25));
 }
 
 .brand h2{
-  margin:4px 0 0;
-  font-family:Cinzel,serif;
-  font-size:19px;
-  letter-spacing:10px;
-  padding-left:10px;
-  color:#f4d49b;
+  margin:3px 0 0;
+
+  font-family:Cinzel,Georgia,serif;
+
+  font-size:
+    clamp(25px,5vw,42px);
+
+  font-weight:500;
+
+  letter-spacing:
+    clamp(8px,2vw,16px);
+
+  padding-left:
+    clamp(8px,2vw,16px);
+
+  color:#f3d09a;
+
+  text-shadow:
+    0 3px 4px #000,
+    0 0 10px rgba(245,181,92,.25);
 }
 
-.brand-sub{
-  margin-top:6px;
-  font-size:6px;
-  letter-spacing:3.5px;
-  color:#a98a61;
+.tagline{
+  margin-top:11px;
+
+  font-size:9px;
+
+  letter-spacing:5px;
+
+  color:#c39b66;
 }
 
-/* =========================
-   INFO
-========================= */
+/* =========================================================
+   HEADER CARDS
+========================================================= */
 
-.info-row{
+.quick{
   display:grid;
   grid-template-columns:1fr 1fr;
-  gap:7px;
-  margin-bottom:9px;
+  gap:9px;
+
+  margin-bottom:12px;
 }
 
-.info{
+.quick-card{
+  min-height:61px;
+
   display:flex;
   align-items:center;
-  gap:8px;
+  gap:10px;
 
-  min-height:50px;
-  padding:8px 10px;
+  padding:9px 12px;
 
-  border-radius:13px;
-
-  border:1px solid #68451f;
-
-  background:
-    linear-gradient(145deg,#211108,#0b0503);
-
-  box-shadow:
-    inset 0 1px #fff2,
-    0 5px 15px #0009;
-}
-
-.info-icon{
-  width:31px;
-  height:31px;
-  border-radius:50%;
-  display:grid;
-  place-items:center;
-  flex:none;
-
-  background:
-    radial-gradient(circle,#70431d,#180a05);
-
-  border:1px solid #9b6935;
-
-  font-size:16px;
-}
-
-.info-label{
-  font-size:6px;
-  letter-spacing:1.4px;
-  color:#967955;
-}
-
-.info-value{
-  margin-top:2px;
-  font-family:Cinzel,serif;
-  font-size:11px;
-  color:#edcc92;
-}
-
-/* =====================================================
-   THE ACTUAL 3D MACHINE
-===================================================== */
-
-.machine{
-  position:relative;
-  padding:8px;
-
-  border-radius:30px;
-
-  background:
-    linear-gradient(
-      135deg,
-      #f1c879 0%,
-      #8c5b2b 3%,
-      #321b0d 7%,
-      #0d0604 12%,
-      #090403 50%,
-      #291509 88%,
-      #9c672f 96%,
-      #e8b965 100%
-    );
-
-  border:1px solid #f5d18b;
-
-  box-shadow:
-    0 0 0 2px #27150a,
-    0 0 0 4px #9a642d,
-    0 0 0 5px #3a2110,
-    0 18px 45px #000e,
-    inset 0 2px 3px #fff8,
-    inset 0 -12px 18px #000;
-}
-
-.machine:before{
-  content:"";
-  position:absolute;
-  left:5%;
-  right:5%;
-  top:1px;
-  height:5px;
-  border-radius:100%;
-  background:linear-gradient(
-    90deg,
-    transparent,
-    #fff0c0,
-    #c98a3d,
-    #fff4cb,
-    transparent
-  );
-  filter:blur(.5px);
-}
-
-.machine-inner{
-  position:relative;
-  padding:13px 9px 12px;
-  border-radius:23px;
-
-  background:
-    radial-gradient(
-      ellipse at 50% 0%,
-      #4a250e 0%,
-      transparent 28%
-    ),
-    linear-gradient(
-      160deg,
-      #1c0d07,
-      #070302 42%,
-      #180b06
-    );
-
-  border:1px solid #744a23;
-
-  box-shadow:
-    inset 0 0 0 2px #0a0402,
-    inset 0 0 35px #000,
-    inset 0 2px #ffe4a522;
-}
-
-.machine-title{
-  text-align:center;
-  margin-bottom:9px;
-
-  font-family:Cinzel,serif;
-  font-size:7px;
-  letter-spacing:2.5px;
-  color:#d3ac70;
-}
-
-.machine-title span{
-  color:#8e602f;
-  padding:0 7px;
-}
-
-/* =========================
-   3D REEL FRAME
-========================= */
-
-.reel-frame{
-  position:relative;
-
-  padding:8px;
-
+  border:1px solid #795027;
   border-radius:18px;
 
   background:
     linear-gradient(
-      135deg,
-      #e9bc70 0%,
-      #8e5a27 5%,
-      #2b170b 9%,
-      #080403 14%,
-      #030201 50%,
-      #2c180b 86%,
-      #8e5a27 94%,
-      #e9bc70 100%
+      145deg,
+      #26150a,
+      #090504 65%
     );
 
-  border:1px solid #f0c77e;
+  box-shadow:
+    inset 0 1px #fff2,
+    0 7px 20px #000a;
+}
+
+.quick-icon{
+  width:40px;
+  height:40px;
+
+  flex:none;
+
+  display:grid;
+  place-items:center;
+
+  border-radius:50%;
+
+  font-size:22px;
+
+  border:1px solid #a9763b;
+
+  background:
+    radial-gradient(circle,#5d3517,#110804 72%);
 
   box-shadow:
-    0 0 0 2px #321c0d,
-    0 0 0 3px #a36d32,
-    inset 0 2px 3px #fff6,
-    inset 0 -8px 15px #000,
-    0 12px 28px #000d;
+    0 0 12px rgba(215,143,52,.18);
 }
 
-.reel-frame:before{
-  content:"";
-  position:absolute;
-  left:7px;
-  right:7px;
-  top:5px;
-  height:3px;
-  border-radius:50%;
-  background:linear-gradient(
-    90deg,
-    transparent,
-    #fff5d0,
-    transparent
-  );
-  opacity:.65;
+.quick-label{
+  font-size:8px;
+  letter-spacing:1.5px;
+  color:#a98b64;
 }
 
-.glass{
+.quick-value{
+  margin-top:2px;
+
+  font-family:"Cormorant Garamond",serif;
+
+  font-size:18px;
+
+  color:#f3d29b;
+}
+
+/* =========================================================
+   MACHINE
+========================================================= */
+
+.machine{
   position:relative;
-  overflow:hidden;
 
-  border-radius:12px;
+  margin-top:7px;
 
-  padding:5px;
+  padding:12px;
+
+  border-radius:38px;
+
+  background:
+    linear-gradient(
+      135deg,
+      #f1c275 0%,
+      #9b642c 3%,
+      #3b2110 6%,
+      #0d0704 11%,
+      #050302 48%,
+      #160b06 87%,
+      #7d4d22 96%,
+      #e4ae5f 100%
+    );
+
+  border:1px solid #ffe0a0;
+
+  box-shadow:
+    0 0 0 2px #3b2110,
+    0 0 0 4px #9c662f,
+    0 0 0 5px #1a0c06,
+    0 22px 55px #000f,
+    inset 0 2px 3px #fff9,
+    inset 0 -12px 20px #000;
+}
+
+.machine:before{
+  content:"";
+
+  position:absolute;
+
+  left:8%;
+  right:8%;
+  top:0;
+
+  height:7px;
+
+  border-radius:50%;
 
   background:
     linear-gradient(
       90deg,
-      #020101,
-      #130905 16%,
-      #241208 50%,
-      #130905 84%,
-      #020101
+      transparent,
+      #fff0bd 20%,
+      white 50%,
+      #fff0bd 80%,
+      transparent
     );
 
-  border:1px solid #9d6b35;
+  filter:blur(.7px);
+
+  opacity:.9;
+}
+
+.machine-inner{
+  position:relative;
+
+  padding:
+    18px
+    15px
+    15px;
+
+  border-radius:30px;
+
+  background:
+    radial-gradient(
+      ellipse at 50% 0%,
+      rgba(140,76,24,.32),
+      transparent 30%
+    ),
+    linear-gradient(
+      160deg,
+      #241208,
+      #080403 42%,
+      #130a06
+    );
+
+  border:1px solid #7b5129;
+
+  box-shadow:
+    inset 0 0 0 2px #0a0503,
+    inset 0 0 50px #000,
+    inset 0 2px #fff2;
+}
+
+/* machine crown */
+
+.machine-top{
+  text-align:center;
+
+  height:32px;
+
+  position:relative;
+}
+
+.machine-top:before{
+  content:"";
+
+  position:absolute;
+
+  left:16%;
+  right:16%;
+  top:15px;
+
+  height:2px;
+
+  background:
+    linear-gradient(
+      90deg,
+      transparent,
+      #d89b4c,
+      #fff0b5,
+      #d89b4c,
+      transparent
+    );
+
+  box-shadow:0 0 8px #e3a957;
+}
+
+.machine-crown{
+  position:relative;
+  z-index:2;
+
+  display:inline-grid;
+  place-items:center;
+
+  width:54px;
+  height:34px;
+
+  font-size:26px;
+
+  color:#ffe09a;
+
+  background:#160b06;
+
+  border:1px solid #a97237;
+
+  border-radius:50%;
+
+  box-shadow:
+    0 0 0 3px #080403,
+    0 0 12px rgba(241,171,71,.25);
+}
+
+/* =========================================================
+   REELS
+========================================================= */
+
+.reel-window{
+  position:relative;
+
+  padding:9px;
+
+  border-radius:23px;
+
+  background:
+    linear-gradient(
+      135deg,
+      #e5b15f,
+      #71451f 5%,
+      #160b06 10%,
+      #050302 50%,
+      #70441f 90%,
+      #dda858
+    );
+
+  border:1px solid #f4ca80;
+
+  box-shadow:
+    inset 0 2px 3px #fff8,
+    inset 0 -8px 15px #000,
+    0 10px 30px #000d;
+}
+
+.reel-window:before{
+  content:"";
+
+  position:absolute;
+
+  inset:3px;
+
+  border-radius:20px;
+
+  border:1px solid rgba(255,221,160,.28);
+
+  pointer-events:none;
+}
+
+.reel-glass{
+  position:relative;
+
+  overflow:hidden;
+
+  padding:5px;
+
+  border-radius:15px;
+
+  background:
+    linear-gradient(
+      90deg,
+      #030201,
+      #170b06 20%,
+      #080403 50%,
+      #170b06 80%,
+      #030201
+    );
+
+  border:1px solid #9d6b34;
 
   box-shadow:
     inset 0 0 30px #000,
-    inset 0 1px #fff5,
-    inset 8px 0 15px #000,
-    inset -8px 0 15px #000;
+    inset 0 1px #fff5;
 }
 
-.glass:before{
+.reel-glass:before{
   content:"";
-  position:absolute;
-  z-index:50;
-  top:-70%;
-  left:-35%;
-  width:22%;
-  height:240%;
 
-  transform:rotate(22deg);
+  position:absolute;
+
+  z-index:20;
+
+  top:-60%;
+  left:-35%;
+
+  width:22%;
+  height:220%;
+
+  transform:rotate(25deg);
 
   background:
     linear-gradient(
@@ -532,33 +787,37 @@ button:disabled{
       transparent
     );
 
-  animation:glassSweep 4s linear infinite;
+  animation:
+    glassSweep 4.5s linear infinite;
+
   pointer-events:none;
 }
 
 @keyframes glassSweep{
   0%{left:-40%}
-  55%,100%{left:125%}
+  100%{left:130%}
 }
-
-/* =========================
-   REELS
-========================= */
 
 .reels{
-  display:grid;
-  grid-template-columns:repeat(5,minmax(0,1fr));
-  gap:4px;
-
-  perspective:1200px;
-}
-
-.reel{
   position:relative;
 
   display:grid;
-  grid-template-rows:repeat(3,1fr);
-  gap:4px;
+
+  grid-template-columns:
+    repeat(5,minmax(0,1fr));
+
+  gap:5px;
+
+  perspective:1400px;
+}
+
+.reel{
+  display:grid;
+
+  grid-template-rows:
+    repeat(3,1fr);
+
+  gap:5px;
 
   min-width:0;
 
@@ -566,133 +825,126 @@ button:disabled{
 }
 
 .reel:nth-child(1){
-  transform:perspective(900px) rotateY(5deg);
-}
-
-.reel:nth-child(2){
-  transform:perspective(1000px) rotateY(2deg);
-}
-
-.reel:nth-child(4){
-  transform:perspective(1000px) rotateY(-2deg);
+  transform:
+    perspective(900px)
+    rotateY(4deg);
 }
 
 .reel:nth-child(5){
-  transform:perspective(900px) rotateY(-5deg);
+  transform:
+    perspective(900px)
+    rotateY(-4deg);
 }
 
-/* =========================
-   DIMENSIONAL TILE
-========================= */
+/* reel divider */
+
+.reel:not(:last-child):after{
+  content:"";
+
+  position:absolute;
+
+  top:0;
+  bottom:0;
+
+  width:2px;
+
+  background:
+    linear-gradient(
+      180deg,
+      transparent,
+      #e2ad60 20%,
+      #fff0bd 50%,
+      #8c5728 80%,
+      transparent
+    );
+
+  opacity:.5;
+}
+
+/* =========================================================
+   TILES
+========================================================= */
 
 .tile{
   position:relative;
 
-  aspect-ratio:1/.93;
+  aspect-ratio:
+    1 / .92;
+
+  min-width:0;
 
   display:grid;
   place-items:center;
 
   overflow:hidden;
 
-  border-radius:7px;
+  border-radius:9px;
 
   background:
     radial-gradient(
-      ellipse at 35% 17%,
-      rgba(255,238,190,.17),
+      ellipse at 35% 20%,
+      rgba(255,236,190,.12),
       transparent 35%
-    ),
-    radial-gradient(
-      ellipse at 50% 100%,
-      rgba(151,74,29,.15),
-      transparent 45%
     ),
     linear-gradient(
       145deg,
-      #301a0d 0%,
-      #130905 28%,
-      #060302 66%,
-      #1c0d07 100%
+      #25140a,
+      #070403 58%,
+      #180b06
     );
 
-  border:1px solid #9a6936;
+  border:1px solid #89592c;
 
   box-shadow:
-    inset 0 1px #fff7,
-    inset 1px 0 #fff2,
-    inset 0 -9px 13px #000,
+    inset 0 1px #fff4,
+    inset 0 -8px 14px #000,
     inset 0 0 14px #000,
-    0 3px 0 #432510,
-    0 5px 8px #000d;
-
-  transform-style:preserve-3d;
+    0 3px 0 #321c0d,
+    0 5px 9px #000d;
 }
 
 .tile:before{
   content:"";
+
   position:absolute;
   inset:2px;
 
-  border-radius:5px;
+  border-radius:7px;
 
-  border:1px solid rgba(255,224,165,.10);
-
-  box-shadow:
-    inset 0 0 10px #000;
-
-  pointer-events:none;
+  border:1px solid rgba(255,226,165,.10);
 }
 
 .tile:after{
   content:"";
+
   position:absolute;
 
-  width:70%;
-  height:180%;
+  left:-60%;
+  top:-20%;
 
-  left:-80%;
-  top:-40%;
+  width:45%;
+  height:160%;
 
-  transform:rotate(25deg);
+  transform:rotate(28deg);
 
   background:
     linear-gradient(
       90deg,
       transparent,
-      rgba(255,241,207,.075),
+      rgba(255,255,255,.09),
       transparent
     );
 
   pointer-events:none;
 }
 
-/* center row has extra visual prominence */
-
-.reel .tile:nth-child(2){
-  background:
-    radial-gradient(
-      ellipse at 50% 45%,
-      rgba(255,211,133,.08),
-      transparent 55%
-    ),
-    linear-gradient(
-      145deg,
-      #351b0d,
-      #0b0503 58%,
-      #241108
-    );
-
-  border-color:#b17a3d;
-}
-
-/* =========================
+/* =========================================================
    SYMBOLS
-========================= */
+========================================================= */
 
 .symbol{
   position:relative;
-  z-index:5;
+  z-index:4;
 
   display:grid;
   place-items:center;
@@ -700,109 +952,150 @@ button:disabled{
   font-family:Cinzel,serif;
   font-weight:700;
 
-  font-size:clamp(25px,7.2vw,55px);
+  font-size:
+    clamp(28px,6.7vw,67px);
 
-  color:#f5cc82;
+  color:#f8d28e;
 
-  transform:translateZ(30px);
-
-  text-shadow:
-    0 3px 1px #3c1c08,
-    0 5px 4px #000,
-    0 0 10px rgba(231,166,75,.38);
+  transform:translateZ(25px);
 
   filter:
-    drop-shadow(0 3px 2px #000)
-    drop-shadow(0 0 7px rgba(238,174,78,.24));
+    drop-shadow(0 4px 2px #000)
+    drop-shadow(0 0 8px rgba(255,180,70,.35));
+
+  user-select:none;
 }
 
-.symbol.kp{
-  font-size:clamp(20px,5.8vw,43px);
-  letter-spacing:-1px;
+.kp-symbol{
+  width:76%;
+  height:76%;
 
-  color:#ffe0a2;
+  border-radius:50%;
+
+  font-family:Cinzel,serif;
+
+  font-size:
+    clamp(19px,4.5vw,43px);
+
+  color:#f5d8a0;
+
+  border:2px solid #d49a4d;
+
+  background:
+    radial-gradient(
+      circle at 40% 25%,
+      #5b3517,
+      #170a05 62%,
+      #050302
+    );
+
+  box-shadow:
+    inset 0 1px #fff6,
+    inset 0 -8px 12px #000,
+    0 0 0 2px #281308,
+    0 0 12px rgba(231,165,73,.25);
+}
+
+.crown-symbol{
+  font-size:
+    clamp(30px,7vw,62px);
+
+  color:#f6c76f;
 
   text-shadow:
-    0 2px 0 #704219,
-    0 4px 4px #000,
-    0 0 12px #e6a94f55;
+    0 2px #5a2d0c,
+    0 0 5px #fff1bd,
+    0 0 16px #e69a39;
 }
 
-.symbol.crown{
-  color:#f8cb74;
+.bell-symbol{
+  font-size:
+    clamp(31px,7vw,62px);
+
+  color:#eeb45b;
 
   text-shadow:
-    0 2px #714216,
-    0 4px 3px #000,
-    0 0 13px #e1a144;
+    0 2px 2px #512609,
+    0 0 9px #d9882e,
+    0 0 15px rgba(236,159,57,.5);
 }
 
-.symbol.seven{
+.cherry-symbol{
+  font-size:
+    clamp(31px,7vw,62px);
+
+  filter:
+    drop-shadow(0 4px 2px #000)
+    drop-shadow(0 0 10px #e92768);
+}
+
+.diamond-symbol{
+  font-size:
+    clamp(32px,7vw,65px);
+
+  color:#ff75ac;
+
+  text-shadow:
+    0 0 4px #fff,
+    0 0 10px #ff4b94,
+    0 0 23px #e52670;
+}
+
+.heart-symbol{
+  font-size:
+    clamp(32px,7vw,64px);
+
+  color:#ff6ba7;
+
+  text-shadow:
+    0 0 3px #fff,
+    0 0 10px #ff4d91,
+    0 0 22px #b51b5c;
+}
+
+.seven-symbol{
+  font-family:Cinzel,serif;
+
   font-style:italic;
-  font-weight:800;
 
-  font-size:clamp(35px,9vw,63px);
+  font-size:
+    clamp(42px,9vw,82px);
+
+  font-weight:700;
 
   background:
     linear-gradient(
       180deg,
-      #ffd3e6 0%,
-      #ff76ae 25%,
-      #df2e74 58%,
-      #751039 100%
+      #ffd1e4,
+      #ff4f96 25%,
+      #db1764 55%,
+      #771139 100%
     );
 
   -webkit-background-clip:text;
   background-clip:text;
+
   color:transparent;
 
-  -webkit-text-stroke:1px #ffd8e7;
+  -webkit-text-stroke:
+    1px #ffe0ed;
 
   filter:
-    drop-shadow(0 3px 1px #310716)
-    drop-shadow(0 0 12px #ef3e83);
+    drop-shadow(0 4px 2px #26030e)
+    drop-shadow(0 0 13px #ff3c89);
 }
 
-.symbol.heart,
-.symbol.diamond{
-  color:#ff6da5;
-
-  text-shadow:
-    0 2px #6d1538,
-    0 4px 3px #000,
-    0 0 7px #fff,
-    0 0 18px #ff3e88,
-    0 0 27px #b51d5c;
-}
-
-.symbol.cherry{
-  font-family:Arial,sans-serif;
-  font-size:clamp(26px,7vw,48px);
-
-  filter:
-    drop-shadow(0 4px 2px #000)
-    drop-shadow(0 0 8px #ff3e71);
-}
-
-.symbol.bell{
-  color:#f3bd68;
-
-  text-shadow:
-    0 2px #704015,
-    0 4px 3px #000,
-    0 0 12px #d88d35;
-}
-
-/* =========================
+/* =========================================================
    PAYLINE
-========================= */
+========================================================= */
 
 .payline{
   position:absolute;
-  z-index:40;
 
-  left:2px;
-  right:2px;
+  z-index:25;
+
+  left:4px;
+  right:4px;
   top:50%;
 
   height:2px;
@@ -813,327 +1106,403 @@ button:disabled{
     linear-gradient(
       90deg,
       transparent,
-      #ffcb70 8%,
-      #fff1bf 50%,
-      #ffcb70 92%,
+      #f6c773 6%,
+      #fff0bc 50%,
+      #f6c773 94%,
       transparent
     );
 
   box-shadow:
-    0 0 5px #fff,
-    0 0 13px #ed963e;
+    0 0 4px #fff,
+    0 0 13px #ed9d3d;
 
-  opacity:.55;
+  opacity:.5;
+
   pointer-events:none;
 }
 
-/* =========================
+/* =========================================================
    SPINNING
-========================= */
+========================================================= */
 
 .reels.spinning .tile{
   animation:
-    reelBounce .09s linear infinite;
+    reelShake .11s linear infinite;
 }
 
 .reels.spinning .symbol{
+  filter:blur(3px);
   animation:
     symbolRoll .09s linear infinite;
-
-  filter:blur(2px);
-
-  opacity:.82;
 }
 
-@keyframes reelBounce{
+@keyframes reelShake{
   0%{
-    transform:translateY(-5px) rotateX(1deg);
+    transform:translateY(-5px);
   }
+
   50%{
-    transform:translateY(5px) rotateX(-1deg);
+    transform:translateY(5px);
   }
+
   100%{
-    transform:translateY(-5px) rotateX(1deg);
+    transform:translateY(-5px);
   }
 }
 
 @keyframes symbolRoll{
   0%{
-    transform:translateZ(20px) translateY(-10px) scaleY(1.08);
+    transform:translateY(-10px) scale(1.03);
   }
+
   50%{
-    transform:translateZ(20px) translateY(10px) scaleY(.92);
+    transform:translateY(10px) scale(.96);
   }
+
   100%{
-    transform:translateZ(20px) translateY(-10px) scaleY(1.08);
+    transform:translateY(-10px) scale(1.03);
   }
 }
 
-/* =========================
+/* =========================================================
    WIN
-========================= */
+========================================================= */
 
 .tile.win{
-  z-index:20;
+  z-index:40;
 
-  border-color:#ffe7aa;
+  border-color:#ffe8af;
 
   background:
     radial-gradient(
-      circle at 50% 50%,
-      rgba(255,205,105,.28),
+      circle,
+      rgba(255,213,125,.36),
       transparent 63%
     ),
     linear-gradient(
       145deg,
-      #51270e,
-      #130703
+      #48250f,
+      #120704
     );
 
   box-shadow:
-    inset 0 0 20px #ffc35eaa,
-    0 0 0 2px #f9d68f,
-    0 0 15px #ffb84e,
-    0 0 28px #ed4d91,
-    0 7px 14px #000;
+    inset 0 0 25px rgba(255,187,73,.8),
+    0 0 0 2px #f8cf7d,
+    0 0 17px #ffbd5b,
+    0 0 30px #e8347f,
+    0 8px 18px #000;
 
-  animation:winPulse .55s ease-in-out infinite alternate;
+  animation:
+    winningTile .6s ease-in-out infinite alternate;
 }
 
 .tile.win .symbol{
-  animation:winSymbol .55s ease-in-out infinite alternate;
+  animation:
+    winningSymbol .6s ease-in-out infinite alternate;
 }
 
-@keyframes winPulse{
+@keyframes winningTile{
   from{
-    transform:translateZ(15px) scale(1);
+    transform:translateZ(10px) scale(1);
   }
+
   to{
-    transform:translateZ(40px) scale(1.06);
+    transform:translateZ(45px) scale(1.06);
   }
 }
 
-@keyframes winSymbol{
+@keyframes winningSymbol{
   from{
     filter:
       drop-shadow(0 3px 2px #000)
       drop-shadow(0 0 8px #ffc65e);
   }
+
   to{
     filter:
       drop-shadow(0 3px 2px #000)
-      drop-shadow(0 0 12px #fff)
-      drop-shadow(0 0 25px #ff4f98);
+      drop-shadow(0 0 12px white)
+      drop-shadow(0 0 25px #ff5799);
   }
 }
 
-/* =========================
-   MACHINE CONTROLS
-========================= */
+/* =========================================================
+   CONTROL BAR
+========================================================= */
 
-.controls{
+.machine-controls{
   display:grid;
-  grid-template-columns:1fr 1fr 1fr;
-  gap:4px;
-  margin-top:9px;
+
+  grid-template-columns:
+    1.05fr 1fr 1.05fr;
+
+  gap:3px;
+
+  margin-top:10px;
+
+  border-radius:15px;
+
+  overflow:hidden;
+
+  border:1px solid #885b2d;
+
+  background:#080403;
+
+  box-shadow:
+    0 0 0 2px #261308,
+    inset 0 1px #fff3;
 }
 
 .control{
-  min-height:51px;
+  min-height:61px;
 
   display:flex;
   align-items:center;
   justify-content:center;
 
-  text-align:center;
+  gap:8px;
+
+  color:#e6c28b;
 
   background:
-    linear-gradient(145deg,#271409,#0b0503);
+    linear-gradient(
+      145deg,
+      #1e1008,
+      #080403
+    );
 
-  border:1px solid #704a25;
-
-  box-shadow:
-    inset 0 1px #fff2,
-    0 4px 8px #000b;
-
-  color:#d7b27a;
-}
-
-.control:first-child{
-  border-radius:11px 4px 4px 11px;
+  border-right:1px solid #6c4725;
 }
 
 .control:last-child{
-  border-radius:4px 11px 11px 4px;
+  border-right:0;
+}
+
+.arrow{
+  font-size:30px;
+  color:#e5af61;
+
+  text-shadow:
+    0 0 7px #bd742b;
 }
 
 .control small{
-  font-size:6px;
-  letter-spacing:1.5px;
-  color:#8f7556;
+  font-size:7px;
+  letter-spacing:1.7px;
+  color:#9b7c57;
 }
 
 .control b{
-  font-family:Cinzel,serif;
-  font-size:13px;
-  color:#efcd91;
+  font-family:"Cormorant Garamond",serif;
+  font-size:21px;
+  font-weight:600;
+  color:#f1ce91;
 }
 
-.arrows{
-  display:flex;
-  align-items:center;
-  gap:7px;
-  font-size:16px;
-  color:#c89651;
+.control-main{
+  text-align:center;
 }
 
-/* =========================
+/* =========================================================
    SPIN CONTROLS
-========================= */
+========================================================= */
 
-.spin-row{
+.spin-area{
   display:grid;
-  grid-template-columns:70px 1fr 70px;
-  gap:8px;
+
+  grid-template-columns:
+    105px minmax(0,1fr) 105px;
+
   align-items:center;
-  margin-top:10px;
+
+  gap:10px;
+
+  margin-top:14px;
 }
 
-.side-button{
-  min-height:68px;
-  border-radius:18px;
+.round{
+  min-height:86px;
 
-  color:#dfbd82;
+  border-radius:27px;
+
+  color:#f1cc91;
+
+  border:1px solid #a16c35;
 
   background:
-    radial-gradient(circle at 50% 20%,#43240f,#100604 65%);
-
-  border:1px solid #966536;
+    radial-gradient(
+      circle at 50% 18%,
+      #3c220f,
+      #0c0604 68%
+    );
 
   box-shadow:
-    inset 0 2px 2px #fff2,
-    inset 0 -7px 10px #000,
-    0 5px 12px #000c;
+    inset 0 2px #fff2,
+    inset 0 -9px 14px #000,
+    0 6px 15px #000d,
+    0 0 0 2px #251207;
 
   font-family:Cinzel,serif;
-  font-size:7px;
+
+  font-size:10px;
+
   letter-spacing:1px;
 }
 
-.side-button span{
+.round-icon{
   display:block;
-  margin-bottom:3px;
-  font-size:23px;
-  color:#efbb62;
-  text-shadow:0 0 10px #d98b30;
+
+  margin-bottom:5px;
+
+  font-size:30px;
+
+  color:#f4bd65;
+
+  text-shadow:
+    0 0 10px #e69a3c;
 }
 
-.side-button.active{
-  border-color:#ed79aa;
-  color:#ffaccb;
+.round.active{
+  border-color:#f08ab0;
+
+  color:#ffb6d1;
+
   box-shadow:
-    inset 0 0 16px #d72d7040,
-    0 0 16px #d83f7c44;
+    inset 0 0 18px rgba(224,54,113,.25),
+    0 0 18px rgba(229,72,130,.25);
 }
 
-.spin{
+.spin-button{
   position:relative;
 
-  min-height:76px;
+  min-height:94px;
 
-  border-radius:23px;
+  border-radius:32px;
 
-  font-family:Cinzel,serif;
-  font-weight:700;
-  font-size:clamp(24px,7vw,40px);
-  letter-spacing:5px;
+  overflow:hidden;
 
-  color:#281307;
+  font-family:Cinzel,Georgia,serif;
+
+  font-size:
+    clamp(28px,7vw,50px);
+
+  letter-spacing:
+    clamp(4px,1vw,9px);
+
+  color:#241004;
 
   background:
     linear-gradient(
       180deg,
-      #fff4cc 0%,
-      #f3c77e 23%,
-      #fff0bc 44%,
-      #d49a4e 73%,
-      #8d5928 100%
+      #fff4ce 0%,
+      #ffd98e 18%,
+      #e5a956 42%,
+      #fff0ba 55%,
+      #bd7932 80%,
+      #794517 100%
     );
 
-  border:2px solid #ffe5a5;
+  border:2px solid #ffe6aa;
 
   box-shadow:
     inset 0 2px #fff,
-    inset 0 -8px 10px #704016aa,
-    0 0 0 3px #3a200e,
-    0 0 0 5px #9a642e,
-    0 7px 0 #5c3518,
-    0 12px 24px #000e,
-    0 0 28px #e8a64a33;
+    inset 0 -9px 12px #774114aa,
+    0 0 0 3px #351c0d,
+    0 0 0 5px #a66e32,
+    0 8px 0 #633a19,
+    0 13px 25px #000e,
+    0 0 30px rgba(239,165,69,.35);
 
   text-shadow:
     0 1px #fff8,
-    0 2px #8c5725;
-
-  overflow:hidden;
+    0 2px 1px #8a5423;
 }
 
-.spin:before{
+.spin-button:before{
   content:"";
+
   position:absolute;
 
-  top:-100%;
+  top:-90%;
   left:-45%;
 
-  width:28%;
-  height:300%;
+  width:27%;
+  height:280%;
 
-  transform:rotate(23deg);
+  transform:rotate(24deg);
 
   background:
     linear-gradient(
       90deg,
       transparent,
-      rgba(255,255,255,.72),
+      rgba(255,255,255,.7),
       transparent
     );
 
-  animation:buttonSweep 2.8s linear infinite;
+  animation:
+    spinShine 3s linear infinite;
 }
 
-@keyframes buttonSweep{
-  from{left:-50%}
-  to{left:135%}
+@keyframes spinShine{
+  from{
+    left:-50%;
+  }
+
+  to{
+    left:140%;
+  }
 }
 
-.spin:active{
-  transform:translateY(4px);
+.spin-button:active{
+  transform:translateY(5px);
+
+  box-shadow:
+    inset 0 2px #fff,
+    inset 0 -5px 8px #704016aa,
+    0 0 0 3px #351c0d,
+    0 0 0 5px #a66e32,
+    0 3px 0 #633a19,
+    0 7px 14px #000d;
+}
+
+.spin-button:disabled{
+  opacity:.7;
 }
 
 .spin-crown{
   display:block;
-  font-size:14px;
+
+  margin-bottom:-3px;
+
+  font-size:17px;
+
   letter-spacing:0;
-  margin-bottom:-2px;
+
+  color:#59300f;
 }
 
-/* =========================
+/* =========================================================
    BET PANEL
-========================= */
+========================================================= */
 
 .bet-panel{
-  margin-top:10px;
-  padding:10px;
+  margin-top:12px;
 
-  border-radius:14px;
+  padding:12px;
+
+  border-radius:16px;
+
+  border:1px solid #664320;
 
   background:
-    linear-gradient(145deg,#1d0f08,#090403);
-
-  border:1px solid #62411f;
+    linear-gradient(
+      145deg,
+      #1b0d07,
+      #070403
+    );
 
   box-shadow:
-    inset 0 1px #fff1,
+    inset 0 1px #fff2,
     0 6px 18px #0009;
 }
 
@@ -1141,73 +1510,85 @@ button:disabled{
   display:flex;
   justify-content:space-between;
 
-  margin-bottom:7px;
+  margin-bottom:8px;
 
-  font-size:6px;
-  letter-spacing:1.5px;
-  color:#927754;
+  font-size:8px;
+
+  letter-spacing:1.6px;
+
+  color:#a98a63;
 }
 
-.bets{
+.bet-buttons{
   display:grid;
-  grid-template-columns:repeat(4,1fr);
-  gap:5px;
+
+  grid-template-columns:
+    repeat(4,1fr);
+
+  gap:6px;
 }
 
-.bet{
-  min-height:38px;
+.bet-button{
+  min-height:43px;
 
-  border-radius:8px;
+  border-radius:10px;
+
+  color:#d4b687;
 
   background:
-    linear-gradient(145deg,#1d1009,#0b0503);
+    linear-gradient(
+      145deg,
+      #211108,
+      #0b0503
+    );
 
-  border:1px solid #5d3d20;
-
-  color:#cdb188;
-  font-size:11px;
+  border:1px solid #674421;
 
   box-shadow:
-    inset 0 1px #fff1;
+    inset 0 1px #fff2;
 }
 
-.bet.active{
-  color:#261307;
+.bet-button.active{
+  color:#241004;
+
+  border-color:#ffe4a8;
 
   background:
     linear-gradient(
       180deg,
-      #fff0c2,
-      #e7b66d 50%,
-      #b87c3a
+      #fff0c1,
+      #e7b66c 50%,
+      #b77939
     );
-
-  border-color:#ffe4a5;
 
   box-shadow:
     inset 0 2px #fff,
-    0 0 14px #e5a34d44;
+    0 0 15px rgba(227,164,79,.3);
 }
 
-.max{
+.max-button{
   width:100%;
-  min-height:35px;
-  margin-top:6px;
 
-  border-radius:8px;
+  min-height:38px;
+
+  margin-top:7px;
+
+  border-radius:10px;
+
+  color:#e6c18a;
 
   background:#0c0604;
-  border:1px solid #754d27;
 
-  color:#e2be83;
+  border:1px solid #795029;
 
-  font-size:7px;
-  letter-spacing:1.4px;
+  font-size:9px;
+
+  letter-spacing:1.5px;
 }
 
-/* =========================
+/* =========================================================
    STATUS
-========================= */
+========================================================= */
 
 .status{
   min-height:27px;
@@ -1220,117 +1601,172 @@ button:disabled{
 
   padding-top:7px;
 
-  font-size:7px;
+  font-size:9px;
+
   letter-spacing:1.4px;
 
-  color:#b4876e;
+  color:#ce8fa6;
 }
 
 .status.win{
-  color:#ffd98e;
-  text-shadow:0 0 12px #e29c42;
+  color:#ffe09c;
+
+  text-shadow:
+    0 0 12px #df9b40;
 }
 
 .status.error{
-  color:#ff789e;
+  color:#ff769b;
 }
 
-/* =========================
+/* =========================================================
    LOWER CARDS
-========================= */
+========================================================= */
 
-.lower{
+.lower-cards{
   display:grid;
-  grid-template-columns:repeat(3,1fr);
-  gap:7px;
-  margin-top:11px;
+
+  grid-template-columns:
+    repeat(3,1fr);
+
+  gap:9px;
+
+  margin-top:14px;
 }
 
 .lower-card{
-  min-height:66px;
-  padding:9px;
+  min-height:77px;
 
-  border-radius:12px;
+  display:flex;
+  align-items:center;
+  gap:10px;
+
+  padding:10px;
+
+  border:1px solid #754c27;
+
+  border-radius:15px;
 
   background:
-    linear-gradient(145deg,#1c0f08,#090403);
-
-  border:1px solid #5f4020;
+    linear-gradient(
+      145deg,
+      #1e1008,
+      #080403
+    );
 
   box-shadow:
-    inset 0 1px #fff1,
-    0 5px 15px #0008;
+    inset 0 1px #fff2,
+    0 7px 18px #0009;
 }
 
 .lower-icon{
-  font-size:17px;
-  color:#e5b96d;
+  width:42px;
+  height:42px;
+
+  flex:none;
+
+  display:grid;
+  place-items:center;
+
+  border-radius:50%;
+
+  font-size:22px;
+
+  border:1px solid #9a6833;
+
+  background:
+    radial-gradient(circle,#4b2a12,#0b0503);
+
+  color:#f2c77d;
+
+  text-shadow:
+    0 0 9px #d58d37;
 }
 
 .lower-title{
-  margin-top:4px;
   font-family:Cinzel,serif;
-  font-size:7px;
-  color:#e1c28c;
+
+  font-size:10px;
+
+  letter-spacing:.7px;
+
+  color:#f0d09a;
 }
 
 .lower-copy{
-  margin-top:2px;
-  font-size:5.5px;
-  letter-spacing:.5px;
-  color:#856d51;
+  margin-top:3px;
+
+  font-size:7px;
+
+  color:#967b58;
 }
 
-/* =========================
+/* =========================================================
    LEADERBOARD
-========================= */
+========================================================= */
 
 .leaderboard{
-  margin-top:11px;
-  padding:11px;
+  margin-top:14px;
 
-  border-radius:14px;
+  padding:13px;
+
+  border:1px solid #754c27;
+
+  border-radius:17px;
 
   background:
-    linear-gradient(145deg,#1c0f08,#090403);
-
-  border:1px solid #5f4020;
+    linear-gradient(
+      145deg,
+      #1c0f08,
+      #070403
+    );
 
   box-shadow:
-    inset 0 1px #fff1,
-    0 6px 18px #0009;
+    inset 0 1px #fff2,
+    0 7px 20px #0009;
 }
 
 .leader-head{
   display:flex;
   justify-content:space-between;
+  align-items:center;
 
-  padding-bottom:7px;
+  padding-bottom:9px;
 
-  border-bottom:1px solid #412b18;
+  border-bottom:1px solid #493019;
 }
 
 .leader-title{
   font-family:Cinzel,serif;
-  font-size:10px;
-  color:#e4c58d;
+
+  font-size:13px;
+
+  letter-spacing:1px;
+
+  color:#efcf98;
 }
 
 .leader-view{
-  font-size:6px;
+  font-size:8px;
+
   letter-spacing:1px;
-  color:#967854;
+
+  color:#b49367;
 }
 
 .player{
   display:grid;
-  grid-template-columns:28px 1fr auto;
+
+  grid-template-columns:
+    34px minmax(0,1fr) auto;
+
   align-items:center;
-  gap:7px;
 
-  min-height:40px;
+  gap:8px;
 
-  border-bottom:1px solid #fff1;
+  min-height:48px;
+
+  border-bottom:1px solid rgba(255,255,255,.035);
 }
 
 .player:last-child{
@@ -1338,43 +1774,52 @@ button:disabled{
 }
 
 .rank{
-  width:25px;
-  height:25px;
+  width:29px;
+  height:29px;
 
   display:grid;
   place-items:center;
 
   border-radius:50%;
 
+  color:#f3cc86;
+
+  background:
+    radial-gradient(circle,#42240f,#0d0604);
+
+  border:1px solid #8b5b2c;
+
   font-family:Cinzel,serif;
-  font-size:8px;
-
-  color:#edc985;
-
-  background:#170c06;
-  border:1px solid #6e4823;
+  font-size:10px;
 }
 
 .player-name{
-  font-size:8px;
-  color:#cdb58f;
   overflow:hidden;
+
   white-space:nowrap;
+
   text-overflow:ellipsis;
+
+  font-size:10px;
+
+  color:#d9bf95;
 }
 
 .player-balance{
-  font-family:Cinzel,serif;
-  font-size:9px;
-  color:#e5c181;
+  font-family:"Cormorant Garamond",serif;
+
+  font-size:15px;
+
+  color:#e9c78b;
 }
 
-/* =========================
+/* =========================================================
    BOTTOM NAV
-========================= */
+========================================================= */
 
-.navbar{
+.bottom-nav{
   position:fixed;
+
   z-index:100;
 
   left:0;
@@ -1382,21 +1827,25 @@ button:disabled{
   bottom:0;
 
   display:grid;
-  grid-template-columns:repeat(5,1fr);
 
-  padding:7px 5px calc(7px + env(safe-area-inset-bottom));
+  grid-template-columns:
+    repeat(5,1fr);
+
+  padding:
+    7px 6px
+    calc(7px + env(safe-area-inset-bottom));
 
   background:
     linear-gradient(
       180deg,
-      rgba(17,9,5,.92),
-      rgba(4,2,1,.99)
+      rgba(15,8,5,.96),
+      rgba(3,2,1,.99)
     );
 
-  border-top:1px solid #68431f;
+  border-top:1px solid #795029;
 
   box-shadow:
-    0 -10px 25px #000c;
+    0 -12px 30px #000d;
 
   backdrop-filter:blur(15px);
 }
@@ -1404,65 +1853,149 @@ button:disabled{
 .nav{
   text-align:center;
 
-  color:#80684e;
+  color:#886d4e;
 
-  font-size:6px;
-  letter-spacing:1px;
+  font-size:7px;
+
+  letter-spacing:1.3px;
 }
 
 .nav-icon{
   display:block;
-  margin-bottom:2px;
 
-  font-size:18px;
-  color:#b68a51;
+  margin-bottom:4px;
+
+  font-size:23px;
+
+  color:#bc8b4c;
+
+  text-shadow:
+    0 0 8px #bb7430;
 }
 
 .nav.active{
-  color:#f0cf92;
+  color:#f2d29b;
 }
 
 .nav.active .nav-icon{
-  color:#ffe3a4;
-  text-shadow:0 0 9px #d9943b;
+  color:#ffe1a2;
 }
 
-/* =========================
-   SMALL PHONES
-========================= */
+/* =========================================================
+   DESKTOP
+========================================================= */
 
-@media(max-width:370px){
+@media(min-width:700px){
 
   .app{
-    padding-left:6px;
-    padding-right:6px;
-  }
-
-  .profile-name,
-  .profile-level,
-  .vip{
-    display:none;
-  }
-
-  .balance{
-    min-width:120px;
+    padding-left:24px;
+    padding-right:24px;
   }
 
   .machine{
-    padding:6px;
-    border-radius:23px;
+    padding:16px;
+    border-radius:45px;
   }
 
   .machine-inner{
-    padding:10px 6px;
+    padding:21px 19px 18px;
   }
 
-  .reel-frame{
+  .reels{
+    gap:7px;
+  }
+
+  .reel{
+    gap:7px;
+  }
+
+  .tile{
+    border-radius:11px;
+  }
+}
+
+/* =========================================================
+   SMALL PHONES
+========================================================= */
+
+@media(max-width:430px){
+
+  .app{
+    padding-left:7px;
+    padding-right:7px;
+  }
+
+  .profile-copy{
+    display:none;
+  }
+
+  .avatar{
+    width:51px;
+    height:51px;
+  }
+
+  .balance{
+    min-width:145px;
+  }
+
+  .balance-value{
+    font-size:20px;
+  }
+
+  .menu-button{
+    left:12px;
+    top:78px;
+
+    width:49px;
+    height:49px;
+  }
+
+  .brand{
+    padding-top:13px;
+  }
+
+  .brand h1{
+    font-size:44px;
+  }
+
+  .brand h2{
+    font-size:22px;
+    letter-spacing:8px;
+  }
+
+  .tagline{
+    font-size:7px;
+    letter-spacing:3px;
+  }
+
+  .machine{
+    padding:7px;
+    border-radius:27px;
+  }
+
+  .machine-inner{
+    padding:12px 7px 11px;
+    border-radius:22px;
+  }
+
+  .machine-top{
+    height:27px;
+  }
+
+  .machine-crown{
+    width:43px;
+    height:29px;
+    font-size:21px;
+  }
+
+  .reel-window{
     padding:6px;
+    border-radius:17px;
   }
 
-  .glass{
+  .reel-glass{
     padding:3px;
+    border-radius:11px;
   }
 
   .reels,
@@ -1471,50 +2004,88 @@ button:disabled{
   }
 
   .tile{
-    border-radius:5px;
+    border-radius:6px;
   }
 
-  .spin-row{
-    grid-template-columns:58px 1fr 58px;
+  .spin-area{
+    grid-template-columns:
+      66px minmax(0,1fr) 66px;
+
     gap:5px;
   }
 
-  .side-button{
-    min-height:62px;
+  .round{
+    min-height:70px;
+    border-radius:19px;
+    font-size:8px;
   }
 
-  .spin{
-    min-height:69px;
+  .round-icon{
+    font-size:23px;
+  }
+
+  .spin-button{
+    min-height:76px;
+    border-radius:23px;
     letter-spacing:3px;
+    font-size:27px;
+  }
+
+  .lower-cards{
+    gap:5px;
+  }
+
+  .lower-card{
+    padding:7px;
+    min-height:65px;
+    gap:5px;
+  }
+
+  .lower-icon{
+    width:32px;
+    height:32px;
+    font-size:17px;
+  }
+
+  .lower-title{
+    font-size:8px;
+  }
+
+  .lower-copy{
+    font-size:5.5px;
   }
 }
 
-/* =========================
-   TABLET
-========================= */
+@media(max-width:350px){
 
-@media(min-width:600px){
-
-  .app{
-    padding-left:20px;
-    padding-right:20px;
+  .balance{
+    min-width:125px;
   }
 
-  .reels,
-  .reel{
-    gap:6px;
+  .coins{
+    display:none;
   }
 
-  .tile{
-    border-radius:9px;
+  .brand h1{
+    font-size:38px;
   }
 
-  .machine{
-    padding:12px;
+  .brand h2{
+    font-size:19px;
   }
 
-  .machine-inner{
-    padding:16px 13px;
+  .spin-area{
+    grid-template-columns:
+      59px minmax(0,1fr) 59px;
+  }
+
+  .round{
+    min-height:65px;
+  }
+
+  .spin-button{
+    min-height:70px;
+    font-size:24px;
   }
 }
 </style>
@@ -1524,7 +2095,9 @@ button:disabled{
 
 <div class="app">
 
-  <!-- TOP -->
+  <!-- =====================================================
+       HEADER
+  ====================================================== -->
 
   <header class="top">
 
@@ -1532,80 +2105,142 @@ button:disabled{
 
       <div class="avatar" id="avatar">K</div>
 
-      <div>
-        <div class="profile-name" id="username">KIMIA</div>
+      <div class="profile-copy">
 
-        <div class="profile-level">
-          VIP LEVEL <span id="vipLevel">0</span>
+        <div class="profile-name" id="username">
+          KIMIA
         </div>
 
-        <div class="vip">
-          <div></div>
+        <div class="profile-vip">
+          VIP LEVEL <span id="vipLevel">3</span>
         </div>
+
+        <div class="vip-row">
+
+          <div class="vip-bar">
+            <div class="vip-fill"></div>
+          </div>
+
+          <div class="vip-percent">
+            42%
+          </div>
+
+        </div>
+
       </div>
 
     </div>
 
-    <div class="crown-top">
+
+    <div class="header-crown">
+
       ♛
+
       <small>VIP</small>
+
     </div>
+
 
     <div class="balance">
 
-      <div class="coin">🪙</div>
-
-      <div>
-        <div class="balance-label">BALANCE</div>
-        <div class="balance-value" id="balance">—</div>
+      <div class="coins">
+        🪙
       </div>
 
-      <div class="plus">+</div>
+      <div class="balance-copy">
+
+        <div class="balance-label">
+          BALANCE
+        </div>
+
+        <div class="balance-value" id="balance">
+          —
+        </div>
+
+      </div>
+
+      <div class="plus">
+        +
+      </div>
 
     </div>
 
   </header>
 
 
-  <!-- BRAND -->
+  <!-- =====================================================
+       MENU
+  ====================================================== -->
+
+  <button class="menu-button" aria-label="Menu">
+    ☰
+  </button>
+
+
+  <!-- =====================================================
+       BRAND
+  ====================================================== -->
 
   <section class="brand">
 
-    <div class="brand-crown">♛</div>
+    <div class="crown">
+      ♛
+    </div>
 
     <h1>KIMIA</h1>
 
     <h2>PRIVÉ</h2>
 
-    <div class="brand-sub">
+    <div class="tagline">
       PRIVATE FORTUNE CLUB
     </div>
 
   </section>
 
 
-  <!-- INFO -->
+  <!-- =====================================================
+       QUICK CARDS
+  ====================================================== -->
 
-  <section class="info-row">
+  <section class="quick">
 
-    <div class="info">
+    <div class="quick-card">
 
-      <div class="info-icon">🎁</div>
+      <div class="quick-icon">
+        🎁
+      </div>
 
       <div>
-        <div class="info-label">DAILY BONUS</div>
-        <div class="info-value">FREE COINS</div>
+
+        <div class="quick-label">
+          DAILY BONUS
+        </div>
+
+        <div class="quick-value">
+          FREE COINS
+        </div>
+
       </div>
 
     </div>
 
-    <div class="info">
 
-      <div class="info-icon">💎</div>
+    <div class="quick-card">
+
+      <div class="quick-icon">
+        💎
+      </div>
 
       <div>
-        <div class="info-label">JACKPOT</div>
-        <div class="info-value">1,248,730</div>
+
+        <div class="quick-label">
+          JACKPOT
+        </div>
+
+        <div class="quick-value">
+          1,248,730
+        </div>
+
       </div>
 
     </div>
@@ -1613,56 +2248,157 @@ button:disabled{
   </section>
 
 
-  <!-- MACHINE -->
+  <!-- =====================================================
+       SLOT MACHINE
+  ====================================================== -->
 
   <main class="machine">
 
     <div class="machine-inner">
 
-      <div class="machine-title">
-        ✦ <span>PRIVÉ ROYALE · FIVE REELS</span> ✦
+      <div class="machine-top">
+
+        <div class="machine-crown">
+          ♛
+        </div>
+
       </div>
 
 
-      <div class="reel-frame">
+      <!-- REELS -->
 
-        <div class="glass" id="glass">
+      <div class="reel-window">
+
+        <div class="reel-glass" id="reelGlass">
 
           <div class="reels" id="reels">
 
-            <!-- 15 TILES -->
+            <!-- column 1 -->
 
             <div class="reel">
-              <div class="tile"><div class="symbol kp">KP</div></div>
-              <div class="tile"><div class="symbol heart">♥</div></div>
-              <div class="tile"><div class="symbol cherry">🍒</div></div>
+
+              <div class="tile">
+                <div class="symbol kp-symbol">
+                  KP
+                </div>
+              </div>
+
+              <div class="tile">
+                <div class="symbol heart-symbol">
+                  ♥
+                </div>
+              </div>
+
+              <div class="tile">
+                <div class="symbol cherry-symbol">
+                  🍒
+                </div>
+              </div>
+
             </div>
 
-            <div class="reel">
-              <div class="tile"><div class="symbol crown">♛</div></div>
-              <div class="tile"><div class="symbol seven">7</div></div>
-              <div class="tile"><div class="symbol bell">♧</div></div>
-            </div>
+
+            <!-- column 2 -->
 
             <div class="reel">
-              <div class="tile"><div class="symbol bell">♧</div></div>
-              <div class="tile"><div class="symbol kp">KP</div></div>
-              <div class="tile"><div class="symbol diamond">♦</div></div>
+
+              <div class="tile">
+                <div class="symbol crown-symbol">
+                  ♛
+                </div>
+              </div>
+
+              <div class="tile">
+                <div class="symbol seven-symbol">
+                  7
+                </div>
+              </div>
+
+              <div class="tile">
+                <div class="symbol bell-symbol">
+                  ♧
+                </div>
+              </div>
+
             </div>
 
-            <div class="reel">
-              <div class="tile"><div class="symbol cherry">🍒</div></div>
-              <div class="tile"><div class="symbol diamond">♦</div></div>
-              <div class="tile"><div class="symbol heart">♥</div></div>
-            </div>
+
+            <!-- column 3 -->
 
             <div class="reel">
-              <div class="tile"><div class="symbol diamond">♦</div></div>
-              <div class="tile"><div class="symbol bell">♧</div></div>
-              <div class="tile"><div class="symbol seven">7</div></div>
+
+              <div class="tile">
+                <div class="symbol bell-symbol">
+                  ♧
+                </div>
+              </div>
+
+              <div class="tile">
+                <div class="symbol kp-symbol">
+                  KP
+                </div>
+              </div>
+
+              <div class="tile">
+                <div class="symbol diamond-symbol">
+                  ♦
+                </div>
+              </div>
+
+            </div>
+
+
+            <!-- column 4 -->
+
+            <div class="reel">
+
+              <div class="tile">
+                <div class="symbol cherry-symbol">
+                  🍒
+                </div>
+              </div>
+
+              <div class="tile">
+                <div class="symbol diamond-symbol">
+                  ♦
+                </div>
+              </div>
+
+              <div class="tile">
+                <div class="symbol heart-symbol">
+                  ♥
+                </div>
+              </div>
+
+            </div>
+
+
+            <!-- column 5 -->
+
+            <div class="reel">
+
+              <div class="tile">
+                <div class="symbol diamond-symbol">
+                  ♦
+                </div>
+              </div>
+
+              <div class="tile">
+                <div class="symbol bell-symbol">
+                  ♧
+                </div>
+              </div>
+
+              <div class="tile">
+                <div class="symbol seven-symbol">
+                  7
+                </div>
+              </div>
+
             </div>
 
           </div>
+
 
           <div class="payline"></div>
 
@@ -1671,104 +2407,166 @@ button:disabled{
       </div>
 
 
-      <!-- CONTROLS -->
+      <!-- =================================================
+           MACHINE CONTROLS
+      ================================================== -->
 
-      <div class="controls">
+      <div class="machine-controls">
 
-        <button class="control" id="lineBtn">
+        <button class="control" id="lineDown">
 
-          <div class="arrows">
+          <span class="arrow">
             ‹
-            <span>
-              <small>LINES</small><br>
-              <b id="lineCount">5</b>
-            </span>
+          </span>
+
+          <span>
+            <small>LINES</small><br>
+            <b id="lineCount">5</b>
+          </span>
+
+          <span class="arrow">
             ›
-          </div>
+          </span>
 
         </button>
 
-        <div class="control">
 
-          <div>
+        <div class="control control-main">
+
+          <span>
             <small>BET</small><br>
             <b id="controlBet">300</b>
-          </div>
+          </span>
 
         </div>
+
 
         <div class="control">
 
-          <div>
+          <span class="arrow">
+            🪙
+          </span>
+
+          <span>
             <small>TOTAL BET</small><br>
-            <b id="totalBet">300</b>
-          </div>
+            <b id="totalBetControl">300</b>
+          </span>
+
+          <span class="arrow">
+            ›
+          </span>
 
         </div>
 
       </div>
 
 
-      <!-- SPIN -->
+      <!-- =================================================
+           SPIN
+      ================================================== -->
 
-      <div class="spin-row">
+      <div class="spin-area">
 
-        <button class="side-button" id="autoBtn">
-          <span>↻</span>
+        <button class="round" id="autoBtn">
+
+          <span class="round-icon">
+            ↻
+          </span>
+
           AUTO
+
         </button>
 
-        <button class="spin" id="spinBtn">
-          <span class="spin-crown">♛</span>
+
+        <button class="spin-button" id="spinBtn">
+
+          <span class="spin-crown">
+            ♛
+          </span>
+
           SPIN
+
         </button>
 
-        <button class="side-button" id="turboBtn">
-          <span>ϟ</span>
+
+        <button class="round" id="turboBtn">
+
+          <span class="round-icon">
+            ⚡
+          </span>
+
           TURBO
+
         </button>
 
       </div>
 
 
-      <!-- BETS -->
+      <!-- =================================================
+           BET PANEL
+      ================================================== -->
 
       <section class="bet-panel">
 
         <div class="bet-head">
-          <span>SELECT YOUR BET</span>
-          <span>CHIPS PER SPIN</span>
+
+          <span>
+            SELECT YOUR BET
+          </span>
+
+          <span>
+            CHIPS PER SPIN
+          </span>
+
         </div>
 
-        <div class="bets">
 
-          <button class="bet active" data-bet="300">
+        <div class="bet-buttons" id="betButtons">
+
+          <button
+            class="bet-button active"
+            data-bet="300">
             300
           </button>
 
-          <button class="bet" data-bet="600">
+          <button
+            class="bet-button"
+            data-bet="600">
             600
           </button>
 
-          <button class="bet" data-bet="1500">
+          <button
+            class="bet-button"
+            data-bet="1500">
             1,500
           </button>
 
-          <button class="bet" data-bet="3000">
+          <button
+            class="bet-button"
+            data-bet="3000">
             3,000
           </button>
 
         </div>
 
-        <button class="max" id="maxBet">
+
+        <button
+          class="max-button"
+          id="maxBet">
+
           ♛ MAX BET · 3,000 CHIPS
+
         </button>
 
       </section>
 
 
-      <div class="status" id="status">
+      <div
+        class="status"
+        id="status">
+
         YOUR PRIVATE FORTUNE AWAITS
+
       </div>
 
     </div>
@@ -1776,42 +2574,102 @@ button:disabled{
   </main>
 
 
-  <!-- LOWER CARDS -->
+  <!-- =====================================================
+       LOWER FEATURE CARDS
+  ====================================================== -->
 
-  <section class="lower">
+  <section class="lower-cards">
 
     <div class="lower-card">
-      <div class="lower-icon">🎁</div>
-      <div class="lower-title">DAILY BONUS</div>
-      <div class="lower-copy">FREE COINS & REWARDS</div>
+
+      <div class="lower-icon">
+        🎁
+      </div>
+
+      <div>
+
+        <div class="lower-title">
+          DAILY BONUS
+        </div>
+
+        <div class="lower-copy">
+          FREE COINS & REWARDS
+        </div>
+
+      </div>
+
     </div>
 
-    <div class="lower-card">
-      <div class="lower-icon">💎</div>
-      <div class="lower-title">JACKPOT</div>
-      <div class="lower-copy">BIGGEST WINS</div>
-    </div>
 
     <div class="lower-card">
-      <div class="lower-icon">♛</div>
-      <div class="lower-title">TOP WINS</div>
-      <div class="lower-copy">SEE BIGGEST WINS</div>
+
+      <div class="lower-icon">
+        💎
+      </div>
+
+      <div>
+
+        <div class="lower-title">
+          JACKPOT
+        </div>
+
+        <div class="lower-copy">
+          💎 1,248,730
+        </div>
+
+      </div>
+
+    </div>
+
+
+    <div class="lower-card">
+
+      <div class="lower-icon">
+        ♛
+      </div>
+
+      <div>
+
+        <div class="lower-title">
+          TOP WINS
+        </div>
+
+        <div class="lower-copy">
+          SEE BIGGEST WINS
+        </div>
+
+      </div>
+
     </div>
 
   </section>
 
 
-  <!-- LEADERBOARD -->
+  <!-- =====================================================
+       LEADERBOARD
+  ====================================================== -->
 
   <section class="leaderboard">
 
     <div class="leader-head">
-      <div class="leader-title">♛ TOP PLAYERS</div>
-      <div class="leader-view">VIEW ALL ›</div>
+
+      <div class="leader-title">
+        ♛ TOP PLAYERS
+      </div>
+
+      <div class="leader-view">
+        VIEW ALL ›
+      </div>
+
     </div>
 
+
     <div id="leaderboard">
-      <div class="player">Loading leaderboard…</div>
+
+      <div class="player">
+        Loading leaderboard…
+      </div>
+
     </div>
 
   </section>
@@ -1819,33 +2677,64 @@ button:disabled{
 </div>
 
 
-<!-- NAV -->
+<!-- =======================================================
+     BOTTOM NAV
+======================================================= -->
 
-<nav class="navbar">
+<nav class="bottom-nav">
 
   <div class="nav active">
-    <span class="nav-icon">⌂</span>
+
+    <span class="nav-icon">
+      ⌂
+    </span>
+
     HOME
+
   </div>
 
+
   <div class="nav">
-    <span class="nav-icon">♜</span>
+
+    <span class="nav-icon">
+      🎰
+    </span>
+
     SLOTS
+
   </div>
 
+
   <div class="nav">
-    <span class="nav-icon">♛</span>
+
+    <span class="nav-icon">
+      ♛
+    </span>
+
     LEADERBOARD
+
   </div>
 
+
   <div class="nav">
-    <span class="nav-icon">◇</span>
+
+    <span class="nav-icon">
+      ◇
+    </span>
+
     WALLET
+
   </div>
 
+
   <div class="nav">
-    <span class="nav-icon">♙</span>
+
+    <span class="nav-icon">
+      ♙
+    </span>
+
     PROFILE
+
   </div>
 
 </nav>
@@ -1856,14 +2745,12 @@ button:disabled{
 
 /* =========================================================
    KIMIA PRIVÉ
-   COMPLETE FRONTEND
-   Backend remains:
-     POST /api/me
-     POST /api/spin
-     GET  /api/leaderboard
+   VISUAL FRONTEND + EXISTING API
 ========================================================= */
 
-const API = "https://kimia-prive-api.onrender.com";
+const API =
+  "https://kimia-prive-api.onrender.com";
+
 
 const tg =
   window.Telegram &&
@@ -1871,14 +2758,67 @@ const tg =
     ? window.Telegram.WebApp
     : null;
 
-const $ = id => document.getElementById(id);
+
+const $ = id =>
+  document.getElementById(id);
+
+
+/* =========================================================
+   STATE
+========================================================= */
 
 let currentBet = 300;
 let currentLines = 5;
+
 let spinning = false;
 let autoMode = false;
 let turboMode = false;
+
 let autoTimer = null;
+
+
+/* =========================================================
+   SYMBOLS
+========================================================= */
+
+const SYMBOLS = [
+
+  {
+    type:"kp",
+    html:"KP"
+  },
+
+  {
+    type:"crown",
+    html:"♛"
+  },
+
+  {
+    type:"bell",
+    html:"♧"
+  },
+
+  {
+    type:"cherry",
+    html:"🍒"
+  },
+
+  {
+    type:"diamond",
+    html:"♦"
+  },
+
+  {
+    type:"heart",
+    html:"♥"
+  },
+
+  {
+    type:"seven",
+    html:"7"
+  }
+
+];
 
 
 /* =========================================================
@@ -1890,9 +2830,12 @@ if(tg){
   tg.ready();
 
   try{
+
     tg.expand();
-    tg.setHeaderColor("#080503");
-    tg.setBackgroundColor("#080503");
+
+    tg.setHeaderColor("#050302");
+    tg.setBackgroundColor("#050302");
+
   }catch(e){}
 
 }
@@ -1904,37 +2847,49 @@ if(tg){
 
 function formatNumber(value){
 
-  const n = Number(value);
+  const number =
+    Number(value);
 
-  if(!Number.isFinite(n)){
+  if(!Number.isFinite(number)){
+
     return "—";
+
   }
 
-  return Math.floor(n).toLocaleString("en-US");
+  return Math.floor(number)
+    .toLocaleString("en-US");
+
 }
 
 
 function setStatus(text,type=""){
 
-  const el = $("status");
+  const status =
+    $("status");
 
-  el.textContent = text;
+  status.textContent =
+    text;
 
-  el.classList.remove("win","error");
+  status.classList.remove(
+    "win",
+    "error"
+  );
 
   if(type){
-    el.classList.add(type);
+
+    status.classList.add(type);
+
   }
 
 }
 
 
-function getInitData(){
+function telegramInitData(){
 
   if(!tg || !tg.initData){
 
     throw new Error(
-      "Open KIMIA PRIVÉ from your Telegram bot."
+      "OPEN KIMIA PRIVÉ FROM YOUR TELEGRAM BOT"
     );
 
   }
@@ -1948,7 +2903,10 @@ function getInitData(){
    API
 ========================================================= */
 
-async function api(path,options={}){
+async function api(
+  path,
+  options={}
+){
 
   const response =
     await fetch(
@@ -1957,7 +2915,9 @@ async function api(path,options={}){
         ...options,
 
         headers:{
-          "Content-Type":"application/json",
+          "Content-Type":
+            "application/json",
+
           ...(options.headers || {})
         }
       }
@@ -1967,15 +2927,23 @@ async function api(path,options={}){
   let data;
 
   try{
-    data = await response.json();
+
+    data =
+      await response.json();
+
   }catch(e){
+
     throw new Error(
       "The server returned an invalid response."
     );
+
   }
 
 
-  if(!response.ok || data.error){
+  if(
+    !response.ok ||
+    data.error
+  ){
 
     throw new Error(
       data.error ||
@@ -1997,20 +2965,27 @@ async function api(path,options={}){
 
 async function loadPlayer(){
 
+  const initData =
+    telegramInitData();
+
+
   const data =
     await api(
       "/api/me",
       {
         method:"POST",
+
         body:JSON.stringify({
-          initData:getInitData()
+          initData
         })
       }
     );
 
 
   $("balance").textContent =
-    formatNumber(data.balance);
+    formatNumber(
+      data.balance
+    );
 
 
   $("vipLevel").textContent =
@@ -2033,7 +3008,8 @@ async function loadPlayer(){
     username
       .replace("@","")
       .slice(0,1)
-      .toUpperCase() || "K";
+      .toUpperCase() ||
+    "K";
 
 }
 
@@ -2047,7 +3023,9 @@ async function loadLeaderboard(){
   try{
 
     const data =
-      await api("/api/leaderboard");
+      await api(
+        "/api/leaderboard"
+      );
 
 
     const players =
@@ -2066,7 +3044,9 @@ async function loadLeaderboard(){
     if(!players.length){
 
       root.innerHTML =
-        `<div class="player">No players yet.</div>`;
+        `<div class="player">
+          No players yet.
+        </div>`;
 
       return;
 
@@ -2075,61 +3055,76 @@ async function loadLeaderboard(){
 
     players
       .slice(0,10)
-      .forEach((player,index)=>{
+      .forEach(
+        (player,index)=>{
 
-        const row =
-          document.createElement("div");
+          const row =
+            document.createElement(
+              "div"
+            );
 
-        row.className =
-          "player";
-
-
-        const rank =
-          document.createElement("div");
-
-        rank.className =
-          "rank";
-
-        rank.textContent =
-          player.rank ?? index + 1;
+          row.className =
+            "player";
 
 
-        const name =
-          document.createElement("div");
+          const rank =
+            document.createElement(
+              "div"
+            );
 
-        name.className =
-          "player-name";
+          rank.className =
+            "rank";
 
-
-        const username =
-          player.username
-            ? String(player.username)
-            : "Anonymous Player";
-
-
-        name.textContent =
-          username.startsWith("@")
-            ? username
-            : "@" + username;
+          rank.textContent =
+            player.rank ??
+            index + 1;
 
 
-        const balance =
-          document.createElement("div");
+          const name =
+            document.createElement(
+              "div"
+            );
 
-        balance.className =
-          "player-balance";
-
-        balance.textContent =
-          formatNumber(player.balance);
+          name.className =
+            "player-name";
 
 
-        row.appendChild(rank);
-        row.appendChild(name);
-        row.appendChild(balance);
+          const username =
+            player.username
+              ? String(
+                  player.username
+                )
+              : "Anonymous Player";
 
-        root.appendChild(row);
 
-      });
+          name.textContent =
+            username.startsWith("@")
+              ? username
+              : "@" + username;
+
+
+          const balance =
+            document.createElement(
+              "div"
+            );
+
+          balance.className =
+            "player-balance";
+
+          balance.textContent =
+            formatNumber(
+              player.balance
+            );
+
+
+          row.appendChild(rank);
+          row.appendChild(name);
+          row.appendChild(balance);
+
+          root.appendChild(row);
+
+        }
+      );
 
 
   }catch(error){
@@ -2139,8 +3134,11 @@ async function loadLeaderboard(){
       error
     );
 
+
     $("leaderboard").innerHTML =
-      `<div class="player">Leaderboard unavailable.</div>`;
+      `<div class="player">
+        Leaderboard unavailable.
+      </div>`;
 
   }
 
@@ -2148,45 +3146,151 @@ async function loadLeaderboard(){
 
 
 /* =========================================================
-   SYMBOLS
+   BET
 ========================================================= */
 
-const SYMBOLS = [
+function setBet(value){
 
-  {type:"kp",html:"KP"},
-  {type:"crown",html:"♛"},
-  {type:"bell",html:"♧"},
-  {type:"cherry",html:"🍒"},
-  {type:"diamond",html:"♦"},
-  {type:"heart",html:"♥"},
-  {type:"seven",html:"7"}
+  const allowed =
+    [
+      300,
+      600,
+      1500,
+      3000
+    ];
 
-];
+
+  value =
+    Number(value);
+
+
+  if(!allowed.includes(value)){
+
+    value = 300;
+
+  }
+
+
+  currentBet =
+    value;
+
+
+  $("controlBet").textContent =
+    formatNumber(
+      currentBet
+    );
+
+
+  $("totalBetControl").textContent =
+    formatNumber(
+      currentBet
+    );
+
+
+  document
+    .querySelectorAll(
+      ".bet-button"
+    )
+    .forEach(button=>{
+
+      button.classList.toggle(
+        "active",
+        Number(
+          button.dataset.bet
+        ) === currentBet
+      );
+
+    });
+
+}
+
+
+/* =========================================================
+   SYMBOL CREATION
+========================================================= */
+
+function makeSymbol(symbol){
+
+  const element =
+    document.createElement(
+      "div"
+    );
+
+
+  if(symbol.type === "kp"){
+
+    element.className =
+      "symbol kp-symbol";
+
+  }
+
+  else if(symbol.type === "crown"){
+
+    element.className =
+      "symbol crown-symbol";
+
+  }
+
+  else if(symbol.type === "bell"){
+
+    element.className =
+      "symbol bell-symbol";
+
+  }
+
+  else if(symbol.type === "cherry"){
+
+    element.className =
+      "symbol cherry-symbol";
+
+  }
+
+  else if(symbol.type === "diamond"){
+
+    element.className =
+      "symbol diamond-symbol";
+
+  }
+
+  else if(symbol.type === "heart"){
+
+    element.className =
+      "symbol heart-symbol";
+
+  }
+
+  else if(symbol.type === "seven"){
+
+    element.className =
+      "symbol seven-symbol";
+
+  }
+
+  else{
+
+    element.className =
+      "symbol";
+
+  }
+
+
+  element.textContent =
+    symbol.html;
+
+
+  return element;
+
+}
 
 
 function randomSymbol(){
 
   return SYMBOLS[
     Math.floor(
-      Math.random() * SYMBOLS.length
+      Math.random() *
+      SYMBOLS.length
     )
   ];
-
-}
-
-
-function makeSymbol(symbol){
-
-  const el =
-    document.createElement("div");
-
-  el.className =
-    "symbol " + symbol.type;
-
-  el.textContent =
-    symbol.html;
-
-  return el;
 
 }
 
@@ -2200,22 +3304,35 @@ function buildReels(){
   const root =
     $("reels");
 
+
   root.innerHTML = "";
 
 
-  for(let column=0;column<5;column++){
+  for(
+    let column=0;
+    column<5;
+    column++
+  ){
 
     const reel =
-      document.createElement("div");
+      document.createElement(
+        "div"
+      );
 
     reel.className =
       "reel";
 
 
-    for(let row=0;row<3;row++){
+    for(
+      let row=0;
+      row<3;
+      row++
+    ){
 
       const tile =
-        document.createElement("div");
+        document.createElement(
+          "div"
+        );
 
       tile.className =
         "tile";
@@ -2246,8 +3363,13 @@ function buildReels(){
 
 function normalizeSymbol(value){
 
-  if(value === null || value === undefined){
+  if(
+    value === null ||
+    value === undefined
+  ){
+
     return randomSymbol();
+
   }
 
 
@@ -2261,15 +3383,25 @@ function normalizeSymbol(value){
     text === "kp" ||
     text.includes("private")
   ){
-    return {type:"kp",html:"KP"};
+
+    return {
+      type:"kp",
+      html:"KP"
+    };
+
   }
 
 
   if(
     text === "7" ||
-    text.includes("seven")
+    text.includes("7️⃣")
   ){
-    return {type:"seven",html:"7"};
+
+    return {
+      type:"seven",
+      html:"7"
+    };
+
   }
 
 
@@ -2278,7 +3410,12 @@ function normalizeSymbol(value){
     text === "♦" ||
     text === "💎"
   ){
-    return {type:"diamond",html:"♦"};
+
+    return {
+      type:"diamond",
+      html:"♦"
+    };
+
   }
 
 
@@ -2287,7 +3424,12 @@ function normalizeSymbol(value){
     text === "♥" ||
     text === "💗"
   ){
-    return {type:"heart",html:"♥"};
+
+    return {
+      type:"heart",
+      html:"♥"
+    };
+
   }
 
 
@@ -2295,7 +3437,12 @@ function normalizeSymbol(value){
     text.includes("cherry") ||
     text === "🍒"
   ){
-    return {type:"cherry",html:"🍒"};
+
+    return {
+      type:"cherry",
+      html:"🍒"
+    };
+
   }
 
 
@@ -2303,7 +3450,12 @@ function normalizeSymbol(value){
     text.includes("bell") ||
     text === "🔔"
   ){
-    return {type:"bell",html:"♧"};
+
+    return {
+      type:"bell",
+      html:"♧"
+    };
+
   }
 
 
@@ -2312,13 +3464,18 @@ function normalizeSymbol(value){
     text === "♛" ||
     text === "👑"
   ){
-    return {type:"crown",html:"♛"};
+
+    return {
+      type:"crown",
+      html:"♛"
+    };
+
   }
 
 
   return {
     type:"kp",
-    html:text.slice(0,3).toUpperCase()
+    html:text.slice(0,3)
   };
 
 }
@@ -2334,31 +3491,45 @@ function displayResult(symbols){
     !Array.isArray(symbols) ||
     symbols.length < 15
   ){
+
     throw new Error(
       "The server returned fewer than 15 symbols."
     );
+
   }
 
 
   const tiles =
-    document.querySelectorAll(".tile");
+    document.querySelectorAll(
+      ".tile"
+    );
 
 
   symbols
     .slice(0,15)
-    .forEach((value,index)=>{
+    .forEach(
+      (value,index)=>{
 
-      if(!tiles[index]) return;
+        const tile =
+          tiles[index];
 
-      tiles[index].innerHTML = "";
 
-      tiles[index].appendChild(
-        makeSymbol(
-          normalizeSymbol(value)
-        )
-      );
+        if(!tile) return;
 
-    });
+
+        tile.innerHTML = "";
+
+
+        tile.appendChild(
+          makeSymbol(
+            normalizeSymbol(
+              value
+            )
+          )
+        );
+
+      }
+    );
 
 }
 
@@ -2367,15 +3538,24 @@ function displayResult(symbols){
    WINNING LINES
 ========================================================= */
 
-function highlightWinningLines(lines){
+function highlightWinningLines(
+  lines
+){
+
+  const tiles =
+    document.querySelectorAll(
+      ".tile"
+    );
+
+
+  tiles.forEach(tile=>{
+    tile.classList.remove("win");
+  });
+
 
   if(!Array.isArray(lines)){
     return;
   }
-
-
-  const tiles =
-    document.querySelectorAll(".tile");
 
 
   lines.forEach(line=>{
@@ -2399,12 +3579,19 @@ function highlightWinningLines(lines){
     }
 
 
-    if(!Number.isInteger(row)){
+    if(
+      !Number.isInteger(row)
+    ){
+
       return;
+
     }
 
 
-    if(row >= 0 && row <= 2){
+    if(
+      row >= 0 &&
+      row <= 2
+    ){
 
       for(
         let column=0;
@@ -2417,7 +3604,12 @@ function highlightWinningLines(lines){
 
 
         if(tiles[index]){
-          tiles[index].classList.add("win");
+
+          tiles[index]
+            .classList.add(
+              "win"
+            );
+
         }
 
       }
@@ -2430,54 +3622,82 @@ function highlightWinningLines(lines){
 
 
 /* =========================================================
-   SPIN VISUAL
+   SPIN ANIMATION
 ========================================================= */
 
-function startVisualSpin(){
+function beginSpinAnimation(){
 
   const reels =
     $("reels");
 
-  reels.classList.add("spinning");
 
-  $("glass").classList.add("flash");
+  reels.classList.add(
+    "spinning"
+  );
+
+
+  const glass =
+    $("reelGlass");
+
+
+  glass.classList.remove(
+    "flash"
+  );
+
+
+  void glass.offsetWidth;
+
+
+  glass.classList.add(
+    "flash"
+  );
 
 
   const tiles =
-    document.querySelectorAll(".tile");
+    document.querySelectorAll(
+      ".tile"
+    );
 
 
-  return setInterval(()=>{
+  const interval =
+    setInterval(()=>{
 
-    if(!spinning){
-      return;
-    }
+      if(!spinning){
+
+        clearInterval(interval);
+
+        return;
+
+      }
 
 
-    tiles.forEach(tile=>{
+      tiles.forEach(tile=>{
 
-      tile.innerHTML = "";
+        tile.innerHTML = "";
 
-      tile.appendChild(
-        makeSymbol(
-          randomSymbol()
-        )
-      );
 
-    });
+        tile.appendChild(
+          makeSymbol(
+            randomSymbol()
+          )
+        );
 
-  },80);
+      });
+
+    }, turboMode ? 65 : 90);
+
+
+  return interval;
 
 }
 
 
-function stopVisualSpin(){
+function endSpinAnimation(){
 
   $("reels")
-    .classList.remove("spinning");
-
-  $("glass")
-    .classList.remove("flash");
+    .classList.remove(
+      "spinning"
+    );
 
 }
 
@@ -2502,50 +3722,6 @@ function updateBalance(value){
 
 
 /* =========================================================
-   BET
-========================================================= */
-
-function setBet(value){
-
-  const allowed =
-    [300,600,1500,3000];
-
-
-  value =
-    Number(value);
-
-
-  if(!allowed.includes(value)){
-    value = 300;
-  }
-
-
-  currentBet =
-    value;
-
-
-  $("controlBet").textContent =
-    formatNumber(value);
-
-  $("totalBet").textContent =
-    formatNumber(value);
-
-
-  document
-    .querySelectorAll(".bet")
-    .forEach(button=>{
-
-      button.classList.toggle(
-        "active",
-        Number(button.dataset.bet) === value
-      );
-
-    });
-
-}
-
-
-/* =========================================================
    SPIN
 ========================================================= */
 
@@ -2559,15 +3735,32 @@ async function spin(){
   spinning = true;
 
 
-  $("spinBtn").disabled = true;
-  $("maxBet").disabled = true;
+  $("spinBtn").disabled =
+    true;
 
 
   document
-    .querySelectorAll(".bet")
+    .querySelectorAll(
+      ".bet-button"
+    )
     .forEach(button=>{
       button.disabled = true;
     });
+
+
+  $("maxBet").disabled =
+    true;
+
+
+  const oldTiles =
+    document.querySelectorAll(
+      ".tile"
+    );
+
+
+  oldTiles.forEach(tile=>{
+    tile.classList.remove("win");
+  });
 
 
   setStatus(
@@ -2576,10 +3769,14 @@ async function spin(){
 
 
   const animation =
-    startVisualSpin();
+    beginSpinAnimation();
 
 
   try{
+
+    const initData =
+      telegramInitData();
+
 
     const data =
       await api(
@@ -2588,25 +3785,14 @@ async function spin(){
           method:"POST",
 
           body:JSON.stringify({
-            initData:getInitData(),
+
+            initData,
+
             bet:currentBet
+
           })
         }
       );
-
-
-    /*
-      Give the visual reel animation
-      a little time even if the server
-      responds immediately.
-    */
-
-    await new Promise(resolve =>
-      setTimeout(
-        resolve,
-        turboMode ? 250 : 650
-      )
-    );
 
 
     displayResult(
@@ -2625,7 +3811,9 @@ async function spin(){
 
 
     const win =
-      Number(data.win || 0);
+      Number(
+        data.win || 0
+      );
 
 
     if(win > 0){
@@ -2638,27 +3826,43 @@ async function spin(){
       );
 
 
-      if(tg?.HapticFeedback){
+      if(
+        tg &&
+        tg.HapticFeedback
+      ){
 
         try{
+
           tg.HapticFeedback
-            .notificationOccurred("success");
+            .notificationOccurred(
+              "success"
+            );
+
         }catch(e){}
 
       }
 
-    }else{
+    }
+
+    else{
 
       setStatus(
         "NO WIN THIS TIME · TRY YOUR LUCK"
       );
 
 
-      if(tg?.HapticFeedback){
+      if(
+        tg &&
+        tg.HapticFeedback
+      ){
 
         try{
+
           tg.HapticFeedback
-            .impactOccurred("light");
+            .impactOccurred(
+              "light"
+            );
+
         }catch(e){}
 
       }
@@ -2672,35 +3876,45 @@ async function spin(){
   }catch(error){
 
     console.error(
-      "Spin:",
+      "Spin failed:",
       error
     );
 
 
     setStatus(
       error.message ||
-      "Spin failed. Please try again.",
+      "SPIN FAILED · TRY AGAIN",
       "error"
     );
 
   }finally{
 
-    clearInterval(animation);
+    clearInterval(
+      animation
+    );
 
-    stopVisualSpin();
+
+    endSpinAnimation();
 
 
     spinning = false;
 
-    $("spinBtn").disabled = false;
-    $("maxBet").disabled = false;
+
+    $("spinBtn").disabled =
+      false;
 
 
     document
-      .querySelectorAll(".bet")
+      .querySelectorAll(
+        ".bet-button"
+      )
       .forEach(button=>{
         button.disabled = false;
       });
+
+
+    $("maxBet").disabled =
+      false;
 
 
     if(
@@ -2714,10 +3928,16 @@ async function spin(){
           autoTimer = null;
 
           if(autoMode){
+
             spin();
+
           }
 
-        },turboMode ? 350 : 1400);
+        },
+        turboMode
+          ? 300
+          : 1400
+        );
 
     }
 
@@ -2731,48 +3951,58 @@ async function spin(){
 ========================================================= */
 
 $("autoBtn")
-  .addEventListener("click",()=>{
+  .addEventListener(
+    "click",
+    ()=>{
 
-    autoMode =
-      !autoMode;
-
-
-    $("autoBtn")
-      .classList.toggle(
-        "active",
-        autoMode
-      );
+      autoMode =
+        !autoMode;
 
 
-    if(!autoMode){
+      $("autoBtn")
+        .classList.toggle(
+          "active",
+          autoMode
+        );
 
-      if(autoTimer){
 
-        clearTimeout(autoTimer);
-        autoTimer = null;
+      if(!autoMode){
+
+        if(autoTimer){
+
+          clearTimeout(
+            autoTimer
+          );
+
+          autoTimer =
+            null;
+
+        }
+
+
+        setStatus(
+          "AUTO MODE STOPPED"
+        );
+
+
+        return;
 
       }
 
 
       setStatus(
-        "AUTO MODE STOPPED"
+        "AUTO MODE ENABLED"
       );
 
-      return;
+
+      if(!spinning){
+
+        spin();
+
+      }
 
     }
-
-
-    setStatus(
-      "AUTO MODE ENABLED"
-    );
-
-
-    if(!spinning){
-      spin();
-    }
-
-  });
+  );
 
 
 /* =========================================================
@@ -2780,26 +4010,29 @@ $("autoBtn")
 ========================================================= */
 
 $("turboBtn")
-  .addEventListener("click",()=>{
+  .addEventListener(
+    "click",
+    ()=>{
 
-    turboMode =
-      !turboMode;
+      turboMode =
+        !turboMode;
 
 
-    $("turboBtn")
-      .classList.toggle(
-        "active",
+      $("turboBtn")
+        .classList.toggle(
+          "active",
+          turboMode
+        );
+
+
+      setStatus(
         turboMode
+          ? "TURBO MODE ENABLED"
+          : "TURBO MODE DISABLED"
       );
 
-
-    setStatus(
-      turboMode
-        ? "TURBO MODE ENABLED"
-        : "TURBO MODE DISABLED"
-    );
-
-  });
+    }
+  );
 
 
 /* =========================================================
@@ -2807,15 +4040,18 @@ $("turboBtn")
 ========================================================= */
 
 $("maxBet")
-  .addEventListener("click",()=>{
+  .addEventListener(
+    "click",
+    ()=>{
 
-    setBet(3000);
+      setBet(3000);
 
-    setStatus(
-      "MAX BET · 3,000 CHIPS"
-    );
+      setStatus(
+        "MAX BET · 3,000 CHIPS"
+      );
 
-  });
+    }
+  );
 
 
 /* =========================================================
@@ -2823,7 +4059,9 @@ $("maxBet")
 ========================================================= */
 
 document
-  .querySelectorAll(".bet")
+  .querySelectorAll(
+    ".bet-button"
+  )
   .forEach(button=>{
 
     button.addEventListener(
@@ -2837,7 +4075,9 @@ document
 
         setStatus(
           "BET SET TO " +
-          formatNumber(currentBet) +
+          formatNumber(
+            currentBet
+          ) +
           " CHIPS"
         );
 
@@ -2848,29 +4088,33 @@ document
 
 
 /* =========================================================
-   LINES
+   LINE CONTROL
 ========================================================= */
 
-$("lineBtn")
-  .addEventListener("click",()=>{
+$("lineDown")
+  .addEventListener(
+    "click",
+    ()=>{
 
-    currentLines =
-      currentLines === 5
-        ? 3
-        : 5;
-
-
-    $("lineCount").textContent =
-      currentLines;
+      currentLines =
+        currentLines === 5
+          ? 3
+          : 5;
 
 
-    setStatus(
-      currentLines === 5
-        ? "5 LINES SELECTED"
-        : "3 LINES SELECTED"
-    );
+      $("lineCount")
+        .textContent =
+        currentLines;
 
-  });
+
+      setStatus(
+        currentLines === 5
+          ? "5 LINES SELECTED"
+          : "3 LINES SELECTED"
+      );
+
+    }
+  );
 
 
 /* =========================================================
@@ -2885,7 +4129,7 @@ $("spinBtn")
 
 
 /* =========================================================
-   START
+   INITIALIZE
 ========================================================= */
 
 buildReels();
@@ -2898,6 +4142,7 @@ setBet(300);
   try{
 
     await loadPlayer();
+
 
     setStatus(
       "YOUR PRIVATE FORTUNE AWAITS"
