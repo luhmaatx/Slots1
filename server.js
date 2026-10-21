@@ -266,29 +266,390 @@ app.get("/api/leaderboard", async (req, res) => {
 });
 
 /* =========================================================
-   FIVE-REEL SLOT
-=========================================================
-
-   Layout:
-
-   5 columns
-   3 rows
-
-   Total:
-   15 symbols
-
-   Indexes:
-
-   0   1   2   3   4
-   5   6   7   8   9
-   10  11  12  13  14
-
+   GIFT COINS
 ========================================================= */
 
-app.post("/api/spin", async (req, res) => {
+app.post("/api/gift", async (req, res) => {
   let client;
 
   try {
+    /* -----------------------------------------------------
+       VERIFY SENDER
+    ----------------------------------------------------- */
+
+    const sender =
+      verifyTelegram(
+        req.body?.initData
+      );
+
+    /* -----------------------------------------------------
+       READ GIFT DATA
+    ----------------------------------------------------- */
+
+    let recipientUsername =
+      typeof req.body?.username === "string"
+        ? req.body.username.trim()
+        : "";
+
+    const amount =
+      Number(req.body?.amount);
+
+    recipientUsername =
+      recipientUsername
+        .replace(/^@/, "")
+        .trim()
+        .slice(0, 64);
+
+    /* -----------------------------------------------------
+       VALIDATE USERNAME
+    ----------------------------------------------------- */
+
+    if (!recipientUsername) {
+      return res.status(400).json({
+        error:
+          "Enter the player's Telegram username."
+      });
+    }
+
+    if (
+      !Number.isInteger(amount) ||
+      amount <= 0
+    ) {
+      return res.status(400).json({
+        error:
+          "Gift amount must be a whole number greater than zero."
+      });
+    }
+
+    if (amount > 1000000000) {
+      return res.status(400).json({
+        error:
+          "Gift amount is too large."
+      });
+    }
+
+    /* -----------------------------------------------------
+       DATABASE TRANSACTION
+    ----------------------------------------------------- */
+
+    client =
+      await pool.connect();
+
+    await client.query(
+      "BEGIN"
+    );
+
+    /* -----------------------------------------------------
+       FIND SENDER
+    ----------------------------------------------------- */
+
+    const senderResult =
+      await client.query(
+        `SELECT
+           telegram_id,
+           username,
+           balance
+         FROM players
+         WHERE telegram_id = $1
+         FOR UPDATE`,
+        [
+          sender.id
+        ]
+      );
+
+    if (
+      senderResult.rows.length === 0
+    ) {
+      await client.query(
+        "ROLLBACK"
+      );
+
+      return res.status(404).json({
+        error:
+          "Sender account was not found."
+      });
+    }
+
+    const senderPlayer =
+      senderResult.rows[0];
+
+    const senderBalance =
+      Number(
+        senderPlayer.balance
+      );
+
+    /* -----------------------------------------------------
+       FIND RECIPIENT
+    ----------------------------------------------------- */
+
+    const recipientResult =
+      await client.query(
+        `SELECT
+           telegram_id,
+           username,
+           balance
+         FROM players
+         WHERE LOWER(username) = LOWER($1)
+         FOR UPDATE`,
+        [
+          recipientUsername
+        ]
+      );
+
+    if (
+      recipientResult.rows.length === 0
+    ) {
+      await client.query(
+        "ROLLBACK"
+      );
+
+      return res.status(404).json({
+        error:
+          "That player was not found. They must open KIMIA PRIVÉ at least once before receiving a gift."
+      });
+    }
+
+    const recipient =
+      recipientResult.rows[0];
+
+    /* -----------------------------------------------------
+       PREVENT SELF GIFT
+    ----------------------------------------------------- */
+
+    if (
+      String(recipient.telegram_id) ===
+      String(sender.id)
+    ) {
+      await client.query(
+        "ROLLBACK"
+      );
+
+      return res.status(400).json({
+        error:
+          "You cannot gift coins to yourself."
+      });
+    }
+
+    /* -----------------------------------------------------
+       CHECK SENDER BALANCE
+    ----------------------------------------------------- */
+
+    if (
+      senderBalance < amount
+    ) {
+      await client.query(
+        "ROLLBACK"
+      );
+
+      return res.status(400).json({
+        error:
+          "You do not have enough chips for this gift.",
+
+        balance:
+          senderBalance
+      });
+    }
+
+    /* -----------------------------------------------------
+       REMOVE COINS FROM SENDER
+    ----------------------------------------------------- */
+
+    const senderUpdate =
+      await client.query(
+        `UPDATE players
+         SET balance = balance - $1
+         WHERE telegram_id = $2
+         RETURNING balance`,
+        [
+          amount,
+          sender.id
+        ]
+      );
+
+    /* -----------------------------------------------------
+       ADD COINS TO RECIPIENT
+    ----------------------------------------------------- */
+
+    await client.query(
+      `UPDATE players
+       SET balance = balance + $1
+       WHERE telegram_id = $2`,
+      [
+        amount,
+        recipient.telegram_id
+      ]
+    );
+
+    /* -----------------------------------------------------
+       RECORD GIFT
+    ----------------------------------------------------- */
+
+    await client.query(
+      `INSERT INTO coin_gifts
+        (
+          sender_telegram_id,
+          recipient_telegram_id,
+          amount
+        )
+       VALUES
+        ($1, $2, $3)`,
+      [
+        sender.id,
+        recipient.telegram_id,
+        amount
+      ]
+    );
+
+    /* -----------------------------------------------------
+       COMPLETE TRANSACTION
+    ----------------------------------------------------- */
+
+    await client.query(
+      "COMMIT"
+    );
+
+    /* -----------------------------------------------------
+       RESPONSE
+    ----------------------------------------------------- */
+
+    res.json({
+      success: true,
+
+      amount,
+
+      recipient:
+        recipient.username
+          ? "@" + recipient.username
+          : "Player",
+
+      balance:
+        Number(
+          senderUpdate.rows[0].balance
+        )
+    });
+
+  } catch (error) {
+
+    if (client) {
+      await client.query(
+        "ROLLBACK"
+      ).catch(() => {});
+    }
+
+    console.error(
+      "Gift failed:",
+      error.message
+    );
+
+    res.status(500).json({
+      error:
+        "Unable to send gift. Please try again."
+    });
+
+  } finally {
+
+    if (client) {
+      client.release();
+    }
+
+  }
+});
+
+/* =========================================================
+   GIFT HISTORY
+========================================================= */
+
+app.post("/api/gifts", async (req, res) => {
+
+  try {
+
+    const user =
+      verifyTelegram(
+        req.body?.initData
+      );
+
+    const result =
+      await pool.query(
+        `SELECT
+           g.amount,
+           g.created_at,
+           sender.username AS sender_username,
+           recipient.username AS recipient_username
+         FROM coin_gifts g
+
+         LEFT JOIN players sender
+           ON sender.telegram_id =
+              g.sender_telegram_id
+
+         LEFT JOIN players recipient
+           ON recipient.telegram_id =
+              g.recipient_telegram_id
+
+         WHERE
+           g.sender_telegram_id = $1
+           OR
+           g.recipient_telegram_id = $1
+
+         ORDER BY
+           g.created_at DESC
+
+         LIMIT 50`,
+        [
+          user.id
+        ]
+      );
+
+    res.json({
+      gifts:
+        result.rows.map(
+          gift => ({
+            amount:
+              Number(gift.amount),
+
+            createdAt:
+              gift.created_at,
+
+            sender:
+              gift.sender_username
+                ? "@" +
+                  gift.sender_username
+                : "Player",
+
+            recipient:
+              gift.recipient_username
+                ? "@" +
+                  gift.recipient_username
+                : "Player"
+          })
+        )
+    });
+
+  } catch (error) {
+
+    console.error(
+      "Gift history failed:",
+      error.message
+    );
+
+    res.status(401).json({
+      error:
+        error.message
+    });
+
+  }
+
+});
+
+/* =========================================================
+   FIVE-REEL SLOT
+========================================================= */
+
+app.post("/api/spin", async (req, res) => {
+
+  let client;
+
+  try {
+
     const user =
       verifyTelegram(
         req.body?.initData
@@ -318,7 +679,9 @@ app.post("/api/spin", async (req, res) => {
     client =
       await pool.connect();
 
-    await client.query("BEGIN");
+    await client.query(
+      "BEGIN"
+    );
 
     /* -----------------------------------------------------
        FIND / CREATE PLAYER
@@ -350,23 +713,31 @@ app.post("/api/spin", async (req, res) => {
       playerResult.rows[0];
 
     const balance =
-      Number(player.balance);
+      Number(
+        player.balance
+      );
 
     /* -----------------------------------------------------
        CHECK BALANCE
     ----------------------------------------------------- */
 
-    if (balance < cost) {
+    if (
+      balance < cost
+    ) {
+
       await client.query(
         "ROLLBACK"
       );
 
       return res.status(400).json({
+
         error:
           "Not enough chips.",
 
         balance
+
       });
+
     }
 
     /* -----------------------------------------------------
@@ -398,27 +769,11 @@ app.post("/api/spin", async (req, res) => {
       );
 
     /* -----------------------------------------------------
-       FIVE-REEL / THREE-ROW PAYLINES
-
-       5 horizontal lines are represented
-       by the 3 visible rows plus 2
-       additional patterns.
-
-       Row 1:
-       0  1  2  3  4
-
-       Row 2:
-       5  6  7  8  9
-
-       Row 3:
-       10 11 12 13 14
-
-       Extra diagonal patterns:
-       0 6 12 8 4
-       10 6 2 8 14
+       PAYLINES
     ----------------------------------------------------- */
 
     const paylines = [
+
       [0, 1, 2, 3, 4],
 
       [5, 6, 7, 8, 9],
@@ -428,6 +783,7 @@ app.post("/api/spin", async (req, res) => {
       [0, 6, 12, 8, 4],
 
       [10, 6, 2, 8, 14]
+
     ];
 
     let win = 0;
@@ -443,9 +799,11 @@ app.post("/api/spin", async (req, res) => {
       i < paylines.length;
       i++
     ) {
+
       const line =
         paylines[i].map(
-          index => output[index]
+          index =>
+            output[index]
         );
 
       const first =
@@ -465,38 +823,52 @@ app.post("/api/spin", async (req, res) => {
 
         let payout;
 
-        if (first === "7️⃣") {
+        if (
+          first === "7️⃣"
+        ) {
+
           payout =
             cost * 50;
+
         } else if (
           first === "💎"
         ) {
+
           payout =
             cost * 25;
+
         } else if (
           first === "💗"
         ) {
+
           payout =
             cost * 15;
+
         } else if (
           first === "🌹"
         ) {
+
           payout =
             cost * 12;
+
         } else {
+
           payout =
             cost * 10;
+
         }
 
         win += payout;
 
-        winningLines.push(i);
+        winningLines.push(
+          i
+        );
 
         continue;
       }
 
       /* ---------------------------------------------------
-         FOUR OF A KIND
+         FOUR / THREE / TWO OF A KIND
       --------------------------------------------------- */
 
       const counts = {};
@@ -504,47 +876,60 @@ app.post("/api/spin", async (req, res) => {
       for (
         const symbol of line
       ) {
+
         counts[symbol] =
           (counts[symbol] || 0) + 1;
+
       }
 
       const highest =
         Math.max(
-          ...Object.values(counts)
+          ...Object.values(
+            counts
+          )
         );
 
-      if (highest >= 4) {
+      if (
+        highest >= 4
+      ) {
 
-        win += cost * 5;
+        win +=
+          cost * 5;
 
-        winningLines.push(i);
+        winningLines.push(
+          i
+        );
 
       } else if (
         highest === 3
       ) {
 
-        win += cost * 2;
+        win +=
+          cost * 2;
 
-        winningLines.push(i);
+        winningLines.push(
+          i
+        );
 
       } else if (
         highest === 2
       ) {
 
-        win += Math.floor(
-          cost * 0.5
+        win +=
+          Math.floor(
+            cost * 0.5
+          );
+
+        winningLines.push(
+          i
         );
 
-        winningLines.push(i);
-
       }
+
     }
 
     /* -----------------------------------------------------
        UPDATE BALANCE
-
-       Existing PostgreSQL account remains intact.
-       Only the spin cost and winnings are applied.
     ----------------------------------------------------- */
 
     const updated =
@@ -622,6 +1007,7 @@ app.post("/api/spin", async (req, res) => {
     }
 
   }
+
 });
 
 /* =========================================================
@@ -629,6 +1015,10 @@ app.post("/api/spin", async (req, res) => {
 ========================================================= */
 
 async function initializeDatabase() {
+
+  /* -------------------------------------------------------
+     PLAYERS
+  ------------------------------------------------------- */
 
   await pool.query(`
     CREATE TABLE IF NOT EXISTS players (
@@ -657,8 +1047,59 @@ async function initializeDatabase() {
     )
   `);
 
+  /* -------------------------------------------------------
+     COIN GIFTS
+  ------------------------------------------------------- */
+
+  await pool.query(`
+    CREATE TABLE IF NOT EXISTS coin_gifts (
+
+      id BIGINT
+        GENERATED ALWAYS AS IDENTITY
+        PRIMARY KEY,
+
+      sender_telegram_id BIGINT
+        NOT NULL,
+
+      recipient_telegram_id BIGINT
+        NOT NULL,
+
+      amount BIGINT
+        NOT NULL
+        CHECK (amount > 0),
+
+      created_at TIMESTAMPTZ
+        NOT NULL
+        DEFAULT NOW()
+    )
+  `);
+
+  /* -------------------------------------------------------
+     INDEXES
+  ------------------------------------------------------- */
+
+  await pool.query(`
+    CREATE INDEX IF NOT EXISTS
+    coin_gifts_sender_idx
+
+    ON coin_gifts
+    (sender_telegram_id)
+  `);
+
+  await pool.query(`
+    CREATE INDEX IF NOT EXISTS
+    coin_gifts_recipient_idx
+
+    ON coin_gifts
+    (recipient_telegram_id)
+  `);
+
   console.log(
     "Players table is ready."
+  );
+
+  console.log(
+    "Coin gifts table is ready."
   );
 }
 
@@ -667,6 +1108,7 @@ async function initializeDatabase() {
 ========================================================= */
 
 initializeDatabase()
+
   .then(() => {
 
     app.listen(
@@ -683,6 +1125,7 @@ initializeDatabase()
     );
 
   })
+
   .catch(error => {
 
     console.error(
