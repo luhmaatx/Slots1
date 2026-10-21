@@ -4,1023 +4,701 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta name="theme-color" content="#090706">
-<title>KIMIA PRIVÉ — The Private Club</title>
-
+<meta name="theme-color" content="#080604">
+<title>KIMIA PRIVÉ | The Gold Room</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
 <script src="https://telegram.org/js/telegram-web-app.js"></script>
 
 <style>
 :root{
-  --bg:#090706;
-  --panel:#110d0a;
-  --panel2:#19110b;
-  --gold:#d7a84d;
-  --gold2:#ffe3a0;
-  --gold3:#8e6024;
-  --rose:#df9baf;
-  --muted:#9a8a77;
-  --line:rgba(215,168,77,.25);
-  --green:#8cdaaa;
-  --red:#ff9a91;
+  --black:#080604;
+  --black2:#100b07;
+  --gold:#dba849;
+  --gold-light:#ffe8a7;
+  --gold-dark:#714519;
+  --cream:#fff2cf;
+  --muted:#a18a68;
+  --pink:#ed91ce;
+  --blue:#6edaff;
+  --green:#b8f18a;
 }
 *{box-sizing:border-box}
 html{scroll-behavior:smooth}
 body{
-  margin:0;
-  min-height:100vh;
-  color:#fff5e5;
-  background:
-    radial-gradient(ellipse at 50% -10%,rgba(154,95,30,.25),transparent 44%),
-    radial-gradient(ellipse at 0% 40%,rgba(103,50,23,.12),transparent 40%),
-    var(--bg);
-  font-family:"DM Sans",sans-serif;
-  overflow-x:hidden;
-}
-body:before{
-  content:"";
-  position:fixed;inset:0;pointer-events:none;z-index:0;
-  opacity:.12;
-  background-image:radial-gradient(rgba(255,221,157,.6) .5px,transparent .7px);
-  background-size:8px 8px;
-  mask-image:linear-gradient(to bottom,#000,transparent 75%);
+  margin:0;background:#080604;color:var(--cream);
+  font-family:"DM Sans",sans-serif;overflow-x:hidden;
 }
 button{font:inherit;cursor:pointer}
-button:disabled{cursor:not-allowed;opacity:.5}
-button:focus-visible{outline:2px solid var(--gold2);outline-offset:4px}
+button:disabled{opacity:.55;cursor:wait}
 button:active:not(:disabled){transform:scale(.97)}
-.app{
-  position:relative;z-index:1;
-  width:min(100%,520px);
-  margin:0 auto;
-  padding:calc(16px + env(safe-area-inset-top)) 15px calc(30px + env(safe-area-inset-bottom));
+button:focus-visible{outline:2px solid var(--gold-light);outline-offset:3px}
+.app{width:min(100%,540px);margin:auto;position:relative;min-height:100vh;background:
+radial-gradient(ellipse at 50% 10%,#422a13 0,transparent 42%),
+linear-gradient(90deg,#070503,#140d07 8%,#080604 18%,#100a06 50%,#080604 82%,#160e08 94%,#070503);
+padding:calc(12px + env(safe-area-inset-top)) 12px calc(28px + env(safe-area-inset-bottom));}
+.app:before{
+content:"";position:absolute;z-index:0;pointer-events:none;inset:0;
+background:
+repeating-linear-gradient(90deg,transparent 0 7%,rgba(237,174,80,.045) 7.2%,transparent 7.5% 13%),
+radial-gradient(ellipse at 50% 28%,rgba(246,180,66,.13),transparent 45%);
 }
-.topbar{
-  display:flex;align-items:center;justify-content:space-between;gap:10px;
-  margin-bottom:20px;
+.app:after{
+content:"";position:absolute;pointer-events:none;inset:0;z-index:0;opacity:.25;
+background-image:radial-gradient(#f2c978 0.6px,transparent .8px);background-size:13px 13px;
+mask-image:linear-gradient(to bottom,black,transparent 60%);
 }
-.mini-profile,.wallet{
-  border:1px solid var(--line);
-  background:linear-gradient(145deg,rgba(39,27,16,.95),rgba(11,8,6,.96));
-  border-radius:15px;padding:10px 12px;
-  min-width:0;
+.content{position:relative;z-index:1}
+.topbar{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:8px;align-items:center}
+.member,.wallet{
+min-width:0;display:flex;align-items:center;gap:9px;padding:9px 10px;
+border:1px solid #a77733;border-radius:30px;
+background:linear-gradient(135deg,#1e1409,#080604 75%);
+box-shadow:inset 0 0 0 2px #d7a4470d,0 4px 15px #0008;
 }
-.mini-profile{display:flex;align-items:center;gap:9px;flex:1}
 .avatar{
-  width:36px;height:36px;flex-shrink:0;border-radius:50%;
-  display:grid;place-items:center;
-  color:var(--gold2);
-  border:1px solid var(--gold3);
-  background:radial-gradient(circle,#4c3217,#130d08 75%);
-  font-family:"Cormorant Garamond",serif;font-size:20px;
+width:34px;height:34px;border-radius:50%;display:grid;place-items:center;flex-shrink:0;
+border:1px solid #d6a64c;background:radial-gradient(circle,#66441d,#100904);
+color:#ffe4a1;font-size:21px;
 }
-.profile-copy{min-width:0}
-.eyebrow{font-size:9px;letter-spacing:2px;color:var(--muted);text-transform:uppercase}
-.player-name{font-size:12px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:145px;margin-top:3px}
-.wallet{display:flex;align-items:center;gap:9px}
+.micro{font-size:8px;letter-spacing:1.8px;text-transform:uppercase;color:#b7a17d}
+.name{font-size:11px;font-weight:600;margin-top:3px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:145px}
+.wallet{padding-right:13px}
 .coin{
-  width:32px;height:32px;border-radius:50%;
-  display:grid;place-items:center;flex-shrink:0;
-  color:#211305;font-size:17px;
-  background:linear-gradient(145deg,#fff0b8,#d49a37 55%,#8b591c);
-  box-shadow:0 0 14px rgba(225,174,76,.14);
+width:30px;height:30px;flex-shrink:0;display:grid;place-items:center;border-radius:50%;
+color:#38200a;font-size:17px;background:linear-gradient(135deg,#fff4bd,#d99a2e 60%,#8e5718);
+box-shadow:0 0 12px #e5ae4333;
 }
-.balance{font-size:15px;font-weight:700;font-variant-numeric:tabular-nums;white-space:nowrap}
-.balance-caption{font-size:8px;letter-spacing:1.5px;color:var(--muted);margin-top:3px}
-.brand{text-align:center;margin:12px 0 22px;position:relative}
-.brand-crown{
-  color:var(--gold);font-size:27px;line-height:1;
-  text-shadow:0 0 24px rgba(215,168,77,.45);
+.balance{font-size:14px;font-weight:700;font-variant-numeric:tabular-nums;white-space:nowrap}
+.wallet-caption{font-size:7px;letter-spacing:1.5px;color:#b7a17d;margin-top:3px}
+.brand{text-align:center;padding:17px 0 19px;position:relative}
+.brand:before,.brand:after{
+content:"";position:absolute;top:47px;width:22%;height:1px;
+background:linear-gradient(90deg,transparent,#bc873b);
 }
+.brand:before{left:0}.brand:after{right:0;transform:scaleX(-1)}
+.crown{font-size:28px;line-height:1;color:#f9d27f;text-shadow:0 0 20px #dba84988}
 .brand h1{
-  margin:3px 0 0;
-  font-family:"Cormorant Garamond",serif;
-  font-size:clamp(42px,12vw,62px);
-  line-height:.85;font-weight:500;letter-spacing:8px;
-  padding-left:8px;
-  color:#f8d994;
-  background:linear-gradient(100deg,#a36b25,#ffeab0 40%,#bf8837 65%,#fff0bf);
-  -webkit-background-clip:text;background-clip:text;color:transparent;
-  filter:drop-shadow(0 3px 12px rgba(200,145,52,.14));
+margin:3px 0 0;font:500 clamp(42px,12vw,62px)/.82 "Cormorant Garamond",serif;
+letter-spacing:8px;padding-left:8px;
+background:linear-gradient(100deg,#b57b2a,#fff1b8 38%,#d7a04a 62%,#fff0b0);
+-webkit-background-clip:text;background-clip:text;color:transparent;
+filter:drop-shadow(0 3px 12px #d49a3633);
 }
-.brand-sub{
-  font-family:"Cormorant Garamond",serif;
-  letter-spacing:10px;padding-left:10px;font-size:20px;
-  margin-top:7px;color:#d6ad6c;
+.brand-sub{font:500 21px "Cormorant Garamond",serif;letter-spacing:11px;padding-left:11px;color:#f0ce8b;margin-top:7px}
+.tagline{font-size:8px;letter-spacing:3.5px;color:#c7a974;margin-top:11px}
+.tagline b{color:#ffdc88;padding:0 5px}
+.jackpot-wrap{margin:0 0 15px;position:relative}
+.jackpot-main{
+position:relative;text-align:center;padding:13px 8px 14px;
+background:linear-gradient(180deg,#241608,#090604 70%,#1b1107);
+border:2px solid #b98435;
+clip-path:polygon(4% 0,96% 0,100% 20%,100% 80%,96% 100%,4% 100%,0 80%,0 20%);
+box-shadow:0 0 18px #dba84930;
 }
-.brand-tag{
-  margin-top:11px;font-size:8px;letter-spacing:4px;color:var(--muted);
+.jackpot-main:before{content:"";position:absolute;inset:4px;border:1px solid #f3d18a66;pointer-events:none}
+.jackpot-label{font-size:10px;letter-spacing:4px;color:#f3d18a;font-weight:700}
+.jackpot-number{font:700 clamp(32px,9vw,45px)/1 "Cormorant Garamond",serif;color:#ffe2a0;text-shadow:0 0 18px #eaa63a66;margin-top:4px}
+.jackpot-number span{font-size:25px}
+.jackpot-foot{font-size:7px;letter-spacing:2px;color:#9e8052;margin-top:5px}
+.tier-row{display:grid;grid-template-columns:1fr 1.5fr 1fr;gap:6px;margin-top:7px}
+.tier{border:1px solid var(--tier);border-radius:10px;text-align:center;padding:8px 2px;background:linear-gradient(145deg,#1b100a,#060504);box-shadow:inset 0 0 13px color-mix(in srgb,var(--tier) 13%,transparent)}
+.tier-label{font-size:7px;letter-spacing:2px;color:var(--tier)}
+.tier-value{font:700 18px "Cormorant Garamond",serif;color:var(--tier);margin-top:2px}
+.tier.major{--tier:#ee82d3}.tier.grand{--tier:#ffdc84}.tier.minor{--tier:#72d9ff}
+.machine{
+position:relative;padding:9px;border:2px solid #8f6028;border-radius:22px;
+background:linear-gradient(140deg,#4c2c0d,#130b05 18%,#090604 48%,#3b230d 90%,#0b0704);
+box-shadow:0 0 0 2px #2b1a0a,0 0 0 5px #c38c3b24,0 15px 30px #000b,inset 0 0 0 2px #e9c16c15;
 }
-.brand-tag span{color:var(--gold);padding:0 5px}
-.jackpot{
-  position:relative;overflow:hidden;text-align:center;
-  border:1px solid var(--gold3);border-radius:16px;
-  padding:13px 10px 15px;margin-bottom:14px;
-  background:
-    radial-gradient(ellipse at 50% 0%,rgba(206,151,61,.2),transparent 70%),
-    linear-gradient(110deg,#170f08,#080605 45%,#211307);
-  box-shadow:inset 0 0 0 3px rgba(215,168,77,.045),0 10px 25px #0008;
+.machine:before{
+content:"";position:absolute;inset:4px;border:1px solid #d7a44866;border-radius:16px;pointer-events:none
 }
-.jackpot:before,.jackpot:after{
-  content:"";position:absolute;top:0;bottom:0;width:1px;
-  background:linear-gradient(transparent,var(--gold),transparent);
-  opacity:.6;
+.machine-heading{display:flex;align-items:center;justify-content:space-between;padding:5px 6px 10px}
+.machine-title{font:600 17px "Cormorant Garamond",serif;letter-spacing:3px;color:#f1d093}
+.ways{font-size:8px;letter-spacing:1.5px;color:#a88a5d}
+.reel-frame{
+position:relative;padding:7px;border:2px solid #e0af53;border-radius:13px;
+background:linear-gradient(100deg,#43290f,#090604 10%,#0b0704 50%,#3e260f);
+box-shadow:0 0 0 3px #1d1208,inset 0 0 20px #000,0 0 18px #dca54a22;
 }
-.jackpot:before{left:12px}.jackpot:after{right:12px}
-.jackpot-label{font-size:9px;letter-spacing:4px;color:#d7b777}
-.jackpot-number{
-  margin-top:4px;font-family:"Cormorant Garamond",serif;
-  font-size:clamp(29px,8vw,40px);font-weight:700;line-height:1;
-  letter-spacing:2px;color:#f8d891;
-  text-shadow:0 0 22px rgba(241,179,68,.3);
+.reel-frame:before{
+content:"";position:absolute;inset:3px;border:1px solid #f4d58a66;border-radius:8px;pointer-events:none;z-index:3
 }
-.jackpot-note{margin-top:6px;font-size:8px;letter-spacing:1.8px;color:#806d55}
-.game-panel{
-  border:1px solid var(--gold3);border-radius:19px;
-  padding:8px;background:linear-gradient(145deg,#2b1b0c,#090706 30%,#211407);
-  box-shadow:0 15px 40px #0009,inset 0 0 0 2px rgba(255,221,148,.04);
-  position:relative;
-}
-.game-panel:before{
-  content:"";position:absolute;inset:4px;border:1px solid rgba(215,168,77,.14);
-  border-radius:14px;pointer-events:none;
-}
-.game-heading{
-  display:flex;justify-content:space-between;align-items:center;
-  padding:8px 7px 11px;
-}
-.section-label{font-size:9px;letter-spacing:3px;color:#d5b375}
-.ways{font-size:9px;color:var(--muted);letter-spacing:1px}
-.reels-wrap{
-  position:relative;overflow:hidden;
-  border:1px solid #6f4a20;border-radius:11px;
-  padding:7px;
-  background:#050403;
-  box-shadow:inset 0 0 24px #000,0 0 0 1px #000;
-}
-.reels-wrap:before{
-  content:"";position:absolute;z-index:2;pointer-events:none;
-  left:7px;right:7px;top:7px;height:22px;
-  background:linear-gradient(#0008,transparent);
-}
-.reels-wrap:after{
-  content:"";position:absolute;z-index:2;pointer-events:none;
-  left:7px;right:7px;bottom:7px;height:22px;
-  background:linear-gradient(transparent,#0009);
-}
-.reels{
-  display:grid;grid-template-columns:repeat(3,minmax(0,1fr));
-  gap:5px;
-}
+.reels{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:5px;position:relative}
 .reel{
-  min-width:0;display:grid;grid-template-rows:repeat(3,1fr);
-  background:linear-gradient(90deg,#090604,#181008 50%,#090604);
-  border-left:1px solid rgba(218,170,77,.28);
-  border-right:1px solid rgba(218,170,77,.28);
-  overflow:hidden;
+min-width:0;overflow:hidden;border-left:1px solid #bb8a4055;border-right:1px solid #bb8a4055;
+background:linear-gradient(90deg,#080503,#1b1008 50%,#080503);
 }
 .symbol{
-  aspect-ratio:1.04 / 1;
-  min-height:78px;
-  display:grid;place-items:center;
-  font-size:clamp(35px,10vw,52px);
-  position:relative;
-  background:linear-gradient(180deg,rgba(255,224,156,.015),transparent 35%,rgba(0,0,0,.18));
-  border-bottom:1px solid rgba(204,155,67,.12);
-  text-shadow:0 3px 8px #000,0 0 16px rgba(239,183,79,.1);
-  transition:background .25s,filter .25s,transform .25s;
-  user-select:none;
+aspect-ratio:.88/1;min-height:91px;display:grid;place-items:center;position:relative;
+font-size:clamp(37px,10vw,53px);
+background:linear-gradient(180deg,#e7b55b08,transparent 30%,#0003);
+border-bottom:1px solid #c5974526;
+text-shadow:0 3px 5px #000,0 0 12px #e7b44a20;
+user-select:none;transition:background .25s;
 }
 .symbol:last-child{border-bottom:0}
-.symbol.spinning{
-  filter:blur(2px);
-  animation:reelBlur .12s linear infinite alternate;
-}
-@keyframes reelBlur{
-  from{transform:translateY(-4px);filter:blur(1px)}
-  to{transform:translateY(4px);filter:blur(3px)}
-}
+.symbol.spinning{filter:blur(2px);animation:roll .11s linear infinite alternate}
+@keyframes roll{from{transform:translateY(-6px)}to{transform:translateY(6px)}}
 .symbol.winning{
-  z-index:1;
-  background:radial-gradient(circle,rgba(255,213,111,.28),rgba(199,136,42,.1) 55%,transparent 80%);
-  animation:winPulse .75s ease-in-out infinite alternate;
+background:radial-gradient(ellipse,#ffdc845c,transparent 72%);
+animation:shine .65s ease-in-out infinite alternate;
 }
-@keyframes winPulse{
-  from{filter:brightness(1);text-shadow:0 0 9px #d89b3a}
-  to{filter:brightness(1.8);text-shadow:0 0 24px #ffdf8a,0 0 45px #d89025}
+@keyframes shine{to{filter:brightness(1.9);text-shadow:0 0 12px #ffe7a2,0 0 28px #e6a539}}
+.reel-frame.rolling{box-shadow:0 0 22px #e6b35155,inset 0 0 20px #000}
+.status{min-height:34px;display:grid;place-items:center;text-align:center;padding:7px 4px 2px;font-size:10px;color:#b19a75}
+.status.good{color:#ffe1a0}.status.bad{color:#ff9d91}
+.controls{display:grid;grid-template-columns:.9fr 1.5fr .9fr;align-items:center;gap:7px;margin-top:9px}
+.side,.betbox,.spin{
+border:1px solid #9d712f;border-radius:12px;
+background:linear-gradient(145deg,#211609,#090604);
 }
-.game-panel.is-spinning .reels-wrap{
-  border-color:#f2ca76;
-  box-shadow:0 0 25px rgba(215,168,77,.16),inset 0 0 24px #000;
+.side{height:61px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;color:#e8c77e}
+.side-icon{font-size:18px}
+.side-label{font-size:9px;letter-spacing:1.3px}
+.side small{font-size:7px;color:#a58b61}
+.side.active{background:linear-gradient(145deg,#473013,#160d06);box-shadow:0 0 14px #dba84920}
+.spin{
+position:relative;overflow:hidden;min-height:69px;color:#281606;
+border:2px solid #f5d994;
+background:linear-gradient(115deg,#9e641e,#ffe8a2 38%,#c18a31 68%,#fce7a5);
+box-shadow:0 0 18px #dba84930,inset 0 1px #fff7d6;
 }
-.status-line{
-  min-height:34px;display:flex;align-items:center;justify-content:center;
-  text-align:center;padding:8px 4px 2px;
-  color:var(--muted);font-size:10px;letter-spacing:.6px;
+.spin:after{
+content:"";position:absolute;top:-80%;bottom:-80%;width:25%;left:-40%;
+transform:rotate(25deg);background:linear-gradient(90deg,transparent,#fff9dfc9,transparent);
+animation:sweep 3.5s ease-in-out infinite;
 }
-.status-line.good{color:var(--gold2)}
-.status-line.bad{color:var(--red)}
-.controls{
-  display:grid;grid-template-columns:1fr 1.5fr 1fr;
-  align-items:center;gap:9px;margin-top:11px;padding:0 2px 4px;
+@keyframes sweep{0%,60%{left:-40%}100%{left:140%}}
+.spin-icon{display:block;font-size:24px;line-height:1;margin-bottom:4px}
+.spin-label{position:relative;font-size:11px;letter-spacing:2px;font-weight:700}
+.bet-row{display:grid;grid-template-columns:1fr 1.5fr 1fr;gap:7px;margin-top:8px}
+.betbox{display:flex;align-items:center;justify-content:space-between;padding:6px 8px;grid-column:1/3}
+.bet-step{width:28px;height:31px;border:1px solid #775020;border-radius:7px;background:#100a05;color:#f4d38b;font-size:17px}
+.bet-copy{text-align:center}
+.bet-caption{font-size:7px;letter-spacing:2px;color:#a99068}
+.bet-value{font:700 22px "Cormorant Garamond",serif;color:#ffe3a0}
+.maxbet{border:1px solid #8f642c;border-radius:10px;background:linear-gradient(145deg,#211609,#090604);color:#f3d28d;font-size:9px;letter-spacing:1px}
+.win-display{
+margin-top:16px;position:relative;overflow:hidden;text-align:center;
+border:1px solid #a77a31;border-radius:18px;padding:15px 12px 17px;
+background:radial-gradient(ellipse at 50% 100%,#79450f55,transparent 65%),linear-gradient(180deg,#1a1008,#080604 70%,#201205);
+box-shadow:inset 0 0 0 4px #dba8490b,0 9px 24px #0008;
 }
-.bet-box,.side-control{
-  min-height:58px;border:1px solid var(--line);border-radius:12px;
-  background:linear-gradient(145deg,#1d140b,#0b0806);
-}
-.bet-box{display:flex;align-items:center;justify-content:space-between;padding:5px}
-.bet-number{min-width:0;text-align:center}
-.bet-label{font-size:8px;letter-spacing:1.5px;color:var(--muted)}
-.bet-value{font-family:"Cormorant Garamond",serif;font-size:23px;color:var(--gold2);font-weight:700}
-.bet-fixed{font-size:8px;color:#8f795a;margin-top:-2px}
-.bet-step{
-  width:27px;height:34px;flex-shrink:0;border:1px solid rgba(215,168,77,.25);
-  border-radius:7px;color:var(--gold2);background:#120d08;font-size:18px;
-}
-.spin-button{
-  position:relative;overflow:hidden;min-height:68px;border:1px solid #f5d58a;
-  border-radius:13px;color:#1c1004;font-weight:700;letter-spacing:2px;
-  background:linear-gradient(115deg,#a66a20,#ffe8a1 42%,#c28a30 70%,#fbe5a0);
-  box-shadow:0 0 20px rgba(218,164,65,.2),inset 0 1px #fff9d9;
-  transition:box-shadow .25s,filter .25s;
-}
-.spin-button:before{
-  content:"";position:absolute;top:-80%;bottom:-80%;left:-55%;width:28%;
-  transform:rotate(25deg);
-  background:linear-gradient(90deg,transparent,#fff9dbb0,transparent);
-  animation:buttonShine 4s ease-in-out infinite;
-}
-@keyframes buttonShine{
-  0%,55%{left:-55%}100%{left:145%}
-}
-.spin-icon{display:block;font-size:23px;line-height:1;margin-bottom:4px}
-.spin-text{font-size:11px;position:relative}
-.spin-button:disabled:before{animation:none}
-.side-control{
-  display:flex;align-items:center;justify-content:center;flex-direction:column;
-  gap:5px;color:var(--gold2);font-size:10px;letter-spacing:1px;
-}
-.side-control .side-icon{font-size:18px}
-.side-control.active{border-color:var(--gold);background:rgba(180,124,39,.15)}
-.side-control small{font-size:8px;color:var(--muted);letter-spacing:.5px}
-.side-control.active small{color:var(--gold2)}
-.notice{
-  margin-top:11px;padding:10px 12px;
-  border:1px solid rgba(215,168,77,.14);border-radius:10px;
-  color:#95836d;font-size:9px;line-height:1.5;text-align:center;
-}
-.lower-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:15px}
-.info-card{
-  min-width:0;border:1px solid var(--line);border-radius:14px;
-  padding:14px 12px;background:linear-gradient(145deg,#1a120b,#0d0907);
-}
-.card-kicker{font-size:8px;letter-spacing:2px;color:var(--muted);text-transform:uppercase}
-.card-title{font-family:"Cormorant Garamond",serif;font-size:21px;color:#f2d396;margin-top:4px}
-.vip-progress{height:4px;background:#332416;border-radius:8px;margin-top:12px;overflow:hidden}
-.vip-progress-fill{height:100%;width:0;background:linear-gradient(90deg,#946022,#ffe2a0);transition:width .8s}
-.vip-caption{font-size:9px;color:var(--muted);margin-top:7px;line-height:1.4}
-.leaderboard{margin-top:15px;border:1px solid var(--line);border-radius:15px;overflow:hidden;background:rgba(16,11,7,.88)}
-.leader-head{display:flex;justify-content:space-between;align-items:center;padding:15px 14px;border-bottom:1px solid var(--line)}
-.leader-title{font-family:"Cormorant Garamond",serif;font-size:24px;color:#f0d49a}
-.leader-sub{font-size:8px;color:var(--muted);letter-spacing:1.5px;margin-top:3px}
-.refresh-btn{border:1px solid var(--line);border-radius:8px;padding:7px 9px;color:var(--gold2);background:#171007;font-size:10px}
-.leader-row{
-  display:grid;grid-template-columns:32px minmax(0,1fr) auto;
-  gap:9px;align-items:center;padding:11px 14px;border-bottom:1px solid rgba(215,168,77,.08);
-}
-.leader-row:last-child{border-bottom:0}
-.rank{font-family:"Cormorant Garamond",serif;color:var(--gold);font-size:19px;text-align:center}
-.leader-row:nth-child(2) .rank{color:#ffe6a2}
-.leader-row:nth-child(3) .rank{color:#c5c9d0}
-.leader-name{font-size:11px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.leader-chip{font-size:10px;color:#d9b975;font-variant-numeric:tabular-nums;white-space:nowrap}
-.empty-board{text-align:center;padding:20px 10px;color:var(--muted);font-size:10px}
-.footer{text-align:center;margin:23px 0 4px;color:#695744;font-size:8px;letter-spacing:3px;line-height:2}
-.footer strong{font-family:"Cormorant Garamond",serif;font-size:15px;color:#a78a5d;letter-spacing:5px;font-weight:500}
+.win-display:before{content:"";position:absolute;inset:5px;border:1px solid #d7a44835;border-radius:13px;pointer-events:none}
+.win-stars{font-size:20px;color:#e7bc66;letter-spacing:8px}
+.win-heading{font:700 29px "Cormorant Garamond",serif;letter-spacing:3px;color:#ffe3a0;text-shadow:0 0 20px #e4a83a33;margin-top:4px}
+.win-total{display:inline-block;min-width:175px;margin-top:8px;padding:7px 14px;border:1px solid #a77a31;border-radius:10px;background:linear-gradient(100deg,#211306,#090604,#211306);font:700 34px "Cormorant Garamond",serif;color:#fff0c1}
+.win-sub{font-size:8px;letter-spacing:3px;color:#a99068;margin-top:7px}
+.win-display.celebrate{animation:celebrate .8s ease-in-out 2}
+@keyframes celebrate{50%{box-shadow:0 0 36px #f6bf4e77,inset 0 0 30px #c68b2b33}}
+.lower{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-top:13px}
+.info{padding:13px 11px;border:1px solid #775426;border-radius:13px;background:linear-gradient(145deg,#1b1209,#0a0705)}
+.info-kicker{font-size:8px;letter-spacing:2px;color:#a99068}
+.info-title{font:600 21px "Cormorant Garamond",serif;color:#f2d59b;margin-top:4px}
+.progress{height:4px;border-radius:8px;background:#352414;margin-top:10px;overflow:hidden}
+.progress-fill{height:100%;width:0;background:linear-gradient(90deg,#986121,#ffe3a0);transition:width .6s}
+.info-note{font-size:9px;line-height:1.5;color:#a18a68;margin-top:7px}
+.leader{margin-top:14px;border:1px solid #805a29;border-radius:15px;overflow:hidden;background:#0c0805}
+.leader-head{display:flex;align-items:center;justify-content:space-between;padding:13px;border-bottom:1px solid #6e4b251c;background:linear-gradient(90deg,#211609,#0c0805)}
+.leader-title{font:600 25px "Cormorant Garamond",serif;color:#f5d79b}
+.leader-sub{font-size:7px;letter-spacing:1.6px;color:#a18a68;margin-top:3px}
+.refresh{border:1px solid #795627;border-radius:8px;background:#160f08;color:#f2d292;padding:8px;font-size:10px}
+.player-row{display:grid;grid-template-columns:30px minmax(0,1fr) auto;align-items:center;gap:8px;padding:11px 13px;border-bottom:1px solid #b1874317}
+.player-row:last-child{border:0}
+.rank{font:600 19px "Cormorant Garamond",serif;color:#d9ac57;text-align:center}
+.player-row:nth-child(2) .rank{color:#ffe5a5}
+.player-row:nth-child(3) .rank{color:#c7cdd8}
+.player-handle{font-size:11px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.player-chips{font-size:10px;color:#e6c47c;white-space:nowrap}
+.empty{padding:19px;text-align:center;font-size:10px;color:#a18a68;line-height:1.7}
+.footer{text-align:center;padding:23px 0 3px;color:#91714a;font-size:8px;letter-spacing:3px;line-height:2.2}
+.footer strong{display:block;font:500 16px "Cormorant Garamond",serif;letter-spacing:5px;color:#c8a363}
 .toast{
-  position:fixed;z-index:20;left:50%;bottom:calc(22px + env(safe-area-inset-bottom));
-  transform:translate(-50%,18px);opacity:0;pointer-events:none;
-  max-width:calc(100vw - 32px);width:max-content;
-  border:1px solid var(--gold);border-radius:12px;padding:12px 18px;
-  color:#ffe8b0;background:#171007;box-shadow:0 10px 40px #000b;
-  font-size:12px;text-align:center;transition:opacity .25s,transform .25s;
+position:fixed;z-index:50;bottom:calc(20px + env(safe-area-inset-bottom));left:50%;
+transform:translate(-50%,18px);opacity:0;pointer-events:none;
+max-width:calc(100vw - 30px);width:max-content;padding:12px 17px;
+border:1px solid #c59a4a;border-radius:12px;background:#171006;color:#ffe5aa;
+font-size:11px;text-align:center;box-shadow:0 10px 35px #000b;transition:.25s;
 }
 .toast.show{opacity:1;transform:translate(-50%,0)}
-.win-overlay{
-  display:none;position:fixed;inset:0;z-index:30;
-  align-items:center;justify-content:center;padding:24px;
-  background:rgba(3,2,1,.76);backdrop-filter:blur(7px);
-}
-.win-overlay.show{display:flex;animation:overlayIn .25s ease-out}
-@keyframes overlayIn{from{opacity:0}to{opacity:1}}
+.overlay{display:none;position:fixed;inset:0;z-index:60;align-items:center;justify-content:center;padding:22px;background:#030201cc;backdrop-filter:blur(8px)}
+.overlay.show{display:flex;animation:fadein .25s ease}
+@keyframes fadein{from{opacity:0}to{opacity:1}}
 .win-card{
-  position:relative;overflow:hidden;width:min(100%,340px);
-  border:1px solid #edc879;border-radius:23px;padding:31px 20px 25px;text-align:center;
-  background:
-    radial-gradient(ellipse at 50% 30%,rgba(220,155,47,.25),transparent 60%),
-    linear-gradient(145deg,#241608,#080605 70%);
-  box-shadow:0 0 70px rgba(225,163,58,.22),inset 0 0 0 4px rgba(215,168,77,.07);
-  animation:cardPop .55s cubic-bezier(.2,.85,.3,1.25);
+position:relative;overflow:hidden;width:min(100%,340px);text-align:center;padding:28px 20px;
+border:2px solid #dcb45f;border-radius:22px;
+background:radial-gradient(ellipse at 50% 25%,#70461777,transparent 60%),linear-gradient(145deg,#281808,#080604 75%);
+box-shadow:0 0 55px #dca34344,inset 0 0 0 4px #dba84912;
+animation:pop .45s cubic-bezier(.2,.8,.3,1.2);
 }
-@keyframes cardPop{
-  from{transform:scale(.72) translateY(20px);opacity:0}
-  to{transform:scale(1) translateY(0);opacity:1}
-}
-.win-card:before{
-  content:"";position:absolute;inset:8px;border:1px solid rgba(215,168,77,.22);
-  border-radius:16px;pointer-events:none;
-}
-.win-spark{font-size:39px;animation:sparkle 1s ease-in-out infinite alternate}
-@keyframes sparkle{to{transform:rotate(10deg) scale(1.12);filter:brightness(1.5)}}
-.win-kicker{margin-top:10px;font-size:10px;letter-spacing:5px;color:#e1bc73}
-.win-title{font:700 43px/.95 "Cormorant Garamond",serif;color:#ffe2a0;margin-top:9px;text-shadow:0 0 24px #ca862e70}
-.win-amount{font:700 38px "Cormorant Garamond",serif;color:white;margin:13px 0 4px}
-.win-copy{font-size:10px;letter-spacing:1px;color:#b5a083}
-.win-close{
-  margin-top:23px;position:relative;border:1px solid #edc879;border-radius:10px;
-  padding:12px 30px;background:linear-gradient(110deg,#a66a20,#ffe8a1,#c28a30);
-  color:#1c1004;font-size:10px;font-weight:700;letter-spacing:2px;
-}
-.confetti-layer{position:fixed;inset:0;pointer-events:none;z-index:31;overflow:hidden}
-.confetti{
-  position:absolute;top:-20px;width:6px;height:12px;border-radius:2px;
-  background:var(--gold);animation:confettiFall var(--fall,2s) linear forwards;
-}
-@keyframes confettiFall{
-  to{transform:translate3d(var(--drift,30px),110vh,0) rotate(760deg);opacity:.15}
-}
+@keyframes pop{from{transform:scale(.75);opacity:0}to{transform:scale(1);opacity:1}}
+.card-crown{font-size:40px;color:#ffdd8c;text-shadow:0 0 24px #dba84977}
+.card-kicker{font-size:9px;letter-spacing:5px;color:#d8b36c;margin-top:9px}
+.card-title{font:700 40px "Cormorant Garamond",serif;color:#ffe5a6;margin-top:5px}
+.card-amount{font:700 39px "Cormorant Garamond",serif;color:white;margin-top:12px}
+.card-copy{font-size:9px;letter-spacing:2px;color:#b69a6d;margin-top:3px}
+.card-close{margin-top:23px;padding:12px 27px;border:1px solid #ffe4a1;border-radius:9px;background:linear-gradient(110deg,#a76c21,#ffe8a2,#bc8228);color:#241506;font-size:10px;letter-spacing:2px;font-weight:700}
+.confetti{position:fixed;top:-12px;z-index:70;width:6px;height:11px;border-radius:2px;pointer-events:none;animation:fall var(--duration) linear forwards}
+@keyframes fall{to{transform:translate(var(--drift),110vh) rotate(720deg);opacity:.15}}
 @media(max-width:370px){
-  .app{padding-left:10px;padding-right:10px}
-  .symbol{min-height:68px;font-size:34px}
-  .controls{gap:6px}
-  .spin-button{min-height:62px}
-  .mini-profile,.wallet{padding:8px}
-  .player-name{max-width:105px}
+.app{padding-left:8px;padding-right:8px}
+.member,.wallet{padding:7px}
+.name{max-width:100px}
+.symbol{min-height:75px;font-size:35px}
+.controls{gap:5px}
+.tier-value{font-size:15px}
+.brand h1{letter-spacing:6px}
 }
 @media(prefers-reduced-motion:reduce){
-  *,*:before,*:after{animation-duration:.01ms!important;animation-iteration-count:1!important;scroll-behavior:auto!important;transition-duration:.01ms!important}
+*,*:before,*:after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important;scroll-behavior:auto!important}
 }
 </style>
 </head>
 
 <body>
 <main class="app">
-  <header class="topbar">
-    <div class="mini-profile">
-      <div class="avatar">♛</div>
-      <div class="profile-copy">
-        <div class="eyebrow">Private member</div>
-        <div class="player-name" id="playerName">Guest Player</div>
-      </div>
+<div class="content">
+<header class="topbar">
+  <div class="member">
+    <div class="avatar">♛</div>
+    <div style="min-width:0">
+      <div class="micro">Private member</div>
+      <div class="name" id="playerName">Entering Privé…</div>
     </div>
-    <div class="wallet">
-      <div class="coin">✦</div>
-      <div>
-        <div class="balance" id="balance">—</div>
-        <div class="balance-caption">VIRTUAL CHIPS</div>
-      </div>
+  </div>
+  <div class="wallet">
+    <div class="coin">✦</div>
+    <div>
+      <div class="balance" id="balance">—</div>
+      <div class="wallet-caption">VIRTUAL CHIPS</div>
     </div>
-  </header>
+  </div>
+</header>
 
-  <section class="brand">
-    <div class="brand-crown">♛</div>
-    <h1>KIMIA</h1>
-    <div class="brand-sub">PRIVÉ</div>
-    <div class="brand-tag">PLAY <span>✦</span> WIN <span>✦</span> BE PRIVÉ</div>
-  </section>
+<section class="brand">
+  <div class="crown">♛</div>
+  <h1>KIMIA</h1>
+  <div class="brand-sub">PRIVÉ</div>
+  <div class="tagline">PLAY <b>✦</b> WIN <b>✦</b> BE PRIVÉ</div>
+</section>
 
-  <section class="jackpot">
-    <div class="jackpot-label">THE PRIVÉ JACKPOT</div>
-    <div class="jackpot-number">♛ <span>1,000,000</span> ♛</div>
-    <div class="jackpot-note">A LUXURY EXPERIENCE · VIRTUAL PLAY ONLY</div>
-  </section>
-
-  <section class="game-panel" id="gamePanel">
-    <div class="game-heading">
-      <div class="section-label">THE GOLD ROOM</div>
-      <div class="ways">3 REELS · 3 ROWS</div>
+<section class="jackpot-wrap">
+  <div class="jackpot-main">
+    <div class="jackpot-label">GRAND JACKPOT</div>
+    <div class="jackpot-number"><span>♛</span> 1,000,000 <span>♛</span></div>
+    <div class="jackpot-foot">THE GOLD ROOM · VIRTUAL PLAY</div>
+  </div>
+  <div class="tier-row">
+    <div class="tier major">
+      <div class="tier-label">MAJOR</div>
+      <div class="tier-value">250,000</div>
     </div>
-
-    <div class="reels-wrap">
-      <div class="reels" id="reels" aria-label="Slot machine reels">
-        <div class="reel">
-          <div class="symbol">💎</div><div class="symbol">7️⃣</div><div class="symbol">🌹</div>
-        </div>
-        <div class="reel">
-          <div class="symbol">👑</div><div class="symbol">💗</div><div class="symbol">♠️</div>
-        </div>
-        <div class="reel">
-          <div class="symbol">✨</div><div class="symbol">💎</div><div class="symbol">7️⃣</div>
-        </div>
-      </div>
+    <div class="tier grand">
+      <div class="tier-label">✦ GRAND ✦</div>
+      <div class="tier-value">1,000,000</div>
     </div>
-
-    <div class="status-line" id="statusLine" role="status" aria-live="polite">
-      Your private table is ready.
+    <div class="tier minor">
+      <div class="tier-label">MINOR</div>
+      <div class="tier-value">50,000</div>
     </div>
+  </div>
+</section>
 
-    <div class="controls">
-      <button class="side-control" id="autoButton" type="button" aria-pressed="false">
-        <span class="side-icon">⟳</span>
-        <span>AUTO</span>
-        <small id="autoLabel">OFF</small>
-      </button>
-
-      <button class="spin-button" id="spinButton" type="button" disabled>
-        <span class="spin-icon" id="spinIcon">✧</span>
-        <span class="spin-text" id="spinText">LOADING</span>
-      </button>
-
-      <button class="side-control" id="turboButton" type="button" aria-pressed="false">
-        <span class="side-icon">⚡</span>
-        <span>TURBO</span>
-        <small id="turboLabel">OFF</small>
-      </button>
+<section class="machine" id="machine">
+  <div class="machine-heading">
+    <div class="machine-title">THE GOLD ROOM</div>
+    <div class="ways">3 REELS · 3 ROWS</div>
+  </div>
+  <div class="reel-frame" id="reelFrame">
+    <div class="reels" id="reels">
+      <div class="reel"><div class="symbol">👑</div><div class="symbol">💎</div><div class="symbol">🌹</div></div>
+      <div class="reel"><div class="symbol">🍒</div><div class="symbol">7️⃣</div><div class="symbol">👑</div></div>
+      <div class="reel"><div class="symbol">💎</div><div class="symbol">🌹</div><div class="symbol">✨</div></div>
     </div>
+  </div>
+  <div class="status" id="status" role="status" aria-live="polite">Your private table is ready.</div>
+  <div class="controls">
+    <button class="side" id="autoBtn" type="button" aria-pressed="false">
+      <span class="side-icon">⟳</span><span class="side-label">AUTO</span><small id="autoLabel">OFF</small>
+    </button>
+    <button class="spin" id="spinBtn" type="button" disabled>
+      <span class="spin-icon" id="spinIcon">✧</span><span class="spin-label" id="spinLabel">LOADING</span>
+    </button>
+    <button class="side" id="turboBtn" type="button" aria-pressed="false">
+      <span class="side-icon">ϟ</span><span class="side-label">TURBO</span><small id="turboLabel">OFF</small>
+    </button>
+  </div>
+  <div class="bet-row">
+    <div class="betbox">
+      <button class="bet-step" type="button" disabled aria-label="Decrease bet">−</button>
+      <div class="bet-copy"><div class="bet-caption">BET PER SPIN</div><div class="bet-value">300</div></div>
+      <button class="bet-step" type="button" disabled aria-label="Increase bet">+</button>
+    </div>
+    <button class="maxbet" id="maxBtn" type="button">♛ MAX BET</button>
+  </div>
+</section>
 
-    <div class="notice">
-      EACH SPIN COSTS <strong style="color:#e4c47f">300 VIRTUAL CHIPS</strong>.
-      WINS ARE CALCULATED BY THE GAME SERVER. NO CASH VALUE.
-    </div>
-  </section>
+<section class="win-display" id="winDisplay">
+  <div class="win-stars">✦ ✧ ✦</div>
+  <div class="win-heading" id="winHeading">YOUR NEXT BIG WIN</div>
+  <div class="win-total" id="winTotal">0</div>
+  <div class="win-sub" id="winSub">VIRTUAL CHIPS · LATEST SPIN</div>
+</section>
 
-  <section class="lower-grid">
-    <div class="info-card">
-      <div class="card-kicker">Your membership</div>
-      <div class="card-title" id="vipTitle">Privé Guest</div>
-      <div class="vip-progress"><div class="vip-progress-fill" id="vipProgress"></div></div>
-      <div class="vip-caption" id="vipCaption">Your club status will appear here.</div>
-    </div>
-    <div class="info-card">
-      <div class="card-kicker">Your last session</div>
-      <div class="card-title" id="lastWin">0 chips</div>
-      <div class="vip-caption" id="sessionCaption">Your latest spin result will appear here.</div>
-    </div>
-  </section>
+<section class="lower">
+  <div class="info">
+    <div class="info-kicker">Your membership</div>
+    <div class="info-title" id="vipTitle">Privé Guest</div>
+    <div class="progress"><div class="progress-fill" id="vipProgress"></div></div>
+    <div class="info-note" id="vipCaption">Your club status.</div>
+  </div>
+  <div class="info">
+    <div class="info-kicker">Last session</div>
+    <div class="info-title" id="lastWin">0 chips</div>
+    <div class="info-note" id="sessionCaption">Your latest spin will appear here.</div>
+  </div>
+</section>
 
-  <section class="leaderboard" id="leaderboardSection">
-    <div class="leader-head">
-      <div>
-        <div class="leader-title">The Privé List</div>
-        <div class="leader-sub">TOP PLAYERS BY VIRTUAL CHIP BALANCE</div>
-      </div>
-      <button class="refresh-btn" id="refreshButton" type="button">↻ Refresh</button>
-    </div>
-    <div id="leaderboardRows">
-      <div class="empty-board">Loading the private list…</div>
-    </div>
-  </section>
+<section class="leader">
+  <div class="leader-head">
+    <div><div class="leader-title">The Privé List</div><div class="leader-sub">TOP PLAYERS · VIRTUAL BALANCES</div></div>
+    <button class="refresh" id="refreshBtn" type="button">↻ Refresh</button>
+  </div>
+  <div id="leaderRows"><div class="empty">Loading the private list…</div></div>
+</section>
 
-  <footer class="footer">
-    <strong>K I M I A &nbsp; P R I V É</strong><br>
-    AN EXCLUSIVE VIRTUAL CLUB<br>
-    PLAY <span style="color:#cba35f">✦</span> ENJOY <span style="color:#cba35f">✦</span> REPEAT
-  </footer>
+<footer class="footer">
+  <strong>K I M I A &nbsp; P R I V É</strong>
+  EXCLUSIVE GAMES <span style="color:#d7a448">✦</span> REAL PLAYERS <span style="color:#d7a448">✦</span> VIRTUAL WINS
+</footer>
+</div>
 </main>
 
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
-<div class="confetti-layer" id="confettiLayer"></div>
-
-<div class="win-overlay" id="winOverlay" role="dialog" aria-modal="true" aria-labelledby="winTitle">
+<div class="overlay" id="overlay" role="dialog" aria-modal="true" aria-labelledby="cardTitle">
   <div class="win-card">
-    <div class="win-spark">✧ ✦ ✧</div>
-    <div class="win-kicker">THE PRIVÉ MOMENT</div>
-    <div class="win-title" id="winTitle">BEAUTIFULLY PLAYED</div>
-    <div class="win-amount" id="winAmount">+0</div>
-    <div class="win-copy" id="winCopy">VIRTUAL CHIPS WON</div>
-    <button class="win-close" id="closeWin" type="button">CONTINUE</button>
+    <div class="card-crown">♛</div>
+    <div class="card-kicker">THE PRIVÉ MOMENT</div>
+    <div class="card-title" id="cardTitle">GOLDEN MOMENT</div>
+    <div class="card-amount" id="cardAmount">+0</div>
+    <div class="card-copy">VIRTUAL CHIPS WON</div>
+    <button class="card-close" id="closeCard" type="button">CONTINUE</button>
   </div>
 </div>
 
 <script>
 (() => {
-  "use strict";
+"use strict";
 
-  const API = "https://kimia-prive-api.onrender.com";
-  const COST = 300;
-  const SYMBOLS = ["💎", "7️⃣", "💗", "🌹", "♠️", "✨"];
-  const REDUCED_MOTION = window.matchMedia &&
-    window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+const API = "https://kimia-prive-api.onrender.com";
+const COST = 300;
+const SYMBOLS = ["💎","7️⃣","💗","🌹","♠️","✨"];
+const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+const $ = id => document.getElementById(id);
+const tg = window.Telegram && window.Telegram.WebApp ? window.Telegram.WebApp : null;
+let initData = "";
+let player = null;
+let busy = false;
+let autoSpin = false;
+let turbo = false;
+let autoTimer = null;
+let toastTimer = null;
 
-  const $ = id => document.getElementById(id);
-  const tg = window.Telegram && window.Telegram.WebApp
-    ? window.Telegram.WebApp
-    : null;
+if(tg){
+  tg.ready();
+  tg.expand();
+  try{tg.setHeaderColor("#080604");tg.setBackgroundColor("#080604");}catch(e){}
+  initData = tg.initData || "";
+}
 
-  let initData = "";
-  let player = null;
-  let busy = false;
-  let autoSpin = false;
-  let turbo = false;
-  let autoTimer = null;
-  let toastTimer = null;
-  let lastWinValue = 0;
-  let sessionSpins = 0;
+const number = n => Math.floor(Number(n)||0).toLocaleString("en-US");
+const sleep = ms => new Promise(resolve=>setTimeout(resolve,ms));
 
-  if (tg) {
-    tg.ready();
-    tg.expand();
-    try {
-      tg.setHeaderColor("#090706");
-      tg.setBackgroundColor("#090706");
-    } catch (_) {}
-    initData = tg.initData || "";
+function status(message,type=""){
+  $("status").textContent=message;
+  $("status").className="status"+(type?" "+type:"");
+}
+function toast(message){
+  $("toast").textContent=message;
+  $("toast").classList.add("show");
+  clearTimeout(toastTimer);
+  toastTimer=setTimeout(()=>$("toast").classList.remove("show"),2800);
+}
+async function api(path,options={}){
+  const response=await fetch(API+path,{
+    ...options,cache:"no-store",
+    headers:{"Content-Type":"application/json",...(options.headers||{})}
+  });
+  let data;
+  try{data=await response.json();}catch(e){throw new Error("The server returned an unreadable response.");}
+  if(!response.ok)throw new Error(data.error||data.message||"Request failed.");
+  return data;
+}
+
+function updatePlayer(data){
+  player={...(player||{}),...data};
+  $("playerName").textContent=player.username
+    ? (String(player.username).startsWith("@")?player.username:"@"+player.username)
+    : "Privé Member";
+  $("balance").textContent=number(player.balance);
+
+  const balance=Number(player.balance)||0;
+  const level=Number(player.vip_level)||0;
+  const tiers=[
+    {name:"Privé Guest",next:5000},
+    {name:"Gold Member",next:20000},
+    {name:"Diamond Member",next:50000},
+    {name:"Royal Privé",next:50000}
+  ];
+  const tier=tiers[Math.min(level,tiers.length-1)];
+  $("vipTitle").textContent=tier.name;
+  $("vipProgress").style.width=(level>=3?100:Math.min(100,balance/tier.next*100))+"%";
+  $("vipCaption").textContent=level>=3?"Highest displayed membership tier.":number(Math.max(0,tier.next-balance))+" chips to the next displayed tier.";
+  $("spinBtn").disabled=busy||balance<COST||!initData;
+  $("spinLabel").textContent=busy?"SPINNING":balance<COST?"NEED CHIPS":"SPIN";
+  $("spinIcon").textContent=busy?"◌":"✧";
+}
+
+async function login(){
+  if(!initData){
+    $("playerName").textContent="Open in Telegram";
+    $("balance").textContent="—";
+    $("spinLabel").textContent="OPEN TELEGRAM";
+    status("Open this game from your Telegram bot to sign in.","bad");
+    return;
   }
-
-  function formatChips(value) {
-    return Math.floor(Number(value) || 0).toLocaleString("en-US");
+  try{
+    status("Entering the Gold Room…");
+    const data=await api("/api/me",{method:"POST",body:JSON.stringify({initData})});
+    updatePlayer(data);
+    status("Welcome to your private table.","good");
+  }catch(error){
+    console.error("Login failed",error);
+    status("LOGIN FAILED · "+error.message,"bad");
+    $("spinLabel").textContent="LOGIN FAILED";
+    $("spinBtn").disabled=true;
   }
+}
 
-  function setStatus(message, type = "") {
-    const el = $("statusLine");
-    el.textContent = message;
-    el.className = "status-line" + (type ? " " + type : "");
-  }
-
-  function toast(message) {
-    const el = $("toast");
-    el.textContent = message;
-    el.classList.add("show");
-    clearTimeout(toastTimer);
-    toastTimer = setTimeout(() => el.classList.remove("show"), 2800);
-  }
-
-  async function api(path, options = {}) {
-    const response = await fetch(API + path, {
-      ...options,
-      headers: {
-        "Content-Type": "application/json",
-        ...(options.headers || {})
-      },
-      cache: "no-store"
-    });
-
-    let data;
-    try {
-      data = await response.json();
-    } catch (_) {
-      throw new Error("The game server returned an unreadable response.");
-    }
-
-    if (!response.ok) {
-      throw new Error(data.error || data.message || "The request could not be completed.");
-    }
-
-    return data;
-  }
-
-  function updatePlayer(data) {
-    player = { ...(player || {}), ...data };
-
-    $("playerName").textContent =
-      player.username ? "@" + player.username : "Privé Member";
-
-    $("balance").textContent = formatChips(player.balance);
-
-    const level = Number(player.vip_level) || 0;
-    const tiers = [
-      { name: "Privé Guest", threshold: 0 },
-      { name: "Gold Member", threshold: 5000 },
-      { name: "Diamond Member", threshold: 20000 },
-      { name: "Royal Privé", threshold: 50000 }
-    ];
-
-    const current = Math.min(level, tiers.length - 1);
-    $("vipTitle").textContent = tiers[current].name;
-
-    const balance = Number(player.balance) || 0;
-    const next = tiers[Math.min(current + 1, tiers.length - 1)];
-    const progress = current === tiers.length - 1
-      ? 100
-      : Math.min(100, Math.max(0, balance / Math.max(1, next.threshold) * 100));
-
-    $("vipProgress").style.width = progress + "%";
-    $("vipCaption").textContent = current === tiers.length - 1
-      ? "You have reached the highest displayed tier."
-      : formatChips(Math.max(0, next.threshold - balance)) +
-        " chips to the next displayed tier.";
-
-    $("spinButton").disabled = busy || balance < COST;
-    $("spinText").textContent = busy ? "SPINNING" :
-      (balance < COST ? "NEED CHIPS" : "SPIN");
-    $("spinIcon").textContent = busy ? "◌" : "✧";
-
-    return player;
-  }
-
-  async function login() {
-    if (!initData) {
-      setStatus("Open this game from the Telegram bot to sign in.", "bad");
-      $("spinButton").disabled = true;
-      $("spinText").textContent = "OPEN IN TELEGRAM";
-      $("playerName").textContent = "Telegram Required";
-      $("balance").textContent = "—";
-      return;
-    }
-
-    try {
-      setStatus("Entering the private club…");
-      const data = await api("/api/me", {
-        method: "POST",
-        body: JSON.stringify({ initData })
-      });
-
-      updatePlayer(data);
-      setStatus("Welcome to your private table.", "good");
-    } catch (error) {
-      console.error("Login failed:", error);
-      setStatus("LOGIN FAILED · " + error.message, "bad");
-      $("spinButton").disabled = true;
-      $("spinText").textContent = "LOGIN FAILED";
-    }
-  }
-
-  function makeReels() {
-    const container = $("reels");
-    container.innerHTML = "";
-
-    for (let col = 0; col < 3; col++) {
-      const reel = document.createElement("div");
-      reel.className = "reel";
-      reel.dataset.col = String(col);
-
-      for (let row = 0; row < 3; row++) {
-        const cell = document.createElement("div");
-        cell.className = "symbol";
-        cell.dataset.row = String(row);
-        cell.textContent = SYMBOLS[Math.floor(Math.random() * SYMBOLS.length)];
-        reel.appendChild(cell);
-      }
-      container.appendChild(reel);
-    }
-  }
-
-  function allCells() {
-    return [...$("reels").querySelectorAll(".symbol")];
-  }
-
-  function randomSymbols() {
-    return Array.from({ length: 9 }, () =>
-      SYMBOLS[Math.floor(Math.random() * SYMBOLS.length)]
-    );
-  }
-
-  function paintSymbols(symbols) {
-    const cells = allCells();
-    cells.forEach((cell, index) => {
-      cell.textContent = symbols[index] || "✨";
-      cell.classList.remove("spinning", "winning");
-    });
-  }
-
-  function sleep(ms) {
-    return new Promise(resolve => setTimeout(resolve, ms));
-  }
-
-  async function animateSpin(finalSymbols) {
-    const reels = [...$("reels").querySelectorAll(".reel")];
-    const duration = REDUCED_MOTION ? 80 : (turbo ? 650 : 1550);
-
-    reels.forEach(reel => {
-      reel.querySelectorAll(".symbol").forEach(cell => {
-        cell.classList.add("spinning");
-        cell.classList.remove("winning");
-      });
-    });
-
-    const started = Date.now();
-
-    await new Promise(resolve => {
-      const tick = () => {
-        const elapsed = Date.now() - started;
-        reels.forEach((reel, col) => {
-          if (elapsed < duration + col * (REDUCED_MOTION ? 0 : 180)) {
-            reel.querySelectorAll(".symbol").forEach(cell => {
-              cell.textContent = SYMBOLS[Math.floor(Math.random() * SYMBOLS.length)];
-            });
-          }
-        });
-
-        if (elapsed < duration + (REDUCED_MOTION ? 0 : 360)) {
-          requestAnimationFrame(tick);
-        } else {
-          resolve();
-        }
-      };
-      requestAnimationFrame(tick);
-    });
-
-    const cells = allCells();
-    const gap = REDUCED_MOTION ? 0 : (turbo ? 65 : 170);
-
-    for (let col = 0; col < 3; col++) {
-      await sleep(gap);
-      for (let row = 0; row < 3; row++) {
-        const index = row * 3 + col;
-        cells[index].textContent = finalSymbols[index] || "✨";
-        cells[index].classList.remove("spinning");
-        cells[index].animate(
-          [
-            { transform: "translateY(-9px)", opacity: .45 },
-            { transform: "translateY(0)", opacity: 1 }
-          ],
-          { duration: REDUCED_MOTION ? 1 : 220, easing: "cubic-bezier(.2,.8,.3,1)" }
-        );
-      }
-    }
-  }
-
-  function highlightWinningLines(lines) {
-    const cells = allCells();
-    cells.forEach(cell => cell.classList.remove("winning"));
-
-    if (!Array.isArray(lines)) return;
-
-    lines.forEach(line => {
-      let indices = [];
-
-      if (Array.isArray(line)) {
-        indices = line;
-      } else if (line && Array.isArray(line.indices)) {
-        indices = line.indices;
-      } else if (line && Number.isInteger(line.line)) {
-        const lineIndex = line.line;
-        indices = lineIndex === 0 ? [0, 1, 2]
-          : lineIndex === 1 ? [3, 4, 5]
-          : lineIndex === 2 ? [6, 7, 8] : [];
-      } else if (line && Number.isInteger(line.index)) {
-        const lineIndex = line.index;
-        indices = lineIndex === 0 ? [0, 1, 2]
-          : lineIndex === 1 ? [3, 4, 5]
-          : lineIndex === 2 ? [6, 7, 8] : [];
-      }
-
-      indices.forEach(index => {
-        if (Number.isInteger(index) && cells[index]) {
-          cells[index].classList.add("winning");
+function cells(){return [...$("reels").querySelectorAll(".symbol")];}
+function paint(symbols){
+  cells().forEach((cell,i)=>{
+    cell.textContent=symbols[i]||"✨";
+    cell.classList.remove("spinning","winning");
+  });
+}
+async function animateReels(finalSymbols){
+  const reels=[...$("reels").querySelectorAll(".reel")];
+  const duration=reduceMotion?80:turbo?500:1350;
+  reels.forEach(reel=>reel.querySelectorAll(".symbol").forEach(cell=>{
+    cell.classList.add("spinning");cell.classList.remove("winning");
+  }));
+  const start=Date.now();
+  await new Promise(resolve=>{
+    function frame(){
+      const elapsed=Date.now()-start;
+      reels.forEach((reel,col)=>{
+        if(elapsed<duration+col*(reduceMotion?0:180)){
+          reel.querySelectorAll(".symbol").forEach(cell=>{
+            cell.textContent=SYMBOLS[Math.floor(Math.random()*SYMBOLS.length)];
+          });
         }
       });
+      if(elapsed<duration+(reduceMotion?0:360))requestAnimationFrame(frame);
+      else resolve();
+    }
+    requestAnimationFrame(frame);
+  });
+
+  const gap=reduceMotion?0:turbo?65:170;
+  for(let col=0;col<3;col++){
+    await sleep(gap);
+    for(let row=0;row<3;row++){
+      const index=row*3+col;
+      const cell=cells()[index];
+      cell.textContent=finalSymbols[index]||"✨";
+      cell.classList.remove("spinning");
+      cell.animate(
+        [{transform:"translateY(-8px)",opacity:.45},{transform:"translateY(0)",opacity:1}],
+        {duration:reduceMotion?1:220,easing:"cubic-bezier(.2,.8,.3,1)"}
+      );
+    }
+  }
+}
+
+function highlight(lines){
+  const list=cells();
+  list.forEach(cell=>cell.classList.remove("winning"));
+  if(!Array.isArray(lines))return;
+  lines.forEach(line=>{
+    let indices=[];
+    if(Array.isArray(line))indices=line;
+    else if(line&&Array.isArray(line.indices))indices=line.indices;
+    else if(line&&Number.isInteger(line.line)){
+      indices=line.line===0?[0,1,2]:line.line===1?[3,4,5]:line.line===2?[6,7,8]:[];
+    }else if(line&&Number.isInteger(line.index)){
+      indices=line.index===0?[0,1,2]:line.index===1?[3,4,5]:line.index===2?[6,7,8]:[];
+    }
+    indices.forEach(i=>{if(Number.isInteger(i)&&list[i])list[i].classList.add("winning");});
+  });
+}
+
+function confetti(){
+  if(reduceMotion)return;
+  document.querySelectorAll(".confetti").forEach(el=>el.remove());
+  for(let i=0;i<65;i++){
+    const el=document.createElement("i");
+    el.className="confetti";
+    el.style.left=Math.random()*100+"%";
+    el.style.setProperty("--duration",(1.5+Math.random()*1.8)+"s");
+    el.style.setProperty("--drift",((Math.random()-.5)*180)+"px");
+    el.style.animationDelay=Math.random()*.5+"s";
+    el.style.background=["#f7d88d","#b47a2b","#fff1c4","#d9a1b0"][Math.floor(Math.random()*4)];
+    document.body.appendChild(el);
+    setTimeout(()=>el.remove(),4300);
+  }
+}
+function celebrate(amount){
+  $("cardTitle").textContent=amount>=10000?"ROYAL FORTUNE":amount>=3000?"A GOLDEN MOMENT":"BEAUTIFULLY PLAYED";
+  $("cardAmount").textContent="+"+number(amount);
+  $("overlay").classList.add("show");
+  $("winDisplay").classList.remove("celebrate");
+  void $("winDisplay").offsetWidth;
+  $("winDisplay").classList.add("celebrate");
+  confetti();
+  try{if(tg&&tg.HapticFeedback)tg.HapticFeedback.notificationOccurred("success");}catch(e){}
+}
+function closeWin(){
+  $("overlay").classList.remove("show");
+  if(autoSpin)scheduleAuto();
+}
+
+async function spin(){
+  if(busy)return;
+  if(!initData||!player){toast("Open the game through Telegram first.");return;}
+  if(Number(player.balance)<COST){status("Not enough virtual chips for a spin.","bad");toast("You need at least 300 virtual chips.");stopAuto();return;}
+
+  busy=true;
+  $("machine").classList.add("is-spinning");
+  $("reelFrame").classList.add("rolling");
+  $("spinBtn").disabled=true;
+  $("autoBtn").disabled=true;
+  $("turboBtn").disabled=true;
+  $("spinLabel").textContent="SPINNING";
+  $("spinIcon").textContent="◌";
+  status("The reels are turning…");
+  $("winHeading").textContent="THE REELS ARE TURNING";
+  $("winTotal").textContent="•••";
+  $("winSub").textContent="GOOD LUCK AT THE GOLD ROOM";
+
+  let result=null;
+  try{
+    result=await api("/api/spin",{method:"POST",body:JSON.stringify({initData})});
+    if(!Array.isArray(result.symbols)||result.symbols.length!==9)throw new Error("Unexpected reel result from server.");
+    await animateReels(result.symbols);
+
+    if(result.balance!==undefined)updatePlayer({balance:result.balance});
+    const win=Math.max(0,Number(result.win)||0);
+    $("winHeading").textContent=win>0?"BIG WIN":"THE NEXT SPIN AWAITS";
+    $("winTotal").textContent=win>0?"+"+number(win):"0";
+    $("winSub").textContent=win>0?"VIRTUAL CHIPS WON":"VIRTUAL CHIPS · LATEST SPIN";
+    $("lastWin").textContent=number(win)+" chips";
+    $("sessionCaption").textContent=win>0?"A winning result on your latest spin.":"No payout on this spin.";
+    highlight(result.winningLines);
+
+    if(win>0){
+      status("A winning combination · +"+number(win)+" chips!","good");
+      celebrate(win);
+    }else{
+      status("The reels have settled. Your next turn awaits.");
+      try{if(tg&&tg.HapticFeedback)tg.HapticFeedback.impactOccurred("light");}catch(e){}
+    }
+    loadLeaderboard();
+  }catch(error){
+    console.error("Spin failed",error);
+    if(result&&Array.isArray(result.symbols))paint(result.symbols);
+    status(error.message||"Spin failed. Please try again.","bad");
+    toast(error.message||"Unable to complete your spin.");
+    try{
+      const refreshed=await api("/api/me",{method:"POST",body:JSON.stringify({initData})});
+      updatePlayer(refreshed);
+    }catch(e){}
+  }finally{
+    busy=false;
+    $("machine").classList.remove("is-spinning");
+    $("reelFrame").classList.remove("rolling");
+    $("autoBtn").disabled=false;
+    $("turboBtn").disabled=false;
+    if(player)updatePlayer(player);
+    if(player&&Number(player.balance)<COST)stopAuto();
+  }
+}
+
+function scheduleAuto(){
+  clearTimeout(autoTimer);
+  if(!autoSpin||busy||$("overlay").classList.contains("show"))return;
+  autoTimer=setTimeout(()=>{if(autoSpin&&!busy)spin();},turbo?400:900);
+}
+function stopAuto(){
+  autoSpin=false;
+  clearTimeout(autoTimer);
+  $("autoBtn").classList.remove("active");
+  $("autoBtn").setAttribute("aria-pressed","false");
+  $("autoLabel").textContent="OFF";
+}
+function toggleAuto(){
+  if(!player||!initData){toast("Sign in through Telegram first.");return;}
+  if(!autoSpin&&Number(player.balance)<COST){toast("You need at least 300 virtual chips.");return;}
+  autoSpin=!autoSpin;
+  $("autoBtn").classList.toggle("active",autoSpin);
+  $("autoBtn").setAttribute("aria-pressed",String(autoSpin));
+  $("autoLabel").textContent=autoSpin?"ON":"OFF";
+  if(autoSpin){toast("Auto-spin enabled. Tap AUTO to stop.");scheduleAuto();}
+  else{clearTimeout(autoTimer);toast("Auto-spin stopped.");}
+}
+function toggleTurbo(){
+  turbo=!turbo;
+  $("turboBtn").classList.toggle("active",turbo);
+  $("turboBtn").setAttribute("aria-pressed",String(turbo));
+  $("turboLabel").textContent=turbo?"ON":"OFF";
+  toast(turbo?"Turbo enabled.":"Standard animation enabled.");
+}
+
+async function loadLeaderboard(){
+  const target=$("leaderRows");
+  $("refreshBtn").disabled=true;
+  try{
+    const data=await api("/api/leaderboard");
+    const players=Array.isArray(data.players)?data.players:[];
+    target.innerHTML="";
+    if(!players.length){target.innerHTML='<div class="empty">The list is waiting for its first players.</div>';return;}
+    players.slice(0,10).forEach((person,index)=>{
+      const row=document.createElement("div");row.className="player-row";
+      const rank=document.createElement("div");rank.className="rank";rank.textContent=String(person.rank||index+1).padStart(2,"0");
+      const name=document.createElement("div");name.className="player-handle";
+      name.textContent=person.username?(String(person.username).startsWith("@")?person.username:"@"+person.username):"Anonymous Player";
+      const chips=document.createElement("div");chips.className="player-chips";chips.textContent=number(person.balance)+" chips";
+      row.append(rank,name,chips);target.appendChild(row);
     });
-  }
+  }catch(error){
+    console.error("Leaderboard failed",error);
+    target.innerHTML='<div class="empty">The private list is temporarily unavailable.<br>Please refresh in a moment.</div>';
+  }finally{$("refreshBtn").disabled=false;}
+}
 
-  function confetti() {
-    if (REDUCED_MOTION) return;
+$("spinBtn").addEventListener("click",spin);
+$("autoBtn").addEventListener("click",toggleAuto);
+$("turboBtn").addEventListener("click",toggleTurbo);
+$("refreshBtn").addEventListener("click",loadLeaderboard);
+$("maxBtn").addEventListener("click",()=>toast("Maximum bet is currently fixed at 300 virtual chips."));
+$("closeCard").addEventListener("click",closeWin);
+$("overlay").addEventListener("click",event=>{if(event.target===$("overlay"))closeWin();});
+document.addEventListener("visibilitychange",()=>{if(document.hidden)stopAuto();});
 
-    const layer = $("confettiLayer");
-    layer.innerHTML = "";
-    const pieces = 65;
-
-    for (let i = 0; i < pieces; i++) {
-      const piece = document.createElement("i");
-      piece.className = "confetti";
-      piece.style.left = Math.random() * 100 + "%";
-      piece.style.setProperty("--fall", (1.5 + Math.random() * 1.8) + "s");
-      piece.style.setProperty("--drift", ((Math.random() - .5) * 180) + "px");
-      piece.style.animationDelay = Math.random() * .6 + "s";
-      piece.style.background = ["#f7d88d", "#b47a2b", "#fff1c4", "#d9a1b0"][
-        Math.floor(Math.random() * 4)
-      ];
-      layer.appendChild(piece);
-    }
-
-    setTimeout(() => { layer.innerHTML = ""; }, 4500);
-  }
-
-  function showWin(amount) {
-    $("winTitle").textContent = amount >= 10000 ? "ROYAL FORTUNE" :
-      amount >= 3000 ? "A GOLDEN MOMENT" : "BEAUTIFULLY PLAYED";
-    $("winAmount").textContent = "+" + formatChips(amount);
-    $("winCopy").textContent = "VIRTUAL CHIPS WON";
-    $("winOverlay").classList.add("show");
-    confetti();
-
-    try {
-      if (tg && tg.HapticFeedback) tg.HapticFeedback.notificationOccurred("success");
-    } catch (_) {}
-  }
-
-  function closeWin() {
-    $("winOverlay").classList.remove("show");
-    if (autoSpin) scheduleAutoSpin();
-  }
-
-  async function spin() {
-    if (busy) return;
-
-    if (!initData || !player) {
-      toast("Please open the game through Telegram and sign in.");
-      return;
-    }
-
-    if (Number(player.balance) < COST) {
-      setStatus("Not enough virtual chips for a spin.", "bad");
-      toast("You need at least 300 virtual chips.");
-      stopAutoSpin();
-      return;
-    }
-
-    busy = true;
-    $("gamePanel").classList.add("is-spinning");
-    $("spinButton").disabled = true;
-    $("spinText").textContent = "SPINNING";
-    $("spinIcon").textContent = "◌";
-    $("autoButton").disabled = true;
-    $("turboButton").disabled = true;
-    setStatus("The reels are turning…");
-    lastWinValue = 0;
-    $("lastWin").textContent = "In progress";
-    $("sessionCaption").textContent = "Good luck at the table.";
-
-    let result;
-
-    try {
-      /*
-       * The server remains authoritative for the balance, symbols,
-       * payout, and winning lines. The animation only presents its result.
-       */
-      const request = api("/api/spin", {
-        method: "POST",
-        body: JSON.stringify({ initData })
-      });
-
-      const response = await request;
-      result = response;
-
-      if (!Array.isArray(result.symbols) || result.symbols.length !== 9) {
-        throw new Error("The server returned an unexpected reel result.");
-      }
-
-      await animateSpin(result.symbols);
-
-      if (result.balance !== undefined) {
-        updatePlayer({ balance: result.balance });
-      }
-
-      const win = Math.max(0, Number(result.win) || 0);
-      lastWinValue = win;
-      sessionSpins++;
-
-      $("lastWin").textContent = formatChips(win) + " chips";
-      $("sessionCaption").textContent = win > 0
-        ? "A winning result on your latest spin."
-        : "No payout on this spin. Try again when ready.";
-
-      highlightWinningLines(result.winningLines);
-
-      if (win > 0) {
-        setStatus("A winning combination — +" + formatChips(win) + " chips!", "good");
-        showWin(win);
-      } else {
-        setStatus("The reels have settled. Your next turn awaits.");
-        try {
-          if (tg && tg.HapticFeedback) tg.HapticFeedback.impactOccurred("light");
-        } catch (_) {}
-      }
-
-      loadLeaderboard();
-    } catch (error) {
-      console.error("Spin failed:", error);
-
-      if (result && Array.isArray(result.symbols)) {
-        paintSymbols(result.symbols);
-      }
-
-      setStatus(error.message || "Spin failed. Please try again.", "bad");
-      toast(error.message || "Unable to complete your spin.");
-
-      // Refresh authoritative balance in case the server completed the spin.
-      try {
-        const refreshed = await api("/api/me", {
-          method: "POST",
-          body: JSON.stringify({ initData })
-        });
-        updatePlayer(refreshed);
-      } catch (_) {}
-    } finally {
-      busy = false;
-      $("gamePanel").classList.remove("is-spinning");
-      $("autoButton").disabled = false;
-      $("turboButton").disabled = false;
-      updatePlayer(player || {});
-      if (Number(player && player.balance) < COST) stopAutoSpin();
-    }
-  }
-
-  function scheduleAutoSpin() {
-    clearTimeout(autoTimer);
-    if (!autoSpin || busy || $("winOverlay").classList.contains("show")) return;
-
-    autoTimer = setTimeout(() => {
-      if (autoSpin && !busy) spin();
-    }, turbo ? 450 : 1000);
-  }
-
-  function stopAutoSpin() {
-    autoSpin = false;
-    clearTimeout(autoTimer);
-    $("autoButton").classList.remove("active");
-    $("autoButton").setAttribute("aria-pressed", "false");
-    $("autoLabel").textContent = "OFF";
-  }
-
-  function toggleAutoSpin() {
-    if (!player || !initData) {
-      toast("Sign in through Telegram first.");
-      return;
-    }
-
-    if (!autoSpin && Number(player.balance) < COST) {
-      toast("You need at least 300 virtual chips.");
-      return;
-    }
-
-    autoSpin = !autoSpin;
-    $("autoButton").classList.toggle("active", autoSpin);
-    $("autoButton").setAttribute("aria-pressed", String(autoSpin));
-    $("autoLabel").textContent = autoSpin ? "ON" : "OFF";
-
-    if (autoSpin) {
-      toast("Auto-spin enabled. Tap AUTO again to stop.");
-      scheduleAutoSpin();
-    } else {
-      clearTimeout(autoTimer);
-      toast("Auto-spin stopped.");
-    }
-  }
-
-  function toggleTurbo() {
-    turbo = !turbo;
-    $("turboButton").classList.toggle("active", turbo);
-    $("turboButton").setAttribute("aria-pressed", String(turbo));
-    $("turboLabel").textContent = turbo ? "ON" : "OFF";
-    toast(turbo ? "Turbo animations enabled." : "Standard animations enabled.");
-  }
-
-  async function loadLeaderboard() {
-    const container = $("leaderboardRows");
-    $("refreshButton").disabled = true;
-
-    try {
-      const data = await api("/api/leaderboard");
-      const players = Array.isArray(data.players) ? data.players : [];
-
-      if (!players.length) {
-        container.innerHTML = '<div class="empty-board">The list is waiting for its first players.</div>';
-        return;
-      }
-
-      container.innerHTML = "";
-
-      players.slice(0, 10).forEach((person, index) => {
-        const row = document.createElement("div");
-        row.className = "leader-row";
-
-        const rank = document.createElement("div");
-        rank.className = "rank";
-        rank.textContent = String(person.rank || index + 1).padStart(2, "0");
-
-        const name = document.createElement("div");
-        name.className = "leader-name";
-        name.textContent = person.username
-          ? (String(person.username).startsWith("@") ? person.username : "@" + person.username)
-          : "Anonymous Player";
-
-        const chips = document.createElement("div");
-        chips.className = "leader-chip";
-        chips.textContent = formatChips(person.balance) + " chips";
-
-        row.append(rank, name, chips);
-        container.appendChild(row);
-      });
-    } catch (error) {
-      console.error("Leaderboard failed:", error);
-      container.innerHTML = '<div class="empty-board">The private list is temporarily unavailable.<br>Please refresh in a moment.</div>';
-    } finally {
-      $("refreshButton").disabled = false;
-    }
-  }
-
-  $("spinButton").addEventListener("click", spin);
-  $("autoButton").addEventListener("click", toggleAutoSpin);
-  $("turboButton").addEventListener("click", toggleTurbo);
-  $("refreshButton").addEventListener("click", loadLeaderboard);
-  $("closeWin").addEventListener("click", closeWin);
-
-  $("winOverlay").addEventListener("click", event => {
-    if (event.target === $("winOverlay")) closeWin();
-  });
-
-  document.addEventListener("visibilitychange", () => {
-    if (document.hidden) {
-      stopAutoSpin();
-    }
-  });
-
-  makeReels();
-  login();
-  loadLeaderboard();
+login();
+loadLeaderboard();
 })();
 </script>
 </body>
