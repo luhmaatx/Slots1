@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta name="theme-color" content="#070403">
+<meta name="theme-color" content="#080503">
 <title>KIMIA PRIVÉ</title>
 
 <script src="https://telegram.org/js/telegram-web-app.js"></script>
@@ -14,14 +14,15 @@
 :root{
   --bg:#050302;
   --black:#090503;
-  --black2:#170c07;
-  --gold:#bd8843;
-  --gold2:#f3cc82;
-  --gold3:#fff0c2;
-  --pink:#ef5e97;
-  --pink2:#ffb0ce;
-  --text:#f6dfb5;
-  --muted:#a88a63;
+  --black2:#160b06;
+  --gold:#c9954d;
+  --gold2:#f6d28f;
+  --gold3:#fff0c5;
+  --rose:#e46b9d;
+  --rose2:#ff9bc4;
+  --text:#f8e6c2;
+  --muted:#a88d68;
+  --line:#70491f;
 }
 
 *{
@@ -41,10 +42,10 @@ body{
   overflow-x:hidden;
 
   background:
-    radial-gradient(circle at 50% 5%,rgba(207,132,49,.20),transparent 25%),
-    radial-gradient(circle at 10% 45%,rgba(113,30,44,.17),transparent 25%),
-    radial-gradient(circle at 90% 45%,rgba(113,30,44,.17),transparent 25%),
-    linear-gradient(180deg,#120805,#070403 45%,#020101);
+    radial-gradient(circle at 50% 7%,rgba(214,132,52,.22),transparent 25%),
+    radial-gradient(circle at 8% 45%,rgba(157,44,44,.14),transparent 25%),
+    radial-gradient(circle at 92% 45%,rgba(157,44,74,.14),transparent 25%),
+    linear-gradient(180deg,#120906 0%,#070403 45%,#020201 100%);
 }
 
 body:before{
@@ -52,15 +53,16 @@ body:before{
   position:fixed;
   inset:0;
   pointer-events:none;
-  opacity:.16;
+  z-index:-1;
+  opacity:.22;
 
   background:
     repeating-linear-gradient(
       120deg,
       transparent 0,
-      transparent 65px,
-      rgba(255,218,159,.025) 66px,
-      transparent 67px
+      transparent 80px,
+      rgba(255,220,160,.025) 81px,
+      transparent 82px
     );
 }
 
@@ -77,12 +79,40 @@ button:disabled{
 .app{
   width:min(100%,820px);
   margin:auto;
-  padding:10px 12px 110px;
+  padding:10px 12px 115px;
+  position:relative;
 }
 
-/* =====================================================
+/* =========================================================
+   AMBIENT LIGHT
+========================================================= */
+
+.ambient{
+  position:fixed;
+  width:240px;
+  height:240px;
+  border-radius:50%;
+  filter:blur(90px);
+  pointer-events:none;
+  opacity:.17;
+  z-index:-1;
+}
+
+.ambient.one{
+  left:-100px;
+  top:25%;
+  background:#c66b32;
+}
+
+.ambient.two{
+  right:-100px;
+  top:50%;
+  background:#8d2045;
+}
+
+/* =========================================================
    TOP
-===================================================== */
+========================================================= */
 
 .top{
   display:grid;
@@ -93,6 +123,7 @@ button:disabled{
 }
 
 .profile-card{
+  justify-self:start;
   display:flex;
   align-items:center;
   gap:9px;
@@ -102,327 +133,309 @@ button:disabled{
 .profile-photo{
   width:50px;
   height:50px;
-  flex:none;
-
+  border-radius:50%;
   display:grid;
   place-items:center;
-
-  border-radius:50%;
-
-  color:var(--gold3);
-  font-family:Cinzel,serif;
-
-  background:
-    radial-gradient(circle at 30% 20%,#80512a,#241106 58%,#080403);
+  flex:none;
 
   border:1px solid var(--gold2);
 
+  background:
+    radial-gradient(circle at 35% 20%,#82532d,#281207 52%,#080403);
+
   box-shadow:
-    0 0 0 3px #090503,
-    0 0 0 4px #704a27,
-    0 0 22px rgba(231,173,85,.22);
+    0 0 0 3px #0b0604,
+    0 0 0 4px #795127,
+    0 0 22px rgba(229,169,86,.25);
+
+  font-family:Cinzel,serif;
+  color:var(--gold3);
 }
 
 .profile-name{
-  max-width:130px;
+  font-family:Cinzel,serif;
+  font-size:12px;
+  letter-spacing:1px;
+  color:#f7dfb2;
+  white-space:nowrap;
   overflow:hidden;
   text-overflow:ellipsis;
-  white-space:nowrap;
-
-  font-family:Cinzel,serif;
-  font-size:11px;
-  letter-spacing:1px;
 }
 
 .profile-level{
-  margin-top:3px;
   font-size:9px;
-  color:#b5966c;
+  color:#b99a6d;
+  margin-top:3px;
 }
 
 .vip-meter{
-  width:100px;
-  height:4px;
+  width:105px;
+  height:5px;
+  border-radius:20px;
   margin-top:6px;
   overflow:hidden;
-
-  border:1px solid #50351e;
-  border-radius:10px;
-
-  background:#100804;
+  border:1px solid #51371e;
+  background:#100a06;
 }
 
 .vip-fill{
-  width:42%;
   height:100%;
-
-  background:linear-gradient(90deg,#8d5426,#ffe1a2);
-  box-shadow:0 0 8px #e5ad5c;
+  width:42%;
+  background:linear-gradient(90deg,#9a5c28,#ffe0a0);
+  box-shadow:0 0 8px #e9b86d;
 }
 
 .top-brand{
   text-align:center;
 }
 
-.top-brand .crown{
-  color:#f5d18b;
-  font-size:23px;
-  text-shadow:0 0 18px #d9963d;
+.top-brand .tiny{
+  font-size:8px;
+  letter-spacing:3px;
+  color:#a88d67;
 }
 
-.top-brand .tiny{
-  font-size:7px;
-  letter-spacing:3px;
-  color:#a98b65;
+.top-brand .crown{
+  font-size:23px;
+  color:#f5d28e;
+  text-shadow:0 0 18px #d99a43;
 }
 
 .money{
   justify-self:end;
-
   display:flex;
   align-items:center;
-  gap:7px;
-
-  min-width:140px;
+  gap:8px;
   padding:8px 10px;
+  min-width:142px;
 
-  border-radius:28px;
-  border:1px solid #765029;
+  border:1px solid #79522d;
+  border-radius:30px;
 
   background:
-    linear-gradient(145deg,#211208,#0b0604);
+    linear-gradient(145deg,#24160b,#0b0604);
 
   box-shadow:
-    inset 0 1px #fff2,
-    0 6px 20px #000a;
+    inset 0 1px #fff3,
+    0 5px 20px #0009;
 }
 
 .coin-stack{
   font-size:21px;
-  filter:drop-shadow(0 0 8px #d99539);
+  filter:drop-shadow(0 0 7px #d89a3c);
 }
 
 .money-label{
   font-size:7px;
   letter-spacing:1.5px;
-  color:#a78b65;
+  color:#a88b65;
 }
 
 .money-value{
-  margin-top:1px;
   font:600 17px "Cormorant Garamond",serif;
-  color:#f8ddb0;
+  color:#f8dfb0;
 }
 
 .plus{
   margin-left:auto;
-
-  width:26px;
-  height:26px;
-
+  width:27px;
+  height:27px;
+  border:1px solid #9d7041;
+  border-radius:50%;
   display:grid;
   place-items:center;
-
-  border-radius:50%;
-  border:1px solid #987044;
-
-  color:#f5d39a;
-  background:#130a06;
+  color:#f2ce91;
+  background:#140b06;
+  font-size:18px;
 }
 
-/* =====================================================
+/* =========================================================
    BRAND
-===================================================== */
+========================================================= */
 
 .brand{
-  position:relative;
   text-align:center;
   padding:6px 0 15px;
+  position:relative;
 }
 
 .brand:before,
 .brand:after{
   content:"";
   position:absolute;
-  top:51%;
-
-  width:19%;
+  top:53%;
+  width:20%;
   height:1px;
-
-  background:linear-gradient(90deg,transparent,#a16d36);
+  background:linear-gradient(90deg,transparent,#9d6b37);
 }
 
-.brand:before{left:1%}
+.brand:before{left:0}
 
 .brand:after{
-  right:1%;
+  right:0;
   transform:rotate(180deg);
 }
 
 .brand-crown{
-  color:#f6d28e;
-  font-size:27px;
+  font-size:28px;
+  color:#f5d38e;
+
   text-shadow:
-    0 0 8px #f5c66e,
-    0 0 25px #b66d2d;
+    0 0 8px #f5c76e,
+    0 0 25px #b16d2e;
 }
 
 .brand h1{
-  margin:2px 0 0;
+  margin:2px 0 -1px;
 
-  font-family:Cinzel,serif;
+  font-family:Cinzel,Georgia,serif;
+  font-size:clamp(40px,11vw,68px);
   font-weight:500;
-
-  font-size:clamp(39px,11vw,67px);
   letter-spacing:7px;
-  line-height:.9;
+  line-height:.95;
 
   background:
     linear-gradient(
       180deg,
-      #fff3ce,
-      #e9b66a 30%,
-      #fff0c0 55%,
-      #9e6329
+      #fff3cf 0%,
+      #e8b66b 28%,
+      #fff1c2 50%,
+      #a9682a 100%
     );
 
   -webkit-background-clip:text;
   background-clip:text;
   color:transparent;
 
-  filter:drop-shadow(0 4px 2px #000);
+  filter:
+    drop-shadow(0 4px 2px #000)
+    drop-shadow(0 0 8px rgba(221,159,77,.18));
 }
 
 .brand h2{
-  margin:2px 0 0;
+  margin:0;
 
-  font-family:Cinzel,serif;
-  font-size:20px;
-  letter-spacing:10px;
-  padding-left:10px;
-
-  color:#f2d09a;
+  font-family:Cinzel,Georgia,serif;
+  font-size:21px;
+  letter-spacing:11px;
+  padding-left:11px;
+  color:#f4d39b;
 
   text-shadow:
     0 2px 4px #000,
-    0 0 10px #b77b3b44;
+    0 0 10px rgba(229,171,91,.16);
 }
 
 .brand-sub{
   margin-top:8px;
-
-  font-size:7px;
+  font-size:8px;
   letter-spacing:4px;
-
-  color:#bd9663;
+  color:#c49c67;
 }
 
-/* =====================================================
-   INFO
-===================================================== */
+/* =========================================================
+   BONUS
+========================================================= */
 
 .bonus{
   display:grid;
   grid-template-columns:1fr 1fr;
   gap:8px;
-  margin-bottom:10px;
+  margin-bottom:11px;
 }
 
 .info-card{
-  min-height:55px;
-  padding:9px 10px;
+  border:1px solid #704a27;
+  border-radius:15px;
+  min-height:54px;
+
+  padding:9px 11px;
 
   display:flex;
   align-items:center;
-  gap:8px;
-
-  border:1px solid #704925;
-  border-radius:15px;
+  gap:9px;
 
   background:
-    linear-gradient(145deg,#211208,#0b0604);
+    linear-gradient(145deg,#211208,#0c0604);
 
   box-shadow:
     inset 0 1px #fff2,
-    0 6px 18px #0009;
+    0 6px 18px #0008;
 }
 
 .info-icon{
   width:34px;
   height:34px;
+  flex:none;
+  border-radius:50%;
 
   display:grid;
   place-items:center;
 
-  flex:none;
-
-  border-radius:50%;
-  border:1px solid #9e713e;
+  font-size:18px;
 
   background:
-    radial-gradient(circle,#71431f,#180b06);
+    radial-gradient(circle,#70431f,#1a0c06);
 
-  box-shadow:0 0 12px #d2914133;
+  border:1px solid #a77740;
 
-  font-size:17px;
+  box-shadow:
+    0 0 12px rgba(199,137,60,.18);
 }
 
 .info-label{
   font-size:7px;
-  letter-spacing:1.5px;
-  color:#a78a64;
+  letter-spacing:1.6px;
+  color:#a68a63;
 }
 
 .info-value{
   margin-top:2px;
   font:500 15px "Cormorant Garamond",serif;
-  color:#f4d6a4;
+  color:#f5d9a8;
 }
 
-/* =====================================================
-   3D CABINET
-===================================================== */
+/* =========================================================
+   LUXURY CABINET
+========================================================= */
 
 .cabinet{
   position:relative;
-
+  margin-top:3px;
   padding:10px;
-  border-radius:34px;
+
+  border-radius:36px;
 
   background:
     linear-gradient(
-      145deg,
-      #f0bd70 0%,
-      #734820 4%,
-      #2a160b 8%,
-      #080403 18%,
-      #040202 50%,
-      #261409 82%,
-      #70461f 95%,
-      #e1aa5b 100%
+      135deg,
+      #f2c77d 0%,
+      #7b4b20 4%,
+      #2b170a 8%,
+      #0a0503 13%,
+      #080403 50%,
+      #271408 87%,
+      #71461f 95%,
+      #e3af65 100%
     );
 
-  border:1px solid #f3cc83;
-
   box-shadow:
-    0 0 0 2px #38200f,
-    0 0 0 4px #8a5829,
-    0 0 0 5px #f0bd70,
-    0 20px 45px #000f,
-    inset 0 2px 3px #fff8,
-    inset 0 -12px 18px #000;
+    0 0 0 1px #f7d48f,
+    0 0 0 3px #3a2413,
+    0 0 0 5px #93602f,
+    0 18px 45px #000e,
+    inset 0 2px 4px #fff8,
+    inset 0 -8px 14px #000;
 
-  transform:perspective(1300px) rotateX(.7deg);
+  transform:perspective(1200px) rotateX(.5deg);
 }
 
 .cabinet:before{
   content:"";
-
   position:absolute;
   left:7%;
   right:7%;
   top:1px;
-
   height:5px;
 
   border-radius:100%;
@@ -431,98 +444,111 @@ button:disabled{
     linear-gradient(
       90deg,
       transparent,
-      #ffe8ae,
-      white,
-      #ffe8ae,
+      #f4c879 15%,
+      #fff3ce 50%,
+      #f4c879 85%,
       transparent
     );
 
-  filter:blur(.5px);
+  box-shadow:0 0 12px #f3bd67;
 }
 
 .cabinet:after{
   content:"";
-
   position:absolute;
-  left:3%;
-  right:3%;
-  bottom:-7px;
+  inset:7px;
 
-  height:18px;
+  border-radius:30px;
 
-  border-radius:50%;
+  border:1px solid rgba(255,221,160,.14);
 
-  background:#000a;
-  filter:blur(8px);
-  z-index:-1;
+  pointer-events:none;
 }
 
 .cabinet-inner{
   position:relative;
-
+  border-radius:28px;
   padding:14px 11px 13px;
 
-  border-radius:27px;
-
-  border:1px solid #765029;
-
   background:
-    radial-gradient(circle at 50% 0%,#351b0c,transparent 30%),
-    linear-gradient(160deg,#1b0e08,#070403 45%,#160a06);
+    radial-gradient(
+      ellipse at 50% -5%,
+      rgba(197,124,43,.22),
+      transparent 30%
+    ),
+    linear-gradient(
+      160deg,
+      #1d0f08,
+      #080403 45%,
+      #150a06
+    );
+
+  border:1px solid #795027;
 
   box-shadow:
     inset 0 0 0 2px #100603,
     inset 0 0 50px #000,
-    inset 0 2px #fff2;
+    inset 0 2px #f8d29422;
 }
 
 .cabinet-label{
-  margin:0 0 10px;
-
   text-align:center;
-
   font-family:Cinzel,serif;
   font-size:8px;
   letter-spacing:2.8px;
-
-  color:#d7b074;
+  color:#d7b174;
+  margin:0 0 10px;
 }
 
 .cabinet-label:before,
 .cabinet-label:after{
   content:"✦";
-  color:#b67c39;
+  color:#b47a38;
   padding:0 8px;
 }
 
-/* =====================================================
-   REEL FRAME
-===================================================== */
+/* =========================================================
+   3D REEL FRAME
+========================================================= */
 
 .reel-frame{
   position:relative;
-  padding:10px;
+  padding:11px;
 
   border-radius:21px;
 
   background:
     linear-gradient(
       145deg,
-      #e6b366,
-      #70451f 6%,
-      #1b0e07 12%,
+      #edbd72 0%,
+      #8b5727 4%,
+      #2c180a 9%,
+      #0d0604 14%,
       #050302 50%,
-      #67401d 88%,
-      #d8a259
+      #2c180a 86%,
+      #8b5727 96%,
+      #edbd72 100%
     );
 
-  border:1px solid #f1c67c;
-
   box-shadow:
-    0 0 0 2px #28170b,
-    inset 0 2px 3px #fff7,
-    inset 0 -10px 16px #000,
-    0 10px 25px #000e;
+    0 0 0 1px #ffe0a0,
+    0 0 0 3px #2b180c,
+    0 0 0 5px #805127,
+    inset 0 3px 4px #fff7,
+    inset 0 -9px 18px #000,
+    0 13px 30px #000e;
+}
+
+.reel-frame:before{
+  content:"";
+  position:absolute;
+  inset:4px;
+
+  border-radius:17px;
+
+  border:1px solid rgba(255,227,174,.18);
+
+  pointer-events:none;
 }
 
 .reel-glass{
@@ -531,62 +557,85 @@ button:disabled{
 
   border-radius:14px;
 
-  padding:5px;
-
-  border:1px solid #a9783d;
+  padding:6px;
 
   background:
-    radial-gradient(circle at 50% 0%,#281309,transparent 35%),
-    #050302;
+    linear-gradient(
+      90deg,
+      #030201,
+      #120a05 12%,
+      #211006 50%,
+      #120a05 88%,
+      #030201
+    );
+
+  border:1px solid #b47a3d;
 
   box-shadow:
-    inset 0 0 35px #000,
-    inset 0 2px #fff4,
+    inset 0 0 30px #000,
+    inset 0 2px 2px #fff5,
+    inset 0 -10px 20px #000,
     0 0 18px #000;
 }
 
 .reel-glass:before{
   content:"";
-
   position:absolute;
   z-index:40;
 
-  top:-60%;
-  left:-50%;
+  left:-30%;
+  top:-80%;
 
-  width:28%;
-  height:220%;
+  width:35%;
+  height:260%;
 
-  transform:rotate(23deg);
+  transform:rotate(24deg);
 
   background:
     linear-gradient(
       90deg,
       transparent,
-      rgba(255,255,255,.17),
+      rgba(255,255,255,.20),
+      rgba(255,224,170,.05),
       transparent
     );
 
   pointer-events:none;
+
+  transition:left .7s ease;
 }
 
 .reel-glass.flash:before{
-  animation:glassSweep .65s ease-out;
+  left:125%;
 }
 
-@keyframes glassSweep{
-  from{left:-50%}
-  to{left:125%}
+.reel-glass:after{
+  content:"";
+  position:absolute;
+  inset:0;
+
+  z-index:25;
+
+  pointer-events:none;
+
+  background:
+    linear-gradient(
+      90deg,
+      rgba(255,255,255,.05),
+      transparent 9%,
+      transparent 91%,
+      rgba(255,255,255,.05)
+    );
 }
 
-/* =====================================================
-   FIVE REELS / THREE ROWS
-===================================================== */
+/* =========================================================
+   FIVE REELS
+========================================================= */
 
 .reels{
   display:grid;
   grid-template-columns:repeat(5,minmax(0,1fr));
-  gap:4px;
+  gap:5px;
 
   perspective:1200px;
   transform-style:preserve-3d;
@@ -597,96 +646,132 @@ button:disabled{
 
   display:grid;
   grid-template-rows:repeat(3,1fr);
-  gap:4px;
+  gap:5px;
 
   min-width:0;
 
   transform-style:preserve-3d;
+
+  background:
+    linear-gradient(
+      90deg,
+      rgba(255,200,115,.04),
+      transparent 22%,
+      transparent 78%,
+      rgba(255,200,115,.04)
+    );
+
+  border-radius:9px;
+
+  box-shadow:
+    inset 0 0 14px rgba(0,0,0,.65);
 }
 
 .reel:nth-child(1){
-  transform:perspective(1000px) rotateY(5deg);
+  transform:
+    perspective(900px)
+    rotateY(4deg)
+    translateZ(2px);
 }
 
 .reel:nth-child(2){
-  transform:perspective(1000px) rotateY(2deg);
+  transform:
+    perspective(900px)
+    rotateY(2deg);
+}
+
+.reel:nth-child(3){
+  transform:
+    perspective(900px)
+    translateZ(4px);
 }
 
 .reel:nth-child(4){
-  transform:perspective(1000px) rotateY(-2deg);
+  transform:
+    perspective(900px)
+    rotateY(-2deg);
 }
 
 .reel:nth-child(5){
-  transform:perspective(1000px) rotateY(-5deg);
+  transform:
+    perspective(900px)
+    rotateY(-4deg)
+    translateZ(2px);
 }
 
-/* =====================================================
-   3D TILES
-===================================================== */
+/* =========================================================
+   TILES
+========================================================= */
 
 .tile{
   position:relative;
 
-  aspect-ratio:1/.94;
+  aspect-ratio:1/.91;
+
+  min-width:0;
 
   display:grid;
   place-items:center;
 
   overflow:hidden;
 
-  border-radius:9px;
+  border-radius:8px;
 
   background:
     radial-gradient(
       ellipse at 35% 18%,
-      rgba(255,241,197,.16),
-      transparent 35%
+      rgba(255,240,199,.16),
+      transparent 30%
     ),
     linear-gradient(
       145deg,
-      #2a170b 0%,
-      #100704 48%,
-      #211007 100%
+      #29170b 0%,
+      #100805 48%,
+      #050302 75%,
+      #1c0d07 100%
     );
 
-  border:1px solid #8f602f;
+  border:1px solid #9a6632;
 
   box-shadow:
-    inset 0 1px #fff5,
-    inset 0 -8px 13px #000,
-    inset 0 0 14px #000,
-    0 3px 0 #3b2110,
-    0 6px 9px #000d;
+    inset 0 2px 2px rgba(255,239,200,.08),
+    inset 0 -10px 15px rgba(0,0,0,.85),
+    inset 0 0 14px rgba(0,0,0,.8),
+    0 2px 0 #3c2110,
+    0 5px 10px rgba(0,0,0,.8);
 
   transform-style:preserve-3d;
 
   transition:
-    transform .18s,
-    box-shadow .18s,
-    border-color .18s;
+    transform .18s ease,
+    box-shadow .18s ease,
+    border-color .18s ease;
 }
 
 .tile:before{
   content:"";
-
   position:absolute;
   inset:2px;
 
-  border-radius:7px;
+  border-radius:6px;
 
-  border:1px solid rgba(255,221,165,.10);
+  border:1px solid rgba(255,222,161,.10);
+
+  box-shadow:
+    inset 0 0 12px rgba(255,186,78,.025);
+
+  pointer-events:none;
 }
 
 .tile:after{
   content:"";
-
   position:absolute;
 
-  top:-30%;
-  left:-65%;
+  left:-55%;
+  top:-20%;
 
-  width:55%;
-  height:170%;
+  width:65%;
+  height:160%;
 
   transform:rotate(25deg);
 
@@ -694,42 +779,49 @@ button:disabled{
     linear-gradient(
       90deg,
       transparent,
-      rgba(255,225,172,.08),
+      rgba(255,226,174,.075),
       transparent
     );
+
+  pointer-events:none;
 }
 
-/* =====================================================
+/* =========================================================
    SYMBOLS
-===================================================== */
+========================================================= */
 
 .symbol{
   position:relative;
   z-index:5;
 
-  font-family:Cinzel,serif;
+  font-family:Cinzel,Georgia,serif;
   font-weight:600;
 
-  font-size:clamp(27px,7vw,52px);
+  font-size:clamp(28px,7vw,54px);
 
-  color:#f8d18e;
+  color:#f8d18d;
 
-  transform:translateZ(25px);
+  user-select:none;
+
+  transform:translateZ(28px);
 
   filter:
     drop-shadow(0 4px 2px #000)
-    drop-shadow(0 0 8px rgba(238,172,76,.35));
+    drop-shadow(0 0 8px rgba(238,172,76,.32));
 
-  user-select:none;
+  transition:
+    transform .18s,
+    filter .18s;
 }
 
 .symbol.kp{
-  font-size:clamp(22px,6vw,43px);
-  color:#f7d79d;
+  font-size:clamp(23px,6vw,44px);
+  color:#f6d69c;
 
   text-shadow:
-    0 0 10px #d19345,
-    0 2px 2px #000;
+    0 1px 0 #fff4,
+    0 3px 3px #000,
+    0 0 12px #c28a45;
 }
 
 .symbol.seven{
@@ -737,121 +829,168 @@ button:disabled{
   font-weight:700;
   font-style:italic;
 
-  font-size:clamp(36px,9vw,61px);
+  font-size:clamp(37px,9vw,62px);
 
   background:
     linear-gradient(
       180deg,
-      #ffc2dc,
-      #df3b78 43%,
-      #761238
+      #ffc2dc 0%,
+      #ed4a8a 38%,
+      #b5165b 70%,
+      #67102f 100%
     );
 
   -webkit-background-clip:text;
   background-clip:text;
   color:transparent;
 
-  -webkit-text-stroke:1px #ffd7e7;
+  -webkit-text-stroke:1px #ffd9e8;
 
   filter:
-    drop-shadow(0 5px 2px #18030b)
-    drop-shadow(0 0 13px #ed4384);
+    drop-shadow(0 4px 2px #18030b)
+    drop-shadow(0 0 12px #e93d81);
 }
 
-.symbol.heart,
 .symbol.diamond{
-  color:#ff75aa;
+  color:#ff79aa;
 
   text-shadow:
     0 0 4px #fff,
-    0 0 15px #ff4088,
-    0 0 27px #c92469;
+    0 0 15px #ff3f88,
+    0 0 28px #d9276e;
+}
+
+.symbol.heart{
+  color:#ff70a8;
+
+  text-shadow:
+    0 0 4px #fff,
+    0 0 15px #ff3f88,
+    0 0 28px #b51e5b;
 }
 
 .symbol.crown{
-  color:#f7c76e;
+  font-size:clamp(30px,7vw,49px);
+  color:#f5c36d;
 
   text-shadow:
-    0 3px 1px #542b0d,
-    0 0 13px #db9638;
+    0 2px #512b0d,
+    0 0 12px #d68d2e,
+    0 0 22px rgba(240,176,72,.35);
 }
 
 .symbol.bell{
-  color:#f4c16c;
+  color:#f3bd68;
 
   text-shadow:
-    0 3px 1px #5b300d,
-    0 0 11px #d89235;
+    0 2px 1px #5a300d,
+    0 0 10px #d89236;
 }
 
 .symbol.cherry{
-  color:#ef466f;
+  color:#ed426f;
 
   text-shadow:
-    0 0 9px #ff386f,
-    0 4px 2px #25050d;
+    0 0 8px #ff376e,
+    0 3px 2px #26050e;
 }
 
-/* =====================================================
-   SPINNING
-===================================================== */
+/* =========================================================
+   SPIN
+========================================================= */
 
 .reels.spinning{
-  animation:machineShake .12s linear infinite;
+  animation:
+    cabinetVibrate .12s linear infinite;
 }
 
 .reels.spinning .tile{
-  animation:tileRoll .12s linear infinite;
+  animation:
+    reelBounce .09s linear infinite;
 }
 
 .reels.spinning .symbol{
-  filter:blur(2.5px);
-  animation:symbolRoll .10s linear infinite;
+  filter:blur(3px);
+  animation:
+    symbolRoll .09s linear infinite;
 }
 
-@keyframes machineShake{
-  0%{transform:translateX(0)}
-  25%{transform:translateX(-1px)}
+@keyframes cabinetVibrate{
+  0%{transform:translateX(-1px)}
   50%{transform:translateX(1px)}
-  75%{transform:translateX(-1px)}
-  100%{transform:translateX(0)}
+  100%{transform:translateX(-1px)}
 }
 
-@keyframes tileRoll{
-  0%{transform:translateY(-5px) scaleY(.96)}
-  50%{transform:translateY(5px) scaleY(1.03)}
-  100%{transform:translateY(-5px) scaleY(.96)}
+@keyframes reelBounce{
+  0%{
+    transform:
+      translateY(-4px)
+      rotateX(2deg);
+  }
+
+  50%{
+    transform:
+      translateY(5px)
+      rotateX(-2deg);
+  }
+
+  100%{
+    transform:
+      translateY(-4px)
+      rotateX(2deg);
+  }
 }
 
 @keyframes symbolRoll{
-  0%{transform:translateY(-13px) scale(1.04)}
-  50%{transform:translateY(13px) scale(.96)}
-  100%{transform:translateY(-13px) scale(1.04)}
+  0%{
+    transform:
+      translateZ(25px)
+      translateY(-10px)
+      scale(1.05);
+  }
+
+  50%{
+    transform:
+      translateZ(25px)
+      translateY(10px)
+      scale(.94);
+  }
+
+  100%{
+    transform:
+      translateZ(25px)
+      translateY(-10px)
+      scale(1.05);
+  }
 }
 
-/* =====================================================
-   WIN
-===================================================== */
+/* =========================================================
+   WIN EFFECT
+========================================================= */
 
 .tile.win{
-  z-index:20;
+  z-index:15;
 
-  border-color:#ffe8aa;
+  border-color:#ffe6a5;
 
   background:
     radial-gradient(
-      circle,
-      rgba(255,219,148,.34),
-      transparent 60%
+      circle at 50% 45%,
+      rgba(255,221,151,.36),
+      transparent 58%
     ),
-    linear-gradient(145deg,#49250f,#130704);
+    linear-gradient(
+      145deg,
+      #4a2811,
+      #130804
+    );
 
   box-shadow:
-    inset 0 0 22px #f8bf67bb,
-    0 0 0 2px #f8d48f,
-    0 0 16px #ffbc58,
-    0 0 35px #e34e89,
-    0 9px 18px #000;
+    inset 0 0 25px rgba(255,191,77,.65),
+    0 0 0 2px #f9d28a,
+    0 0 17px #ffbb57,
+    0 0 34px #e34d89,
+    0 8px 18px #000;
 
   animation:
     winningTile .55s ease-in-out infinite alternate;
@@ -864,37 +1003,41 @@ button:disabled{
 
 @keyframes winningTile{
   from{
-    transform:translateZ(15px) scale(1);
+    transform:
+      translateZ(15px)
+      scale(1);
   }
 
   to{
-    transform:translateZ(45px) scale(1.06);
+    transform:
+      translateZ(45px)
+      scale(1.06);
   }
 }
 
 @keyframes winningSymbol{
   from{
     filter:
-      drop-shadow(0 4px 2px #000)
+      drop-shadow(0 3px 2px #000)
       drop-shadow(0 0 8px #ffc65e);
   }
 
   to{
     filter:
-      drop-shadow(0 4px 2px #000)
-      drop-shadow(0 0 14px #fff)
+      drop-shadow(0 3px 2px #000)
+      drop-shadow(0 0 15px #fff)
       drop-shadow(0 0 28px #ff5b9b);
   }
 }
 
-/* =====================================================
+/* =========================================================
    PAYLINE
-===================================================== */
+========================================================= */
 
 .payline{
   position:absolute;
 
-  z-index:30;
+  z-index:35;
 
   left:3px;
   right:3px;
@@ -909,34 +1052,34 @@ button:disabled{
       90deg,
       transparent,
       #ffcf7a 8%,
-      #ffe9b3 50%,
+      #fff1c0 50%,
       #ffcf7a 92%,
       transparent
     );
 
   box-shadow:
     0 0 4px #fff,
-    0 0 13px #f2a34c;
+    0 0 12px #f2a34c;
 
-  opacity:.5;
+  opacity:.42;
 
   pointer-events:none;
 }
 
-/* =====================================================
-   CONTROLS
-===================================================== */
+/* =========================================================
+   MACHINE CONTROLS
+========================================================= */
 
 .machine-controls{
+  margin-top:10px;
+
   display:grid;
   grid-template-columns:1fr 1.05fr 1fr;
   gap:4px;
-
-  margin-top:10px;
 }
 
 .control{
-  min-height:57px;
+  min-height:58px;
 
   display:flex;
   align-items:center;
@@ -946,13 +1089,13 @@ button:disabled{
   color:#e9c78e;
 
   background:
-    linear-gradient(145deg,#241409,#0a0503);
+    linear-gradient(145deg,#241409,#0b0604);
 
   border:1px solid #704a27;
 
   box-shadow:
     inset 0 1px #fff2,
-    0 5px 9px #0009;
+    0 4px 8px #0009;
 
   font-size:10px;
 }
@@ -966,8 +1109,13 @@ button:disabled{
 }
 
 .control .arrow{
-  color:#d6a664;
   font-size:18px;
+  color:#d4a664;
+}
+
+.control-main{
+  min-height:58px;
+  text-align:center;
 }
 
 .control-label{
@@ -977,15 +1125,14 @@ button:disabled{
 }
 
 .control-value{
-  margin-top:2px;
-
+  margin-top:3px;
   font:600 21px "Cormorant Garamond",serif;
   color:#f6d49a;
 }
 
-/* =====================================================
+/* =========================================================
    SPIN BUTTON
-===================================================== */
+========================================================= */
 
 .spin-area{
   display:grid;
@@ -1002,52 +1149,51 @@ button:disabled{
 
   border-radius:22px;
 
-  color:#e9c58a;
+  color:#e7c38a;
 
   background:
-    radial-gradient(circle at 50% 18%,#43240f,#110703 65%);
+    radial-gradient(
+      circle at 50% 18%,
+      #442710,
+      #110704 65%
+    );
 
   border:1px solid #986a37;
 
   box-shadow:
     inset 0 2px 2px #fff2,
-    inset 0 -8px 12px #000,
-    0 6px 13px #000d;
+    inset 0 -7px 10px #000,
+    0 5px 12px #000c;
 }
 
 .round-button .icon{
   display:block;
-
-  margin-bottom:4px;
-
-  color:#f0bf68;
-
   font-size:27px;
+  margin-bottom:5px;
+  color:#f0bf68;
 
   text-shadow:
     0 0 10px #db9234;
 }
 
 .round-button.active{
-  color:#ffb4d0;
-
   border-color:#ed87ad;
+  color:#ffb1cf;
 
   box-shadow:
-    inset 0 0 16px #d83e7440,
-    0 0 18px #db528233;
+    inset 0 0 15px #d83e7440,
+    0 0 16px #db528233;
 }
 
 .spin-button{
   position:relative;
-  overflow:hidden;
 
   min-height:82px;
 
   border-radius:27px;
 
-  font-family:Cinzel,serif;
-  font-size:clamp(24px,7vw,42px);
+  font-family:Cinzel,Georgia,serif;
+  font-size:clamp(25px,7vw,42px);
   letter-spacing:6px;
 
   color:#1a0c04;
@@ -1055,27 +1201,29 @@ button:disabled{
   background:
     linear-gradient(
       180deg,
-      #fff2c7 0%,
-      #e8b96f 25%,
-      #fff0bd 46%,
-      #c88c45 76%,
-      #8c5827 100%
+      #fff3c9 0%,
+      #edc17a 24%,
+      #fff0bd 44%,
+      #c98f47 74%,
+      #8d5928 100%
     );
 
-  border:2px solid #ffe3a2;
+  border:2px solid #ffe2a0;
 
   box-shadow:
     inset 0 2px 2px #fff,
-    inset 0 -9px 12px #6b3d16aa,
-    0 0 0 3px #39200f,
+    inset 0 -8px 10px #6b3d16aa,
+    0 0 0 3px #3b2110,
     0 0 0 5px #9c682e,
-    0 8px 0 #5c3518,
-    0 13px 23px #000e,
-    0 0 28px #e7a94b44;
+    0 7px 0 #5c3518,
+    0 12px 22px #000d,
+    0 0 30px #e7a94b35;
 
   text-shadow:
-    0 1px #fff6,
+    0 1px #fff5,
     0 2px 1px #8d5927;
+
+  overflow:hidden;
 }
 
 .spin-button:before{
@@ -1083,10 +1231,10 @@ button:disabled{
 
   position:absolute;
 
+  left:-50%;
   top:-80%;
-  left:-45%;
 
-  width:32%;
+  width:35%;
   height:260%;
 
   transform:rotate(25deg);
@@ -1095,16 +1243,17 @@ button:disabled{
     linear-gradient(
       90deg,
       transparent,
-      rgba(255,255,255,.68),
+      rgba(255,255,255,.7),
       transparent
     );
 
-  animation:spinReflection 3s linear infinite;
+  animation:
+    spinReflection 3s linear infinite;
 }
 
 @keyframes spinReflection{
   from{left:-50%}
-  to{left:140%}
+  to{left:135%}
 }
 
 .spin-button:active{
@@ -1113,38 +1262,35 @@ button:disabled{
   box-shadow:
     inset 0 2px 3px #fff,
     inset 0 -5px 8px #6b3d16aa,
-    0 0 0 3px #39200f,
+    0 0 0 3px #3b2110,
     0 0 0 5px #9c682e,
     0 3px 0 #5c3518,
-    0 8px 14px #000d;
+    0 7px 14px #000d;
 }
 
 .spin-button:disabled{
-  opacity:.68;
+  opacity:.65;
 }
 
 .spin-crown{
   display:block;
-
-  margin-bottom:-2px;
-
   font-size:16px;
   letter-spacing:0;
-
+  margin-bottom:-2px;
   color:#4b2911;
 }
 
-/* =====================================================
+/* =========================================================
    BETS
-===================================================== */
+========================================================= */
 
 .bet-panel{
   margin-top:11px;
 
-  padding:11px;
-
   border:1px solid #634321;
   border-radius:16px;
+
+  padding:11px;
 
   background:
     linear-gradient(145deg,#1b0e08,#090504);
@@ -1157,12 +1303,12 @@ button:disabled{
 .bet-title{
   display:flex;
   justify-content:space-between;
+  align-items:center;
 
   margin-bottom:8px;
 
   font-size:8px;
   letter-spacing:1.5px;
-
   color:#a98b65;
 }
 
@@ -1184,7 +1330,10 @@ button:disabled{
 
   border:1px solid #5f3f22;
 
-  box-shadow:inset 0 1px #fff1;
+  font-size:12px;
+
+  box-shadow:
+    inset 0 1px #fff1;
 }
 
 .bet-button.active{
@@ -1202,14 +1351,14 @@ button:disabled{
 
   box-shadow:
     inset 0 2px #fff,
-    0 0 13px #e5ae5d44;
+    0 0 13px #e5ae5d33;
 }
 
 .max-button{
   width:100%;
-  min-height:38px;
-
   margin-top:7px;
+
+  min-height:38px;
 
   border-radius:9px;
 
@@ -1223,9 +1372,9 @@ button:disabled{
   letter-spacing:1.4px;
 }
 
-/* =====================================================
+/* =========================================================
    STATUS
-===================================================== */
+========================================================= */
 
 .status{
   min-height:25px;
@@ -1234,28 +1383,31 @@ button:disabled{
   align-items:center;
   justify-content:center;
 
-  padding:8px 2px 2px;
-
   text-align:center;
 
   color:#db93ad;
 
   font-size:9px;
   letter-spacing:1.5px;
+
+  padding:8px 2px 2px;
 }
 
 .status.win{
   color:#ffd993;
-  text-shadow:0 0 10px #d48c36;
+
+  text-shadow:
+    0 0 10px #d48c36,
+    0 0 20px #d84c83;
 }
 
 .status.error{
   color:#ff829f;
 }
 
-/* =====================================================
+/* =========================================================
    LOWER CARDS
-===================================================== */
+========================================================= */
 
 .lower-cards{
   display:grid;
@@ -1267,6 +1419,7 @@ button:disabled{
 
 .lower-card{
   min-height:70px;
+
   padding:11px 9px;
 
   border:1px solid #654321;
@@ -1291,30 +1444,27 @@ button:disabled{
   font-family:Cinzel,serif;
   font-size:9px;
   letter-spacing:.8px;
-
   color:#e9c995;
 }
 
 .lower-copy{
   margin-top:3px;
-
   font-size:6.5px;
   letter-spacing:.6px;
-
   color:#927a5b;
 }
 
-/* =====================================================
+/* =========================================================
    LEADERBOARD
-===================================================== */
+========================================================= */
 
 .leaderboard{
   margin-top:13px;
 
-  padding:13px;
-
   border:1px solid #654321;
   border-radius:16px;
+
+  padding:13px;
 
   background:
     linear-gradient(145deg,#1c1009,#090504);
@@ -1327,6 +1477,7 @@ button:disabled{
 .leader-head{
   display:flex;
   justify-content:space-between;
+  align-items:center;
 
   padding-bottom:8px;
 
@@ -1379,12 +1530,12 @@ button:disabled{
 }
 
 .player-name{
+  font-size:10px;
+  color:#d7bd93;
+
   overflow:hidden;
   text-overflow:ellipsis;
   white-space:nowrap;
-
-  font-size:10px;
-  color:#d7bd93;
 }
 
 .player-balance{
@@ -1392,9 +1543,9 @@ button:disabled{
   color:#e8c487;
 }
 
-/* =====================================================
-   NAV
-===================================================== */
+/* =========================================================
+   BOTTOM NAV
+========================================================= */
 
 .bottom-nav{
   position:fixed;
@@ -1438,9 +1589,9 @@ button:disabled{
 .nav-icon{
   display:block;
 
-  margin-bottom:3px;
-
   font-size:20px;
+
+  margin-bottom:3px;
 
   color:#c69a5a;
 
@@ -1455,9 +1606,9 @@ button:disabled{
   color:#ffe2a2;
 }
 
-/* =====================================================
-   RESPONSIVE
-===================================================== */
+/* =========================================================
+   TABLET
+========================================================= */
 
 @media(min-width:600px){
 
@@ -1466,13 +1617,16 @@ button:disabled{
     padding-right:20px;
   }
 
-  .reels,
+  .reels{
+    gap:7px;
+  }
+
   .reel{
-    gap:6px;
+    gap:7px;
   }
 
   .tile{
-    border-radius:11px;
+    border-radius:10px;
   }
 
   .cabinet{
@@ -1483,6 +1637,25 @@ button:disabled{
     padding:17px 14px;
   }
 }
+
+/* =========================================================
+   LARGE
+========================================================= */
+
+@media(min-width:900px){
+
+  .app{
+    width:820px;
+  }
+
+  .tile{
+    aspect-ratio:1/.88;
+  }
+}
+
+/* =========================================================
+   SMALL PHONE
+========================================================= */
 
 @media(max-width:370px){
 
@@ -1508,13 +1681,13 @@ button:disabled{
   }
 
   .cabinet{
-    padding:7px;
     border-radius:25px;
+    padding:7px;
   }
 
   .cabinet-inner{
-    padding:9px 6px;
     border-radius:20px;
+    padding:9px 6px;
   }
 
   .reel-frame{
@@ -1553,15 +1726,24 @@ button:disabled{
 
 <body>
 
+<div class="ambient one"></div>
+<div class="ambient two"></div>
+
 <div class="app">
 
 <header class="top">
 
   <div class="profile-card">
-    <div class="profile-photo" id="avatar">K</div>
+
+    <div class="profile-photo" id="avatar">
+      K
+    </div>
 
     <div class="profile-info">
-      <div class="profile-name" id="username">KIMIA</div>
+
+      <div class="profile-name" id="username">
+        KIMIA
+      </div>
 
       <div class="profile-level">
         VIP LEVEL <span id="vipLevel">0</span>
@@ -1570,7 +1752,9 @@ button:disabled{
       <div class="vip-meter">
         <div class="vip-fill"></div>
       </div>
+
     </div>
+
   </div>
 
   <div class="top-brand">
@@ -1580,14 +1764,23 @@ button:disabled{
 
   <div class="money">
 
-    <div class="coin-stack">🪙</div>
-
-    <div>
-      <div class="money-label">BALANCE</div>
-      <div class="money-value" id="balance">—</div>
+    <div class="coin-stack">
+      🪙
     </div>
 
-    <div class="plus">+</div>
+    <div>
+      <div class="money-label">
+        BALANCE
+      </div>
+
+      <div class="money-value" id="balance">
+        —
+      </div>
+    </div>
+
+    <div class="plus">
+      +
+    </div>
 
   </div>
 
@@ -1596,7 +1789,9 @@ button:disabled{
 
 <section class="brand">
 
-  <div class="brand-crown">♛</div>
+  <div class="brand-crown">
+    ♛
+  </div>
 
   <h1>KIMIA</h1>
 
@@ -1613,22 +1808,41 @@ button:disabled{
 
   <div class="info-card">
 
-    <div class="info-icon">🎁</div>
+    <div class="info-icon">
+      🎁
+    </div>
 
     <div>
-      <div class="info-label">DAILY BONUS</div>
-      <div class="info-value">FREE COINS</div>
+
+      <div class="info-label">
+        DAILY BONUS
+      </div>
+
+      <div class="info-value">
+        FREE COINS
+      </div>
+
     </div>
 
   </div>
 
+
   <div class="info-card">
 
-    <div class="info-icon">💎</div>
+    <div class="info-icon">
+      💎
+    </div>
 
     <div>
-      <div class="info-label">JACKPOT</div>
-      <div class="info-value">1,248,730</div>
+
+      <div class="info-label">
+        JACKPOT
+      </div>
+
+      <div class="info-value">
+        1,248,730
+      </div>
+
     </div>
 
   </div>
@@ -1638,191 +1852,310 @@ button:disabled{
 
 <main class="cabinet">
 
-  <div class="cabinet-inner">
+<div class="cabinet-inner">
 
-    <div class="cabinet-label">
-      PRIVÉ ROYALE · FIVE REELS
+<div class="cabinet-label">
+  PRIVÉ ROYALE · FIVE REELS
+</div>
+
+
+<div class="reel-frame">
+
+<div class="reel-glass" id="reelGlass">
+
+<div class="reels" id="reels">
+
+<div class="reel">
+
+  <div class="tile">
+    <div class="symbol kp">KP</div>
+  </div>
+
+  <div class="tile">
+    <div class="symbol heart">♥</div>
+  </div>
+
+  <div class="tile">
+    <div class="symbol cherry">🍒</div>
+  </div>
+
+</div>
+
+
+<div class="reel">
+
+  <div class="tile">
+    <div class="symbol crown">♛</div>
+  </div>
+
+  <div class="tile">
+    <div class="symbol seven">7</div>
+  </div>
+
+  <div class="tile">
+    <div class="symbol bell">♧</div>
+  </div>
+
+</div>
+
+
+<div class="reel">
+
+  <div class="tile">
+    <div class="symbol bell">♧</div>
+  </div>
+
+  <div class="tile">
+    <div class="symbol kp">KP</div>
+  </div>
+
+  <div class="tile">
+    <div class="symbol diamond">♦</div>
+  </div>
+
+</div>
+
+
+<div class="reel">
+
+  <div class="tile">
+    <div class="symbol cherry">🍒</div>
+  </div>
+
+  <div class="tile">
+    <div class="symbol diamond">♦</div>
+  </div>
+
+  <div class="tile">
+    <div class="symbol heart">♥</div>
+  </div>
+
+</div>
+
+
+<div class="reel">
+
+  <div class="tile">
+    <div class="symbol diamond">♦</div>
+  </div>
+
+  <div class="tile">
+    <div class="symbol bell">♧</div>
+  </div>
+
+  <div class="tile">
+    <div class="symbol seven">7</div>
+  </div>
+
+</div>
+
+</div>
+
+<div class="payline"></div>
+
+</div>
+</div>
+
+
+<div class="machine-controls">
+
+<button class="control" id="lineDown">
+
+  <span class="arrow">‹</span>
+
+  <span>
+    <small>LINES</small><br>
+    <b id="lineCount">5</b>
+  </span>
+
+  <span class="arrow">›</span>
+
+</button>
+
+
+<div class="control control-main">
+
+  <div>
+
+    <div class="control-label">
+      BET
     </div>
 
-
-    <div class="reel-frame">
-
-      <div class="reel-glass" id="reelGlass">
-
-        <div class="reels" id="reels">
-
-          <div class="reel">
-            <div class="tile"><div class="symbol kp">KP</div></div>
-            <div class="tile"><div class="symbol heart">♥</div></div>
-            <div class="tile"><div class="symbol cherry">🍒</div></div>
-          </div>
-
-          <div class="reel">
-            <div class="tile"><div class="symbol crown">♛</div></div>
-            <div class="tile"><div class="symbol seven">7</div></div>
-            <div class="tile"><div class="symbol bell">♧</div></div>
-          </div>
-
-          <div class="reel">
-            <div class="tile"><div class="symbol bell">♧</div></div>
-            <div class="tile"><div class="symbol kp">KP</div></div>
-            <div class="tile"><div class="symbol diamond">♦</div></div>
-          </div>
-
-          <div class="reel">
-            <div class="tile"><div class="symbol cherry">🍒</div></div>
-            <div class="tile"><div class="symbol diamond">♦</div></div>
-            <div class="tile"><div class="symbol heart">♥</div></div>
-          </div>
-
-          <div class="reel">
-            <div class="tile"><div class="symbol diamond">♦</div></div>
-            <div class="tile"><div class="symbol bell">♧</div></div>
-            <div class="tile"><div class="symbol seven">7</div></div>
-          </div>
-
-        </div>
-
-        <div class="payline"></div>
-
-      </div>
-
-    </div>
-
-
-    <div class="machine-controls">
-
-      <button class="control" id="lineDown">
-        <span class="arrow">‹</span>
-
-        <span>
-          <small>LINES</small><br>
-          <b id="lineCount">5</b>
-        </span>
-
-        <span class="arrow">›</span>
-      </button>
-
-      <div class="control">
-        <div>
-          <div class="control-label">BET</div>
-          <div class="control-value" id="controlBet">300</div>
-        </div>
-      </div>
-
-      <div class="control">
-        <span>
-          <small>TOTAL BET</small><br>
-          <b id="totalBetControl">300</b>
-        </span>
-      </div>
-
-    </div>
-
-
-    <div class="spin-area">
-
-      <button class="round-button" id="autoBtn">
-        <span class="icon">↻</span>
-        AUTO
-      </button>
-
-      <button class="spin-button" id="spinBtn">
-        <span class="spin-crown">♛</span>
-        SPIN
-      </button>
-
-      <button class="round-button" id="turboBtn">
-        <span class="icon">ϟ</span>
-        TURBO
-      </button>
-
-    </div>
-
-
-    <section class="bet-panel">
-
-      <div class="bet-title">
-        <span>SELECT YOUR BET</span>
-        <span>CHIPS PER SPIN</span>
-      </div>
-
-      <div class="bet-buttons">
-
-        <button class="bet-button active" data-bet="300">
-          300
-        </button>
-
-        <button class="bet-button" data-bet="600">
-          600
-        </button>
-
-        <button class="bet-button" data-bet="1500">
-          1,500
-        </button>
-
-        <button class="bet-button" data-bet="3000">
-          3,000
-        </button>
-
-      </div>
-
-      <button class="max-button" id="maxBet">
-        ♛ MAX BET · 3,000 CHIPS
-      </button>
-
-    </section>
-
-
-    <div class="status" id="status">
-      YOUR PRIVATE FORTUNE AWAITS
+    <div class="control-value" id="controlBet">
+      300
     </div>
 
   </div>
 
+</div>
+
+
+<div class="control">
+
+  <span>
+    <small>TOTAL BET</small><br>
+    <b id="totalBetControl">300</b>
+  </span>
+
+</div>
+
+</div>
+
+
+<div class="spin-area">
+
+<button class="round-button" id="autoBtn">
+
+  <span class="icon">↻</span>
+
+  AUTO
+
+</button>
+
+
+<button class="spin-button" id="spinBtn">
+
+  <span class="spin-crown">
+    ♛
+  </span>
+
+  SPIN
+
+</button>
+
+
+<button class="round-button" id="turboBtn">
+
+  <span class="icon">ϟ</span>
+
+  TURBO
+
+</button>
+
+</div>
+
+
+<section class="bet-panel">
+
+<div class="bet-title">
+
+  <span>
+    SELECT YOUR BET
+  </span>
+
+  <span>
+    CHIPS PER SPIN
+  </span>
+
+</div>
+
+
+<div class="bet-buttons" id="betButtons">
+
+<button class="bet-button active" data-bet="300">
+  300
+</button>
+
+<button class="bet-button" data-bet="600">
+  600
+</button>
+
+<button class="bet-button" data-bet="1500">
+  1,500
+</button>
+
+<button class="bet-button" data-bet="3000">
+  3,000
+</button>
+
+</div>
+
+
+<button class="max-button" id="maxBet">
+  ♛ MAX BET · 3,000 CHIPS
+</button>
+
+</section>
+
+
+<div class="status" id="status">
+  YOUR PRIVATE FORTUNE AWAITS
+</div>
+
+</div>
 </main>
 
 
 <section class="lower-cards">
 
-  <div class="lower-card">
-    <div class="lower-icon">🎁</div>
-    <div class="lower-title">DAILY BONUS</div>
-    <div class="lower-copy">FREE COINS & REWARDS</div>
+<div class="lower-card">
+
+  <div class="lower-icon">🎁</div>
+
+  <div class="lower-title">
+    DAILY BONUS
   </div>
 
-  <div class="lower-card">
-    <div class="lower-icon">💎</div>
-    <div class="lower-title">JACKPOT</div>
-    <div class="lower-copy">BIGGEST WINS</div>
+  <div class="lower-copy">
+    FREE COINS & REWARDS
   </div>
 
-  <div class="lower-card">
-    <div class="lower-icon">♛</div>
-    <div class="lower-title">TOP WINS</div>
-    <div class="lower-copy">SEE BIGGEST WINS</div>
+</div>
+
+
+<div class="lower-card">
+
+  <div class="lower-icon">💎</div>
+
+  <div class="lower-title">
+    JACKPOT
   </div>
+
+  <div class="lower-copy">
+    BIGGEST WINS
+  </div>
+
+</div>
+
+
+<div class="lower-card">
+
+  <div class="lower-icon">♛</div>
+
+  <div class="lower-title">
+    TOP WINS
+  </div>
+
+  <div class="lower-copy">
+    SEE BIGGEST WINS
+  </div>
+
+</div>
 
 </section>
 
 
 <section class="leaderboard">
 
-  <div class="leader-head">
+<div class="leader-head">
 
-    <div class="leader-title">
-      ♛ TOP PLAYERS
-    </div>
-
-    <div class="leader-view">
-      VIEW ALL ›
-    </div>
-
+  <div class="leader-title">
+    ♛ TOP PLAYERS
   </div>
 
-  <div id="leaderboard">
-    <div class="player">Loading leaderboard…</div>
+  <div class="leader-view">
+    VIEW ALL ›
   </div>
+
+</div>
+
+<div id="leaderboard">
+
+  <div class="player">
+    Loading leaderboard…
+  </div>
+
+</div>
 
 </section>
 
@@ -1831,30 +2164,30 @@ button:disabled{
 
 <nav class="bottom-nav">
 
-  <div class="nav active">
-    <span class="nav-icon">⌂</span>
-    HOME
-  </div>
+<div class="nav active">
+  <span class="nav-icon">⌂</span>
+  HOME
+</div>
 
-  <div class="nav">
-    <span class="nav-icon">♜</span>
-    SLOTS
-  </div>
+<div class="nav">
+  <span class="nav-icon">♜</span>
+  SLOTS
+</div>
 
-  <div class="nav">
-    <span class="nav-icon">♛</span>
-    LEADERBOARD
-  </div>
+<div class="nav">
+  <span class="nav-icon">♛</span>
+  LEADERBOARD
+</div>
 
-  <div class="nav">
-    <span class="nav-icon">◇</span>
-    WALLET
-  </div>
+<div class="nav">
+  <span class="nav-icon">◇</span>
+  WALLET
+</div>
 
-  <div class="nav">
-    <span class="nav-icon">♙</span>
-    PROFILE
-  </div>
+<div class="nav">
+  <span class="nav-icon">♙</span>
+  PROFILE
+</div>
 
 </nav>
 
@@ -1881,9 +2214,9 @@ let turboMode = false;
 let autoTimer = null;
 
 
-/* =====================================================
+/* =========================================================
    SYMBOLS
-===================================================== */
+========================================================= */
 
 const SYMBOLS = [
   {type:"kp",html:"KP"},
@@ -1896,9 +2229,9 @@ const SYMBOLS = [
 ];
 
 
-/* =====================================================
+/* =========================================================
    TELEGRAM
-===================================================== */
+========================================================= */
 
 if(tg){
 
@@ -1913,9 +2246,9 @@ if(tg){
 }
 
 
-/* =====================================================
+/* =========================================================
    HELPERS
-===================================================== */
+========================================================= */
 
 function formatNumber(value){
 
@@ -1926,6 +2259,7 @@ function formatNumber(value){
   }
 
   return Math.floor(number).toLocaleString("en-US");
+
 }
 
 
@@ -1940,6 +2274,7 @@ function setStatus(text,type=""){
   if(type){
     status.classList.add(type);
   }
+
 }
 
 
@@ -1954,37 +2289,43 @@ function telegramInitData(){
   }
 
   return tg.initData;
+
 }
 
 
-/* =====================================================
+/* =========================================================
    API
-===================================================== */
+========================================================= */
 
 async function api(path,options={}){
 
-  const response =
-    await fetch(
-      API + path,
-      {
-        ...options,
+  const response = await fetch(
+    API + path,
+    {
+      ...options,
 
-        headers:{
-          "Content-Type":"application/json",
-          ...(options.headers || {})
-        }
+      headers:{
+        "Content-Type":"application/json",
+        ...(options.headers || {})
       }
-    );
+    }
+  );
+
 
   let data;
 
   try{
+
     data = await response.json();
+
   }catch(e){
+
     throw new Error(
       "The server returned an invalid response."
     );
+
   }
+
 
   if(!response.ok || data.error){
 
@@ -1996,58 +2337,64 @@ async function api(path,options={}){
 
   }
 
+
   return data;
+
 }
 
 
-/* =====================================================
+/* =========================================================
    PLAYER
-===================================================== */
+========================================================= */
 
 async function loadPlayer(){
 
-  const initData =
-    telegramInitData();
+  const initData = telegramInitData();
 
-  const data =
-    await api(
-      "/api/me",
-      {
-        method:"POST",
+  const data = await api(
+    "/api/me",
+    {
+      method:"POST",
 
-        body:JSON.stringify({
-          initData
-        })
-      }
-    );
+      body:JSON.stringify({
+        initData
+      })
+    }
+  );
+
 
   $("balance").textContent =
     formatNumber(data.balance);
 
+
   $("vipLevel").textContent =
     data.vipLevel ?? 0;
+
 
   const username =
     data.username
       ? String(data.username)
       : "Player";
 
+
   $("username").textContent =
     username.startsWith("@")
       ? username
       : "@" + username;
+
 
   $("avatar").textContent =
     username
       .replace("@","")
       .slice(0,1)
       .toUpperCase() || "K";
+
 }
 
 
-/* =====================================================
+/* =========================================================
    LEADERBOARD
-===================================================== */
+========================================================= */
 
 async function loadLeaderboard(){
 
@@ -2072,7 +2419,9 @@ async function loadLeaderboard(){
         `<div class="player">No players yet.</div>`;
 
       return;
+
     }
+
 
     players
       .slice(0,10)
@@ -2081,7 +2430,9 @@ async function loadLeaderboard(){
         const row =
           document.createElement("div");
 
-        row.className = "player";
+        row.className =
+          "player";
+
 
         const rank =
           document.createElement("div");
@@ -2092,21 +2443,25 @@ async function loadLeaderboard(){
         rank.textContent =
           player.rank ?? index + 1;
 
+
         const name =
           document.createElement("div");
 
         name.className =
           "player-name";
 
+
         const username =
           player.username
             ? String(player.username)
             : "Anonymous Player";
 
+
         name.textContent =
           username.startsWith("@")
             ? username
             : "@" + username;
+
 
         const balance =
           document.createElement("div");
@@ -2117,6 +2472,7 @@ async function loadLeaderboard(){
         balance.textContent =
           formatNumber(player.balance);
 
+
         row.appendChild(rank);
         row.appendChild(name);
         row.appendChild(balance);
@@ -2124,6 +2480,7 @@ async function loadLeaderboard(){
         root.appendChild(row);
 
       });
+
 
   }catch(error){
 
@@ -2134,13 +2491,15 @@ async function loadLeaderboard(){
 
     $("leaderboard").innerHTML =
       `<div class="player">Leaderboard unavailable.</div>`;
+
   }
+
 }
 
 
-/* =====================================================
+/* =========================================================
    BET
-===================================================== */
+========================================================= */
 
 function setBet(value){
 
@@ -2161,6 +2520,7 @@ function setBet(value){
   $("totalBetControl").textContent =
     formatNumber(currentBet);
 
+
   document
     .querySelectorAll(".bet-button")
     .forEach(button=>{
@@ -2171,12 +2531,13 @@ function setBet(value){
       );
 
     });
+
 }
 
 
-/* =====================================================
-   SYMBOL
-===================================================== */
+/* =========================================================
+   SYMBOL CREATION
+========================================================= */
 
 function makeSymbol(symbol){
 
@@ -2190,6 +2551,7 @@ function makeSymbol(symbol){
     symbol.html;
 
   return element;
+
 }
 
 
@@ -2200,12 +2562,13 @@ function randomSymbol(){
       Math.random() * SYMBOLS.length
     )
   ];
+
 }
 
 
-/* =====================================================
-   REELS
-===================================================== */
+/* =========================================================
+   BUILD REELS
+========================================================= */
 
 function buildReels(){
 
@@ -2235,16 +2598,19 @@ function buildReels(){
       );
 
       reel.appendChild(tile);
+
     }
 
     reels.appendChild(reel);
+
   }
+
 }
 
 
-/* =====================================================
-   SERVER RESULT
-===================================================== */
+/* =========================================================
+   SERVER SYMBOL NORMALIZATION
+========================================================= */
 
 function normalizeSymbol(value){
 
@@ -2257,6 +2623,7 @@ function normalizeSymbol(value){
       .toLowerCase()
       .trim();
 
+
   if(
     text === "kp" ||
     text.includes("private")
@@ -2267,6 +2634,7 @@ function normalizeSymbol(value){
     };
   }
 
+
   if(
     text === "7" ||
     text.includes("7️⃣")
@@ -2276,6 +2644,7 @@ function normalizeSymbol(value){
       html:"7"
     };
   }
+
 
   if(
     text.includes("diamond") ||
@@ -2288,6 +2657,7 @@ function normalizeSymbol(value){
     };
   }
 
+
   if(
     text.includes("heart") ||
     text === "♥" ||
@@ -2299,6 +2669,7 @@ function normalizeSymbol(value){
     };
   }
 
+
   if(
     text.includes("cherry") ||
     text === "🍒"
@@ -2309,6 +2680,7 @@ function normalizeSymbol(value){
     };
   }
 
+
   if(
     text.includes("bell") ||
     text === "🔔"
@@ -2318,6 +2690,7 @@ function normalizeSymbol(value){
       html:"♧"
     };
   }
+
 
   if(
     text.includes("crown") ||
@@ -2330,12 +2703,18 @@ function normalizeSymbol(value){
     };
   }
 
+
   return {
     type:"kp",
     html:text.slice(0,3)
   };
+
 }
 
+
+/* =========================================================
+   DISPLAY RESULT
+========================================================= */
 
 function displayResult(symbols){
 
@@ -2343,13 +2722,17 @@ function displayResult(symbols){
     !Array.isArray(symbols) ||
     symbols.length < 15
   ){
+
     throw new Error(
       "The server returned fewer than 15 symbols."
     );
+
   }
+
 
   const tiles =
     document.querySelectorAll(".tile");
+
 
   symbols
     .slice(0,15)
@@ -2369,32 +2752,30 @@ function displayResult(symbols){
       );
 
     });
+
 }
 
 
-/* =====================================================
+/* =========================================================
    WINNING LINES
-===================================================== */
+========================================================= */
 
 function highlightWinningLines(lines){
-
-  document
-    .querySelectorAll(".tile")
-    .forEach(tile=>{
-      tile.classList.remove("win");
-    });
 
   if(!Array.isArray(lines)){
     return;
   }
 
+
   const tiles =
     document.querySelectorAll(".tile");
+
 
   lines.forEach(line=>{
 
     let row =
       Number(line);
+
 
     if(
       line &&
@@ -2407,11 +2788,14 @@ function highlightWinningLines(lines){
           line.line ??
           line.index
         );
+
     }
+
 
     if(!Number.isInteger(row)){
       return;
     }
+
 
     if(row >= 0 && row <= 2){
 
@@ -2428,15 +2812,19 @@ function highlightWinningLines(lines){
           tiles[index]
             .classList.add("win");
         }
+
       }
+
     }
+
   });
+
 }
 
 
-/* =====================================================
+/* =========================================================
    SPIN ANIMATION
-===================================================== */
+========================================================= */
 
 function beginSpinAnimation(){
 
@@ -2448,8 +2836,10 @@ function beginSpinAnimation(){
   $("reelGlass")
     .classList.add("flash");
 
+
   const tiles =
     document.querySelectorAll(".tile");
+
 
   const interval =
     setInterval(()=>{
@@ -2458,23 +2848,27 @@ function beginSpinAnimation(){
 
         clearInterval(interval);
         return;
+
       }
 
+
       tiles.forEach(tile=>{
+
+        tile.classList.remove("win");
 
         tile.innerHTML = "";
 
         tile.appendChild(
-          makeSymbol(
-            randomSymbol()
-          )
+          makeSymbol(randomSymbol())
         );
 
       });
 
-    },85);
+    },90);
+
 
   return interval;
+
 }
 
 
@@ -2485,30 +2879,13 @@ function endSpinAnimation(){
 
   $("reelGlass")
     .classList.remove("flash");
+
 }
 
 
-/* =====================================================
-   BALANCE
-===================================================== */
-
-function updateBalance(value){
-
-  if(
-    value !== undefined &&
-    value !== null
-  ){
-
-    $("balance").textContent =
-      formatNumber(value);
-
-  }
-}
-
-
-/* =====================================================
+/* =========================================================
    SPIN
-===================================================== */
+========================================================= */
 
 async function spin(){
 
@@ -2516,9 +2893,13 @@ async function spin(){
     return;
   }
 
+
   spinning = true;
 
-  $("spinBtn").disabled = true;
+
+  $("spinBtn").disabled =
+    true;
+
 
   document
     .querySelectorAll(".bet-button")
@@ -2526,19 +2907,25 @@ async function spin(){
       button.disabled = true;
     });
 
-  $("maxBet").disabled = true;
+
+  $("maxBet").disabled =
+    true;
+
 
   setStatus(
     "THE PRIVÉ REELS ARE TURNING…"
   );
 
+
   const animation =
     beginSpinAnimation();
+
 
   try{
 
     const initData =
       telegramInitData();
+
 
     const data =
       await api(
@@ -2553,16 +2940,25 @@ async function spin(){
         }
       );
 
-    displayResult(data.symbols);
 
-    updateBalance(data.balance);
+    displayResult(
+      data.symbols
+    );
+
+
+    updateBalance(
+      data.balance
+    );
+
 
     highlightWinningLines(
       data.winningLines
     );
 
+
     const win =
       Number(data.win || 0);
+
 
     if(win > 0){
 
@@ -2573,11 +2969,14 @@ async function spin(){
         "win"
       );
 
+
       if(tg?.HapticFeedback){
 
         try{
           tg.HapticFeedback
-            .notificationOccurred("success");
+            .notificationOccurred(
+              "success"
+            );
         }catch(e){}
 
       }
@@ -2588,17 +2987,23 @@ async function spin(){
         "NO WIN THIS TIME · TRY YOUR LUCK"
       );
 
+
       if(tg?.HapticFeedback){
 
         try{
           tg.HapticFeedback
-            .impactOccurred("light");
+            .impactOccurred(
+              "light"
+            );
         }catch(e){}
 
       }
+
     }
 
+
     await loadLeaderboard();
+
 
   }catch(error){
 
@@ -2606,6 +3011,7 @@ async function spin(){
       "Spin failed:",
       error
     );
+
 
     setStatus(
       error.message ||
@@ -2621,7 +3027,9 @@ async function spin(){
 
     spinning = false;
 
-    $("spinBtn").disabled = false;
+    $("spinBtn").disabled =
+      false;
+
 
     document
       .querySelectorAll(".bet-button")
@@ -2629,7 +3037,10 @@ async function spin(){
         button.disabled = false;
       });
 
-    $("maxBet").disabled = false;
+
+    $("maxBet").disabled =
+      false;
+
 
     if(
       autoMode &&
@@ -2646,19 +3057,43 @@ async function spin(){
           }
 
         },turboMode ? 350 : 1500);
+
     }
+
   }
+
 }
 
 
-/* =====================================================
+/* =========================================================
+   BALANCE
+========================================================= */
+
+function updateBalance(value){
+
+  if(
+    value !== undefined &&
+    value !== null
+  ){
+
+    $("balance").textContent =
+      formatNumber(value);
+
+  }
+
+}
+
+
+/* =========================================================
    AUTO
-===================================================== */
+========================================================= */
 
 $("autoBtn")
   .addEventListener("click",()=>{
 
-    autoMode = !autoMode;
+    autoMode =
+      !autoMode;
+
 
     $("autoBtn")
       .classList.toggle(
@@ -2666,39 +3101,48 @@ $("autoBtn")
         autoMode
       );
 
+
     if(!autoMode){
 
       if(autoTimer){
 
         clearTimeout(autoTimer);
         autoTimer = null;
+
       }
+
 
       setStatus(
         "AUTO MODE STOPPED"
       );
 
       return;
+
     }
+
 
     setStatus(
       "AUTO MODE ENABLED"
     );
 
+
     if(!spinning){
       spin();
     }
+
   });
 
 
-/* =====================================================
+/* =========================================================
    TURBO
-===================================================== */
+========================================================= */
 
 $("turboBtn")
   .addEventListener("click",()=>{
 
-    turboMode = !turboMode;
+    turboMode =
+      !turboMode;
+
 
     $("turboBtn")
       .classList.toggle(
@@ -2706,17 +3150,19 @@ $("turboBtn")
         turboMode
       );
 
+
     setStatus(
       turboMode
         ? "TURBO MODE ENABLED"
         : "TURBO MODE DISABLED"
     );
+
   });
 
 
-/* =====================================================
+/* =========================================================
    MAX BET
-===================================================== */
+========================================================= */
 
 $("maxBet")
   .addEventListener("click",()=>{
@@ -2726,12 +3172,13 @@ $("maxBet")
     setStatus(
       "MAX BET · 3,000 CHIPS"
     );
+
   });
 
 
-/* =====================================================
+/* =========================================================
    BET BUTTONS
-===================================================== */
+========================================================= */
 
 document
   .querySelectorAll(".bet-button")
@@ -2745,19 +3192,22 @@ document
           button.dataset.bet
         );
 
+
         setStatus(
           "BET SET TO " +
           formatNumber(currentBet) +
           " CHIPS"
         );
+
       }
     );
+
   });
 
 
-/* =====================================================
-   LINE DISPLAY
-===================================================== */
+/* =========================================================
+   LINE CONTROL
+========================================================= */
 
 $("lineDown")
   .addEventListener("click",()=>{
@@ -2775,12 +3225,13 @@ $("lineDown")
         ? "5 LINES SELECTED"
         : "3 LINES SELECTED"
     );
+
   });
 
 
-/* =====================================================
+/* =========================================================
    SPIN BUTTON
-===================================================== */
+========================================================= */
 
 $("spinBtn")
   .addEventListener(
@@ -2789,13 +3240,14 @@ $("spinBtn")
   );
 
 
-/* =====================================================
+/* =========================================================
    INITIALIZE
-===================================================== */
+========================================================= */
 
 buildReels();
 
 setBet(300);
+
 
 (async()=>{
 
@@ -2814,12 +3266,15 @@ setBet(300);
       error
     );
 
+
     setStatus(
       error.message ||
       "LOGIN FAILED · REOPEN GAME",
       "error"
     );
+
   }
+
 
   await loadLeaderboard();
 
