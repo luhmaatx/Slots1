@@ -1,704 +1,532 @@
 
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta name="theme-color" content="#080604">
-<title>KIMIA PRIVÉ | The Gold Room</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#080706">
+<title>KIMIA PRIVÉ — The Gold Room</title>
 <script src="https://telegram.org/js/telegram-web-app.js"></script>
-
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
-:root{
-  --black:#080604;
-  --black2:#100b07;
-  --gold:#dba849;
-  --gold-light:#ffe8a7;
-  --gold-dark:#714519;
-  --cream:#fff2cf;
-  --muted:#a18a68;
-  --pink:#ed91ce;
-  --blue:#6edaff;
-  --green:#b8f18a;
+:root {
+  --gold:#d9b76e;
+  --gold2:#f8e7ae;
+  --dark:#080706;
+  --panel:#15120d;
+  --muted:#a89a7e;
+  --line:#72582e;
 }
 *{box-sizing:border-box}
-html{scroll-behavior:smooth}
-body{
-  margin:0;background:#080604;color:var(--cream);
-  font-family:"DM Sans",sans-serif;overflow-x:hidden;
+body {
+  margin:0;
+  background:radial-gradient(ellipse at top,#302313 0%,#100d09 38%,#060605 100%);
+  color:#f9efd8;
+  font-family:Inter,Arial,sans-serif;
+  min-height:100vh;
 }
-button{font:inherit;cursor:pointer}
+button {font:inherit;cursor:pointer}
 button:disabled{opacity:.55;cursor:wait}
-button:active:not(:disabled){transform:scale(.97)}
-button:focus-visible{outline:2px solid var(--gold-light);outline-offset:3px}
-.app{width:min(100%,540px);margin:auto;position:relative;min-height:100vh;background:
-radial-gradient(ellipse at 50% 10%,#422a13 0,transparent 42%),
-linear-gradient(90deg,#070503,#140d07 8%,#080604 18%,#100a06 50%,#080604 82%,#160e08 94%,#070503);
-padding:calc(12px + env(safe-area-inset-top)) 12px calc(28px + env(safe-area-inset-bottom));}
-.app:before{
-content:"";position:absolute;z-index:0;pointer-events:none;inset:0;
-background:
-repeating-linear-gradient(90deg,transparent 0 7%,rgba(237,174,80,.045) 7.2%,transparent 7.5% 13%),
-radial-gradient(ellipse at 50% 28%,rgba(246,180,66,.13),transparent 45%);
-}
-.app:after{
-content:"";position:absolute;pointer-events:none;inset:0;z-index:0;opacity:.25;
-background-image:radial-gradient(#f2c978 0.6px,transparent .8px);background-size:13px 13px;
-mask-image:linear-gradient(to bottom,black,transparent 60%);
-}
-.content{position:relative;z-index:1}
-.topbar{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:8px;align-items:center}
-.member,.wallet{
-min-width:0;display:flex;align-items:center;gap:9px;padding:9px 10px;
-border:1px solid #a77733;border-radius:30px;
-background:linear-gradient(135deg,#1e1409,#080604 75%);
-box-shadow:inset 0 0 0 2px #d7a4470d,0 4px 15px #0008;
-}
-.avatar{
-width:34px;height:34px;border-radius:50%;display:grid;place-items:center;flex-shrink:0;
-border:1px solid #d6a64c;background:radial-gradient(circle,#66441d,#100904);
-color:#ffe4a1;font-size:21px;
-}
-.micro{font-size:8px;letter-spacing:1.8px;text-transform:uppercase;color:#b7a17d}
-.name{font-size:11px;font-weight:600;margin-top:3px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:145px}
-.wallet{padding-right:13px}
-.coin{
-width:30px;height:30px;flex-shrink:0;display:grid;place-items:center;border-radius:50%;
-color:#38200a;font-size:17px;background:linear-gradient(135deg,#fff4bd,#d99a2e 60%,#8e5718);
-box-shadow:0 0 12px #e5ae4333;
-}
-.balance{font-size:14px;font-weight:700;font-variant-numeric:tabular-nums;white-space:nowrap}
-.wallet-caption{font-size:7px;letter-spacing:1.5px;color:#b7a17d;margin-top:3px}
-.brand{text-align:center;padding:17px 0 19px;position:relative}
-.brand:before,.brand:after{
-content:"";position:absolute;top:47px;width:22%;height:1px;
-background:linear-gradient(90deg,transparent,#bc873b);
-}
-.brand:before{left:0}.brand:after{right:0;transform:scaleX(-1)}
-.crown{font-size:28px;line-height:1;color:#f9d27f;text-shadow:0 0 20px #dba84988}
-.brand h1{
-margin:3px 0 0;font:500 clamp(42px,12vw,62px)/.82 "Cormorant Garamond",serif;
-letter-spacing:8px;padding-left:8px;
-background:linear-gradient(100deg,#b57b2a,#fff1b8 38%,#d7a04a 62%,#fff0b0);
--webkit-background-clip:text;background-clip:text;color:transparent;
-filter:drop-shadow(0 3px 12px #d49a3633);
-}
-.brand-sub{font:500 21px "Cormorant Garamond",serif;letter-spacing:11px;padding-left:11px;color:#f0ce8b;margin-top:7px}
-.tagline{font-size:8px;letter-spacing:3.5px;color:#c7a974;margin-top:11px}
-.tagline b{color:#ffdc88;padding:0 5px}
-.jackpot-wrap{margin:0 0 15px;position:relative}
-.jackpot-main{
-position:relative;text-align:center;padding:13px 8px 14px;
-background:linear-gradient(180deg,#241608,#090604 70%,#1b1107);
-border:2px solid #b98435;
-clip-path:polygon(4% 0,96% 0,100% 20%,100% 80%,96% 100%,4% 100%,0 80%,0 20%);
-box-shadow:0 0 18px #dba84930;
-}
-.jackpot-main:before{content:"";position:absolute;inset:4px;border:1px solid #f3d18a66;pointer-events:none}
-.jackpot-label{font-size:10px;letter-spacing:4px;color:#f3d18a;font-weight:700}
-.jackpot-number{font:700 clamp(32px,9vw,45px)/1 "Cormorant Garamond",serif;color:#ffe2a0;text-shadow:0 0 18px #eaa63a66;margin-top:4px}
-.jackpot-number span{font-size:25px}
-.jackpot-foot{font-size:7px;letter-spacing:2px;color:#9e8052;margin-top:5px}
-.tier-row{display:grid;grid-template-columns:1fr 1.5fr 1fr;gap:6px;margin-top:7px}
-.tier{border:1px solid var(--tier);border-radius:10px;text-align:center;padding:8px 2px;background:linear-gradient(145deg,#1b100a,#060504);box-shadow:inset 0 0 13px color-mix(in srgb,var(--tier) 13%,transparent)}
-.tier-label{font-size:7px;letter-spacing:2px;color:var(--tier)}
-.tier-value{font:700 18px "Cormorant Garamond",serif;color:var(--tier);margin-top:2px}
-.tier.major{--tier:#ee82d3}.tier.grand{--tier:#ffdc84}.tier.minor{--tier:#72d9ff}
-.machine{
-position:relative;padding:9px;border:2px solid #8f6028;border-radius:22px;
-background:linear-gradient(140deg,#4c2c0d,#130b05 18%,#090604 48%,#3b230d 90%,#0b0704);
-box-shadow:0 0 0 2px #2b1a0a,0 0 0 5px #c38c3b24,0 15px 30px #000b,inset 0 0 0 2px #e9c16c15;
-}
-.machine:before{
-content:"";position:absolute;inset:4px;border:1px solid #d7a44866;border-radius:16px;pointer-events:none
-}
-.machine-heading{display:flex;align-items:center;justify-content:space-between;padding:5px 6px 10px}
-.machine-title{font:600 17px "Cormorant Garamond",serif;letter-spacing:3px;color:#f1d093}
-.ways{font-size:8px;letter-spacing:1.5px;color:#a88a5d}
-.reel-frame{
-position:relative;padding:7px;border:2px solid #e0af53;border-radius:13px;
-background:linear-gradient(100deg,#43290f,#090604 10%,#0b0704 50%,#3e260f);
-box-shadow:0 0 0 3px #1d1208,inset 0 0 20px #000,0 0 18px #dca54a22;
-}
-.reel-frame:before{
-content:"";position:absolute;inset:3px;border:1px solid #f4d58a66;border-radius:8px;pointer-events:none;z-index:3
-}
-.reels{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:5px;position:relative}
-.reel{
-min-width:0;overflow:hidden;border-left:1px solid #bb8a4055;border-right:1px solid #bb8a4055;
-background:linear-gradient(90deg,#080503,#1b1008 50%,#080503);
-}
-.symbol{
-aspect-ratio:.88/1;min-height:91px;display:grid;place-items:center;position:relative;
-font-size:clamp(37px,10vw,53px);
-background:linear-gradient(180deg,#e7b55b08,transparent 30%,#0003);
-border-bottom:1px solid #c5974526;
-text-shadow:0 3px 5px #000,0 0 12px #e7b44a20;
-user-select:none;transition:background .25s;
-}
-.symbol:last-child{border-bottom:0}
-.symbol.spinning{filter:blur(2px);animation:roll .11s linear infinite alternate}
-@keyframes roll{from{transform:translateY(-6px)}to{transform:translateY(6px)}}
-.symbol.winning{
-background:radial-gradient(ellipse,#ffdc845c,transparent 72%);
-animation:shine .65s ease-in-out infinite alternate;
-}
-@keyframes shine{to{filter:brightness(1.9);text-shadow:0 0 12px #ffe7a2,0 0 28px #e6a539}}
-.reel-frame.rolling{box-shadow:0 0 22px #e6b35155,inset 0 0 20px #000}
-.status{min-height:34px;display:grid;place-items:center;text-align:center;padding:7px 4px 2px;font-size:10px;color:#b19a75}
-.status.good{color:#ffe1a0}.status.bad{color:#ff9d91}
-.controls{display:grid;grid-template-columns:.9fr 1.5fr .9fr;align-items:center;gap:7px;margin-top:9px}
-.side,.betbox,.spin{
-border:1px solid #9d712f;border-radius:12px;
-background:linear-gradient(145deg,#211609,#090604);
-}
-.side{height:61px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;color:#e8c77e}
-.side-icon{font-size:18px}
-.side-label{font-size:9px;letter-spacing:1.3px}
-.side small{font-size:7px;color:#a58b61}
-.side.active{background:linear-gradient(145deg,#473013,#160d06);box-shadow:0 0 14px #dba84920}
-.spin{
-position:relative;overflow:hidden;min-height:69px;color:#281606;
-border:2px solid #f5d994;
-background:linear-gradient(115deg,#9e641e,#ffe8a2 38%,#c18a31 68%,#fce7a5);
-box-shadow:0 0 18px #dba84930,inset 0 1px #fff7d6;
-}
-.spin:after{
-content:"";position:absolute;top:-80%;bottom:-80%;width:25%;left:-40%;
-transform:rotate(25deg);background:linear-gradient(90deg,transparent,#fff9dfc9,transparent);
-animation:sweep 3.5s ease-in-out infinite;
-}
-@keyframes sweep{0%,60%{left:-40%}100%{left:140%}}
-.spin-icon{display:block;font-size:24px;line-height:1;margin-bottom:4px}
-.spin-label{position:relative;font-size:11px;letter-spacing:2px;font-weight:700}
-.bet-row{display:grid;grid-template-columns:1fr 1.5fr 1fr;gap:7px;margin-top:8px}
-.betbox{display:flex;align-items:center;justify-content:space-between;padding:6px 8px;grid-column:1/3}
-.bet-step{width:28px;height:31px;border:1px solid #775020;border-radius:7px;background:#100a05;color:#f4d38b;font-size:17px}
-.bet-copy{text-align:center}
-.bet-caption{font-size:7px;letter-spacing:2px;color:#a99068}
-.bet-value{font:700 22px "Cormorant Garamond",serif;color:#ffe3a0}
-.maxbet{border:1px solid #8f642c;border-radius:10px;background:linear-gradient(145deg,#211609,#090604);color:#f3d28d;font-size:9px;letter-spacing:1px}
-.win-display{
-margin-top:16px;position:relative;overflow:hidden;text-align:center;
-border:1px solid #a77a31;border-radius:18px;padding:15px 12px 17px;
-background:radial-gradient(ellipse at 50% 100%,#79450f55,transparent 65%),linear-gradient(180deg,#1a1008,#080604 70%,#201205);
-box-shadow:inset 0 0 0 4px #dba8490b,0 9px 24px #0008;
-}
-.win-display:before{content:"";position:absolute;inset:5px;border:1px solid #d7a44835;border-radius:13px;pointer-events:none}
-.win-stars{font-size:20px;color:#e7bc66;letter-spacing:8px}
-.win-heading{font:700 29px "Cormorant Garamond",serif;letter-spacing:3px;color:#ffe3a0;text-shadow:0 0 20px #e4a83a33;margin-top:4px}
-.win-total{display:inline-block;min-width:175px;margin-top:8px;padding:7px 14px;border:1px solid #a77a31;border-radius:10px;background:linear-gradient(100deg,#211306,#090604,#211306);font:700 34px "Cormorant Garamond",serif;color:#fff0c1}
-.win-sub{font-size:8px;letter-spacing:3px;color:#a99068;margin-top:7px}
-.win-display.celebrate{animation:celebrate .8s ease-in-out 2}
-@keyframes celebrate{50%{box-shadow:0 0 36px #f6bf4e77,inset 0 0 30px #c68b2b33}}
-.lower{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-top:13px}
-.info{padding:13px 11px;border:1px solid #775426;border-radius:13px;background:linear-gradient(145deg,#1b1209,#0a0705)}
-.info-kicker{font-size:8px;letter-spacing:2px;color:#a99068}
-.info-title{font:600 21px "Cormorant Garamond",serif;color:#f2d59b;margin-top:4px}
-.progress{height:4px;border-radius:8px;background:#352414;margin-top:10px;overflow:hidden}
-.progress-fill{height:100%;width:0;background:linear-gradient(90deg,#986121,#ffe3a0);transition:width .6s}
-.info-note{font-size:9px;line-height:1.5;color:#a18a68;margin-top:7px}
-.leader{margin-top:14px;border:1px solid #805a29;border-radius:15px;overflow:hidden;background:#0c0805}
-.leader-head{display:flex;align-items:center;justify-content:space-between;padding:13px;border-bottom:1px solid #6e4b251c;background:linear-gradient(90deg,#211609,#0c0805)}
-.leader-title{font:600 25px "Cormorant Garamond",serif;color:#f5d79b}
-.leader-sub{font-size:7px;letter-spacing:1.6px;color:#a18a68;margin-top:3px}
-.refresh{border:1px solid #795627;border-radius:8px;background:#160f08;color:#f2d292;padding:8px;font-size:10px}
-.player-row{display:grid;grid-template-columns:30px minmax(0,1fr) auto;align-items:center;gap:8px;padding:11px 13px;border-bottom:1px solid #b1874317}
-.player-row:last-child{border:0}
-.rank{font:600 19px "Cormorant Garamond",serif;color:#d9ac57;text-align:center}
-.player-row:nth-child(2) .rank{color:#ffe5a5}
-.player-row:nth-child(3) .rank{color:#c7cdd8}
-.player-handle{font-size:11px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.player-chips{font-size:10px;color:#e6c47c;white-space:nowrap}
-.empty{padding:19px;text-align:center;font-size:10px;color:#a18a68;line-height:1.7}
-.footer{text-align:center;padding:23px 0 3px;color:#91714a;font-size:8px;letter-spacing:3px;line-height:2.2}
-.footer strong{display:block;font:500 16px "Cormorant Garamond",serif;letter-spacing:5px;color:#c8a363}
-.toast{
-position:fixed;z-index:50;bottom:calc(20px + env(safe-area-inset-bottom));left:50%;
-transform:translate(-50%,18px);opacity:0;pointer-events:none;
-max-width:calc(100vw - 30px);width:max-content;padding:12px 17px;
-border:1px solid #c59a4a;border-radius:12px;background:#171006;color:#ffe5aa;
-font-size:11px;text-align:center;box-shadow:0 10px 35px #000b;transition:.25s;
-}
-.toast.show{opacity:1;transform:translate(-50%,0)}
-.overlay{display:none;position:fixed;inset:0;z-index:60;align-items:center;justify-content:center;padding:22px;background:#030201cc;backdrop-filter:blur(8px)}
-.overlay.show{display:flex;animation:fadein .25s ease}
-@keyframes fadein{from{opacity:0}to{opacity:1}}
-.win-card{
-position:relative;overflow:hidden;width:min(100%,340px);text-align:center;padding:28px 20px;
-border:2px solid #dcb45f;border-radius:22px;
-background:radial-gradient(ellipse at 50% 25%,#70461777,transparent 60%),linear-gradient(145deg,#281808,#080604 75%);
-box-shadow:0 0 55px #dca34344,inset 0 0 0 4px #dba84912;
-animation:pop .45s cubic-bezier(.2,.8,.3,1.2);
-}
-@keyframes pop{from{transform:scale(.75);opacity:0}to{transform:scale(1);opacity:1}}
-.card-crown{font-size:40px;color:#ffdd8c;text-shadow:0 0 24px #dba84977}
-.card-kicker{font-size:9px;letter-spacing:5px;color:#d8b36c;margin-top:9px}
-.card-title{font:700 40px "Cormorant Garamond",serif;color:#ffe5a6;margin-top:5px}
-.card-amount{font:700 39px "Cormorant Garamond",serif;color:white;margin-top:12px}
-.card-copy{font-size:9px;letter-spacing:2px;color:#b69a6d;margin-top:3px}
-.card-close{margin-top:23px;padding:12px 27px;border:1px solid #ffe4a1;border-radius:9px;background:linear-gradient(110deg,#a76c21,#ffe8a2,#bc8228);color:#241506;font-size:10px;letter-spacing:2px;font-weight:700}
-.confetti{position:fixed;top:-12px;z-index:70;width:6px;height:11px;border-radius:2px;pointer-events:none;animation:fall var(--duration) linear forwards}
-@keyframes fall{to{transform:translate(var(--drift),110vh) rotate(720deg);opacity:.15}}
-@media(max-width:370px){
-.app{padding-left:8px;padding-right:8px}
-.member,.wallet{padding:7px}
-.name{max-width:100px}
-.symbol{min-height:75px;font-size:35px}
-.controls{gap:5px}
-.tier-value{font-size:15px}
-.brand h1{letter-spacing:6px}
-}
-@media(prefers-reduced-motion:reduce){
-*,*:before,*:after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important;scroll-behavior:auto!important}
-}
+.page{width:min(100%,600px);margin:auto;padding:14px 13px 30px}
+.topbar{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.brand{font-family:Cinzel,serif;font-weight:700;letter-spacing:3px;font-size:clamp(18px,5vw,26px);color:var(--gold2)}
+.brand small{display:block;font:9px Inter,sans-serif;letter-spacing:4px;color:#a18b60;margin-top:4px}
+.avatar{border:1px solid var(--gold);border-radius:50%;width:42px;height:42px;display:grid;place-items:center;background:#1b160d;color:var(--gold2);font-size:19px}
+.balance-card{margin-top:17px;border:1px solid #6d5229;border-radius:12px;background:linear-gradient(135deg,#21190d,#0b0907);padding:12px 15px;display:flex;align-items:center;justify-content:space-between;gap:12px;box-shadow:0 0 25px #0008}
+.eyebrow{font-size:9px;letter-spacing:2px;color:var(--muted);text-transform:uppercase}
+.balance{font-family:Cinzel,serif;color:var(--gold2);font-size:25px;margin-top:4px}
+.gold-button{border:1px solid #f4d993;color:#211707;background:linear-gradient(180deg,#ffedb6,#c99b43 54%,#edcf85);font-weight:800;letter-spacing:1px;border-radius:8px;padding:10px 13px;box-shadow:inset 0 1px #fff9,0 3px 12px #0008}
+.section-title{text-align:center;font-family:Cinzel,serif;font-size:12px;letter-spacing:4px;color:var(--gold);margin:24px 0 12px}
+.jackpots{display:grid;grid-template-columns:1fr 1.35fr 1fr;gap:7px}
+.jackpot{padding:12px 5px;text-align:center;background:linear-gradient(145deg,#20170c,#0b0907);border:1px solid #73552b;border-radius:9px;min-width:0}
+.jackpot.main{border-color:#f1d18a;box-shadow:0 0 18px #d9b76e24}
+.jackpot .name{font-size:8px;letter-spacing:1.5px;color:#c7ad76}
+.jackpot .amount{font-family:Cinzel,serif;font-size:clamp(12px,3.5vw,18px);color:var(--gold2);margin-top:7px;white-space:nowrap}
+.jackpot.main .amount{font-size:clamp(15px,4.4vw,23px)}
+.jackpot .tag{font-size:8px;color:#a08c65;margin-top:5px}
+.machine{margin-top:18px;padding:5px;border:1px solid #f1d18a;border-radius:14px;background:linear-gradient(145deg,#f6dda0,#74501f 16%,#20170c 40%,#a97b35 72%,#f0d48b);box-shadow:0 12px 40px #000b,0 0 22px #d9b76e22}
+.machine-inner{border:1px solid #9c783d;border-radius:9px;background:linear-gradient(180deg,#17120b,#080706);padding:13px 9px 12px}
+.machine-head{text-align:center;margin-bottom:12px}
+.machine-head .small{font-size:8px;letter-spacing:4px;color:#bda36d}
+.machine-head .title{font-family:Cinzel,serif;color:var(--gold2);font-size:clamp(17px,5vw,25px);letter-spacing:2px;margin-top:4px}
+.reels-wrap{border:2px solid #b58b43;border-radius:8px;padding:5px;background:#050403;box-shadow:inset 0 0 18px #000}
+.reels{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:4px}
+.reel{display:grid;grid-template-rows:repeat(3,clamp(48px,13vw,69px));gap:4px;min-width:0}
+.cell{display:grid;place-items:center;min-width:0;border-radius:4px;border:1px solid #4f3d21;background:linear-gradient(180deg,#f5e6c5,#d4c09b 48%,#a58c60);color:#241a0d;font-size:clamp(20px,6.5vw,35px);text-shadow:0 1px #fff9;overflow:hidden}
+.cell.dim{opacity:.8}
+.cell.winner{border:2px solid #fff0a0;box-shadow:0 0 12px #ffe58b, inset 0 0 12px #fff6;background:linear-gradient(#fff4c7,#e9c76b);animation:pulse .7s infinite alternate}
+@keyframes pulse{to{filter:brightness(1.25)}}
+.machine-footer{text-align:center;color:#b9a16f;font-size:8px;letter-spacing:2px;margin-top:9px}
+.status{text-align:center;min-height:24px;margin:13px 0 4px;color:var(--gold2);font-size:12px;font-weight:700;letter-spacing:1px}
+.status.error{color:#ff9a88}
+.bet-box{margin-top:14px;border:1px solid #514027;border-radius:10px;padding:12px;background:#0c0a07}
+.bet-label{display:flex;justify-content:space-between;align-items:center;color:var(--muted);font-size:10px;letter-spacing:2px;text-transform:uppercase}
+.bet-value{color:var(--gold2);font-family:Cinzel,serif;font-size:18px}
+.bet-options{display:grid;grid-template-columns:repeat(4,1fr);gap:7px;margin-top:10px}
+.bet-option{border:1px solid #574326;border-radius:6px;background:#17120b;color:#c4b18a;padding:10px 2px;font-size:12px;font-weight:700}
+.bet-option.active{border-color:#f2d18b;background:linear-gradient(#f8e4a5,#b78635);color:#1b1308;box-shadow:0 0 12px #d9b76e2a}
+.controls{display:grid;grid-template-columns:1fr 1.5fr 1fr;gap:8px;margin-top:12px;align-items:stretch}
+.side-button{border:1px solid #6e542d;border-radius:8px;background:linear-gradient(#21190e,#0e0b07);color:#e7cf94;font-size:10px;font-weight:800;letter-spacing:1px;padding:12px 3px}
+.spin-button{border:1px solid #fff0b8;border-radius:9px;background:linear-gradient(180deg,#fff0b6,#e2b958 45%,#a77323);color:#211605;font-family:Cinzel,serif;font-size:19px;font-weight:800;letter-spacing:2px;box-shadow:0 4px 0 #68451a,0 0 22px #e6bd5a2a;padding:12px 4px}
+.spin-button:active{transform:translateY(2px);box-shadow:0 2px 0 #68451a}
+.switches{display:flex;gap:8px;margin-top:10px}
+.switch{flex:1;border:1px solid #4d3c22;border-radius:7px;padding:10px;background:#0d0a07;color:#bba578;font-size:10px;font-weight:700;letter-spacing:1px}
+.switch.on{border-color:#d9b76e;color:#ffe8a4;background:#20170b}
+.info-grid{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-top:15px}
+.info-card{border:1px solid #514027;background:linear-gradient(145deg,#18130c,#0b0907);border-radius:9px;padding:13px}
+.info-card h3{font-family:Cinzel,serif;color:var(--gold2);font-size:12px;letter-spacing:1px;margin:0 0 10px}
+.info-card p{font-size:10px;color:#b9a987;line-height:1.7;margin:0}
+.leader-row{display:flex;justify-content:space-between;gap:8px;padding:8px 0;border-bottom:1px solid #302517;font-size:10px;color:#e4d4b1}
+.leader-row:last-child{border:0}
+.leader-row .rank{color:var(--gold);width:22px}
+.leader-row .player{flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.leader-row .score{color:var(--gold2);font-weight:700}
+.nav{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-top:17px}
+.nav button{border:1px solid #3e301b;border-radius:7px;background:#0d0a07;color:#ad9971;padding:12px 2px;font-size:9px;letter-spacing:.5px}
+.nav button.active{color:#f5d994;border-color:#b58b43;background:#1c150b}
+.footnote{text-align:center;color:#75664b;font-size:9px;line-height:1.6;margin-top:16px}
+.overlay{position:fixed;inset:0;display:none;align-items:center;justify-content:center;padding:20px;background:#000d;z-index:10}
+.overlay.show{display:flex}
+.win-card{text-align:center;width:min(100%,340px);padding:28px 20px;border:2px solid #e7c576;border-radius:16px;background:radial-gradient(ellipse at top,#39280f,#100c07 65%);box-shadow:0 0 50px #d9b76e40}
+.win-card .big{font-family:Cinzel,serif;font-size:clamp(30px,9vw,48px);font-weight:800;letter-spacing:3px;color:#ffe7a0;text-shadow:0 0 20px #f5c65b}
+.win-card .amount{font-size:25px;font-weight:800;color:white;margin:12px}
+.win-card p{font-size:11px;color:#c4ae7e}
+.win-card button{width:100%;margin-top:10px}
+.confetti{position:fixed;top:-20px;width:7px;height:12px;background:#f5d58a;z-index:12;pointer-events:none;animation:fall 1.8s linear forwards}
+@keyframes fall{to{transform:translateY(110vh) rotate(720deg);opacity:0}}
+@media(min-width:520px){.page{padding-top:22px}.machine-inner{padding:18px 14px}.cell{font-size:35px}}
 </style>
 </head>
-
 <body>
-<main class="app">
-<div class="content">
-<header class="topbar">
-  <div class="member">
-    <div class="avatar">♛</div>
-    <div style="min-width:0">
-      <div class="micro">Private member</div>
-      <div class="name" id="playerName">Entering Privé…</div>
-    </div>
-  </div>
-  <div class="wallet">
-    <div class="coin">✦</div>
+<div class="page">
+  <header class="topbar">
+    <div class="brand">KIMIA PRIVÉ<small>THE GOLD ROOM · EST. 2026</small></div>
+    <div class="avatar" id="avatar">♛</div>
+  </header>
+
+  <section class="balance-card">
     <div>
-      <div class="balance" id="balance">—</div>
-      <div class="wallet-caption">VIRTUAL CHIPS</div>
+      <div class="eyebrow">Your private fortune</div>
+      <div class="balance"><span id="balance">—</span> <span style="font:10px Inter;color:#bda36d">CHIPS</span></div>
+      <div class="eyebrow" style="margin-top:6px">VIP <span id="vip">0</span> · <span id="playerName">MEMBER</span></div>
     </div>
-  </div>
-</header>
+    <button class="gold-button" id="refreshBtn">↻ REFRESH</button>
+  </section>
 
-<section class="brand">
-  <div class="crown">♛</div>
-  <h1>KIMIA</h1>
-  <div class="brand-sub">PRIVÉ</div>
-  <div class="tagline">PLAY <b>✦</b> WIN <b>✦</b> BE PRIVÉ</div>
-</section>
+  <div class="section-title">✦ THE JACKPOT CLUB ✦</div>
+  <section class="jackpots">
+    <div class="jackpot"><div class="name">MAJOR</div><div class="amount">250K</div><div class="tag">THE HIGH LIFE</div></div>
+    <div class="jackpot main"><div class="name">✧ GRAND JACKPOT ✧</div><div class="amount">1,000,000</div><div class="tag">THE ULTIMATE PRIZE</div></div>
+    <div class="jackpot"><div class="name">MINOR</div><div class="amount">25K</div><div class="tag">A GOLDEN MOMENT</div></div>
+  </section>
 
-<section class="jackpot-wrap">
-  <div class="jackpot-main">
-    <div class="jackpot-label">GRAND JACKPOT</div>
-    <div class="jackpot-number"><span>♛</span> 1,000,000 <span>♛</span></div>
-    <div class="jackpot-foot">THE GOLD ROOM · VIRTUAL PLAY</div>
-  </div>
-  <div class="tier-row">
-    <div class="tier major">
-      <div class="tier-label">MAJOR</div>
-      <div class="tier-value">250,000</div>
+  <section class="machine">
+    <div class="machine-inner">
+      <div class="machine-head">
+        <div class="small">LADIES & GENTLEMEN</div>
+        <div class="title">THE GOLD ROOM</div>
+      </div>
+      <div class="reels-wrap"><div class="reels" id="reels"></div></div>
+      <div class="machine-footer">FIVE REELS · THREE ROWS · YOUR NEXT BIG MOMENT</div>
     </div>
-    <div class="tier grand">
-      <div class="tier-label">✦ GRAND ✦</div>
-      <div class="tier-value">1,000,000</div>
+  </section>
+
+  <div class="status" id="status">WELCOME TO THE GOLD ROOM</div>
+
+  <section class="bet-box">
+    <div class="bet-label"><span>SELECT YOUR BET</span><span class="bet-value" id="betDisplay">300 CHIPS</span></div>
+    <div class="bet-options">
+      <button class="bet-option active" data-bet="300">300</button>
+      <button class="bet-option" data-bet="600">600</button>
+      <button class="bet-option" data-bet="1500">1.5K</button>
+      <button class="bet-option" data-bet="3000">3K</button>
     </div>
-    <div class="tier minor">
-      <div class="tier-label">MINOR</div>
-      <div class="tier-value">50,000</div>
+    <div class="controls">
+      <button class="side-button" id="maxBet">MAX<br>BET</button>
+      <button class="spin-button" id="spinBtn">SPIN ✦</button>
+      <button class="side-button" id="autoBtn">AUTO<br>OFF</button>
     </div>
-  </div>
-</section>
-
-<section class="machine" id="machine">
-  <div class="machine-heading">
-    <div class="machine-title">THE GOLD ROOM</div>
-    <div class="ways">3 REELS · 3 ROWS</div>
-  </div>
-  <div class="reel-frame" id="reelFrame">
-    <div class="reels" id="reels">
-      <div class="reel"><div class="symbol">👑</div><div class="symbol">💎</div><div class="symbol">🌹</div></div>
-      <div class="reel"><div class="symbol">🍒</div><div class="symbol">7️⃣</div><div class="symbol">👑</div></div>
-      <div class="reel"><div class="symbol">💎</div><div class="symbol">🌹</div><div class="symbol">✨</div></div>
+    <div class="switches">
+      <button class="switch" id="turboBtn">⚡ TURBO OFF</button>
+      <button class="switch" id="soundBtn">♫ SOUND OFF</button>
     </div>
-  </div>
-  <div class="status" id="status" role="status" aria-live="polite">Your private table is ready.</div>
-  <div class="controls">
-    <button class="side" id="autoBtn" type="button" aria-pressed="false">
-      <span class="side-icon">⟳</span><span class="side-label">AUTO</span><small id="autoLabel">OFF</small>
-    </button>
-    <button class="spin" id="spinBtn" type="button" disabled>
-      <span class="spin-icon" id="spinIcon">✧</span><span class="spin-label" id="spinLabel">LOADING</span>
-    </button>
-    <button class="side" id="turboBtn" type="button" aria-pressed="false">
-      <span class="side-icon">ϟ</span><span class="side-label">TURBO</span><small id="turboLabel">OFF</small>
-    </button>
-  </div>
-  <div class="bet-row">
-    <div class="betbox">
-      <button class="bet-step" type="button" disabled aria-label="Decrease bet">−</button>
-      <div class="bet-copy"><div class="bet-caption">BET PER SPIN</div><div class="bet-value">300</div></div>
-      <button class="bet-step" type="button" disabled aria-label="Increase bet">+</button>
+  </section>
+
+  <section class="info-grid">
+    <div class="info-card">
+      <h3>✧ PAYTABLE</h3>
+      <p>5 × SEVEN — 15,000 × bet scale<br>5 × DIAMOND — 7,500 × scale<br>5 × HEART — 4,500 × scale<br>5 × OTHER — 3,000 × scale<br>4 matching — ⅓ of five-match prize<br>3 matching — ¹⁄₁₀ of five-match prize<br>2 matching — 150 × scale</p>
     </div>
-    <button class="maxbet" id="maxBtn" type="button">♛ MAX BET</button>
-  </div>
-</section>
+    <div class="info-card">
+      <h3>♛ VIP LOUNGE</h3>
+      <p>Your player account and chip balance are stored securely on the game server. Keep playing to climb the leaderboard and claim your place in the Gold Room.</p>
+    </div>
+  </section>
 
-<section class="win-display" id="winDisplay">
-  <div class="win-stars">✦ ✧ ✦</div>
-  <div class="win-heading" id="winHeading">YOUR NEXT BIG WIN</div>
-  <div class="win-total" id="winTotal">0</div>
-  <div class="win-sub" id="winSub">VIRTUAL CHIPS · LATEST SPIN</div>
-</section>
+  <section class="info-card" style="margin-top:10px">
+    <h3>✦ TOP PLAYERS</h3>
+    <div id="leaderboard"><p style="color:#a89a7e;font-size:10px">Loading leaderboard…</p></div>
+  </section>
 
-<section class="lower">
-  <div class="info">
-    <div class="info-kicker">Your membership</div>
-    <div class="info-title" id="vipTitle">Privé Guest</div>
-    <div class="progress"><div class="progress-fill" id="vipProgress"></div></div>
-    <div class="info-note" id="vipCaption">Your club status.</div>
-  </div>
-  <div class="info">
-    <div class="info-kicker">Last session</div>
-    <div class="info-title" id="lastWin">0 chips</div>
-    <div class="info-note" id="sessionCaption">Your latest spin will appear here.</div>
-  </div>
-</section>
-
-<section class="leader">
-  <div class="leader-head">
-    <div><div class="leader-title">The Privé List</div><div class="leader-sub">TOP PLAYERS · VIRTUAL BALANCES</div></div>
-    <button class="refresh" id="refreshBtn" type="button">↻ Refresh</button>
-  </div>
-  <div id="leaderRows"><div class="empty">Loading the private list…</div></div>
-</section>
-
-<footer class="footer">
-  <strong>K I M I A &nbsp; P R I V É</strong>
-  EXCLUSIVE GAMES <span style="color:#d7a448">✦</span> REAL PLAYERS <span style="color:#d7a448">✦</span> VIRTUAL WINS
-</footer>
+  <nav class="nav">
+    <button class="active" data-nav="home">♛<br>HOME</button>
+    <button data-nav="leaderboard">♕<br>LEADERS</button>
+    <button data-nav="rewards">✧<br>REWARDS</button>
+    <button data-nav="settings">⚙<br>SETTINGS</button>
+  </nav>
+  <div class="footnote">KIMIA PRIVÉ · THE GOLD ROOM<br>Virtual chips only. No cash prizes or cash withdrawals.<br>Jackpot figures shown are decorative and are not live pooled jackpots.</div>
 </div>
-</main>
 
-<div class="toast" id="toast" role="status" aria-live="polite"></div>
-<div class="overlay" id="overlay" role="dialog" aria-modal="true" aria-labelledby="cardTitle">
+<div class="overlay" id="winOverlay">
   <div class="win-card">
-    <div class="card-crown">♛</div>
-    <div class="card-kicker">THE PRIVÉ MOMENT</div>
-    <div class="card-title" id="cardTitle">GOLDEN MOMENT</div>
-    <div class="card-amount" id="cardAmount">+0</div>
-    <div class="card-copy">VIRTUAL CHIPS WON</div>
-    <button class="card-close" id="closeCard" type="button">CONTINUE</button>
+    <div style="font-size:30px">✧ 💎 ✧</div>
+    <div class="big" id="winTitle">BIG WIN</div>
+    <div class="amount" id="winAmount">+0 CHIPS</div>
+    <p id="winMessage">FORTUNE FAVORS THE BOLD</p>
+    <button class="gold-button" id="closeWin">CONTINUE</button>
   </div>
 </div>
 
 <script>
 (() => {
-"use strict";
-
-const API = "https://kimia-prive-api.onrender.com";
-const COST = 300;
-const SYMBOLS = ["💎","7️⃣","💗","🌹","♠️","✨"];
-const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-const $ = id => document.getElementById(id);
-const tg = window.Telegram && window.Telegram.WebApp ? window.Telegram.WebApp : null;
-let initData = "";
-let player = null;
-let busy = false;
-let autoSpin = false;
-let turbo = false;
-let autoTimer = null;
-let toastTimer = null;
-
-if(tg){
-  tg.ready();
-  tg.expand();
-  try{tg.setHeaderColor("#080604");tg.setBackgroundColor("#080604");}catch(e){}
-  initData = tg.initData || "";
-}
-
-const number = n => Math.floor(Number(n)||0).toLocaleString("en-US");
-const sleep = ms => new Promise(resolve=>setTimeout(resolve,ms));
-
-function status(message,type=""){
-  $("status").textContent=message;
-  $("status").className="status"+(type?" "+type:"");
-}
-function toast(message){
-  $("toast").textContent=message;
-  $("toast").classList.add("show");
-  clearTimeout(toastTimer);
-  toastTimer=setTimeout(()=>$("toast").classList.remove("show"),2800);
-}
-async function api(path,options={}){
-  const response=await fetch(API+path,{
-    ...options,cache:"no-store",
-    headers:{"Content-Type":"application/json",...(options.headers||{})}
-  });
-  let data;
-  try{data=await response.json();}catch(e){throw new Error("The server returned an unreadable response.");}
-  if(!response.ok)throw new Error(data.error||data.message||"Request failed.");
-  return data;
-}
-
-function updatePlayer(data){
-  player={...(player||{}),...data};
-  $("playerName").textContent=player.username
-    ? (String(player.username).startsWith("@")?player.username:"@"+player.username)
-    : "Privé Member";
-  $("balance").textContent=number(player.balance);
-
-  const balance=Number(player.balance)||0;
-  const level=Number(player.vip_level)||0;
-  const tiers=[
-    {name:"Privé Guest",next:5000},
-    {name:"Gold Member",next:20000},
-    {name:"Diamond Member",next:50000},
-    {name:"Royal Privé",next:50000}
-  ];
-  const tier=tiers[Math.min(level,tiers.length-1)];
-  $("vipTitle").textContent=tier.name;
-  $("vipProgress").style.width=(level>=3?100:Math.min(100,balance/tier.next*100))+"%";
-  $("vipCaption").textContent=level>=3?"Highest displayed membership tier.":number(Math.max(0,tier.next-balance))+" chips to the next displayed tier.";
-  $("spinBtn").disabled=busy||balance<COST||!initData;
-  $("spinLabel").textContent=busy?"SPINNING":balance<COST?"NEED CHIPS":"SPIN";
-  $("spinIcon").textContent=busy?"◌":"✧";
-}
-
-async function login(){
-  if(!initData){
-    $("playerName").textContent="Open in Telegram";
-    $("balance").textContent="—";
-    $("spinLabel").textContent="OPEN TELEGRAM";
-    status("Open this game from your Telegram bot to sign in.","bad");
-    return;
+  const API = "https://kimia-prive-api.onrender.com";
+  const tg = window.Telegram && window.Telegram.WebApp;
+  if (tg) {
+    tg.ready();
+    tg.expand();
+    try { tg.setHeaderColor("#080706"); } catch (_) {}
+    try { tg.setBackgroundColor("#080706"); } catch (_) {}
   }
-  try{
-    status("Entering the Gold Room…");
-    const data=await api("/api/me",{method:"POST",body:JSON.stringify({initData})});
-    updatePlayer(data);
-    status("Welcome to your private table.","good");
-  }catch(error){
-    console.error("Login failed",error);
-    status("LOGIN FAILED · "+error.message,"bad");
-    $("spinLabel").textContent="LOGIN FAILED";
-    $("spinBtn").disabled=true;
+
+  const $ = id => document.getElementById(id);
+  const fmt = n => Number(n || 0).toLocaleString("en-US");
+  const SYMBOLS = ["💎", "7️⃣", "💗", "🌹", "♠️", "✨"];
+  let initData = tg && tg.initData ? tg.initData : "";
+  let balance = 0;
+  let currentBet = 300;
+  let spinning = false;
+  let autoSpin = false;
+  let turbo = false;
+  let soundOn = false;
+  let autoTimer = null;
+  let audioContext = null;
+
+  const reels = $("reels");
+
+  function setStatus(message, error = false) {
+    $("status").textContent = message;
+    $("status").classList.toggle("error", error);
   }
-}
 
-function cells(){return [...$("reels").querySelectorAll(".symbol")];}
-function paint(symbols){
-  cells().forEach((cell,i)=>{
-    cell.textContent=symbols[i]||"✨";
-    cell.classList.remove("spinning","winning");
-  });
-}
-async function animateReels(finalSymbols){
-  const reels=[...$("reels").querySelectorAll(".reel")];
-  const duration=reduceMotion?80:turbo?500:1350;
-  reels.forEach(reel=>reel.querySelectorAll(".symbol").forEach(cell=>{
-    cell.classList.add("spinning");cell.classList.remove("winning");
-  }));
-  const start=Date.now();
-  await new Promise(resolve=>{
-    function frame(){
-      const elapsed=Date.now()-start;
-      reels.forEach((reel,col)=>{
-        if(elapsed<duration+col*(reduceMotion?0:180)){
-          reel.querySelectorAll(".symbol").forEach(cell=>{
-            cell.textContent=SYMBOLS[Math.floor(Math.random()*SYMBOLS.length)];
-          });
-        }
-      });
-      if(elapsed<duration+(reduceMotion?0:360))requestAnimationFrame(frame);
-      else resolve();
-    }
-    requestAnimationFrame(frame);
-  });
-
-  const gap=reduceMotion?0:turbo?65:170;
-  for(let col=0;col<3;col++){
-    await sleep(gap);
-    for(let row=0;row<3;row++){
-      const index=row*3+col;
-      const cell=cells()[index];
-      cell.textContent=finalSymbols[index]||"✨";
-      cell.classList.remove("spinning");
-      cell.animate(
-        [{transform:"translateY(-8px)",opacity:.45},{transform:"translateY(0)",opacity:1}],
-        {duration:reduceMotion?1:220,easing:"cubic-bezier(.2,.8,.3,1)"}
-      );
+  function makeGrid() {
+    reels.innerHTML = "";
+    for (let col = 0; col < 5; col++) {
+      const reel = document.createElement("div");
+      reel.className = "reel";
+      for (let row = 0; row < 3; row++) {
+        const cell = document.createElement("div");
+        cell.className = "cell";
+        cell.textContent = SYMBOLS[Math.floor(Math.random() * SYMBOLS.length)];
+        cell.dataset.index = row * 5 + col;
+        reel.appendChild(cell);
+      }
+      reels.appendChild(reel);
     }
   }
-}
 
-function highlight(lines){
-  const list=cells();
-  list.forEach(cell=>cell.classList.remove("winning"));
-  if(!Array.isArray(lines))return;
-  lines.forEach(line=>{
-    let indices=[];
-    if(Array.isArray(line))indices=line;
-    else if(line&&Array.isArray(line.indices))indices=line.indices;
-    else if(line&&Number.isInteger(line.line)){
-      indices=line.line===0?[0,1,2]:line.line===1?[3,4,5]:line.line===2?[6,7,8]:[];
-    }else if(line&&Number.isInteger(line.index)){
-      indices=line.index===0?[0,1,2]:line.index===1?[3,4,5]:line.index===2?[6,7,8]:[];
-    }
-    indices.forEach(i=>{if(Number.isInteger(i)&&list[i])list[i].classList.add("winning");});
-  });
-}
-
-function confetti(){
-  if(reduceMotion)return;
-  document.querySelectorAll(".confetti").forEach(el=>el.remove());
-  for(let i=0;i<65;i++){
-    const el=document.createElement("i");
-    el.className="confetti";
-    el.style.left=Math.random()*100+"%";
-    el.style.setProperty("--duration",(1.5+Math.random()*1.8)+"s");
-    el.style.setProperty("--drift",((Math.random()-.5)*180)+"px");
-    el.style.animationDelay=Math.random()*.5+"s";
-    el.style.background=["#f7d88d","#b47a2b","#fff1c4","#d9a1b0"][Math.floor(Math.random()*4)];
-    document.body.appendChild(el);
-    setTimeout(()=>el.remove(),4300);
+  function allCells() {
+    return [...reels.querySelectorAll(".cell")];
   }
-}
-function celebrate(amount){
-  $("cardTitle").textContent=amount>=10000?"ROYAL FORTUNE":amount>=3000?"A GOLDEN MOMENT":"BEAUTIFULLY PLAYED";
-  $("cardAmount").textContent="+"+number(amount);
-  $("overlay").classList.add("show");
-  $("winDisplay").classList.remove("celebrate");
-  void $("winDisplay").offsetWidth;
-  $("winDisplay").classList.add("celebrate");
-  confetti();
-  try{if(tg&&tg.HapticFeedback)tg.HapticFeedback.notificationOccurred("success");}catch(e){}
-}
-function closeWin(){
-  $("overlay").classList.remove("show");
-  if(autoSpin)scheduleAuto();
-}
 
-async function spin(){
-  if(busy)return;
-  if(!initData||!player){toast("Open the game through Telegram first.");return;}
-  if(Number(player.balance)<COST){status("Not enough virtual chips for a spin.","bad");toast("You need at least 300 virtual chips.");stopAuto();return;}
-
-  busy=true;
-  $("machine").classList.add("is-spinning");
-  $("reelFrame").classList.add("rolling");
-  $("spinBtn").disabled=true;
-  $("autoBtn").disabled=true;
-  $("turboBtn").disabled=true;
-  $("spinLabel").textContent="SPINNING";
-  $("spinIcon").textContent="◌";
-  status("The reels are turning…");
-  $("winHeading").textContent="THE REELS ARE TURNING";
-  $("winTotal").textContent="•••";
-  $("winSub").textContent="GOOD LUCK AT THE GOLD ROOM";
-
-  let result=null;
-  try{
-    result=await api("/api/spin",{method:"POST",body:JSON.stringify({initData})});
-    if(!Array.isArray(result.symbols)||result.symbols.length!==9)throw new Error("Unexpected reel result from server.");
-    await animateReels(result.symbols);
-
-    if(result.balance!==undefined)updatePlayer({balance:result.balance});
-    const win=Math.max(0,Number(result.win)||0);
-    $("winHeading").textContent=win>0?"BIG WIN":"THE NEXT SPIN AWAITS";
-    $("winTotal").textContent=win>0?"+"+number(win):"0";
-    $("winSub").textContent=win>0?"VIRTUAL CHIPS WON":"VIRTUAL CHIPS · LATEST SPIN";
-    $("lastWin").textContent=number(win)+" chips";
-    $("sessionCaption").textContent=win>0?"A winning result on your latest spin.":"No payout on this spin.";
-    highlight(result.winningLines);
-
-    if(win>0){
-      status("A winning combination · +"+number(win)+" chips!","good");
-      celebrate(win);
-    }else{
-      status("The reels have settled. Your next turn awaits.");
-      try{if(tg&&tg.HapticFeedback)tg.HapticFeedback.impactOccurred("light");}catch(e){}
-    }
-    loadLeaderboard();
-  }catch(error){
-    console.error("Spin failed",error);
-    if(result&&Array.isArray(result.symbols))paint(result.symbols);
-    status(error.message||"Spin failed. Please try again.","bad");
-    toast(error.message||"Unable to complete your spin.");
-    try{
-      const refreshed=await api("/api/me",{method:"POST",body:JSON.stringify({initData})});
-      updatePlayer(refreshed);
-    }catch(e){}
-  }finally{
-    busy=false;
-    $("machine").classList.remove("is-spinning");
-    $("reelFrame").classList.remove("rolling");
-    $("autoBtn").disabled=false;
-    $("turboBtn").disabled=false;
-    if(player)updatePlayer(player);
-    if(player&&Number(player.balance)<COST)stopAuto();
+  function showBalance(value) {
+    balance = Number(value);
+    $("balance").textContent = fmt(balance);
   }
-}
 
-function scheduleAuto(){
-  clearTimeout(autoTimer);
-  if(!autoSpin||busy||$("overlay").classList.contains("show"))return;
-  autoTimer=setTimeout(()=>{if(autoSpin&&!busy)spin();},turbo?400:900);
-}
-function stopAuto(){
-  autoSpin=false;
-  clearTimeout(autoTimer);
-  $("autoBtn").classList.remove("active");
-  $("autoBtn").setAttribute("aria-pressed","false");
-  $("autoLabel").textContent="OFF";
-}
-function toggleAuto(){
-  if(!player||!initData){toast("Sign in through Telegram first.");return;}
-  if(!autoSpin&&Number(player.balance)<COST){toast("You need at least 300 virtual chips.");return;}
-  autoSpin=!autoSpin;
-  $("autoBtn").classList.toggle("active",autoSpin);
-  $("autoBtn").setAttribute("aria-pressed",String(autoSpin));
-  $("autoLabel").textContent=autoSpin?"ON":"OFF";
-  if(autoSpin){toast("Auto-spin enabled. Tap AUTO to stop.");scheduleAuto();}
-  else{clearTimeout(autoTimer);toast("Auto-spin stopped.");}
-}
-function toggleTurbo(){
-  turbo=!turbo;
-  $("turboBtn").classList.toggle("active",turbo);
-  $("turboBtn").setAttribute("aria-pressed",String(turbo));
-  $("turboLabel").textContent=turbo?"ON":"OFF";
-  toast(turbo?"Turbo enabled.":"Standard animation enabled.");
-}
-
-async function loadLeaderboard(){
-  const target=$("leaderRows");
-  $("refreshBtn").disabled=true;
-  try{
-    const data=await api("/api/leaderboard");
-    const players=Array.isArray(data.players)?data.players:[];
-    target.innerHTML="";
-    if(!players.length){target.innerHTML='<div class="empty">The list is waiting for its first players.</div>';return;}
-    players.slice(0,10).forEach((person,index)=>{
-      const row=document.createElement("div");row.className="player-row";
-      const rank=document.createElement("div");rank.className="rank";rank.textContent=String(person.rank||index+1).padStart(2,"0");
-      const name=document.createElement("div");name.className="player-handle";
-      name.textContent=person.username?(String(person.username).startsWith("@")?person.username:"@"+person.username):"Anonymous Player";
-      const chips=document.createElement("div");chips.className="player-chips";chips.textContent=number(person.balance)+" chips";
-      row.append(rank,name,chips);target.appendChild(row);
+  async function api(path, options = {}) {
+    const response = await fetch(API + path, {
+      ...options,
+      headers: {
+        "Content-Type": "application/json",
+        ...(options.headers || {})
+      }
     });
-  }catch(error){
-    console.error("Leaderboard failed",error);
-    target.innerHTML='<div class="empty">The private list is temporarily unavailable.<br>Please refresh in a moment.</div>';
-  }finally{$("refreshBtn").disabled=false;}
-}
+    const data = await response.json().catch(() => ({}));
+    if (!response.ok) throw new Error(data.error || "Request failed.");
+    return data;
+  }
 
-$("spinBtn").addEventListener("click",spin);
-$("autoBtn").addEventListener("click",toggleAuto);
-$("turboBtn").addEventListener("click",toggleTurbo);
-$("refreshBtn").addEventListener("click",loadLeaderboard);
-$("maxBtn").addEventListener("click",()=>toast("Maximum bet is currently fixed at 300 virtual chips."));
-$("closeCard").addEventListener("click",closeWin);
-$("overlay").addEventListener("click",event=>{if(event.target===$("overlay"))closeWin();});
-document.addEventListener("visibilitychange",()=>{if(document.hidden)stopAuto();});
+  async function loadMe() {
+    if (!initData) {
+      setStatus("OPEN THIS GAME THROUGH TELEGRAM TO LOG IN", true);
+      $("playerName").textContent = "LOGIN REQUIRED";
+      return;
+    }
+    try {
+      const data = await api("/api/me", {
+        method: "POST",
+        body: JSON.stringify({ initData })
+      });
+      showBalance(data.balance);
+      $("vip").textContent = data.vipLevel ?? 0;
+      $("playerName").textContent = data.username ? "@" + data.username : "MEMBER";
+      $("avatar").textContent = data.username ? data.username.slice(0,1).toUpperCase() : "♛";
+      setStatus("WELCOME TO THE GOLD ROOM");
+    } catch (error) {
+      setStatus(error.message, true);
+    }
+  }
 
-login();
-loadLeaderboard();
+  async function loadLeaderboard() {
+    try {
+      const data = await api("/api/leaderboard");
+      const list = $("leaderboard");
+      list.innerHTML = "";
+      if (!data.players || !data.players.length) {
+        list.innerHTML = '<p style="font-size:10px;color:#a89a7e">No players yet. Be the first.</p>';
+        return;
+      }
+      data.players.forEach(player => {
+        const row = document.createElement("div");
+        row.className = "leader-row";
+        const rank = document.createElement("span");
+        rank.className = "rank";
+        rank.textContent = "#" + player.rank;
+        const name = document.createElement("span");
+        name.className = "player";
+        name.textContent = player.username || "Anonymous Player";
+        const score = document.createElement("span");
+        score.className = "score";
+        score.textContent = fmt(player.balance);
+        row.append(rank, name, score);
+        list.appendChild(row);
+      });
+    } catch (_) {
+      $("leaderboard").innerHTML = '<p style="font-size:10px;color:#a89a7e">Leaderboard temporarily unavailable.</p>';
+    }
+  }
+
+  function selectBet(bet) {
+    currentBet = Number(bet);
+    $("betDisplay").textContent = fmt(currentBet) + " CHIPS";
+    document.querySelectorAll(".bet-option").forEach(button => {
+      button.classList.toggle("active", Number(button.dataset.bet) === currentBet);
+    });
+  }
+
+  function winningCells(lines) {
+    const patterns = [
+      [0,1,2,3,4],
+      [5,6,7,8,9],
+      [10,11,12,13,14],
+      [0,6,12,8,4],
+      [10,6,2,8,14]
+    ];
+    const indexes = new Set();
+    (lines || []).forEach(lineIndex => {
+      if (patterns[lineIndex]) patterns[lineIndex].forEach(index => indexes.add(index));
+    });
+    allCells().forEach(cell => {
+      if (indexes.has(Number(cell.dataset.index))) cell.classList.add("winner");
+    });
+  }
+
+  function playTone(frequency = 660, duration = 0.1) {
+    if (!soundOn) return;
+    try {
+      audioContext = audioContext || new (window.AudioContext || window.webkitAudioContext)();
+      const oscillator = audioContext.createOscillator();
+      const gain = audioContext.createGain();
+      oscillator.type = "sine";
+      oscillator.frequency.value = frequency;
+      gain.gain.value = 0.045;
+      oscillator.connect(gain);
+      gain.connect(audioContext.destination);
+      oscillator.start();
+      gain.gain.exponentialRampToValueAtTime(0.001, audioContext.currentTime + duration);
+      oscillator.stop(audioContext.currentTime + duration);
+    } catch (_) {}
+  }
+
+  function confetti() {
+    for (let i = 0; i < 35; i++) {
+      const piece = document.createElement("i");
+      piece.className = "confetti";
+      piece.style.left = Math.random() * 100 + "vw";
+      piece.style.animationDelay = Math.random() * 0.6 + "s";
+      piece.style.transform = "rotate(" + Math.random() * 360 + "deg)";
+      if (i % 3 === 0) piece.style.background = "#fff0b3";
+      else if (i % 3 === 1) piece.style.background = "#c99b43";
+      else piece.style.background = "#8f6a30";
+      document.body.appendChild(piece);
+      setTimeout(() => piece.remove(), 2600);
+    }
+  }
+
+  function showWin(win) {
+    $("winTitle").textContent = win >= currentBet * 10 ? "BIG WIN" : "YOU WON";
+    $("winAmount").textContent = "+" + fmt(win) + " CHIPS";
+    $("winMessage").textContent = "YOUR FORTUNE IS GLOWING";
+    $("winOverlay").classList.add("show");
+    confetti();
+    playTone(880, 0.25);
+    setTimeout(() => playTone(1100, 0.3), 120);
+  }
+
+  function closeWin() {
+    $("winOverlay").classList.remove("show");
+    if (autoSpin) scheduleAuto();
+  }
+
+  function scheduleAuto() {
+    clearTimeout(autoTimer);
+    if (autoSpin) autoTimer = setTimeout(() => spin(), 500);
+  }
+
+  async function spin() {
+    if (spinning) return;
+    if (!initData) {
+      setStatus("OPEN THE GAME THROUGH TELEGRAM TO PLAY", true);
+      return;
+    }
+    if (balance < currentBet) {
+      setStatus("NOT ENOUGH CHIPS FOR THIS BET", true);
+      stopAuto();
+      return;
+    }
+
+    spinning = true;
+    $("spinBtn").disabled = true;
+    document.querySelectorAll(".bet-option").forEach(button => button.disabled = true);
+    $("maxBet").disabled = true;
+    $("autoBtn").disabled = true;
+    setStatus("THE REELS ARE SPINNING…");
+    allCells().forEach(cell => cell.classList.remove("winner"));
+
+    let animationTimer;
+    try {
+      const animationDuration = turbo ? 500 : 1600;
+      animationTimer = setInterval(() => {
+        allCells().forEach(cell => {
+          cell.textContent = SYMBOLS[Math.floor(Math.random() * SYMBOLS.length)];
+        });
+        playTone(330, 0.035);
+      }, turbo ? 65 : 85);
+
+      const resultPromise = api("/api/spin", {
+        method: "POST",
+        body: JSON.stringify({ initData, bet: currentBet })
+      });
+
+      const result = await resultPromise;
+      clearInterval(animationTimer);
+
+      // Stagger the final stopping of each reel.
+      const cells = allCells();
+      for (let col = 0; col < 5; col++) {
+        await new Promise(resolve => setTimeout(resolve, turbo ? 20 : 100));
+        for (let row = 0; row < 3; row++) {
+          const index = row * 5 + col;
+          cells[index].textContent = result.symbols[index];
+        }
+        playTone(440 + col * 80, 0.08);
+      }
+
+      showBalance(result.balance);
+      winningCells(result.winningLines);
+
+      if (result.win > 0) {
+        setStatus("✦ WINNER · +" + fmt(result.win) + " CHIPS ✦");
+        showWin(result.win);
+      } else {
+        setStatus("NO WIN THIS TIME · PLACE YOUR NEXT BET");
+      }
+
+      await loadLeaderboard();
+    } catch (error) {
+      clearInterval(animationTimer);
+      setStatus(error.message || "SPIN FAILED. PLEASE TRY AGAIN.", true);
+      await loadMe();
+      if (autoSpin && /not enough chips/i.test(error.message)) stopAuto();
+    } finally {
+      clearInterval(animationTimer);
+      spinning = false;
+      $("spinBtn").disabled = false;
+      document.querySelectorAll(".bet-option").forEach(button => button.disabled = false);
+      $("maxBet").disabled = false;
+      $("autoBtn").disabled = false;
+      if (autoSpin && !$("winOverlay").classList.contains("show")) scheduleAuto();
+    }
+  }
+
+  function stopAuto() {
+    autoSpin = false;
+    clearTimeout(autoTimer);
+    $("autoBtn").innerHTML = "AUTO<br>OFF";
+    $("autoBtn").classList.remove("on");
+  }
+
+  document.querySelectorAll(".bet-option").forEach(button => {
+    button.addEventListener("click", () => {
+      if (!spinning) selectBet(button.dataset.bet);
+    });
+  });
+
+  $("maxBet").addEventListener("click", () => selectBet(3000));
+  $("spinBtn").addEventListener("click", spin);
+  $("closeWin").addEventListener("click", closeWin);
+  $("refreshBtn").addEventListener("click", async () => {
+    await loadMe();
+    await loadLeaderboard();
+  });
+
+  $("autoBtn").addEventListener("click", () => {
+    autoSpin = !autoSpin;
+    $("autoBtn").innerHTML = autoSpin ? "AUTO<br>ON" : "AUTO<br>OFF";
+    $("autoBtn").classList.toggle("on", autoSpin);
+    if (autoSpin) scheduleAuto();
+    else clearTimeout(autoTimer);
+  });
+
+  $("turboBtn").addEventListener("click", () => {
+    turbo = !turbo;
+    $("turboBtn").textContent = turbo ? "⚡ TURBO ON" : "⚡ TURBO OFF";
+    $("turboBtn").classList.toggle("on", turbo);
+  });
+
+  $("soundBtn").addEventListener("click", () => {
+    soundOn = !soundOn;
+    $("soundBtn").textContent = soundOn ? "♫ SOUND ON" : "♫ SOUND OFF";
+    $("soundBtn").classList.toggle("on", soundOn);
+    if (soundOn) playTone();
+  });
+
+  document.querySelectorAll("[data-nav]").forEach(button => {
+    button.addEventListener("click", () => {
+      document.querySelectorAll("[data-nav]").forEach(item => item.classList.remove("active"));
+      button.classList.add("active");
+      const target = button.dataset.nav;
+      if (target === "leaderboard") {
+        $("leaderboard").scrollIntoView({ behavior: "smooth", block: "center" });
+      } else if (target === "rewards") {
+        document.querySelector(".jackpots").scrollIntoView({ behavior: "smooth", block: "center" });
+        setStatus("JACKPOT DISPLAY IS DECORATIVE — NO LIVE JACKPOT PAYOUT");
+      } else if (target === "settings") {
+        $("soundBtn").scrollIntoView({ behavior: "smooth", block: "center" });
+      } else {
+        window.scrollTo({ top: 0, behavior: "smooth" });
+      }
+    });
+  });
+
+  document.addEventListener("visibilitychange", () => {
+    if (document.hidden) stopAuto();
+  });
+
+  makeGrid();
+  selectBet(300);
+  loadMe();
+  loadLeaderboard();
 })();
 </script>
 </body>
