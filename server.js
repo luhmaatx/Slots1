@@ -1210,7 +1210,7 @@ app.get(
    SERVE INDEX.HTML
 ========================================================= */
 
-app.get("*", (req, res) => {
+app.get("/{*path}", (req, res) => {
   res.sendFile(
     path.join(
       __dirname,
