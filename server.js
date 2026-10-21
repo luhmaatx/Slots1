@@ -19,10 +19,7 @@ app.use(cors());
 app.use(express.json({ limit: "20kb" }));
 
 app.get("/", (req, res) => {
-  res.json({
-    status: "online",
-    game: "KIMIA PRIVÉ"
-  });
+  res.json({ status: "online", game: "KIMIA PRIVÉ" });
 });
 
 app.get("/api/health", async (req, res) => {
@@ -86,7 +83,6 @@ function verifyTelegram(initData) {
   if (!userText) throw new Error("Telegram user is missing.");
 
   const user = JSON.parse(userText);
-
   if (!user.id) throw new Error("Invalid Telegram player.");
 
   return {
@@ -115,6 +111,7 @@ async function getPlayer(initData) {
 app.post("/api/me", async (req, res) => {
   try {
     const player = await getPlayer(req.body?.initData);
+
     res.json({
       id: player.telegram_id,
       username: player.username,
@@ -128,10 +125,11 @@ app.post("/api/me", async (req, res) => {
 });
 
 app.post("/api/spin", async (req, res) => {
-  const client = await pool.connect();
+  let client;
 
   try {
     const user = verifyTelegram(req.body?.initData);
+    client = await pool.connect();
 
     await client.query("BEGIN");
 
@@ -157,24 +155,46 @@ app.post("/api/spin", async (req, res) => {
     }
 
     const symbols = ["💎", "7️⃣", "💗", "🌹", "♠️", "✨"];
+
+    // Nine symbols: three rows and three columns.
     const output = Array.from(
-      { length: 3 },
+      { length: 9 },
       () => symbols[crypto.randomInt(symbols.length)]
     );
 
-    let win = 0;
+    // Each line uses three symbols in one horizontal row.
+    const paylines = [
+      [0, 1, 2],
+      [3, 4, 5],
+      [6, 7, 8]
+    ];
 
-    if (output.every(symbol => symbol === output[0])) {
-      win = output[0] === "7️⃣" ? 15000
-        : output[0] === "💎" ? 7500
-        : output[0] === "💗" ? 4500
-        : 3000;
-    } else if (
-      output[0] === output[1] ||
-      output[1] === output[2] ||
-      output[0] === output[2]
-    ) {
-      win = 600;
+    let win = 0;
+    const winningLines = [];
+
+    for (let i = 0; i < paylines.length; i++) {
+      const line = paylines[i].map(index => output[index]);
+
+      if (line.every(symbol => symbol === line[0])) {
+        const payout = line[0] === "7️⃣" ? 15000
+          : line[0] === "💎" ? 7500
+          : line[0] === "💗" ? 4500
+          : 3000;
+
+        win += payout;
+        winningLines.push(i);
+      } else {
+        const counts = {};
+
+        for (const symbol of line) {
+          counts[symbol] = (counts[symbol] || 0) + 1;
+        }
+
+        if (Object.values(counts).some(count => count === 2)) {
+          win += 150;
+          winningLines.push(i);
+        }
+      }
     }
 
     const updated = await client.query(
@@ -190,14 +210,20 @@ app.post("/api/spin", async (req, res) => {
     res.json({
       symbols: output,
       win,
+      winningLines,
       balance: Number(updated.rows[0].balance)
     });
   } catch (error) {
-    await client.query("ROLLBACK").catch(() => {});
+    if (client) {
+      await client.query("ROLLBACK").catch(() => {});
+    }
+
     console.error("Spin failed:", error.message);
-    res.status(401).json({ error: "Unable to complete spin. Reopen the game and try again." });
+    res.status(500).json({
+      error: "Unable to complete spin. Please try again."
+    });
   } finally {
-    client.release();
+    if (client) client.release();
   }
 });
 
@@ -222,7 +248,7 @@ initializeDatabase()
       console.log("KIMIA PRIVÉ API running on port " + PORT);
     });
   })
-  .catch((error) => {
+  .catch(error => {
     console.error("Database initialization failed:", error.message);
     process.exit(1);
   });
