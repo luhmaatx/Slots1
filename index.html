@@ -33,6 +33,8 @@ body{
 
 button{
   font:inherit;
+  -webkit-appearance:none;
+  appearance:none;
 }
 
 .app{
@@ -78,9 +80,7 @@ button{
   display:none!important;
 }
 
-/* =====================================================
-   LOGIN
-===================================================== */
+/* LOGIN */
 
 .login-card{
   padding:48px 30px 32px;
@@ -118,7 +118,6 @@ button{
   align-items:center;
   gap:16px;
   margin:30px 0 28px;
-  color:#cba45b;
 }
 
 .ornament:before,
@@ -158,15 +157,29 @@ button{
   font-weight:600;
   letter-spacing:3px;
   cursor:pointer;
+  touch-action:manipulation;
+  position:relative;
+  z-index:5;
+}
+
+.primary-btn:active{
+  transform:translateY(1px);
 }
 
 .primary-btn:disabled{
   opacity:.55;
+  cursor:wait;
 }
 
-/* =====================================================
-   GAME HEADER
-===================================================== */
+.status{
+  min-height:24px;
+  margin-top:15px;
+  color:#c5a46d;
+  font-size:10px;
+  line-height:1.5;
+}
+
+/* GAME HEADER */
 
 .game-screen{
   width:min(620px,100%);
@@ -194,9 +207,7 @@ button{
   color:#d3ae63;
 }
 
-/* =====================================================
-   QUICK MENU
-===================================================== */
+/* QUICK MENU */
 
 .quick-menu{
   display:grid;
@@ -213,7 +224,7 @@ button{
   cursor:pointer;
   font-size:9px;
   letter-spacing:1.5px;
-  transition:.15s;
+  touch-action:manipulation;
 }
 
 .menu-btn:active{
@@ -229,9 +240,7 @@ button{
   color:#e3c477;
 }
 
-/* =====================================================
-   BALANCE
-===================================================== */
+/* BALANCE */
 
 .balance-card{
   display:flex;
@@ -254,9 +263,7 @@ button{
   color:#e8c979;
 }
 
-/* =====================================================
-   SLOT MACHINE
-===================================================== */
+/* SLOTS */
 
 .reel-card{
   padding:18px;
@@ -319,9 +326,7 @@ button{
 .symbol-spade .symbol-art{font-size:38px}
 .symbol-star .symbol-art{font-size:32px}
 
-/* =====================================================
-   CONTROLS
-===================================================== */
+/* CONTROLS */
 
 .controls{
   margin-top:16px;
@@ -342,6 +347,7 @@ button{
   font-size:10px;
   letter-spacing:1px;
   cursor:pointer;
+  touch-action:manipulation;
 }
 
 .bet-btn.active{
@@ -359,6 +365,9 @@ button{
   font-weight:600;
   letter-spacing:4px;
   cursor:pointer;
+  touch-action:manipulation;
+  position:relative;
+  z-index:5;
 }
 
 .spin-btn:disabled{
@@ -373,9 +382,7 @@ button{
   font-size:12px;
 }
 
-/* =====================================================
-   TOP PLAYERS
-===================================================== */
+/* LEADERBOARD */
 
 .leaderboard-card{
   margin-top:12px;
@@ -447,9 +454,16 @@ button{
   color:#e1c274;
 }
 
-/* =====================================================
-   MODAL SYSTEM
-===================================================== */
+.leaderboard-loading,
+.leaderboard-empty{
+  text-align:center;
+  padding:14px 4px;
+  color:#756a5b;
+  font-size:10px;
+  letter-spacing:1px;
+}
+
+/* MODALS */
 
 .modal{
   position:fixed;
@@ -469,8 +483,7 @@ button{
   overflow:auto;
   padding:28px 22px;
   border:1px solid rgba(205,164,82,.52);
-  background:
-    linear-gradient(145deg,#211710,#0b0806);
+  background:linear-gradient(145deg,#211710,#0b0806);
   box-shadow:0 25px 80px rgba(0,0,0,.75);
   position:relative;
 }
@@ -492,6 +505,7 @@ button{
   color:#a98c58;
   font-size:20px;
   cursor:pointer;
+  z-index:3;
 }
 
 .modal-title{
@@ -511,9 +525,7 @@ button{
   margin-bottom:24px;
 }
 
-/* =====================================================
-   PROFILE
-===================================================== */
+/* PROFILE */
 
 .profile-head{
   text-align:center;
@@ -573,9 +585,7 @@ button{
   letter-spacing:2px;
 }
 
-/* =====================================================
-   REWARDS
-===================================================== */
+/* REWARDS */
 
 .reward-card{
   border:1px solid rgba(205,164,82,.20);
@@ -618,7 +628,7 @@ button{
 
 .reward-progress-bar{
   height:100%;
-  width:35%;
+  width:0%;
   background:linear-gradient(90deg,#9b7135,#e2c477);
 }
 
@@ -639,9 +649,7 @@ button{
   color:#140e08;
 }
 
-/* =====================================================
-   DAILY GIFT
-===================================================== */
+/* DAILY GIFT */
 
 .gift-box{
   text-align:center;
@@ -691,11 +699,11 @@ button{
   font-weight:600;
   letter-spacing:3px;
   cursor:pointer;
+  touch-action:manipulation;
 }
 
 .gift-button:disabled{
   opacity:.45;
-  cursor:default;
 }
 
 .streak{
@@ -706,9 +714,7 @@ button{
   letter-spacing:2px;
 }
 
-/* =====================================================
-   ANIMATION
-===================================================== */
+/* ANIMATION */
 
 .reel.spinning{
   animation:reelPulse .09s linear infinite alternate;
@@ -731,12 +737,33 @@ button{
 
 @media(max-width:430px){
 
-  .brand{font-size:49px}
-  .brand-sub{font-size:25px}
+  .app{
+    padding:8px;
+  }
 
-  .symbol-art{font-size:28px}
-  .symbol-seven .symbol-art{font-size:34px}
-  .symbol-k .symbol-art{font-size:36px}
+  .login-card{
+    padding:40px 22px 27px;
+  }
+
+  .brand{
+    font-size:49px;
+  }
+
+  .brand-sub{
+    font-size:25px;
+  }
+
+  .symbol-art{
+    font-size:28px;
+  }
+
+  .symbol-seven .symbol-art{
+    font-size:34px;
+  }
+
+  .symbol-k .symbol-art{
+    font-size:36px;
+  }
 
   .player-row{
     grid-template-columns:35px 1fr auto;
@@ -749,9 +776,7 @@ button{
 
 <div class="app">
 
-<!-- =====================================================
-     LOGIN
-===================================================== -->
+<!-- LOGIN -->
 
 <main id="loginScreen" class="screen">
 
@@ -772,7 +797,7 @@ Your Telegram identity connects directly
 to your PRIVÉ account.
 </p>
 
-<button id="loginBtn" class="primary-btn">
+<button id="loginBtn" class="primary-btn" type="button">
 ENTER PRIVÉ
 </button>
 
@@ -783,9 +808,7 @@ ENTER PRIVÉ
 </main>
 
 
-<!-- =====================================================
-     GAME
-===================================================== -->
+<!-- GAME -->
 
 <main id="gameScreen" class="screen game-screen hidden">
 
@@ -806,17 +829,17 @@ PRIVÉ
 
 <div class="quick-menu">
 
-<button class="menu-btn" id="profileBtn">
+<button class="menu-btn" id="profileBtn" type="button">
 <span class="menu-icon">♙</span>
 PROFILE
 </button>
 
-<button class="menu-btn" id="rewardsBtn">
+<button class="menu-btn" id="rewardsBtn" type="button">
 <span class="menu-icon">◇</span>
 REWARDS
 </button>
 
-<button class="menu-btn" id="giftBtn">
+<button class="menu-btn" id="giftBtn" type="button">
 <span class="menu-icon">✦</span>
 DAILY GIFT
 </button>
@@ -847,7 +870,7 @@ MEMBER
 </section>
 
 
-<!-- SLOTS -->
+<!-- SLOT MACHINE -->
 
 <section class="card reel-card">
 
@@ -857,14 +880,14 @@ MEMBER
 
 <div class="bet-row">
 
-<button class="bet-btn active" data-bet="300">300</button>
-<button class="bet-btn" data-bet="600">600</button>
-<button class="bet-btn" data-bet="1500">1,500</button>
-<button class="bet-btn" data-bet="3000">3,000</button>
+<button class="bet-btn active" data-bet="300" type="button">300</button>
+<button class="bet-btn" data-bet="600" type="button">600</button>
+<button class="bet-btn" data-bet="1500" type="button">1,500</button>
+<button class="bet-btn" data-bet="3000" type="button">3,000</button>
 
 </div>
 
-<button id="spinBtn" class="spin-btn">
+<button id="spinBtn" class="spin-btn" type="button">
 SPIN
 </button>
 
@@ -875,7 +898,7 @@ SPIN
 </section>
 
 
-<!-- TOP PLAYERS -->
+<!-- LEADERBOARD -->
 
 <section class="card leaderboard-card">
 
@@ -902,23 +925,17 @@ LOADING PLAYERS…
 </div>
 
 
-<!-- =====================================================
-     PROFILE MODAL
-===================================================== -->
+<!-- PROFILE -->
 
 <div id="profileModal" class="modal hidden">
 
 <div class="modal-card">
 
-<button class="modal-close" data-close="profileModal">×</button>
+<button class="modal-close" data-close="profileModal" type="button">×</button>
 
-<div class="modal-title">
-PROFILE
-</div>
+<div class="modal-title">PROFILE</div>
 
-<div class="modal-subtitle">
-YOUR PRIVÉ ACCOUNT
-</div>
+<div class="modal-subtitle">YOUR PRIVÉ ACCOUNT</div>
 
 <div class="profile-head">
 
@@ -963,35 +980,25 @@ PRIVÉ MEMBER
 </div>
 
 
-<!-- =====================================================
-     REWARDS MODAL
-===================================================== -->
+<!-- REWARDS -->
 
 <div id="rewardsModal" class="modal hidden">
 
 <div class="modal-card">
 
-<button class="modal-close" data-close="rewardsModal">×</button>
+<button class="modal-close" data-close="rewardsModal" type="button">×</button>
 
-<div class="modal-title">
-REWARDS
-</div>
+<div class="modal-title">REWARDS</div>
 
-<div class="modal-subtitle">
-PRIVÉ REWARD COLLECTION
-</div>
+<div class="modal-subtitle">PRIVÉ REWARD COLLECTION</div>
 
 <div class="reward-card">
 
 <div class="reward-top">
 
-<div class="reward-name">
-FIRST SPIN
-</div>
+<div class="reward-name">FIRST SPIN</div>
 
-<div class="reward-amount">
-+500
-</div>
+<div class="reward-amount">+500</div>
 
 </div>
 
@@ -1000,39 +1007,10 @@ Complete your first spin to unlock this reward.
 </div>
 
 <div class="reward-progress">
-<div class="reward-progress-bar" style="width:100%"></div>
+<div id="firstSpinProgress" class="reward-progress-bar"></div>
 </div>
 
-<button class="reward-button">
-COMPLETED
-</button>
-
-</div>
-
-
-<div class="reward-card">
-
-<div class="reward-top">
-
-<div class="reward-name">
-HIGH ROLLER
-</div>
-
-<div class="reward-amount">
-+2,500
-</div>
-
-</div>
-
-<div class="reward-description">
-Reach 10,000 total coins wagered.
-</div>
-
-<div class="reward-progress">
-<div id="highRollerProgress" class="reward-progress-bar" style="width:0%"></div>
-</div>
-
-<button id="highRollerButton" class="reward-button">
+<button id="firstSpinButton" class="reward-button" type="button">
 IN PROGRESS
 </button>
 
@@ -1043,13 +1021,34 @@ IN PROGRESS
 
 <div class="reward-top">
 
-<div class="reward-name">
-PRIVÉ ELITE
+<div class="reward-name">HIGH ROLLER</div>
+
+<div class="reward-amount">+2,500</div>
+
 </div>
 
-<div class="reward-amount">
-+10,000
+<div class="reward-description">
+Reach 10,000 total coins wagered.
 </div>
+
+<div class="reward-progress">
+<div id="highRollerProgress" class="reward-progress-bar"></div>
+</div>
+
+<button id="highRollerButton" class="reward-button" type="button">
+IN PROGRESS
+</button>
+
+</div>
+
+
+<div class="reward-card">
+
+<div class="reward-top">
+
+<div class="reward-name">PRIVÉ ELITE</div>
+
+<div class="reward-amount">+10,000</div>
 
 </div>
 
@@ -1058,10 +1057,10 @@ Reach VIP Level 5.
 </div>
 
 <div class="reward-progress">
-<div id="eliteProgress" class="reward-progress-bar" style="width:0%"></div>
+<div id="eliteProgress" class="reward-progress-bar"></div>
 </div>
 
-<button class="reward-button">
+<button id="eliteButton" class="reward-button" type="button">
 LOCKED
 </button>
 
@@ -1072,29 +1071,21 @@ LOCKED
 </div>
 
 
-<!-- =====================================================
-     DAILY GIFT MODAL
-===================================================== -->
+<!-- DAILY GIFT -->
 
 <div id="giftModal" class="modal hidden">
 
 <div class="modal-card">
 
-<button class="modal-close" data-close="giftModal">×</button>
+<button class="modal-close" data-close="giftModal" type="button">×</button>
 
-<div class="modal-title">
-DAILY GIFT
-</div>
+<div class="modal-title">DAILY GIFT</div>
 
-<div class="modal-subtitle">
-A LITTLE PRIVÉ SURPRISE
-</div>
+<div class="modal-subtitle">A LITTLE PRIVÉ SURPRISE</div>
 
 <div class="gift-box">
 
-<div class="gift-icon">
-✦
-</div>
+<div class="gift-icon">✦</div>
 
 <div class="gift-title">
 TODAY'S GIFT
@@ -1109,7 +1100,7 @@ and unlock increasingly valuable gifts.
 +1,000
 </div>
 
-<button id="giftClaimBtn" class="gift-button">
+<button id="giftClaimBtn" class="gift-button" type="button">
 CLAIM TODAY'S GIFT
 </button>
 
@@ -1131,30 +1122,24 @@ CURRENT STREAK · 1 DAY
 
 "use strict";
 
-
 /* =====================================================
    TELEGRAM
 ===================================================== */
 
 const tg =
-window.Telegram &&
-window.Telegram.WebApp
-? window.Telegram.WebApp
-: null;
+  window.Telegram &&
+  window.Telegram.WebApp
+    ? window.Telegram.WebApp
+    : null;
 
 if(tg){
 
-try{
-
-tg.ready();
-tg.expand();
-tg.enableClosingConfirmation();
-
-}catch(e){
-
-console.warn("Telegram setup:",e);
-
-}
+  try{
+    tg.ready();
+    tg.expand();
+  }catch(error){
+    console.warn("Telegram setup:",error);
+  }
 
 }
 
@@ -1164,64 +1149,64 @@ console.warn("Telegram setup:",e);
 ===================================================== */
 
 const loginScreen =
-document.getElementById("loginScreen");
+  document.getElementById("loginScreen");
 
 const gameScreen =
-document.getElementById("gameScreen");
+  document.getElementById("gameScreen");
 
 const loginBtn =
-document.getElementById("loginBtn");
+  document.getElementById("loginBtn");
 
 const loginStatus =
-document.getElementById("loginStatus");
+  document.getElementById("loginStatus");
 
 const balanceEl =
-document.getElementById("balance");
+  document.getElementById("balance");
 
 const playerNameEl =
-document.getElementById("playerName");
+  document.getElementById("playerName");
 
 const vipBadge =
-document.getElementById("vipBadge");
+  document.getElementById("vipBadge");
 
 const reelsEl =
-document.getElementById("reels");
+  document.getElementById("reels");
 
 const spinBtn =
-document.getElementById("spinBtn");
+  document.getElementById("spinBtn");
 
 const gameMessage =
-document.getElementById("gameMessage");
+  document.getElementById("gameMessage");
 
 const playersEl =
-document.getElementById("players");
+  document.getElementById("players");
 
 const profileBtn =
-document.getElementById("profileBtn");
+  document.getElementById("profileBtn");
 
 const rewardsBtn =
-document.getElementById("rewardsBtn");
+  document.getElementById("rewardsBtn");
 
 const giftBtn =
-document.getElementById("giftBtn");
+  document.getElementById("giftBtn");
 
 const profileModal =
-document.getElementById("profileModal");
+  document.getElementById("profileModal");
 
 const rewardsModal =
-document.getElementById("rewardsModal");
+  document.getElementById("rewardsModal");
 
 const giftModal =
-document.getElementById("giftModal");
+  document.getElementById("giftModal");
 
 const giftClaimBtn =
-document.getElementById("giftClaimBtn");
+  document.getElementById("giftClaimBtn");
 
 const giftMessage =
-document.getElementById("giftMessage");
+  document.getElementById("giftMessage");
 
 const streakText =
-document.getElementById("streakText");
+  document.getElementById("streakText");
 
 
 let selectedBet = 300;
@@ -1230,135 +1215,168 @@ let spinning = false;
 
 
 /* =====================================================
-   API
+   API POST
 ===================================================== */
 
 async function apiPost(endpoint,body){
 
-const response =
-await fetch(
-endpoint,
-{
-method:"POST",
-headers:{
-"Content-Type":"application/json",
-"Accept":"application/json"
-},
-body:JSON.stringify(body)
-}
-);
+  let response;
 
-const text =
-await response.text();
+  try{
 
-let data = null;
+    response = await fetch(
+      endpoint,
+      {
+        method:"POST",
+        headers:{
+          "Content-Type":"application/json",
+          "Accept":"application/json"
+        },
+        body:JSON.stringify(body),
+        cache:"no-store"
+      }
+    );
 
-if(text){
+  }catch(error){
 
-try{
+    throw new Error(
+      "Unable to reach the KIMIA PRIVÉ server."
+    );
 
-data = JSON.parse(text);
+  }
 
-}catch(error){
 
-throw new Error(
-"Server returned invalid JSON."
-);
+  const text =
+    await response.text();
 
-}
+  let data = null;
 
-}
+  if(text){
 
-if(!response.ok){
+    try{
+      data = JSON.parse(text);
+    }catch(error){
 
-const serverError =
-data && data.error
-? data.error
-: `Server returned HTTP ${response.status}.`;
+      throw new Error(
+        `Server returned invalid JSON from ${endpoint}.`
+      );
 
-throw new Error(serverError);
+    }
 
-}
+  }
 
-if(!data){
 
-throw new Error(
-"Server returned an empty response."
-);
+  if(!response.ok){
 
-}
+    const serverError =
+      data && data.error
+        ? data.error
+        : `Server returned HTTP ${response.status}.`;
 
-return data;
+    throw new Error(serverError);
+
+  }
+
+
+  if(!data){
+
+    throw new Error(
+      "Server returned an empty response."
+    );
+
+  }
+
+
+  return data;
 
 }
 
 
 /* =====================================================
-   TELEGRAM DATA
+   TELEGRAM INIT DATA
 ===================================================== */
 
 function getInitData(){
 
-if(!tg){
+  if(!tg){
 
-throw new Error(
-"Telegram WebApp is not available."
-);
+    throw new Error(
+      "Telegram WebApp was not detected. Please open KIMIA PRIVÉ from the Telegram bot."
+    );
 
-}
+  }
 
-if(!tg.initData){
 
-throw new Error(
-"Telegram did not provide login data. Open the game from the Telegram bot."
-);
+  /*
+    initData is the signed Telegram payload
+    that the backend uses to identify the player.
+  */
 
-}
+  const initData =
+    typeof tg.initData === "string"
+      ? tg.initData.trim()
+      : "";
 
-return tg.initData;
+
+  if(!initData){
+
+    throw new Error(
+      "Telegram did not provide login data. Close this window and open KIMIA PRIVÉ directly from the bot again."
+    );
+
+  }
+
+
+  return initData;
 
 }
 
 
 /* =====================================================
-   PLAYER
+   PLAYER DISPLAY
 ===================================================== */
 
 function updatePlayer(player){
 
-const balance =
-Number(player.balance);
+  const balance =
+    Number(player.balance);
 
-balanceEl.textContent =
-Number.isFinite(balance)
-? balance.toLocaleString()
-: "0";
 
-let name =
-player.username ||
-player.first_name ||
-"PRIVÉ MEMBER";
+  balanceEl.textContent =
+    Number.isFinite(balance)
+      ? balance.toLocaleString()
+      : "0";
 
-if(
-typeof name === "string" &&
-name.startsWith("@")
-){
 
-name =
-name.substring(1);
+  let name =
+    player.username ||
+    player.first_name ||
+    "PRIVÉ MEMBER";
 
-}
 
-playerNameEl.textContent =
-String(name).toUpperCase();
+  if(
+    typeof name === "string" &&
+    name.startsWith("@")
+  ){
 
-const vip =
-Number(player.vipLevel || 0);
+    name =
+      name.substring(1);
 
-vipBadge.textContent =
-vip > 0
-? `VIP ${vip}`
-: "PRIVÉ";
+  }
+
+
+  playerNameEl.textContent =
+    String(name).toUpperCase();
+
+
+  const vip =
+    Number(player.vipLevel || 0);
+
+
+  vipBadge.textContent =
+    vip > 0
+      ? `VIP ${vip}`
+      : "PRIVÉ";
 
 }
 
@@ -1369,55 +1387,85 @@ vip > 0
 
 function openProfile(){
 
-if(!currentPlayer){
-return;
-}
+  if(!currentPlayer){
+    return;
+  }
 
-const name =
-currentPlayer.first_name ||
-currentPlayer.username ||
-"PRIVÉ MEMBER";
 
-const username =
-currentPlayer.username
-? "@" + String(currentPlayer.username).replace(/^@/,"")
-: "@member";
+  const name =
+    currentPlayer.first_name ||
+    currentPlayer.username ||
+    "PRIVÉ MEMBER";
 
-document.getElementById("profileName")
-.textContent =
-String(name).toUpperCase();
 
-document.getElementById("profileUsername")
-.textContent =
-username;
+  const username =
+    currentPlayer.username
+      ? "@" + String(
+          currentPlayer.username
+        ).replace(/^@/,"")
+      : "@member";
 
-document.getElementById("profileBalance")
-.textContent =
-Number(currentPlayer.balance || 0)
-.toLocaleString();
 
-document.getElementById("profileVip")
-.textContent =
-Number(currentPlayer.vipLevel || 0);
+  document.getElementById(
+    "profileName"
+  ).textContent =
+    String(name).toUpperCase();
 
-document.getElementById("profileSpins")
-.textContent =
-Number(currentPlayer.spins || 0)
-.toLocaleString();
 
-document.getElementById("profileWins")
-.textContent =
-Number(currentPlayer.wins || 0)
-.toLocaleString();
+  document.getElementById(
+    "profileUsername"
+  ).textContent =
+    username;
 
-const initial =
-String(name).trim().charAt(0).toUpperCase() || "K";
 
-document.getElementById("profileAvatar")
-.textContent =
-initial;
+  document.getElementById(
+    "profileBalance"
+  ).textContent =
+    Number(
+      currentPlayer.balance || 0
+    ).toLocaleString();
 
-profileModal.classList.remove("hidden");
+
+  document.getElementById(
+    "profileVip"
+  ).textContent =
+    Number(
+      currentPlayer.vipLevel || 0
+    );
+
+
+  document.getElementById(
+    "profileSpins"
+  ).textContent =
+    Number(
+      currentPlayer.spins || 0
+    ).toLocaleString();
+
+
+  document.getElementById(
+    "profileWins"
+  ).textContent =
+    Number(
+      currentPlayer.wins || 0
+    ).toLocaleString();
+
+
+  const initial =
+    String(name)
+      .trim()
+      .charAt(0)
+      .toUpperCase() || "K";
+
+
+  document.getElementById(
+    "profileAvatar"
+  ).textContent =
+    initial;
+
+
+  profileModal.classList.remove(
+    "hidden"
+  );
 
 }
 
@@ -1428,70 +1476,153 @@ profileModal.classList.remove("hidden");
 
 function openRewards(){
 
-if(!currentPlayer){
-return;
-}
+  if(!currentPlayer){
+    return;
+  }
 
-const wagered =
-Number(
-currentPlayer.totalWagered ||
-currentPlayer.wagered ||
-0
-);
 
-const vip =
-Number(currentPlayer.vipLevel || 0);
+  const spins =
+    Number(
+      currentPlayer.spins || 0
+    );
 
-const wagerProgress =
-Math.min(
-100,
-(wagered / 10000) * 100
-);
 
-const eliteProgress =
-Math.min(
-100,
-(vip / 5) * 100
-);
+  const wagered =
+    Number(
+      currentPlayer.totalWagered ||
+      currentPlayer.wagered ||
+      0
+    );
 
-document.getElementById(
-"highRollerProgress"
-).style.width =
-wagerProgress + "%";
 
-document.getElementById(
-"eliteProgress"
-).style.width =
-eliteProgress + "%";
+  const vip =
+    Number(
+      currentPlayer.vipLevel || 0
+    );
 
-const highButton =
-document.getElementById(
-"highRollerButton"
-);
 
-if(wagered >= 10000){
+  const firstProgress =
+    spins > 0
+      ? 100
+      : 0;
 
-highButton.textContent =
-"READY TO CLAIM";
 
-highButton.classList.add(
-"claimable"
-);
+  const wagerProgress =
+    Math.min(
+      100,
+      (wagered / 10000) * 100
+    );
 
-}else{
 
-highButton.textContent =
-`${Math.round(wagerProgress)}% COMPLETE`;
+  const eliteProgress =
+    Math.min(
+      100,
+      (vip / 5) * 100
+    );
 
-highButton.classList.remove(
-"claimable"
-);
 
-}
+  document.getElementById(
+    "firstSpinProgress"
+  ).style.width =
+    firstProgress + "%";
 
-rewardsModal.classList.remove(
-"hidden"
-);
+
+  document.getElementById(
+    "highRollerProgress"
+  ).style.width =
+    wagerProgress + "%";
+
+
+  document.getElementById(
+    "eliteProgress"
+  ).style.width =
+    eliteProgress + "%";
+
+
+  const firstButton =
+    document.getElementById(
+      "firstSpinButton"
+    );
+
+
+  if(spins > 0){
+
+    firstButton.textContent =
+      "COMPLETED";
+
+    firstButton.classList.remove(
+      "claimable"
+    );
+
+  }else{
+
+    firstButton.textContent =
+      "IN PROGRESS";
+
+    firstButton.classList.remove(
+      "claimable"
+    );
+
+  }
+
+
+  const highButton =
+    document.getElementById(
+      "highRollerButton"
+    );
+
+
+  if(wagered >= 10000){
+
+    highButton.textContent =
+      "READY TO CLAIM";
+
+    highButton.classList.add(
+      "claimable"
+    );
+
+  }else{
+
+    highButton.textContent =
+      `${Math.round(wagerProgress)}% COMPLETE`;
+
+    highButton.classList.remove(
+      "claimable"
+    );
+
+  }
+
+
+  const eliteButton =
+    document.getElementById(
+      "eliteButton"
+    );
+
+
+  if(vip >= 5){
+
+    eliteButton.textContent =
+      "READY TO CLAIM";
+
+    eliteButton.classList.add(
+      "claimable"
+    );
+
+  }else{
+
+    eliteButton.textContent =
+      "LOCKED";
+
+    eliteButton.classList.remove(
+      "claimable"
+    );
+
+  }
+
+
+  rewardsModal.classList.remove(
+    "hidden"
+  );
 
 }
 
@@ -1502,31 +1633,43 @@ rewardsModal.classList.remove(
 
 function openGift(){
 
-giftMessage.textContent = "";
+  giftMessage.textContent = "";
 
-giftModal.classList.remove(
-"hidden"
-);
+  giftClaimBtn.disabled = false;
+
+  giftClaimBtn.textContent =
+    "CLAIM TODAY'S GIFT";
+
+  giftModal.classList.remove(
+    "hidden"
+  );
 
 }
 
+
+/*
+  Visual claim for now.
+  The actual persistent daily-gift
+  claim should be connected to PostgreSQL
+  through a backend endpoint.
+*/
 
 giftClaimBtn.addEventListener(
-"click",
-() => {
+  "click",
+  function(){
 
-giftClaimBtn.disabled = true;
+    giftClaimBtn.disabled = true;
 
-giftClaimBtn.textContent =
-"CLAIMED ✓";
+    giftClaimBtn.textContent =
+      "CLAIMED ✓";
 
-giftMessage.textContent =
-"Today's gift has been claimed.";
+    giftMessage.textContent =
+      "Today's gift has been claimed.";
 
-streakText.textContent =
-"CURRENT STREAK · 1 DAY";
+    streakText.textContent =
+      "CURRENT STREAK · 1 DAY";
 
-}
+  }
 );
 
 
@@ -1535,61 +1678,67 @@ streakText.textContent =
 ===================================================== */
 
 profileBtn.addEventListener(
-"click",
-openProfile
+  "click",
+  openProfile
 );
 
 rewardsBtn.addEventListener(
-"click",
-openRewards
+  "click",
+  openRewards
 );
 
 giftBtn.addEventListener(
-"click",
-openGift
+  "click",
+  openGift
 );
-
-document
-.querySelectorAll("[data-close]")
-.forEach(button => {
-
-button.addEventListener(
-"click",
-() => {
-
-const id =
-button.dataset.close;
-
-document
-.getElementById(id)
-.classList.add("hidden");
-
-}
-);
-
-});
 
 
 document
-.querySelectorAll(".modal")
-.forEach(modal => {
+  .querySelectorAll("[data-close]")
+  .forEach(button => {
 
-modal.addEventListener(
-"click",
-event => {
+    button.addEventListener(
+      "click",
+      function(){
 
-if(event.target === modal){
+        const id =
+          button.dataset.close;
 
-modal.classList.add(
-"hidden"
-);
+        const modal =
+          document.getElementById(id);
 
-}
+        if(modal){
+          modal.classList.add(
+            "hidden"
+          );
+        }
 
-}
-);
+      }
+    );
 
-});
+  });
+
+
+document
+  .querySelectorAll(".modal")
+  .forEach(modal => {
+
+    modal.addEventListener(
+      "click",
+      function(event){
+
+        if(event.target === modal){
+
+          modal.classList.add(
+            "hidden"
+          );
+
+        }
+
+      }
+    );
+
+  });
 
 
 /* =====================================================
@@ -1598,310 +1747,326 @@ modal.classList.add(
 
 async function loadLeaderboard(){
 
-try{
+  try{
 
-const response =
-await fetch(
-"/api/leaderboard",
-{
-method:"GET",
-cache:"no-store",
-headers:{
-"Accept":"application/json"
-}
-}
-);
+    const response =
+      await fetch(
+        "/api/leaderboard",
+        {
+          method:"GET",
+          cache:"no-store",
+          headers:{
+            "Accept":"application/json"
+          }
+        }
+      );
 
-const text =
-await response.text();
 
-if(!response.ok){
+    const text =
+      await response.text();
 
-throw new Error(
-`Leaderboard HTTP ${response.status}`
-);
 
-}
+    if(!response.ok){
 
-if(!text){
+      throw new Error(
+        `Leaderboard HTTP ${response.status}`
+      );
 
-throw new Error(
-"Empty leaderboard response."
-);
+    }
 
-}
 
-const data =
-JSON.parse(text);
+    if(!text){
 
-const players =
-Array.isArray(data.players)
-? data.players
-: [];
+      throw new Error(
+        "Empty leaderboard response."
+      );
 
-renderLeaderboard(players);
+    }
 
-}catch(error){
 
-console.error(
-"LEADERBOARD ERROR:",
-error
-);
+    const data =
+      JSON.parse(text);
 
-playersEl.innerHTML = `
-<div class="leaderboard-empty">
-LEADERBOARD UNAVAILABLE
-</div>
-`;
 
-}
+    const players =
+      Array.isArray(data.players)
+        ? data.players
+        : [];
+
+
+    renderLeaderboard(players);
+
+
+  }catch(error){
+
+    console.error(
+      "LEADERBOARD ERROR:",
+      error
+    );
+
+
+    playersEl.innerHTML = `
+      <div class="leaderboard-empty">
+        LEADERBOARD UNAVAILABLE
+      </div>
+    `;
+
+  }
 
 }
 
 
 function renderLeaderboard(players){
 
-playersEl.innerHTML = "";
+  playersEl.innerHTML = "";
 
-if(
-!Array.isArray(players) ||
-players.length === 0
-){
 
-playersEl.innerHTML = `
-<div class="leaderboard-empty">
-NO PLAYERS YET
-</div>
-`;
+  if(
+    !Array.isArray(players) ||
+    players.length === 0
+  ){
 
-return;
+    playersEl.innerHTML = `
+      <div class="leaderboard-empty">
+        NO PLAYERS YET
+      </div>
+    `;
 
-}
+    return;
 
-players
-.slice(0,10)
-.forEach((player,index) => {
+  }
 
-const row =
-document.createElement("div");
 
-row.className =
-"player-row";
+  players
+    .slice(0,10)
+    .forEach(
+      (player,index) => {
 
-const rank =
-Number(player.rank) ||
-index + 1;
+        const row =
+          document.createElement(
+            "div"
+          );
 
-const username =
-player.username ||
-player.name ||
-"Anonymous Player";
 
-const balance =
-Number(player.balance);
+        row.className =
+          "player-row";
 
-const formattedBalance =
-Number.isFinite(balance)
-? balance.toLocaleString()
-: "0";
 
-row.innerHTML = `
+        const rank =
+          Number(player.rank) ||
+          index + 1;
 
-<div class="player-rank">
-#${rank}
-</div>
 
-<div class="player-info">
+        const username =
+          player.username ||
+          player.name ||
+          "Anonymous Player";
 
-<div class="player-name">
-${escapeHtml(String(username))}
-</div>
 
-<div class="player-label">
-PRIVÉ MEMBER
-</div>
+        const balance =
+          Number(player.balance);
 
-</div>
 
-<div class="player-balance">
-${formattedBalance}
-</div>
+        const formattedBalance =
+          Number.isFinite(balance)
+            ? balance.toLocaleString()
+            : "0";
 
-`;
 
-playersEl.appendChild(row);
+        row.innerHTML = `
 
-});
+          <div class="player-rank">
+            #${rank}
+          </div>
+
+          <div class="player-info">
+
+            <div class="player-name">
+              ${escapeHtml(
+                String(username)
+              )}
+            </div>
+
+            <div class="player-label">
+              PRIVÉ MEMBER
+            </div>
+
+          </div>
+
+          <div class="player-balance">
+            ${formattedBalance}
+          </div>
+
+        `;
+
+
+        playersEl.appendChild(row);
+
+      }
+    );
 
 }
 
 
 function escapeHtml(value){
 
-return value
-.replace(/&/g,"&amp;")
-.replace(/</g,"&lt;")
-.replace(/>/g,"&gt;")
-.replace(/"/g,"&quot;")
-.replace(/'/g,"&#039;");
+  return value
+    .replace(/&/g,"&amp;")
+    .replace(/</g,"&lt;")
+    .replace(/>/g,"&gt;")
+    .replace(/"/g,"&quot;")
+    .replace(/'/g,"&#039;");
 
 }
 
 
 /* =====================================================
-   SYMBOL NORMALIZATION
+   SYMBOLS
 ===================================================== */
 
 function normalizeSymbol(raw){
 
-if(raw === null || raw === undefined){
-return "STAR";
-}
-
-let value =
-String(raw)
-.trim()
-.toLowerCase();
-
-value =
-value.replace(/\uFE0F/g,"");
-
-value =
-value.replace(/\u200D/g,"");
+  if(
+    raw === null ||
+    raw === undefined
+  ){
+    return "STAR";
+  }
 
 
-if(
-value === "🌹" ||
-value === "rose" ||
-value === "k" ||
-value === "letter k"
-){
-
-return "K";
-
-}
+  let value =
+    String(raw)
+      .trim()
+      .toLowerCase();
 
 
-if(
-value === "💎" ||
-value === "diamond" ||
-value === "◆" ||
-value === "◇"
-){
-
-return "DIAMOND";
-
-}
+  value =
+    value.replace(/\uFE0F/g,"");
 
 
-if(
-value === "7" ||
-value === "7️⃣" ||
-value === "seven"
-){
-
-return "7";
-
-}
+  value =
+    value.replace(/\u200D/g,"");
 
 
-if(
-value === "💗" ||
-value === "❤️" ||
-value === "♥" ||
-value === "heart"
-){
-
-return "HEART";
-
-}
+  if(
+    value === "🌹" ||
+    value === "rose" ||
+    value === "k" ||
+    value === "letter k"
+  ){
+    return "K";
+  }
 
 
-if(
-value === "♠" ||
-value === "♠️" ||
-value === "spade"
-){
+  if(
+    value === "💎" ||
+    value === "diamond" ||
+    value === "◆" ||
+    value === "◇"
+  ){
+    return "DIAMOND";
+  }
 
-return "SPADE";
 
-}
+  if(
+    value === "7" ||
+    value === "7️⃣" ||
+    value === "seven"
+  ){
+    return "7";
+  }
 
 
-if(
-value === "✨" ||
-value === "✦" ||
-value === "star"
-){
+  if(
+    value === "💗" ||
+    value === "❤️" ||
+    value === "♥" ||
+    value === "heart"
+  ){
+    return "HEART";
+  }
 
-return "STAR";
+
+  if(
+    value === "♠" ||
+    value === "spade"
+  ){
+    return "SPADE";
+  }
+
+
+  if(
+    value === "✨" ||
+    value === "✦" ||
+    value === "star"
+  ){
+    return "STAR";
+  }
+
+
+  return "STAR";
 
 }
 
-return "STAR";
-
-}
-
-
-/* =====================================================
-   SYMBOL DISPLAY
-===================================================== */
 
 function symbolClass(symbol){
 
-if(symbol === "DIAMOND")
-return "symbol-diamond";
+  if(symbol === "DIAMOND")
+    return "symbol-diamond";
 
-if(symbol === "7")
-return "symbol-seven";
+  if(symbol === "7")
+    return "symbol-seven";
 
-if(symbol === "HEART")
-return "symbol-heart";
+  if(symbol === "HEART")
+    return "symbol-heart";
 
-if(symbol === "K")
-return "symbol-k";
+  if(symbol === "K")
+    return "symbol-k";
 
-if(symbol === "SPADE")
-return "symbol-spade";
+  if(symbol === "SPADE")
+    return "symbol-spade";
 
-return "symbol-star";
+  return "symbol-star";
 
 }
 
 
 function symbolMarkup(rawSymbol){
 
-const symbol =
-normalizeSymbol(rawSymbol);
+  const symbol =
+    normalizeSymbol(rawSymbol);
 
-let art = "✦";
 
-if(symbol === "DIAMOND")
-art = "◆";
+  let art = "✦";
 
-if(symbol === "7")
-art = "7";
 
-if(symbol === "HEART")
-art = "♥";
+  if(symbol === "DIAMOND")
+    art = "◆";
 
-if(symbol === "K")
-art = "K";
+  if(symbol === "7")
+    art = "7";
 
-if(symbol === "SPADE")
-art = "♠";
+  if(symbol === "HEART")
+    art = "♥";
 
-return `
+  if(symbol === "K")
+    art = "K";
 
-<div class="symbol ${symbolClass(symbol)}">
+  if(symbol === "SPADE")
+    art = "♠";
 
-<span class="symbol-art">
-${art}
-</span>
 
-</div>
+  return `
 
-`;
+    <div class="symbol ${symbolClass(symbol)}">
+
+      <span class="symbol-art">
+        ${art}
+      </span>
+
+    </div>
+
+  `;
 
 }
 
@@ -1911,41 +2076,50 @@ ${art}
 ===================================================== */
 
 function renderSymbols(
-symbols,
-spinningState=false
+  symbols,
+  spinningState=false
 ){
 
-reelsEl.innerHTML = "";
+  reelsEl.innerHTML = "";
 
-if(
-!Array.isArray(symbols) ||
-symbols.length !== 15
-){
 
-symbols =
-Array.from(
-{length:15},
-() => "STAR"
-);
+  if(
+    !Array.isArray(symbols) ||
+    symbols.length !== 15
+  ){
 
-}
+    symbols =
+      Array.from(
+        {length:15},
+        () => "STAR"
+      );
 
-symbols.forEach(rawSymbol => {
+  }
 
-const reel =
-document.createElement("div");
 
-reel.className =
-spinningState
-? "reel spinning"
-: "reel";
+  symbols.forEach(
+    rawSymbol => {
 
-reel.innerHTML =
-symbolMarkup(rawSymbol);
+      const reel =
+        document.createElement(
+          "div"
+        );
 
-reelsEl.appendChild(reel);
 
-});
+      reel.className =
+        spinningState
+          ? "reel spinning"
+          : "reel";
+
+
+      reel.innerHTML =
+        symbolMarkup(rawSymbol);
+
+
+      reelsEl.appendChild(reel);
+
+    }
+  );
 
 }
 
@@ -1956,61 +2130,72 @@ reelsEl.appendChild(reel);
 
 renderSymbols([
 
-"K",
-"7",
-"HEART",
-"STAR",
-"SPADE",
+  "K",
+  "7",
+  "HEART",
+  "STAR",
+  "SPADE",
 
-"DIAMOND",
-"K",
-"HEART",
-"7",
-"SPADE",
+  "DIAMOND",
+  "K",
+  "HEART",
+  "7",
+  "SPADE",
 
-"STAR",
-"DIAMOND",
-"K",
-"HEART",
-"7"
+  "STAR",
+  "DIAMOND",
+  "K",
+  "HEART",
+  "7"
 
 ]);
 
 
 /* =====================================================
-   BETS
+   BET BUTTONS
 ===================================================== */
 
 document
-.querySelectorAll(".bet-btn")
-.forEach(button => {
+  .querySelectorAll(".bet-btn")
+  .forEach(button => {
 
-button.addEventListener(
-"click",
-() => {
+    button.addEventListener(
+      "click",
+      function(){
 
-if(spinning){
-return;
-}
+        if(spinning){
+          return;
+        }
 
-document
-.querySelectorAll(".bet-btn")
-.forEach(btn =>
-btn.classList.remove("active")
-);
 
-button.classList.add("active");
+        document
+          .querySelectorAll(".bet-btn")
+          .forEach(
+            btn =>
+              btn.classList.remove(
+                "active"
+              )
+          );
 
-selectedBet =
-Number(button.dataset.bet);
 
-gameMessage.textContent =
-`BET ${selectedBet.toLocaleString()}`;
+        button.classList.add(
+          "active"
+        );
 
-}
-);
 
-});
+        selectedBet =
+          Number(
+            button.dataset.bet
+          );
+
+
+        gameMessage.textContent =
+          `BET ${selectedBet.toLocaleString()}`;
+
+      }
+    );
+
+  });
 
 
 /* =====================================================
@@ -2019,260 +2204,429 @@ gameMessage.textContent =
 
 async function spin(){
 
-if(spinning){
-return;
-}
+  if(spinning){
+    return;
+  }
 
-spinning = true;
 
-spinBtn.disabled = true;
-spinBtn.textContent = "SPINNING…";
-gameMessage.textContent = "";
+  if(!currentPlayer){
 
+    gameMessage.textContent =
+      "PLEASE ENTER PRIVÉ FIRST.";
 
-/* Animation */
+    return;
 
-const animationPromise =
-new Promise(resolve => {
+  }
 
-let count = 0;
 
-const timer =
-setInterval(() => {
+  spinning = true;
 
-const choices = [
+  spinBtn.disabled = true;
 
-"K",
-"7",
-"HEART",
-"SPADE",
-"STAR",
-"DIAMOND"
+  spinBtn.textContent =
+    "SPINNING…";
 
-];
+  gameMessage.textContent = "";
 
-const animated =
-Array.from(
-{length:15},
-() =>
-choices[
-Math.floor(
-Math.random() *
-choices.length
-)
-]
-);
 
-renderSymbols(
-animated,
-true
-);
+  /*
+    Animation runs independently.
+    This prevents a slow API response
+    from preventing the visual spin.
+  */
 
-count++;
+  const animationPromise =
+    new Promise(resolve => {
 
-if(count >= 10){
+      let count = 0;
 
-clearInterval(timer);
-resolve();
 
-}
+      const timer =
+        setInterval(
+          function(){
 
-},90);
+            const choices = [
+              "K",
+              "7",
+              "HEART",
+              "SPADE",
+              "STAR",
+              "DIAMOND"
+            ];
 
-});
 
+            const animated =
+              Array.from(
+                {length:15},
+                function(){
 
-try{
+                  return choices[
+                    Math.floor(
+                      Math.random() *
+                      choices.length
+                    )
+                  ];
 
-const initData =
-getInitData();
+                }
+              );
 
 
-/* REAL SERVER SPIN */
+            renderSymbols(
+              animated,
+              true
+            );
 
-const apiPromise =
-apiPost(
-"/api/spin",
-{
-initData:initData,
-bet:selectedBet
-}
-);
 
+            count++;
 
-/* Wait for animation + server */
 
-const [
-,
-data
-] =
-await Promise.all([
-animationPromise,
-apiPromise
-]);
+            if(count >= 12){
 
+              clearInterval(timer);
 
-if(
-!data ||
-!Array.isArray(data.symbols)
-){
+              resolve();
 
-throw new Error(
-"Server returned an incomplete spin response."
-);
+            }
 
-}
+          },
+          90
+        );
 
+    });
 
-/* FINAL SERVER RESULT */
 
-renderSymbols(
-data.symbols,
-false
-);
+  try{
 
+    const initData =
+      getInitData();
 
-/* UPDATE PLAYER */
 
-if(
-data.balance !== undefined
-){
+    const apiPromise =
+      apiPost(
+        "/api/spin",
+        {
+          initData:initData,
+          bet:selectedBet
+        }
+      );
 
-currentPlayer = {
 
-...currentPlayer,
+    /*
+      Wait for the real server result.
+    */
 
-balance:data.balance,
+    const [
+      ,
+      data
+    ] =
+      await Promise.all([
+        animationPromise,
+        apiPromise
+      ]);
 
-vipLevel:
-data.vipLevel !== undefined
-? data.vipLevel
-: currentPlayer.vipLevel,
 
-username:
-data.username !== undefined
-? data.username
-: currentPlayer.username,
+    if(
+      !data ||
+      !Array.isArray(data.symbols)
+    ){
 
-spins:
-data.spins !== undefined
-? data.spins
-: currentPlayer.spins,
+      throw new Error(
+        "The server returned an incomplete spin response."
+      );
 
-wins:
-data.wins !== undefined
-? data.wins
-: currentPlayer.wins,
+    }
 
-totalWagered:
-data.totalWagered !== undefined
-? data.totalWagered
-: currentPlayer.totalWagered
 
-};
+    renderSymbols(
+      data.symbols,
+      false
+    );
 
-updatePlayer(
-currentPlayer
-);
 
-}
+    /*
+      Update player data.
+    */
 
+    currentPlayer = {
+      ...currentPlayer,
 
-/* RESULT */
+      balance:
+        data.balance !== undefined
+          ? data.balance
+          : currentPlayer.balance,
 
-const win =
-Number(data.win || 0);
+      vipLevel:
+        data.vipLevel !== undefined
+          ? data.vipLevel
+          : currentPlayer.vipLevel,
 
-if(win > 0){
+      username:
+        data.username !== undefined
+          ? data.username
+          : currentPlayer.username,
 
-gameMessage.textContent =
-`WIN · ${win.toLocaleString()} PRIVÉ COINS`;
+      first_name:
+        data.first_name !== undefined
+          ? data.first_name
+          : currentPlayer.first_name,
 
-reelsEl.classList.add(
-"win-flash"
-);
+      spins:
+        data.spins !== undefined
+          ? data.spins
+          : currentPlayer.spins,
 
-setTimeout(() => {
+      wins:
+        data.wins !== undefined
+          ? data.wins
+          : currentPlayer.wins,
 
-reelsEl.classList.remove(
-"win-flash"
-);
+      totalWagered:
+        data.totalWagered !== undefined
+          ? data.totalWagered
+          : currentPlayer.totalWagered
 
-},600);
+    };
 
-}else{
 
-gameMessage.textContent =
-"NO WIN · TRY AGAIN";
+    updatePlayer(
+      currentPlayer
+    );
 
-}
 
+    const win =
+      Number(
+        data.win || 0
+      );
 
-/* REFRESH LEADERBOARD */
 
-loadLeaderboard();
+    if(win > 0){
 
+      gameMessage.textContent =
+        `WIN · ${win.toLocaleString()} PRIVÉ COINS`;
 
-}catch(error){
 
-console.error(
-"SPIN ERROR:",
-error
-);
+      reelsEl.classList.add(
+        "win-flash"
+      );
 
-renderSymbols(
-Array(15).fill("STAR"),
-false
-);
 
-gameMessage.textContent =
-error && error.message
-? error.message
-: "Spin failed.";
+      setTimeout(
+        function(){
 
-}finally{
+          reelsEl.classList.remove(
+            "win-flash"
+          );
 
-setTimeout(() => {
+        },
+        600
+      );
 
-spinning = false;
 
-spinBtn.disabled = false;
+    }else{
 
-spinBtn.textContent =
-"SPIN";
+      gameMessage.textContent =
+        "NO WIN · TRY AGAIN";
 
-},350);
+    }
 
-}
+
+    loadLeaderboard();
+
+
+  }catch(error){
+
+    console.error(
+      "SPIN ERROR:",
+      error
+    );
+
+
+    renderSymbols(
+      Array(15).fill("STAR"),
+      false
+    );
+
+
+    gameMessage.textContent =
+      error && error.message
+        ? error.message
+        : "Spin failed.";
+
+  }finally{
+
+    /*
+      Always unlock the button.
+    */
+
+    setTimeout(
+      function(){
+
+        spinning = false;
+
+        spinBtn.disabled = false;
+
+        spinBtn.textContent =
+          "SPIN";
+
+      },
+      350
+    );
+
+  }
 
 }
 
 
 /* =====================================================
-   BUTTONS
+   LOGIN
+===================================================== */
+
+async function login(){
+
+  if(
+    loginBtn.disabled
+  ){
+    return;
+  }
+
+
+  loginBtn.disabled = true;
+
+  loginBtn.textContent =
+    "CONNECTING…";
+
+  loginStatus.textContent =
+    "";
+
+
+  try{
+
+    const initData =
+      getInitData();
+
+
+    loginStatus.textContent =
+      "CONNECTING TO PRIVÉ…";
+
+
+    const data =
+      await apiPost(
+        "/api/me",
+        {
+          initData:initData
+        }
+      );
+
+
+    if(
+      !data ||
+      typeof data !== "object"
+    ){
+
+      throw new Error(
+        "The server returned an incomplete account response."
+      );
+
+    }
+
+
+    if(
+      data.id === undefined ||
+      data.balance === undefined
+    ){
+
+      throw new Error(
+        "The server returned an incomplete account response."
+      );
+
+    }
+
+
+    currentPlayer =
+      data;
+
+
+    updatePlayer(
+      data
+    );
+
+
+    /*
+      THIS IS THE ACTUAL SCREEN SWITCH.
+    */
+
+    loginScreen.classList.add(
+      "hidden"
+    );
+
+    gameScreen.classList.remove(
+      "hidden"
+    );
+
+
+    loginStatus.textContent =
+      "";
+
+
+    loadLeaderboard();
+
+
+  }catch(error){
+
+    console.error(
+      "LOGIN ERROR:",
+      error
+    );
+
+
+    loginStatus.textContent =
+      error && error.message
+        ? error.message
+        : "Login failed.";
+
+
+    /*
+      Leave the button usable so
+      the player can retry.
+    */
+
+  }finally{
+
+    loginBtn.disabled = false;
+
+    loginBtn.textContent =
+      "ENTER PRIVÉ";
+
+  }
+
+}
+
+
+/* =====================================================
+   BUTTON EVENTS
 ===================================================== */
 
 loginBtn.addEventListener(
-"click",
-login
+  "click",
+  function(event){
+
+    event.preventDefault();
+
+    login();
+
+  }
 );
 
 
-/*
-=======================================================
-IMPORTANT FIX
-=======================================================
-
-The previous version defined spin()
-but never connected the SPIN button to it.
-
-This listener is required.
-=======================================================
-*/
-
 spinBtn.addEventListener(
-"click",
-spin
+  "click",
+  function(event){
+
+    event.preventDefault();
+
+    spin();
+
+  }
 );
 
 
@@ -2281,22 +2635,33 @@ spin
 ===================================================== */
 
 window.addEventListener(
-"load",
-() => {
+  "load",
+  function(){
 
-if(
-tg &&
-tg.initData
-){
+    /*
+      Give Telegram a moment to finish
+      initializing before attempting login.
+    */
 
-setTimeout(
-login,
-150
+    setTimeout(
+      function(){
+
+        if(
+          tg &&
+          typeof tg.initData === "string" &&
+          tg.initData.trim()
+        ){
+
+          login();
+
+        }
+
+      },
+      400
+    );
+
+  }
 );
-
-}
-
-});
 
 
 })();
