@@ -19,10 +19,9 @@
 html,body{
   margin:0;
   width:100%;
-  height:100%;
-  overflow:hidden;
+  min-height:100%;
   background:
-    radial-gradient(circle at 50% 25%,rgba(145,104,42,.16),transparent 38%),
+    radial-gradient(circle at 50% 20%,rgba(145,104,42,.16),transparent 38%),
     linear-gradient(145deg,#080605,#120d09 48%,#070605);
   color:#ead9b5;
   font-family:Montserrat,Arial,sans-serif;
@@ -34,21 +33,19 @@ body{
 
 button{
   font:inherit;
-  -webkit-appearance:none;
-  appearance:none;
 }
 
 .app{
   width:100%;
-  height:100dvh;
+  min-height:100dvh;
   display:flex;
   justify-content:center;
-  align-items:center;
+  align-items:flex-start;
   padding:18px;
 }
 
 .screen{
-  width:min(500px,100%);
+  width:min(620px,100%);
   max-height:96dvh;
   overflow:auto;
   scrollbar-width:none;
@@ -76,6 +73,12 @@ button{
   border:1px solid rgba(206,165,83,.10);
   pointer-events:none;
 }
+
+.hidden{
+  display:none!important;
+}
+
+/* LOGIN */
 
 .login-card{
   padding:48px 30px 32px;
@@ -144,13 +147,13 @@ button{
   line-height:1.8;
 }
 
-.primary-btn{
+.primary-btn,
+.spin-btn{
   position:relative;
   width:100%;
   min-height:58px;
   border:1px solid #e0bc6c;
-  background:
-    linear-gradient(180deg,#e0bd70,#b9893b);
+  background:linear-gradient(180deg,#e0bd70,#b9893b);
   color:#160f09;
   font-weight:600;
   letter-spacing:3px;
@@ -160,11 +163,13 @@ button{
     inset 0 1px rgba(255,255,255,.3);
 }
 
-.primary-btn:active{
+.primary-btn:active,
+.spin-btn:active{
   transform:translateY(1px);
 }
 
-.primary-btn:disabled{
+.primary-btn:disabled,
+.spin-btn:disabled{
   opacity:.55;
   cursor:wait;
 }
@@ -177,13 +182,7 @@ button{
   color:#b88e8e;
 }
 
-.hidden{
-  display:none!important;
-}
-
-/* =========================================================
-   GAME
-========================================================= */
+/* GAME */
 
 .game-screen{
   width:min(620px,100%);
@@ -211,6 +210,8 @@ button{
   color:#d3ae63;
 }
 
+/* BALANCE */
+
 .balance-card{
   display:flex;
   justify-content:space-between;
@@ -232,16 +233,26 @@ button{
   color:#e8c979;
 }
 
+.player-name{
+  max-width:160px;
+  overflow:hidden;
+  text-overflow:ellipsis;
+  white-space:nowrap;
+  text-align:right;
+}
+
+/* REELS */
+
 .reel-card{
   padding:18px;
 }
 
-.collection-label{
+.collection-title{
   text-align:center;
-  margin:0 0 16px;
+  margin:0 0 18px;
   font-size:9px;
   letter-spacing:5px;
-  color:#8f7955;
+  color:#a99168;
 }
 
 .reels{
@@ -261,18 +272,6 @@ button{
   background:
     radial-gradient(circle at 50% 40%,rgba(145,104,42,.12),transparent 60%),
     #0c0907;
-  transition:
-    border-color .2s ease,
-    box-shadow .2s ease,
-    transform .2s ease;
-}
-
-.reel.winner{
-  border-color:#e3be68;
-  box-shadow:
-    0 0 18px rgba(222,183,91,.32),
-    inset 0 0 18px rgba(222,183,91,.08);
-  transform:scale(1.015);
 }
 
 .symbol{
@@ -293,21 +292,11 @@ button{
   position:absolute;
 }
 
-.symbol:after{
-  content:"";
-  position:absolute;
-  width:45%;
-  height:45%;
-  border-radius:50%;
-  background:rgba(216,177,89,.035);
-  box-shadow:0 0 18px rgba(216,177,89,.06);
-}
-
 .symbol-art{
   position:relative;
   z-index:2;
   font-family:"Cormorant Garamond",serif;
-  font-weight:700;
+  font-weight:600;
   font-size:35px;
   line-height:1;
   color:#e7c77b;
@@ -341,21 +330,7 @@ button{
   font-size:32px;
 }
 
-.reel.spinning .symbol-art{
-  animation:
-    symbolPulse .16s linear infinite alternate;
-}
-
-@keyframes symbolPulse{
-  from{
-    transform:translateY(-2px) scale(.92);
-    opacity:.55;
-  }
-  to{
-    transform:translateY(2px) scale(1.08);
-    opacity:1;
-  }
-}
+/* CONTROLS */
 
 .controls{
   margin-top:16px;
@@ -384,31 +359,8 @@ button{
   background:rgba(181,139,61,.14);
 }
 
-.bet-btn:active{
-  transform:translateY(1px);
-}
-
 .spin-btn{
-  width:100%;
   height:58px;
-  border:1px solid #d9b66a;
-  background:linear-gradient(180deg,#dcb96d,#ae8035);
-  color:#140e08;
-  font-weight:600;
-  letter-spacing:4px;
-  cursor:pointer;
-  box-shadow:
-    0 8px 22px rgba(0,0,0,.3),
-    inset 0 1px rgba(255,255,255,.3);
-}
-
-.spin-btn:active{
-  transform:translateY(1px);
-}
-
-.spin-btn:disabled{
-  opacity:.55;
-  cursor:wait;
 }
 
 .message{
@@ -417,7 +369,6 @@ button{
   margin-top:13px;
   color:#c9aa70;
   font-size:12px;
-  letter-spacing:.5px;
 }
 
 .small-error{
@@ -427,6 +378,160 @@ button{
   text-align:center;
   margin-top:8px;
 }
+
+/* TOP PLAYERS */
+
+.leaderboard-card{
+  margin-top:14px;
+  padding:22px 18px 18px;
+}
+
+.section-heading{
+  text-align:center;
+  font-family:"Cormorant Garamond",serif;
+  font-size:25px;
+  letter-spacing:4px;
+  color:#e8d4aa;
+}
+
+.section-subtitle{
+  text-align:center;
+  margin-top:5px;
+  font-size:8px;
+  letter-spacing:3px;
+  color:#887b69;
+}
+
+.leaderboard{
+  margin-top:18px;
+  display:flex;
+  flex-direction:column;
+  gap:7px;
+}
+
+.player-row{
+  min-height:58px;
+  display:grid;
+  grid-template-columns:38px 1fr auto;
+  align-items:center;
+  gap:10px;
+  padding:9px 11px;
+  border:1px solid rgba(205,164,82,.18);
+  background:rgba(10,8,6,.65);
+}
+
+.player-row.me{
+  border-color:rgba(218,180,91,.65);
+  background:rgba(181,139,61,.09);
+}
+
+.rank{
+  width:30px;
+  height:30px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  border:1px solid rgba(205,164,82,.25);
+  font-family:"Cormorant Garamond",serif;
+  font-size:17px;
+  color:#d9b76d;
+}
+
+.player-info{
+  min-width:0;
+}
+
+.player-username{
+  color:#dfcfad;
+  font-size:11px;
+  font-weight:500;
+  letter-spacing:1px;
+  overflow:hidden;
+  text-overflow:ellipsis;
+  white-space:nowrap;
+}
+
+.player-tag{
+  margin-top:3px;
+  color:#746957;
+  font-size:7px;
+  letter-spacing:2px;
+}
+
+.player-balance{
+  text-align:right;
+  font-family:"Cormorant Garamond",serif;
+  font-size:18px;
+  color:#dcbf79;
+  white-space:nowrap;
+}
+
+.leaderboard-footer{
+  margin-top:14px;
+  text-align:center;
+  color:#756958;
+  font-size:8px;
+  letter-spacing:2px;
+}
+
+.refresh-dot{
+  display:inline-block;
+  width:5px;
+  height:5px;
+  border-radius:50%;
+  background:#c9a45a;
+  margin-right:5px;
+  vertical-align:middle;
+}
+
+.leaderboard-loading,
+.leaderboard-empty{
+  padding:20px;
+  text-align:center;
+  color:#817564;
+  font-size:10px;
+  letter-spacing:1px;
+}
+
+/* QUICK FEATURES */
+
+.feature-grid{
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:8px;
+  margin-top:14px;
+}
+
+.feature-card{
+  min-height:76px;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  align-items:center;
+  text-align:center;
+  border:1px solid rgba(205,164,82,.24);
+  background:rgba(12,9,7,.8);
+  cursor:pointer;
+}
+
+.feature-icon{
+  font-family:"Cormorant Garamond",serif;
+  font-size:22px;
+  color:#d9b66b;
+}
+
+.feature-title{
+  margin-top:5px;
+  font-size:8px;
+  letter-spacing:2px;
+  color:#bba27a;
+}
+
+.feature-card:active{
+  transform:scale(.99);
+}
+
+/* MOBILE */
 
 @media(max-width:430px){
 
@@ -454,12 +559,17 @@ button{
     font-size:34px;
   }
 
-  .reels{
-    gap:6px;
+  .leaderboard-card{
+    padding:20px 12px 15px;
   }
 
-  .reel-card{
-    padding:14px;
+  .player-row{
+    grid-template-columns:34px 1fr auto;
+    padding:8px;
+  }
+
+  .player-balance{
+    font-size:16px;
   }
 }
 </style>
@@ -469,25 +579,16 @@ button{
 
 <div class="app">
 
-  <!-- =====================================================
-       LOGIN
-  ====================================================== -->
+  <!-- LOGIN -->
 
   <main id="loginScreen" class="screen">
 
     <section class="card login-card">
 
-      <div class="eyebrow">
-        WELCOME TO
-      </div>
+      <div class="eyebrow">WELCOME TO</div>
 
-      <div class="brand">
-        KIMIA
-      </div>
-
-      <div class="brand-sub">
-        PRIVÉ
-      </div>
+      <div class="brand">KIMIA</div>
+      <div class="brand-sub">PRIVÉ</div>
 
       <div class="ornament">
         <span class="diamond"></span>
@@ -510,9 +611,7 @@ button{
   </main>
 
 
-  <!-- =====================================================
-       GAME
-  ====================================================== -->
+  <!-- GAME -->
 
   <main id="gameScreen" class="screen game-screen hidden">
 
@@ -529,6 +628,8 @@ button{
     </div>
 
 
+    <!-- BALANCE -->
+
     <section class="card balance-card">
 
       <div>
@@ -543,21 +644,25 @@ button{
 
       </div>
 
-      <div id="playerName" class="balance-label">
+      <div
+        id="playerName"
+        class="balance-label player-name"
+      >
         MEMBER
       </div>
 
     </section>
 
 
+    <!-- SLOT MACHINE -->
+
     <section class="card reel-card">
 
-      <div class="collection-label">
+      <div class="collection-title">
         PRIVÉ COLLECTION
       </div>
 
       <div id="reels" class="reels"></div>
-
 
       <div class="controls">
 
@@ -565,46 +670,113 @@ button{
 
           <button
             class="bet-btn active"
-            data-bet="300">
+            data-bet="300"
+          >
             300
           </button>
 
           <button
             class="bet-btn"
-            data-bet="600">
+            data-bet="600"
+          >
             600
           </button>
 
           <button
             class="bet-btn"
-            data-bet="1500">
+            data-bet="1500"
+          >
             1,500
           </button>
 
           <button
             class="bet-btn"
-            data-bet="3000">
+            data-bet="3000"
+          >
             3,000
           </button>
 
         </div>
 
-
         <button
           id="spinBtn"
-          class="spin-btn">
+          class="spin-btn"
+        >
           SPIN
         </button>
 
-
         <div
           id="gameMessage"
-          class="message">
-        </div>
+          class="message"
+        ></div>
 
       </div>
 
     </section>
+
+
+    <!-- TOP PLAYERS -->
+
+    <section class="card leaderboard-card">
+
+      <div class="section-heading">
+        TOP PLAYERS
+      </div>
+
+      <div class="section-subtitle">
+        PRIVÉ LEADERBOARD
+      </div>
+
+      <div
+        id="leaderboard"
+        class="leaderboard"
+      >
+
+        <div class="leaderboard-loading">
+          LOADING PRIVATE RANKINGS…
+        </div>
+
+      </div>
+
+      <div class="leaderboard-footer">
+        <span class="refresh-dot"></span>
+        LIVE PRIVATE RANKINGS
+      </div>
+
+    </section>
+
+
+    <!-- QUICK FEATURES -->
+
+    <div class="feature-grid">
+
+      <div
+        id="rewardsBtn"
+        class="card feature-card"
+      >
+        <div class="feature-icon">✦</div>
+        <div class="feature-title">
+          REWARDS
+        </div>
+      </div>
+
+      <div
+        id="giftingBtn"
+        class="card feature-card"
+      >
+        <div class="feature-icon">♢</div>
+        <div class="feature-title">
+          GIFTING
+        </div>
+      </div>
+
+    </div>
+
+
+    <div
+      id="featureMessage"
+      class="message"
+    ></div>
 
   </main>
 
@@ -627,22 +799,19 @@ button{
       ? window.Telegram.WebApp
       : null;
 
-
   if(tg){
 
     try{
 
       tg.ready();
-
       tg.expand();
-
       tg.enableClosingConfirmation();
 
-    }catch(error){
+    }catch(e){
 
       console.warn(
         "Telegram WebApp setup:",
-        error
+        e
       );
 
     }
@@ -704,11 +873,19 @@ button{
       "gameMessage"
     );
 
+  const leaderboardEl =
+    document.getElementById(
+      "leaderboard"
+    );
+
+  const featureMessage =
+    document.getElementById(
+      "featureMessage"
+    );
+
 
   let selectedBet = 300;
-
   let currentPlayer = null;
-
   let spinning = false;
 
 
@@ -769,8 +946,79 @@ button{
     if(!response.ok){
 
       const serverError =
-        data &&
-        data.error
+        data && data.error
+          ? data.error
+          : `Server returned HTTP ${response.status}.`;
+
+      throw new Error(
+        serverError
+      );
+
+    }
+
+
+    if(!data){
+
+      throw new Error(
+        "Server returned an empty response."
+      );
+
+    }
+
+
+    return data;
+
+  }
+
+
+  /* =====================================================
+     API GET
+  ===================================================== */
+
+  async function apiGet(endpoint){
+
+    const response =
+      await fetch(
+        endpoint,
+        {
+          method:"GET",
+          headers:{
+            "Accept":
+              "application/json"
+          }
+        }
+      );
+
+
+    const text =
+      await response.text();
+
+
+    let data = null;
+
+
+    if(text){
+
+      try{
+
+        data =
+          JSON.parse(text);
+
+      }catch(error){
+
+        throw new Error(
+          "Server returned invalid JSON."
+        );
+
+      }
+
+    }
+
+
+    if(!response.ok){
+
+      const serverError =
+        data && data.error
           ? data.error
           : `Server returned HTTP ${response.status}.`;
 
@@ -846,7 +1094,8 @@ button{
     loginBtn.textContent =
       "CONNECTING…";
 
-    loginStatus.textContent = "";
+    loginStatus.textContent =
+      "";
 
 
     try{
@@ -889,12 +1138,11 @@ button{
       }
 
 
-      currentPlayer = data;
+      currentPlayer =
+        data;
 
 
-      updatePlayer(
-        data
-      );
+      updatePlayer(data);
 
 
       loginScreen.classList.add(
@@ -906,7 +1154,16 @@ button{
       );
 
 
-      loginStatus.textContent = "";
+      loginStatus.textContent =
+        "";
+
+
+      /*
+        Load leaderboard after the
+        account itself is working.
+      */
+
+      loadLeaderboard();
 
 
     }catch(error){
@@ -926,7 +1183,8 @@ button{
 
     }finally{
 
-      loginBtn.disabled = false;
+      loginBtn.disabled =
+        false;
 
       loginBtn.textContent =
         "ENTER PRIVÉ";
@@ -940,9 +1198,7 @@ button{
      PLAYER DISPLAY
   ===================================================== */
 
-  function updatePlayer(
-    player
-  ){
+  function updatePlayer(player){
 
     const balance =
       Number(
@@ -958,6 +1214,7 @@ button{
 
     let name =
       player.username ||
+      player.first_name ||
       "PRIVÉ MEMBER";
 
 
@@ -973,7 +1230,7 @@ button{
 
 
     playerNameEl.textContent =
-      name.toUpperCase();
+      String(name).toUpperCase();
 
 
     const vip =
@@ -998,82 +1255,61 @@ button{
 
 
   /* =====================================================
-     SYMBOLS
+     SYMBOL ART
   ===================================================== */
 
-  const SYMBOLS = [
-    "💎",
-    "7️⃣",
-    "💗",
-    "🌹",
-    "♠️",
-    "✨"
-  ];
+  function symbolClass(symbol){
 
-
-  function symbolClass(
-    symbol
-  ){
-
-    if(symbol === "💎"){
+    if(symbol === "💎")
       return "symbol-diamond";
-    }
 
-    if(symbol === "7️⃣"){
+    if(symbol === "7️⃣")
       return "symbol-seven";
-    }
 
-    if(symbol === "💗"){
+    if(symbol === "💗")
       return "symbol-heart";
-    }
 
-    if(symbol === "🌹"){
+    if(symbol === "🌹")
       return "symbol-rose";
-    }
 
-    if(symbol === "♠️"){
+    if(symbol === "♠️")
       return "symbol-spade";
-    }
 
-    if(symbol === "✨"){
+    if(symbol === "✨")
       return "symbol-star";
-    }
 
     return "symbol-star";
 
   }
 
 
-  function symbolMarkup(
-    symbol
-  ){
+  function symbolMarkup(symbol){
 
     let art = "✦";
 
 
-    if(symbol === "💎"){
+    if(symbol === "💎")
       art = "◆";
-    }
 
-    if(symbol === "7️⃣"){
+
+    if(symbol === "7️⃣")
       art = "7";
-    }
 
-    if(symbol === "💗"){
+
+    if(symbol === "💗")
       art = "♥";
-    }
 
-    if(symbol === "🌹"){
+
+    if(symbol === "🌹")
       art = "✿";
-    }
 
-    if(symbol === "♠️"){
+
+    if(symbol === "♠️")
       art = "♠";
-    }
 
-    if(symbol === "✨"){
+
+    if(symbol === "✨")
       art = "✦";
-    }
 
 
     return `
@@ -1086,26 +1322,24 @@ button{
 
 
   /* =====================================================
-     RENDER
+     REELS
   ===================================================== */
 
-  function renderSymbols(
-    symbols,
-    winnerIndexes = []
-  ){
+  function renderSymbols(symbols){
 
     reelsEl.innerHTML = "";
 
 
-    const safeSymbols =
-      Array.isArray(symbols) &&
-      symbols.length === 15
-        ? symbols
-        : Array(15).fill("✨");
+    if(
+      !Array.isArray(symbols) ||
+      symbols.length !== 15
+    ){
 
-
-    safeSymbols.forEach(
-      (symbol,index) => {
+      for(
+        let i = 0;
+        i < 15;
+        i++
+      ){
 
         const reel =
           document.createElement(
@@ -1117,23 +1351,37 @@ button{
           "reel";
 
 
-        if(
-          winnerIndexes.includes(index)
-        ){
+        reel.innerHTML =
+          symbolMarkup("✨");
 
-          reel.classList.add(
-            "winner"
+
+        reelsEl.appendChild(
+          reel
+        );
+
+      }
+
+
+      return;
+
+    }
+
+
+    symbols.forEach(
+      symbol => {
+
+        const reel =
+          document.createElement(
+            "div"
           );
 
-        }
+
+        reel.className =
+          "reel";
 
 
         reel.innerHTML =
-          symbolMarkup(
-            SYMBOLS.includes(symbol)
-              ? symbol
-              : "✨"
-          );
+          symbolMarkup(symbol);
 
 
         reelsEl.appendChild(
@@ -1147,70 +1395,323 @@ button{
 
 
   /* =====================================================
-     SPINNING DISPLAY
-  ===================================================== */
-
-  function renderSpinningSymbols(){
-
-    const fakeSymbols =
-      Array.from(
-        {
-          length:15
-        },
-        () => {
-
-          return SYMBOLS[
-            Math.floor(
-              Math.random() *
-              SYMBOLS.length
-            )
-          ];
-
-        }
-      );
-
-
-    renderSymbols(
-      fakeSymbols
-    );
-
-
-    document
-      .querySelectorAll(".reel")
-      .forEach(
-        reel => {
-
-          reel.classList.add(
-            "spinning"
-          );
-
-        }
-      );
-
-  }
-
-
-  /* =====================================================
      INITIAL REELS
   ===================================================== */
 
   renderSymbols([
-    "💎",
-    "7️⃣",
-    "💗",
-    "🌹",
-    "♠️",
-    "✨",
-    "💎",
-    "7️⃣",
-    "🌹",
-    "♠️",
-    "7️⃣",
-    "💗",
-    "✨",
-    "💎",
-    "🌹"
+
+    "💎","7️⃣","💗","🌹","♠️",
+
+    "✨","💎","♥","🌹","♠️",
+
+    "7️⃣","💗","✨","💎","🌹"
+
   ]);
+
+
+  /* =====================================================
+     LEADERBOARD
+  ===================================================== */
+
+  function getLeaderboardArray(data){
+
+    if(Array.isArray(data))
+      return data;
+
+    if(data && Array.isArray(data.players))
+      return data.players;
+
+    if(data && Array.isArray(data.leaderboard))
+      return data.leaderboard;
+
+    if(data && Array.isArray(data.topPlayers))
+      return data.topPlayers;
+
+    if(data && Array.isArray(data.data))
+      return data.data;
+
+    return [];
+
+  }
+
+
+  function playerDisplayName(player){
+
+    let name =
+      player.username ||
+      player.first_name ||
+      player.name ||
+      "PRIVÉ MEMBER";
+
+
+    if(
+      typeof name === "string" &&
+      name.startsWith("@")
+    ){
+
+      name =
+        name.substring(1);
+
+    }
+
+
+    return String(name);
+
+  }
+
+
+  function playerBalance(player){
+
+    const value =
+      Number(
+        player.balance ??
+        player.coins ??
+        player.credits ??
+        0
+      );
+
+
+    return Number.isFinite(value)
+      ? value
+      : 0;
+
+  }
+
+
+  function isCurrentPlayer(player){
+
+    if(!currentPlayer)
+      return false;
+
+
+    const currentId =
+      String(
+        currentPlayer.id ??
+        currentPlayer.user_id ??
+        currentPlayer.telegram_id ??
+        ""
+      );
+
+
+    const playerId =
+      String(
+        player.id ??
+        player.user_id ??
+        player.telegram_id ??
+        ""
+      );
+
+
+    return(
+      currentId &&
+      playerId &&
+      currentId === playerId
+    );
+
+  }
+
+
+  function renderLeaderboard(players){
+
+    leaderboardEl.innerHTML = "";
+
+
+    if(
+      !Array.isArray(players) ||
+      players.length === 0
+    ){
+
+      leaderboardEl.innerHTML = `
+        <div class="leaderboard-empty">
+          NO PRIVATE RANKINGS AVAILABLE
+        </div>
+      `;
+
+      return;
+
+    }
+
+
+    /*
+      Sort by balance when the server
+      does not already provide ranking.
+    */
+
+    const sorted =
+      [...players]
+        .sort(
+          (a,b) =>
+            playerBalance(b) -
+            playerBalance(a)
+        )
+        .slice(0,10);
+
+
+    sorted.forEach(
+      (player,index) => {
+
+        const row =
+          document.createElement(
+            "div"
+          );
+
+
+        row.className =
+          "player-row";
+
+
+        if(
+          isCurrentPlayer(player)
+        ){
+
+          row.classList.add(
+            "me"
+          );
+
+        }
+
+
+        let medal =
+          String(index + 1);
+
+
+        if(index === 0)
+          medal = "♛";
+
+        if(index === 1)
+          medal = "◆";
+
+        if(index === 2)
+          medal = "✦";
+
+
+        const balance =
+          playerBalance(player);
+
+
+        row.innerHTML = `
+
+          <div class="rank">
+            ${medal}
+          </div>
+
+          <div class="player-info">
+
+            <div class="player-username">
+              ${escapeHtml(
+                playerDisplayName(player)
+              )}
+            </div>
+
+            <div class="player-tag">
+              ${isCurrentPlayer(player)
+                ? "YOU · CURRENT MEMBER"
+                : `RANK ${index + 1}`
+              }
+            </div>
+
+          </div>
+
+          <div class="player-balance">
+            ${balance.toLocaleString()}
+          </div>
+
+        `;
+
+
+        leaderboardEl.appendChild(
+          row
+        );
+
+      }
+    );
+
+  }
+
+
+  function escapeHtml(value){
+
+    return String(value)
+      .replace(/&/g,"&amp;")
+      .replace(/</g,"&lt;")
+      .replace(/>/g,"&gt;")
+      .replace(/"/g,"&quot;")
+      .replace(/'/g,"&#039;");
+
+  }
+
+
+  async function loadLeaderboard(){
+
+    leaderboardEl.innerHTML = `
+      <div class="leaderboard-loading">
+        LOADING PRIVATE RANKINGS…
+      </div>
+    `;
+
+
+    /*
+      The existing backend may expose
+      the leaderboard using one of these
+      routes. Try the standard route first.
+    */
+
+    const endpoints = [
+      "/api/leaderboard",
+      "/api/top-players"
+    ];
+
+
+    for(
+      const endpoint of endpoints
+    ){
+
+      try{
+
+        const data =
+          await apiGet(endpoint);
+
+
+        const players =
+          getLeaderboardArray(data);
+
+
+        if(players.length > 0){
+
+          renderLeaderboard(
+            players
+          );
+
+          return;
+
+        }
+
+      }catch(error){
+
+        console.warn(
+          "Leaderboard endpoint unavailable:",
+          endpoint,
+          error
+        );
+
+      }
+
+    }
+
+
+    /*
+      Important:
+      Leaderboard failure does NOT
+      break the game.
+    */
+
+    leaderboardEl.innerHTML = `
+      <div class="leaderboard-empty">
+        PRIVATE RANKINGS WILL APPEAR HERE
+      </div>
+    `;
+
+  }
 
 
   /* =====================================================
@@ -1218,9 +1719,7 @@ button{
   ===================================================== */
 
   document
-    .querySelectorAll(
-      ".bet-btn"
-    )
+    .querySelectorAll(".bet-btn")
     .forEach(
       button => {
 
@@ -1228,11 +1727,8 @@ button{
           "click",
           () => {
 
-            if(spinning){
-
+            if(spinning)
               return;
-
-            }
 
 
             document
@@ -1274,64 +1770,83 @@ button{
 
   async function spin(){
 
-    if(spinning){
-
+    if(spinning)
       return;
-
-    }
 
 
     spinning = true;
 
-    spinBtn.disabled = true;
+    spinBtn.disabled =
+      true;
 
     spinBtn.textContent =
       "SPINNING…";
 
-    gameMessage.textContent = "";
+    gameMessage.textContent =
+      "";
 
 
-    /*
-      IMPORTANT:
-
-      We use a controlled animation loop instead
-      of setInterval. This prevents an old animation
-      frame from overwriting the real server result.
-    */
-
-    let animationActive = true;
-
-    let animationFrame = null;
-
-
-    function animate(){
-
-      if(!animationActive){
-
-        return;
-
-      }
-
-
-      renderSpinningSymbols();
-
-
-      animationFrame =
-        setTimeout(
-          animate,
-          100
-        );
-
-    }
-
-
-    animate();
+    let animation = null;
 
 
     try{
 
       const initData =
         getInitData();
+
+
+      let animationCount = 0;
+
+
+      animation =
+        setInterval(
+          () => {
+
+            const fakeSymbols =
+              Array.from(
+                {length:15},
+                () => {
+
+                  const choices = [
+                    "💎",
+                    "7️⃣",
+                    "💗",
+                    "🌹",
+                    "♠️",
+                    "✨"
+                  ];
+
+
+                  return choices[
+                    Math.floor(
+                      Math.random() *
+                      choices.length
+                    )
+                  ];
+
+                }
+              );
+
+
+            renderSymbols(
+              fakeSymbols
+            );
+
+
+            animationCount++;
+
+
+            if(animationCount >= 8){
+
+              clearInterval(
+                animation
+              );
+
+            }
+
+          },
+          90
+        );
 
 
       const data =
@@ -1347,32 +1862,11 @@ button{
         );
 
 
-      /*
-        STOP animation FIRST.
-      */
-
-      animationActive = false;
-
-
-      if(animationFrame){
-
-        clearTimeout(
-          animationFrame
-        );
-
-        animationFrame = null;
-
-      }
-
-
-      /*
-        Validate the actual server result.
-      */
-
       if(
         !data ||
-        !Array.isArray(data.symbols) ||
-        data.symbols.length !== 15
+        !Array.isArray(
+          data.symbols
+        )
       ){
 
         throw new Error(
@@ -1382,121 +1876,39 @@ button{
       }
 
 
-      /*
-        Display the REAL server symbols.
-      */
+      if(animation){
+
+        clearInterval(
+          animation
+        );
+
+      }
+
 
       renderSymbols(
         data.symbols
       );
 
 
-      /*
-        Update balance from server.
-      */
-
       if(
         data.balance !== undefined
       ){
 
-        const updatedPlayer = {
-
+        currentPlayer = {
           ...currentPlayer,
-
           balance:
             data.balance,
-
           vipLevel:
-            data.vipLevel,
-
+            data.vipLevel ??
+            currentPlayer.vipLevel,
           username:
-            data.username
-
+            data.username ??
+            currentPlayer.username
         };
 
 
-        currentPlayer =
-          updatedPlayer;
-
-
         updatePlayer(
-          updatedPlayer
-        );
-
-      }
-
-
-      /*
-        Highlight winning positions.
-      */
-
-      const winnerIndexes = [];
-
-
-      if(
-        Array.isArray(
-          data.winningLines
-        )
-      ){
-
-        data.winningLines.forEach(
-          winningLine => {
-
-            const lineNumber =
-              Number(
-                winningLine.line
-              );
-
-
-            const line =
-              [
-                [0,3,6,9,12],
-                [1,4,7,10,13],
-                [2,5,8,11,14],
-                [0,4,8,10,12],
-                [2,4,6,10,14]
-              ][
-                lineNumber - 1
-              ];
-
-
-            if(Array.isArray(line)){
-
-              line.forEach(
-                index => {
-
-                  if(
-                    !winnerIndexes.includes(
-                      index
-                    )
-                  ){
-
-                    winnerIndexes.push(
-                      index
-                    );
-
-                  }
-
-                }
-              );
-
-            }
-
-          }
-        );
-
-      }
-
-
-      /*
-        Re-render with winning highlights.
-      */
-
-      if(winnerIndexes.length){
-
-        renderSymbols(
-          data.symbols,
-          winnerIndexes
+          currentPlayer
         );
 
       }
@@ -1521,22 +1933,21 @@ button{
       }
 
 
-    }catch(error){
-
       /*
-        Always stop animation on error.
+        Refresh leaderboard after
+        every successful spin.
       */
 
-      animationActive = false;
+      loadLeaderboard();
 
 
-      if(animationFrame){
+    }catch(error){
 
-        clearTimeout(
-          animationFrame
+      if(animation){
+
+        clearInterval(
+          animation
         );
-
-        animationFrame = null;
 
       }
 
@@ -1553,7 +1964,6 @@ button{
           ? error.message
           : "Spin failed.";
 
-
     }finally{
 
       setTimeout(
@@ -1561,7 +1971,8 @@ button{
 
           spinning = false;
 
-          spinBtn.disabled = false;
+          spinBtn.disabled =
+            false;
 
           spinBtn.textContent =
             "SPIN";
@@ -1573,6 +1984,36 @@ button{
     }
 
   }
+
+
+  /* =====================================================
+     QUICK FEATURE BUTTONS
+  ===================================================== */
+
+  document
+    .getElementById("rewardsBtn")
+    .addEventListener(
+      "click",
+      () => {
+
+        featureMessage.textContent =
+          "REWARDS · COMING NEXT";
+
+      }
+    );
+
+
+  document
+    .getElementById("giftingBtn")
+    .addEventListener(
+      "click",
+      () => {
+
+        featureMessage.textContent =
+          "GIFTING · COMING NEXT";
+
+      }
+    );
 
 
   /* =====================================================
