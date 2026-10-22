@@ -11,14 +11,29 @@ const BOT_TOKEN = process.env.TELEGRAM_BOT_TOKEN;
 const DATABASE_URL = process.env.DATABASE_URL;
 
 /* =========================================================
-   MIDDLEWARE
+   BASIC MIDDLEWARE
 ========================================================= */
 
-app.use(cors());
+app.use(cors({
+  origin: "*",
+  methods: ["GET", "POST", "OPTIONS"],
+  allowedHeaders: ["Content-Type", "Accept"]
+}));
 
 app.use(express.json({
   limit: "1mb"
 }));
+
+app.use(express.urlencoded({
+  extended: true,
+  limit: "1mb"
+}));
+
+/* =========================================================
+   STATIC FILES
+========================================================= */
+
+app.use(express.static(__dirname));
 
 /* =========================================================
    POSTGRESQL
@@ -27,9 +42,10 @@ app.use(express.json({
 const pool = new Pool({
   connectionString: DATABASE_URL,
 
-  ssl: process.env.NODE_ENV === "production"
-    ? { rejectUnauthorized: false }
-    : false,
+  ssl:
+    process.env.NODE_ENV === "production"
+      ? { rejectUnauthorized: false }
+      : false,
 
   max: 10,
 
@@ -39,17 +55,37 @@ const pool = new Pool({
 });
 
 pool.on("error", (error) => {
-  console.error("Unexpected PostgreSQL pool error:", error);
+  console.error(
+    "POSTGRES POOL ERROR:",
+    error
+  );
 });
 
 /* =========================================================
-   DATABASE
+   REQUEST LOGGER
+========================================================= */
+
+app.use((req, res, next) => {
+
+  console.log(
+    `[REQUEST] ${req.method} ${req.originalUrl}`
+  );
+
+  next();
+
+});
+
+/* =========================================================
+   DATABASE INITIALIZATION
 ========================================================= */
 
 async function initializeDatabase() {
-  const client = await pool.connect();
+
+  const client =
+    await pool.connect();
 
   try {
+
     await client.query(`
       CREATE TABLE IF NOT EXISTS players (
         telegram_id BIGINT PRIMARY KEY,
@@ -61,121 +97,189 @@ async function initializeDatabase() {
       )
     `);
 
-    console.log("PostgreSQL database initialized.");
+    console.log(
+      "PostgreSQL database initialized."
+    );
+
   } finally {
+
     client.release();
+
   }
+
 }
 
 /* =========================================================
-   TELEGRAM VERIFICATION
+   TELEGRAM INIT DATA VERIFICATION
 ========================================================= */
 
 function verifyTelegramInitData(initData) {
 
-  if (!initData || typeof initData !== "string") {
-    throw new Error("Telegram login data is missing.");
+  if (
+    !initData ||
+    typeof initData !== "string"
+  ) {
+
+    throw new Error(
+      "Telegram login data is missing."
+    );
+
   }
 
   if (!BOT_TOKEN) {
+
     throw new Error(
       "TELEGRAM_BOT_TOKEN is not configured on Render."
     );
+
   }
 
-  const params = new URLSearchParams(initData);
+  const params =
+    new URLSearchParams(initData);
 
-  const receivedHash = params.get("hash");
+  const receivedHash =
+    params.get("hash");
 
   if (!receivedHash) {
+
     throw new Error(
       "Telegram login hash is missing."
     );
+
   }
 
   params.delete("hash");
 
-  const dataCheckString = [...params.entries()]
-    .sort(([a], [b]) => a.localeCompare(b))
-    .map(([key, value]) => `${key}=${value}`)
-    .join("\n");
+  const dataCheckString =
+    [...params.entries()]
+      .sort(([a], [b]) =>
+        a.localeCompare(b)
+      )
+      .map(
+        ([key, value]) =>
+          `${key}=${value}`
+      )
+      .join("\n");
 
-  const secretKey = crypto
-    .createHmac("sha256", "WebAppData")
-    .update(BOT_TOKEN)
-    .digest();
+  const secretKey =
+    crypto
+      .createHmac(
+        "sha256",
+        "WebAppData"
+      )
+      .update(BOT_TOKEN)
+      .digest();
 
-  const calculatedHash = crypto
-    .createHmac("sha256", secretKey)
-    .update(dataCheckString)
-    .digest("hex");
+  const calculatedHash =
+    crypto
+      .createHmac(
+        "sha256",
+        secretKey
+      )
+      .update(dataCheckString)
+      .digest("hex");
 
   const receivedBuffer =
-    Buffer.from(receivedHash, "hex");
+    Buffer.from(
+      receivedHash,
+      "hex"
+    );
 
   const calculatedBuffer =
-    Buffer.from(calculatedHash, "hex");
+    Buffer.from(
+      calculatedHash,
+      "hex"
+    );
 
   if (
-    receivedBuffer.length !== calculatedBuffer.length ||
+    receivedBuffer.length !==
+      calculatedBuffer.length ||
     !crypto.timingSafeEqual(
       receivedBuffer,
       calculatedBuffer
     )
   ) {
+
     throw new Error(
       "Telegram login verification failed."
     );
+
   }
 
   const authDate =
-    Number(params.get("auth_date"));
+    Number(
+      params.get("auth_date")
+    );
 
-  if (!Number.isFinite(authDate)) {
+  if (
+    !Number.isFinite(authDate)
+  ) {
+
     throw new Error(
       "Telegram authentication timestamp is missing."
     );
+
   }
 
   const age =
-    Math.floor(Date.now() / 1000) - authDate;
+    Math.floor(
+      Date.now() / 1000
+    ) - authDate;
 
-  if (age < -60 || age > 86400) {
+  if (
+    age < -60 ||
+    age > 86400
+  ) {
+
     throw new Error(
       "Telegram login session has expired."
     );
+
   }
 
   const userRaw =
     params.get("user");
 
   if (!userRaw) {
+
     throw new Error(
       "Telegram user information is missing."
     );
+
   }
 
   let user;
 
   try {
-    user = JSON.parse(userRaw);
+
+    user =
+      JSON.parse(userRaw);
+
   } catch {
+
     throw new Error(
       "Telegram user information is invalid."
     );
+
   }
 
-  if (!user || !user.id) {
+  if (
+    !user ||
+    !user.id
+  ) {
+
     throw new Error(
       "Telegram user ID is missing."
     );
+
   }
 
   return user;
+
 }
 
 /* =========================================================
-   PLAYER
+   PLAYER ACCOUNT
 ========================================================= */
 
 async function getOrCreatePlayer(user) {
@@ -189,6 +293,10 @@ async function getOrCreatePlayer(user) {
       .filter(Boolean)
       .join(" ") ||
     `player_${telegramId}`;
+
+  console.log(
+    `[PLAYER] Loading account ${telegramId}`
+  );
 
   const result =
     await pool.query(
@@ -216,11 +324,23 @@ async function getOrCreatePlayer(user) {
       ]
     );
 
+  if (
+    !result.rows ||
+    result.rows.length === 0
+  ) {
+
+    throw new Error(
+      "Database did not return the player account."
+    );
+
+  }
+
   return result.rows[0];
+
 }
 
 /* =========================================================
-   AUTHENTICATION MIDDLEWARE
+   AUTH MIDDLEWARE
 ========================================================= */
 
 async function authenticatedUser(
@@ -235,26 +355,42 @@ async function authenticatedUser(
       req.body &&
       req.body.initData;
 
-    const user =
-      verifyTelegramInitData(initData);
+    console.log(
+      `[AUTH] initData received: ${
+        typeof initData === "string"
+          ? initData.length + " characters"
+          : "NO"
+      }`
+    );
 
-    req.telegramUser = user;
+    const user =
+      verifyTelegramInitData(
+        initData
+      );
+
+    req.telegramUser =
+      user;
 
     next();
 
   } catch (error) {
 
     console.error(
-      "Authentication error:",
+      "[AUTH ERROR]",
       error.message
     );
 
-    return res.status(401).json({
-      error:
-        error.message ||
-        "Login failed."
-    });
+    return res
+      .status(401)
+      .type("application/json")
+      .json({
+        error:
+          error.message ||
+          "Login failed."
+      });
+
   }
+
 }
 
 /* =========================================================
@@ -264,44 +400,56 @@ async function authenticatedUser(
 app.get("/", (req, res) => {
 
   res.sendFile(
-    path.join(__dirname, "index.html")
+    path.join(
+      __dirname,
+      "index.html"
+    )
   );
 
 });
 
 /* =========================================================
-   HEALTH CHECK
+   HEALTH
 ========================================================= */
 
-app.get("/api/health", async (req, res) => {
+app.get(
+  "/api/health",
+  async (req, res) => {
 
-  try {
+    try {
 
-    await pool.query("SELECT 1");
+      await pool.query(
+        "SELECT 1"
+      );
 
-    return res.status(200).json({
-      status: "ok",
-      database: "connected",
-      game: "KIMIA PRIVÉ",
-      version: "2.2"
-    });
+      return res
+        .status(200)
+        .json({
+          status: "ok",
+          database: "connected",
+          game: "KIMIA PRIVÉ",
+          version: "2.3"
+        });
 
-  } catch (error) {
+    } catch (error) {
 
-    console.error(
-      "Health check failed:",
-      error
-    );
+      console.error(
+        "[HEALTH ERROR]",
+        error
+      );
 
-    return res.status(500).json({
-      status: "error",
-      database: "disconnected",
-      error: error.message
-    });
+      return res
+        .status(500)
+        .json({
+          status: "error",
+          database: "disconnected",
+          error: error.message
+        });
+
+    }
 
   }
-
-});
+);
 
 /* =========================================================
    LOGIN
@@ -312,6 +460,10 @@ app.post(
   authenticatedUser,
   async (req, res) => {
 
+    console.log(
+      "[API/ME] Request authenticated."
+    );
+
     try {
 
       const player =
@@ -319,42 +471,53 @@ app.post(
           req.telegramUser
         );
 
-      if (!player) {
-
-        return res.status(500).json({
-          error:
-            "Unable to create PRIVÉ account."
-        });
-
-      }
-
-      return res.status(200).json({
-
+      const response = {
         id:
-          String(player.telegram_id),
+          String(
+            player.telegram_id
+          ),
 
         username:
-          player.username || "PRIVÉ MEMBER",
+          player.username ||
+          "PRIVÉ MEMBER",
 
         balance:
-          Number(player.balance),
+          Number(
+            player.balance
+          ),
 
         vipLevel:
-          Number(player.vip_level)
+          Number(
+            player.vip_level
+          )
+      };
 
-      });
+      console.log(
+        "[API/ME] Sending account response:",
+        response
+      );
+
+      return res
+        .status(200)
+        .type("application/json")
+        .json(response);
 
     } catch (error) {
 
       console.error(
-        "/api/me error:",
+        "[API/ME ERROR]",
         error
       );
 
-      return res.status(500).json({
-        error:
-          "Unable to load your PRIVÉ account."
-      });
+      return res
+        .status(500)
+        .type("application/json")
+        .json({
+          error:
+            "Unable to load your PRIVÉ account.",
+          details:
+            error.message
+        });
 
     }
 
@@ -385,7 +548,6 @@ app.get(
       const players =
         result.rows.map(
           (player, index) => ({
-
             rank:
               index + 1,
 
@@ -394,26 +556,31 @@ app.get(
               "PRIVÉ Player",
 
             balance:
-              Number(player.balance)
-
+              Number(
+                player.balance
+              )
           })
         );
 
-      return res.status(200).json({
-        players
-      });
+      return res
+        .status(200)
+        .json({
+          players
+        });
 
     } catch (error) {
 
       console.error(
-        "/api/leaderboard error:",
+        "[LEADERBOARD ERROR]",
         error
       );
 
-      return res.status(500).json({
-        error:
-          "Unable to load leaderboard."
-      });
+      return res
+        .status(500)
+        .json({
+          error:
+            "Unable to load leaderboard."
+        });
 
     }
 
@@ -425,37 +592,30 @@ app.get(
 ========================================================= */
 
 const SYMBOL_WEIGHTS = [
-
   {
     symbol: "💎",
     weight: 20
   },
-
   {
     symbol: "7️⃣",
     weight: 8
   },
-
   {
     symbol: "💗",
     weight: 22
   },
-
   {
     symbol: "🌹",
     weight: 18
   },
-
   {
     symbol: "♠️",
     weight: 22
   },
-
   {
     symbol: "✨",
     weight: 10
   }
-
 ];
 
 function randomSymbol() {
@@ -475,10 +635,15 @@ function randomSymbol() {
     const item of SYMBOL_WEIGHTS
   ) {
 
-    random -= item.weight;
+    random -=
+      item.weight;
 
-    if (random <= 0) {
+    if (
+      random <= 0
+    ) {
+
       return item.symbol;
+
     }
 
   }
@@ -486,6 +651,7 @@ function randomSymbol() {
   return SYMBOL_WEIGHTS[
     SYMBOL_WEIGHTS.length - 1
   ].symbol;
+
 }
 
 function generateSpin() {
@@ -504,17 +670,11 @@ function generateSpin() {
 ========================================================= */
 
 const PAYLINES = [
-
   [0, 3, 6, 9, 12],
-
   [1, 4, 7, 10, 13],
-
   [2, 5, 8, 11, 14],
-
   [0, 4, 8, 10, 12],
-
   [2, 4, 6, 10, 14]
-
 ];
 
 function evaluatePayline(
@@ -576,31 +736,34 @@ function calculateWin(
           line
         );
 
-      if (result.matches >= 3) {
+      if (
+        result.matches >= 3
+      ) {
 
         let multiplier = 0;
 
         if (
           result.matches === 3
         ) {
-          multiplier = 2;
-        }
 
-        if (
+          multiplier = 2;
+
+        } else if (
           result.matches === 4
         ) {
-          multiplier = 5;
-        }
 
-        if (
+          multiplier = 5;
+
+        } else if (
           result.matches === 5
         ) {
+
           multiplier = 12;
+
         }
 
         if (
-          result.symbol === "7️⃣" &&
-          result.matches >= 3
+          result.symbol === "7️⃣"
         ) {
 
           multiplier *= 2;
@@ -610,10 +773,10 @@ function calculateWin(
         const lineWin =
           bet * multiplier;
 
-        totalWin += lineWin;
+        totalWin +=
+          lineWin;
 
         winningLines.push({
-
           line:
             lineIndex + 1,
 
@@ -625,7 +788,6 @@ function calculateWin(
 
           win:
             lineWin
-
         });
 
       }
@@ -650,7 +812,10 @@ app.post(
   async (req, res) => {
 
     const bet =
-      Number(req.body?.bet);
+      Number(
+        req.body &&
+        req.body.bet
+      );
 
     const allowedBets = [
       300,
@@ -660,28 +825,39 @@ app.post(
     ];
 
     if (
-      !Number.isSafeInteger(bet)
+      !Number.isSafeInteger(
+        bet
+      )
     ) {
 
-      return res.status(400).json({
-        error: "Invalid bet."
-      });
+      return res
+        .status(400)
+        .json({
+          error:
+            "Invalid bet."
+        });
 
     }
 
     if (
-      !allowedBets.includes(bet)
+      !allowedBets.includes(
+        bet
+      )
     ) {
 
-      return res.status(400).json({
-        error:
-          "Invalid bet. Allowed bets are 300, 600, 1500 and 3000."
-      });
+      return res
+        .status(400)
+        .json({
+          error:
+            "Invalid bet. Allowed bets are 300, 600, 1500 and 3000."
+        });
 
     }
 
     const telegramId =
-      String(req.telegramUser.id);
+      String(
+        req.telegramUser.id
+      );
 
     const client =
       await pool.connect();
@@ -704,9 +880,7 @@ app.post(
             WHERE telegram_id = $1
             FOR UPDATE
           `,
-          [
-            telegramId
-          ]
+          [telegramId]
         );
 
       if (
@@ -717,10 +891,12 @@ app.post(
           "ROLLBACK"
         );
 
-        return res.status(404).json({
-          error:
-            "PRIVÉ account not found."
-        });
+        return res
+          .status(404)
+          .json({
+            error:
+              "PRIVÉ account not found."
+          });
 
       }
 
@@ -728,7 +904,9 @@ app.post(
         playerResult.rows[0];
 
       const currentBalance =
-        Number(player.balance);
+        Number(
+          player.balance
+        );
 
       if (
         currentBalance < bet
@@ -738,10 +916,12 @@ app.post(
           "ROLLBACK"
         );
 
-        return res.status(400).json({
-          error:
-            "Not enough PRIVÉ coins."
-        });
+        return res
+          .status(400)
+          .json({
+            error:
+              "Not enough PRIVÉ coins."
+          });
 
       }
 
@@ -777,46 +957,54 @@ app.post(
         "COMMIT"
       );
 
-      return res.status(200).json({
+      return res
+        .status(200)
+        .json({
 
-        symbols,
+          symbols,
 
-        win:
-          payout.win,
+          win:
+            payout.win,
 
-        winningLines:
-          payout.winningLines,
+          winningLines:
+            payout.winningLines,
 
-        bet,
+          bet,
 
-        balance:
-          newBalance,
+          balance:
+            newBalance,
 
-        vipLevel:
-          Number(player.vip_level),
+          vipLevel:
+            Number(
+              player.vip_level
+            ),
 
-        username:
-          player.username
+          username:
+            player.username
 
-      });
+        });
 
     } catch (error) {
 
       try {
+
         await client.query(
           "ROLLBACK"
         );
+
       } catch {}
 
       console.error(
-        "/api/spin error:",
+        "[SPIN ERROR]",
         error
       );
 
-      return res.status(500).json({
-        error:
-          "Spin failed. Your coins were not changed."
-      });
+      return res
+        .status(500)
+        .json({
+          error:
+            "Spin failed. Your coins were not changed."
+        });
 
     } finally {
 
@@ -828,49 +1016,91 @@ app.post(
 );
 
 /* =========================================================
-   UNKNOWN API ROUTES
+   API 404
 ========================================================= */
 
 app.use(
   "/api",
   (req, res) => {
 
-    return res.status(404).json({
-      error:
-        "API endpoint not found.",
-      path:
-        req.originalUrl
-    });
+    console.log(
+      `[API 404] ${req.method} ${req.originalUrl}`
+    );
+
+    return res
+      .status(404)
+      .json({
+        error:
+          "API endpoint not found.",
+        path:
+          req.originalUrl
+      });
 
   }
 );
 
 /* =========================================================
-   STATIC FRONTEND
+   GENERAL ERROR HANDLER
 ========================================================= */
 
 app.use(
-  express.static(__dirname)
+  (error, req, res, next) => {
+
+    console.error(
+      "[UNHANDLED ERROR]",
+      error
+    );
+
+    if(res.headersSent){
+      return next(error);
+    }
+
+    return res
+      .status(500)
+      .json({
+        error:
+          "Internal server error.",
+        details:
+          error.message
+      });
+
+  }
 );
 
 /* =========================================================
-   START
+   START SERVER
 ========================================================= */
 
 async function startServer() {
 
   try {
 
-    if (!BOT_TOKEN) {
+    if(!BOT_TOKEN){
+
       console.error(
         "WARNING: TELEGRAM_BOT_TOKEN is missing."
       );
+
+    } else {
+
+      console.log(
+        "TELEGRAM_BOT_TOKEN is configured."
+      );
+
     }
 
-    if (!DATABASE_URL) {
+    if(!DATABASE_URL){
+
       console.error(
         "WARNING: DATABASE_URL is missing."
       );
+
+    } else {
+
+      console.log(
+        "DATABASE_URL is configured."
+      );
+
     }
 
     await initializeDatabase();
@@ -894,7 +1124,7 @@ async function startServer() {
   } catch (error) {
 
     console.error(
-      "Unable to start KIMIA PRIVÉ server:",
+      "UNABLE TO START KIMIA PRIVÉ:",
       error
     );
 
