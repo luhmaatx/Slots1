@@ -3,13 +3,13 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta name="theme-color" content="#090706">
+<meta name="theme-color" content="#080604">
 <title>KIMIA PRIVÉ</title>
 
 <script src="https://telegram.org/js/telegram-web-app.js"></script>
 
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Montserrat:wght@400;500;600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700;800&family=Montserrat:wght@400;500;600;700&display=swap');
 
 *{
   box-sizing:border-box;
@@ -20,15 +20,14 @@ html,body{
   margin:0;
   width:100%;
   min-height:100%;
-  background:
-    radial-gradient(circle at 50% 25%,rgba(145,104,42,.16),transparent 38%),
-    linear-gradient(145deg,#080605,#120d09 48%,#070605);
-  color:#ead9b5;
+  background:#050403;
+  color:#f0d69a;
   font-family:Montserrat,Arial,sans-serif;
 }
 
 body{
   min-height:100dvh;
+  overflow-x:hidden;
 }
 
 button{
@@ -37,19 +36,63 @@ button{
   appearance:none;
 }
 
+button:active{
+  transform:scale(.98);
+}
+
+.hidden{
+  display:none!important;
+}
+
+/* =====================================================
+   LUXURY BACKGROUND
+===================================================== */
+
+body:before{
+  content:"";
+  position:fixed;
+  inset:0;
+  z-index:-3;
+  background:
+    radial-gradient(circle at 50% 12%,rgba(255,193,74,.18),transparent 27%),
+    radial-gradient(circle at 15% 45%,rgba(120,54,24,.18),transparent 30%),
+    radial-gradient(circle at 88% 60%,rgba(155,67,38,.12),transparent 30%),
+    linear-gradient(135deg,#030302,#100a06 45%,#040302);
+}
+
+body:after{
+  content:"";
+  position:fixed;
+  inset:0;
+  z-index:-2;
+  pointer-events:none;
+  opacity:.24;
+  background:
+    repeating-linear-gradient(
+      115deg,
+      transparent 0,
+      transparent 5px,
+      rgba(255,210,120,.025) 6px,
+      transparent 7px
+    );
+}
+
+/* =====================================================
+   APP
+===================================================== */
+
 .app{
   width:100%;
   min-height:100dvh;
   display:flex;
   justify-content:center;
-  align-items:flex-start;
-  padding:10px;
 }
 
 .screen{
   width:min(620px,100%);
-  max-height:96dvh;
-  overflow:auto;
+  min-height:100dvh;
+  padding:10px 10px 95px;
+  overflow-x:hidden;
   scrollbar-width:none;
 }
 
@@ -57,235 +100,547 @@ button{
   display:none;
 }
 
-.card{
+/* =====================================================
+   GOLD FRAME
+===================================================== */
+
+.luxury-card{
   position:relative;
-  border:1px solid rgba(205,164,82,.48);
+  border:1px solid rgba(224,170,69,.72);
   background:
-    linear-gradient(145deg,rgba(31,22,16,.97),rgba(10,8,6,.98));
+    linear-gradient(
+      145deg,
+      rgba(24,15,8,.98),
+      rgba(5,4,3,.99) 55%,
+      rgba(20,12,7,.98)
+    );
   box-shadow:
-    0 0 0 1px rgba(255,255,255,.025) inset,
-    0 25px 70px rgba(0,0,0,.6),
-    0 0 45px rgba(158,113,42,.08);
+    0 0 0 1px rgba(255,230,160,.05) inset,
+    0 0 25px rgba(210,146,38,.08),
+    0 20px 60px rgba(0,0,0,.7);
 }
 
-.card:before{
+.luxury-card:before{
   content:"";
   position:absolute;
-  inset:8px;
-  border:1px solid rgba(206,165,83,.10);
+  inset:5px;
+  border:1px solid rgba(244,202,112,.16);
   pointer-events:none;
 }
 
-.hidden{
-  display:none!important;
+.gold-line{
+  height:1px;
+  background:linear-gradient(
+    90deg,
+    transparent,
+    #b9822c,
+    #f3d184,
+    #b9822c,
+    transparent
+  );
 }
 
-/* LOGIN */
+/* =====================================================
+   LOGIN
+===================================================== */
+
+.login-screen{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  min-height:100dvh;
+}
 
 .login-card{
-  padding:48px 30px 32px;
+  width:100%;
+  padding:55px 28px 35px;
   text-align:center;
 }
 
+.crown{
+  font-size:42px;
+  color:#edc66f;
+  filter:drop-shadow(0 0 12px rgba(240,190,74,.45));
+  margin-bottom:5px;
+}
+
 .eyebrow{
-  font-size:10px;
-  letter-spacing:8px;
-  color:#c9a65d;
+  font-size:9px;
+  letter-spacing:7px;
+  color:#d2a85a;
   margin-bottom:14px;
 }
 
 .brand{
-  font-family:"Cormorant Garamond",serif;
-  font-size:58px;
-  line-height:.9;
+  font-family:Cinzel,serif;
+  font-size:52px;
+  line-height:.95;
   letter-spacing:7px;
-  color:#f0e1c3;
-  margin-left:7px;
+  color:#f5e1b1;
+  text-shadow:
+    0 0 12px rgba(239,188,76,.18),
+    0 2px 2px #000;
 }
 
 .brand-sub{
-  margin-top:15px;
-  font-family:"Cormorant Garamond",serif;
-  font-size:28px;
+  margin-top:9px;
+  font-family:Cinzel,serif;
+  font-size:26px;
   letter-spacing:11px;
-  color:#d5b56d;
-  margin-left:11px;
+  color:#d8ae5e;
+  margin-left:10px;
+}
+
+.club{
+  margin-top:14px;
+  font-size:8px;
+  letter-spacing:5px;
+  color:#9c8050;
 }
 
 .ornament{
   display:flex;
   justify-content:center;
   align-items:center;
-  gap:16px;
-  margin:30px 0 28px;
+  gap:12px;
+  margin:30px 0;
 }
 
 .ornament:before,
 .ornament:after{
   content:"";
-  width:35px;
+  width:55px;
   height:1px;
-  background:linear-gradient(90deg,transparent,#b9934e);
+  background:linear-gradient(90deg,transparent,#d4a44e);
 }
 
 .ornament:after{
-  background:linear-gradient(90deg,#b9934e,transparent);
+  background:linear-gradient(90deg,#d4a44e,transparent);
 }
 
 .diamond{
-  transform:rotate(45deg);
   width:9px;
   height:9px;
-  background:#c9a45a;
-  box-shadow:0 0 14px rgba(215,175,91,.45);
+  transform:rotate(45deg);
+  background:#e4ba60;
+  box-shadow:0 0 18px rgba(238,190,83,.5);
 }
 
 .description{
   max-width:360px;
-  margin:0 auto 31px;
-  color:#a99b87;
-  font-size:13px;
+  margin:0 auto 30px;
+  color:#998872;
+  font-size:11px;
   line-height:1.8;
+}
+
+.primary-btn,
+.spin-btn,
+.gift-button{
+  border:1px solid #f0c66d;
+  background:
+    linear-gradient(
+      180deg,
+      #f0c873 0%,
+      #c7923c 48%,
+      #9d6b27 100%
+    );
+  color:#160e05;
+  box-shadow:
+    0 0 20px rgba(229,171,62,.12),
+    inset 0 1px rgba(255,245,201,.55);
+  font-weight:700;
+  cursor:pointer;
 }
 
 .primary-btn{
   width:100%;
   min-height:58px;
-  border:1px solid #e0bc6c;
-  background:linear-gradient(180deg,#e0bd70,#b9893b);
-  color:#160f09;
-  font-weight:600;
-  letter-spacing:3px;
-  cursor:pointer;
-  touch-action:manipulation;
-  position:relative;
-  z-index:5;
-}
-
-.primary-btn:active{
-  transform:translateY(1px);
-}
-
-.primary-btn:disabled{
-  opacity:.55;
-  cursor:wait;
+  letter-spacing:4px;
 }
 
 .status{
-  min-height:24px;
-  margin-top:15px;
-  color:#c5a46d;
-  font-size:10px;
-  line-height:1.5;
+  min-height:22px;
+  margin-top:14px;
+  color:#d2aa5c;
+  font-size:9px;
 }
 
-/* GAME HEADER */
+/* =====================================================
+   GAME HEADER
+===================================================== */
 
 .game-screen{
-  width:min(620px,100%);
+  padding-top:7px;
 }
 
-.topbar{
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  margin-bottom:12px;
-}
-
-.logo-small{
-  font-family:"Cormorant Garamond",serif;
-  font-size:25px;
-  letter-spacing:4px;
-  color:#e8d4aa;
-}
-
-.vip{
-  border:1px solid rgba(205,164,82,.4);
-  padding:7px 12px;
-  font-size:9px;
-  letter-spacing:2px;
-  color:#d3ae63;
-}
-
-/* QUICK MENU */
-
-.quick-menu{
+.game-header{
   display:grid;
-  grid-template-columns:repeat(3,1fr);
-  gap:7px;
-  margin-bottom:12px;
+  grid-template-columns:1fr auto;
+  gap:8px;
+  align-items:center;
+  margin-bottom:9px;
 }
 
-.menu-btn{
-  min-height:47px;
-  border:1px solid rgba(205,164,82,.30);
-  background:rgba(16,12,9,.92);
-  color:#d2b979;
+.player-vip{
+  min-height:67px;
+  padding:9px 12px;
+  display:flex;
+  align-items:center;
+  gap:10px;
+  border:1px solid rgba(225,174,77,.62);
+  border-radius:35px;
+  background:
+    linear-gradient(
+      145deg,
+      rgba(31,20,11,.96),
+      rgba(7,5,4,.98)
+    );
+  box-shadow:
+    0 0 18px rgba(221,159,46,.07),
+    inset 0 0 20px rgba(255,198,87,.025);
+}
+
+.avatar-ring{
+  width:48px;
+  height:48px;
+  flex:none;
+  border:1px solid #d5a849;
+  border-radius:50%;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  font-family:Cinzel,serif;
+  font-size:20px;
+  color:#f2ce81;
+  background:
+    radial-gradient(circle,#3a2511,#0b0704 70%);
+  box-shadow:
+    0 0 13px rgba(228,174,71,.18);
+}
+
+.player-details{
+  min-width:0;
+}
+
+.player-name-big{
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+  font-family:Cinzel,serif;
+  font-size:17px;
+  color:#f0d29a;
+}
+
+.vip-line{
+  display:flex;
+  align-items:center;
+  gap:7px;
+  margin-top:2px;
+}
+
+.vip-crown{
+  color:#f0c66b;
+  font-size:15px;
+}
+
+.vip-level{
+  color:#d4ad61;
+  font-size:9px;
+  letter-spacing:1px;
+}
+
+.vip-progress{
+  width:90px;
+  height:4px;
+  margin-top:5px;
+  border-radius:4px;
+  overflow:hidden;
+  background:#25180d;
+}
+
+.vip-progress-bar{
+  width:42%;
+  height:100%;
+  background:linear-gradient(90deg,#a76d27,#f2c96e);
+  box-shadow:0 0 7px rgba(235,187,84,.4);
+}
+
+.balance-box{
+  min-width:135px;
+  height:67px;
+  padding:9px 12px;
+  border:1px solid rgba(225,174,77,.62);
+  border-radius:35px;
+  display:flex;
+  align-items:center;
+  gap:9px;
+  background:
+    linear-gradient(
+      145deg,
+      rgba(31,20,11,.96),
+      rgba(7,5,4,.98)
+    );
+}
+
+.coin-icon{
+  width:37px;
+  height:37px;
+  border:1px solid #d7a949;
+  border-radius:50%;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  font-size:20px;
+  background:radial-gradient(circle,#8d5c20,#241508);
+  box-shadow:0 0 12px rgba(226,169,62,.15);
+}
+
+.balance-info{
+  min-width:0;
+}
+
+.balance-caption{
+  color:#b9a27d;
+  font-size:7px;
+  letter-spacing:2px;
+}
+
+.balance-number{
+  margin-top:2px;
+  color:#f0d18e;
+  font-family:Cinzel,serif;
+  font-size:19px;
+  white-space:nowrap;
+}
+
+.plus-btn{
+  width:31px;
+  height:31px;
+  flex:none;
+  border:1px solid #d3a247;
+  border-radius:50%;
+  background:#110b06;
+  color:#edc26b;
+  font-size:21px;
+  line-height:1;
   cursor:pointer;
+}
+
+/* =====================================================
+   DAILY BONUS
+===================================================== */
+
+.bonus-bar{
+  height:52px;
+  margin-bottom:10px;
+  padding:0 15px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  border:1px solid rgba(222,169,73,.5);
+  border-radius:28px;
+  background:
+    linear-gradient(
+      90deg,
+      rgba(35,22,10,.96),
+      rgba(11,7,4,.98)
+    );
+  box-shadow:inset 0 0 20px rgba(218,158,51,.025);
+}
+
+.bonus-left{
+  display:flex;
+  align-items:center;
+  gap:11px;
+}
+
+.bonus-icon{
+  font-size:25px;
+  color:#e8bd65;
+}
+
+.bonus-title{
+  color:#ead09b;
   font-size:9px;
   letter-spacing:1.5px;
-  touch-action:manipulation;
 }
 
-.menu-btn:active{
-  transform:scale(.98);
+.bonus-time{
+  margin-top:2px;
+  color:#9c8562;
+  font-size:8px;
 }
 
-.menu-icon{
-  display:block;
-  font-family:"Cormorant Garamond",serif;
-  font-size:20px;
-  line-height:18px;
-  margin-bottom:3px;
-  color:#e3c477;
+.chevron{
+  color:#e0b65d;
+  font-size:25px;
 }
 
-/* BALANCE */
+/* =====================================================
+   LOGO
+===================================================== */
 
-.balance-card{
+.logo-area{
+  text-align:center;
+  padding:8px 0 12px;
+}
+
+.logo-crown{
+  font-size:42px;
+  line-height:35px;
+  color:#eac16b;
+  filter:drop-shadow(0 0 14px rgba(239,184,67,.38));
+}
+
+.logo-main{
+  margin-top:3px;
+  font-family:Cinzel,serif;
+  font-weight:600;
+  font-size:47px;
+  letter-spacing:5px;
+  line-height:1;
+  color:#f4dfad;
+  text-shadow:
+    0 2px 0 #6c4316,
+    0 0 15px rgba(243,189,76,.22);
+}
+
+.logo-sub{
+  margin-top:3px;
+  font-family:Cinzel,serif;
+  font-size:24px;
+  letter-spacing:9px;
+  color:#e0b863;
+  margin-left:9px;
+}
+
+.logo-tagline{
+  margin-top:8px;
+  font-size:7px;
+  letter-spacing:5px;
+  color:#9e8255;
+}
+
+/* =====================================================
+   MACHINE
+===================================================== */
+
+.machine{
+  position:relative;
+  padding:11px 11px 14px;
+  border:2px solid #b77c28;
+  border-radius:30px;
+  background:
+    linear-gradient(
+      135deg,
+      #4b2d0d 0%,
+      #140c05 7%,
+      #050403 20%,
+      #211306 50%,
+      #050403 80%,
+      #4a2b0c 100%
+    );
+  box-shadow:
+    0 0 0 2px #2c1a08,
+    0 0 0 4px rgba(239,182,73,.32),
+    0 15px 45px rgba(0,0,0,.75),
+    0 0 40px rgba(214,146,38,.13);
+}
+
+.machine-top{
+  height:30px;
   display:flex;
-  justify-content:space-between;
+  justify-content:center;
   align-items:center;
-  padding:16px 18px;
-  margin-bottom:12px;
+  position:relative;
 }
 
-.balance-label{
-  font-size:9px;
-  letter-spacing:3px;
-  color:#887b69;
+.machine-top:before,
+.machine-top:after{
+  content:"";
+  width:80px;
+  height:1px;
+  background:linear-gradient(90deg,transparent,#d8a74c);
 }
 
-.balance{
-  margin-top:5px;
-  font-family:"Cormorant Garamond",serif;
-  font-size:30px;
-  color:#e8c979;
+.machine-top:after{
+  background:linear-gradient(90deg,#d8a74c,transparent);
 }
 
-/* SLOTS */
+.machine-emblem{
+  width:32px;
+  height:25px;
+  margin:0 10px;
+  border:1px solid #d8aa50;
+  border-radius:50%;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  color:#efc66f;
+  font-size:14px;
+  background:#100a05;
+}
 
-.reel-card{
-  padding:18px;
+.reel-window{
+  padding:8px;
+  border:2px solid #8e5b1b;
+  border-radius:19px;
+  background:
+    linear-gradient(
+      145deg,
+      #0c0805,
+      #251506,
+      #080604
+    );
+  box-shadow:
+    inset 0 0 20px rgba(0,0,0,.9),
+    0 0 15px rgba(222,164,52,.12);
 }
 
 .reels{
   display:grid;
   grid-template-columns:repeat(5,1fr);
-  gap:7px;
+  gap:3px;
+  border-radius:12px;
+  overflow:hidden;
 }
 
 .reel{
-  aspect-ratio:1/1.22;
-  min-width:0;
+  position:relative;
+  aspect-ratio:.78/1;
   display:flex;
   align-items:center;
   justify-content:center;
   overflow:hidden;
-  border:1px solid rgba(204,163,80,.3);
+  border:1px solid rgba(221,168,71,.55);
   background:
-    radial-gradient(circle at 50% 40%,rgba(145,104,42,.12),transparent 60%),
-    #0c0907;
+    radial-gradient(
+      circle at 50% 45%,
+      rgba(255,190,67,.13),
+      transparent 54%
+    ),
+    linear-gradient(
+      180deg,
+      #130c06,
+      #050403 50%,
+      #170d05
+    );
+}
+
+.reel:after{
+  content:"";
+  position:absolute;
+  inset:0;
+  background:
+    linear-gradient(
+      90deg,
+      rgba(255,255,255,.035),
+      transparent 20%,
+      transparent 80%,
+      rgba(255,255,255,.025)
+    );
+  pointer-events:none;
 }
 
 .symbol{
@@ -299,75 +654,156 @@ button{
 
 .symbol:before{
   content:"";
-  width:68%;
-  height:68%;
-  border:1px solid rgba(202,164,87,.22);
-  transform:rotate(45deg);
+  width:67%;
+  height:67%;
   position:absolute;
+  border:1px solid rgba(222,171,73,.22);
+  transform:rotate(45deg);
+  box-shadow:0 0 15px rgba(212,153,42,.06);
 }
 
 .symbol-art{
   position:relative;
   z-index:2;
-  font-family:"Cormorant Garamond",serif;
-  font-weight:600;
-  font-size:35px;
-  line-height:1;
-  color:#e7c77b;
+  font-family:Cinzel,serif;
+  font-weight:700;
+  font-size:31px;
+  color:#f0ca74;
   text-shadow:
-    0 0 9px rgba(219,183,102,.35),
-    0 2px 3px #000;
+    0 0 7px rgba(239,183,66,.5),
+    0 2px 2px #000;
 }
 
-.symbol-diamond .symbol-art{font-size:32px}
-.symbol-seven .symbol-art{font-size:42px;font-style:italic}
-.symbol-heart .symbol-art{font-size:38px}
-.symbol-k .symbol-art{font-size:43px;font-weight:700}
-.symbol-spade .symbol-art{font-size:38px}
-.symbol-star .symbol-art{font-size:32px}
-
-/* CONTROLS */
-
-.controls{
-  margin-top:16px;
+.symbol-k .symbol-art{
+  font-size:33px;
+  color:#f0d291;
 }
 
-.bet-row{
+.symbol-seven .symbol-art{
+  font-family:Cinzel,serif;
+  font-size:45px;
+  font-style:italic;
+  color:#ff4e91;
+  text-shadow:
+    0 0 8px rgba(255,38,126,.6),
+    0 0 18px rgba(255,38,126,.2),
+    0 3px 2px #000;
+}
+
+.symbol-heart .symbol-art{
+  font-size:42px;
+  color:#ff438c;
+  text-shadow:
+    0 0 10px rgba(255,40,119,.7),
+    0 0 18px rgba(255,40,119,.18);
+}
+
+.symbol-diamond .symbol-art{
+  font-size:40px;
+  color:#ff4b9b;
+  text-shadow:
+    0 0 8px rgba(255,53,148,.7),
+    0 0 18px rgba(255,53,148,.22);
+}
+
+.symbol-spade .symbol-art{
+  font-size:39px;
+  color:#e9c878;
+}
+
+.symbol-star .symbol-art{
+  font-size:34px;
+  color:#eac477;
+}
+
+/* =====================================================
+   MACHINE CONTROLS
+===================================================== */
+
+.machine-controls{
   display:grid;
-  grid-template-columns:repeat(4,1fr);
-  gap:7px;
-  margin-bottom:10px;
+  grid-template-columns:1fr 1fr 1fr;
+  gap:4px;
+  margin-top:9px;
 }
 
-.bet-btn{
-  border:1px solid rgba(205,164,82,.32);
-  background:#100c09;
-  color:#c7b28e;
-  padding:11px 4px;
-  font-size:10px;
+.control-box{
+  min-height:58px;
+  padding:6px 4px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  flex-direction:column;
+  border:1px solid rgba(221,168,71,.46);
+  background:linear-gradient(180deg,#120b06,#070504);
+}
+
+.control-label{
+  font-size:7px;
+  color:#b49a6d;
   letter-spacing:1px;
-  cursor:pointer;
-  touch-action:manipulation;
 }
 
-.bet-btn.active{
-  border-color:#d4ad5f;
-  color:#ebd18e;
-  background:rgba(181,139,61,.14);
+.control-value{
+  margin-top:3px;
+  font-family:Cinzel,serif;
+  font-size:17px;
+  color:#f1d28d;
+}
+
+.control-arrows{
+  display:flex;
+  align-items:center;
+  gap:9px;
+}
+
+.arrow{
+  color:#dfb45c;
+  font-size:22px;
+}
+
+.spin-section{
+  margin-top:9px;
+  display:grid;
+  grid-template-columns:72px 1fr 72px;
+  gap:7px;
+  align-items:center;
+}
+
+.side-control{
+  height:70px;
+  border:1px solid #b27b2a;
+  border-radius:35px;
+  background:
+    radial-gradient(circle,#261609,#090604);
+  color:#e5bd68;
+  cursor:pointer;
+  box-shadow:
+    inset 0 0 15px rgba(225,164,52,.06);
+}
+
+.side-icon{
+  display:block;
+  font-size:25px;
+  line-height:25px;
+}
+
+.side-text{
+  display:block;
+  margin-top:4px;
+  font-size:7px;
+  letter-spacing:1px;
 }
 
 .spin-btn{
-  width:100%;
-  height:58px;
-  border:1px solid #d9b66a;
-  background:linear-gradient(180deg,#dcb96d,#ae8035);
-  color:#140e08;
-  font-weight:600;
+  height:76px;
+  border-radius:38px;
+  font-family:Cinzel,serif;
+  font-size:30px;
   letter-spacing:4px;
-  cursor:pointer;
-  touch-action:manipulation;
-  position:relative;
-  z-index:5;
+  box-shadow:
+    0 0 22px rgba(239,184,68,.25),
+    inset 0 2px rgba(255,244,196,.55);
 }
 
 .spin-btn:disabled{
@@ -375,212 +811,389 @@ button{
 }
 
 .message{
-  min-height:25px;
+  min-height:21px;
+  margin-top:7px;
   text-align:center;
-  margin-top:13px;
-  color:#c9aa70;
-  font-size:12px;
-}
-
-/* LEADERBOARD */
-
-.leaderboard-card{
-  margin-top:12px;
-  padding:20px 18px;
-}
-
-.leaderboard-title{
-  text-align:center;
-  font-size:10px;
-  letter-spacing:6px;
-  color:#c9a65d;
-  margin-bottom:16px;
-}
-
-.leaderboard-subtitle{
-  text-align:center;
-  color:#756a5b;
+  color:#d7b568;
   font-size:9px;
-  letter-spacing:2px;
-  margin-top:-8px;
-  margin-bottom:15px;
-}
-
-.players{
-  display:flex;
-  flex-direction:column;
-  gap:6px;
-}
-
-.player-row{
-  display:grid;
-  grid-template-columns:42px 1fr auto;
-  align-items:center;
-  min-height:48px;
-  padding:7px 10px;
-  border:1px solid rgba(205,164,82,.17);
-  background:rgba(12,9,7,.65);
-}
-
-.player-rank{
-  font-family:"Cormorant Garamond",serif;
-  font-size:18px;
-  color:#c9a65d;
-}
-
-.player-info{
-  min-width:0;
-}
-
-.player-name{
-  overflow:hidden;
-  white-space:nowrap;
-  text-overflow:ellipsis;
-  color:#d9c49c;
-  font-size:10px;
   letter-spacing:1px;
 }
 
-.player-label{
-  margin-top:2px;
-  color:#655b4e;
+/* =====================================================
+   FEATURE CARDS
+===================================================== */
+
+.feature-grid{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:7px;
+  margin-top:10px;
+}
+
+.feature-card{
+  min-height:76px;
+  padding:9px 7px;
+  border:1px solid rgba(218,163,58,.5);
+  border-radius:14px;
+  background:
+    linear-gradient(145deg,#1c1007,#080604);
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  cursor:pointer;
+  text-align:left;
+  color:#f0d29a;
+}
+
+.feature-icon{
+  font-size:22px;
+  color:#e4b95e;
+  margin-bottom:4px;
+}
+
+.feature-title{
+  font-size:8px;
+  letter-spacing:1px;
+}
+
+.feature-copy{
+  margin-top:3px;
+  color:#867254;
+  font-size:7px;
+  line-height:1.4;
+}
+
+.feature-arrow{
+  position:absolute;
+  right:9px;
+  color:#cfa45a;
+}
+
+/* =====================================================
+   JACKPOT
+===================================================== */
+
+.jackpot-card{
+  margin-top:10px;
+  padding:13px;
+  border:1px solid rgba(219,166,65,.5);
+  border-radius:15px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:14px;
+  background:
+    radial-gradient(
+      circle at 50% 50%,
+      rgba(214,147,34,.13),
+      transparent 60%
+    ),
+    #090604;
+}
+
+.jackpot-icon{
+  font-size:30px;
+  color:#edc36a;
+}
+
+.jackpot-caption{
   font-size:7px;
   letter-spacing:2px;
+  color:#9d8358;
+}
+
+.jackpot-number{
+  margin-top:2px;
+  font-family:Cinzel,serif;
+  font-size:22px;
+  color:#f2d291;
+  letter-spacing:1px;
+}
+
+/* =====================================================
+   LEADERBOARD
+===================================================== */
+
+.leaderboard-card{
+  margin-top:10px;
+  padding:13px;
+}
+
+.section-heading{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin-bottom:10px;
+}
+
+.section-title{
+  display:flex;
+  align-items:center;
+  gap:7px;
+  font-family:Cinzel,serif;
+  font-size:12px;
+  letter-spacing:2px;
+  color:#e8cb8b;
+}
+
+.section-title-icon{
+  color:#e7bd63;
+}
+
+.view-all{
+  color:#c99c4b;
+  font-size:7px;
+  letter-spacing:1px;
+}
+
+.players{
+  display:grid;
+  grid-template-columns:repeat(5,1fr);
+  gap:5px;
+}
+
+.player-row{
+  min-width:0;
+  min-height:85px;
+  padding:7px 4px;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  border:1px solid rgba(214,160,57,.25);
+  border-radius:10px;
+  background:linear-gradient(145deg,#180e07,#080604);
+}
+
+.player-rank{
+  width:22px;
+  height:22px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  border:1px solid #b47b2b;
+  border-radius:50%;
+  color:#e5bb67;
+  font-family:Cinzel,serif;
+  font-size:10px;
+}
+
+.player-info{
+  width:100%;
+  min-width:0;
+  text-align:center;
+}
+
+.player-name{
+  margin-top:4px;
+  overflow:hidden;
+  white-space:nowrap;
+  text-overflow:ellipsis;
+  color:#d9c292;
+  font-size:7px;
+}
+
+.player-label{
+  display:none;
 }
 
 .player-balance{
-  font-family:"Cormorant Garamond",serif;
-  font-size:16px;
-  color:#e1c274;
+  margin-top:4px;
+  color:#eac879;
+  font-family:Cinzel,serif;
+  font-size:9px;
 }
 
 .leaderboard-loading,
 .leaderboard-empty{
+  grid-column:1/-1;
   text-align:center;
-  padding:14px 4px;
-  color:#756a5b;
-  font-size:10px;
+  padding:15px;
+  color:#756348;
+  font-size:8px;
   letter-spacing:1px;
 }
 
-/* MODALS */
+/* =====================================================
+   BOTTOM NAV
+===================================================== */
+
+.bottom-nav{
+  position:fixed;
+  left:50%;
+  bottom:0;
+  z-index:40;
+  transform:translateX(-50%);
+  width:min(620px,100%);
+  padding:
+    7px 7px
+    calc(7px + env(safe-area-inset-bottom));
+  display:grid;
+  grid-template-columns:repeat(5,1fr);
+  border-top:1px solid rgba(218,163,59,.55);
+  background:
+    linear-gradient(
+      180deg,
+      rgba(15,9,5,.96),
+      rgba(4,3,2,.99)
+    );
+  backdrop-filter:blur(15px);
+}
+
+.nav-btn{
+  border:0;
+  background:none;
+  color:#8d7550;
+  min-height:58px;
+  cursor:pointer;
+}
+
+.nav-icon{
+  display:block;
+  font-size:23px;
+  line-height:25px;
+}
+
+.nav-label{
+  display:block;
+  margin-top:4px;
+  font-size:7px;
+  letter-spacing:2px;
+}
+
+.nav-btn.active{
+  color:#edc979;
+}
+
+.nav-btn.active .nav-icon{
+  filter:drop-shadow(0 0 7px rgba(236,190,78,.45));
+}
+
+/* =====================================================
+   MODALS
+===================================================== */
 
 .modal{
   position:fixed;
   inset:0;
-  z-index:50;
+  z-index:100;
   display:flex;
-  align-items:center;
   justify-content:center;
-  padding:18px;
-  background:rgba(0,0,0,.78);
-  backdrop-filter:blur(8px);
+  align-items:center;
+  padding:15px;
+  background:rgba(0,0,0,.84);
+  backdrop-filter:blur(10px);
 }
 
 .modal-card{
   width:min(460px,100%);
   max-height:90dvh;
   overflow:auto;
-  padding:28px 22px;
-  border:1px solid rgba(205,164,82,.52);
-  background:linear-gradient(145deg,#211710,#0b0806);
-  box-shadow:0 25px 80px rgba(0,0,0,.75);
+  padding:28px 20px;
+  border:1px solid rgba(225,174,76,.72);
+  border-radius:18px;
+  background:
+    linear-gradient(145deg,#241508,#080503);
+  box-shadow:
+    0 30px 90px rgba(0,0,0,.9),
+    0 0 30px rgba(216,153,38,.12);
   position:relative;
 }
 
 .modal-card:before{
   content:"";
   position:absolute;
-  inset:8px;
-  border:1px solid rgba(206,165,83,.10);
+  inset:6px;
+  border:1px solid rgba(235,190,94,.12);
   pointer-events:none;
 }
 
 .modal-close{
   position:absolute;
-  top:14px;
-  right:16px;
+  top:10px;
+  right:13px;
+  z-index:5;
   border:0;
   background:none;
-  color:#a98c58;
-  font-size:20px;
+  color:#d4a958;
+  font-size:25px;
   cursor:pointer;
-  z-index:3;
 }
 
 .modal-title{
   text-align:center;
-  font-family:"Cormorant Garamond",serif;
-  font-size:31px;
+  font-family:Cinzel,serif;
+  font-size:25px;
   letter-spacing:4px;
-  color:#ebd39b;
-  margin-bottom:5px;
+  color:#eed39a;
 }
 
 .modal-subtitle{
   text-align:center;
-  color:#776b5a;
-  font-size:8px;
+  margin-top:5px;
+  margin-bottom:20px;
+  color:#806c4d;
+  font-size:7px;
   letter-spacing:3px;
-  margin-bottom:24px;
 }
 
 /* PROFILE */
 
 .profile-head{
   text-align:center;
-  margin-bottom:22px;
+  margin-bottom:18px;
 }
 
 .profile-avatar{
-  width:74px;
-  height:74px;
-  margin:0 auto 12px;
-  border:1px solid #c49b51;
+  width:76px;
+  height:76px;
+  margin:0 auto 10px;
   display:flex;
   align-items:center;
   justify-content:center;
+  border:1px solid #d5a849;
   border-radius:50%;
-  background:radial-gradient(circle,#342416,#100b08);
-  color:#e3c477;
-  font-family:"Cormorant Garamond",serif;
-  font-size:34px;
+  background:radial-gradient(circle,#38220e,#080503 70%);
+  color:#efc979;
+  font-family:Cinzel,serif;
+  font-size:30px;
+  box-shadow:0 0 20px rgba(221,163,48,.15);
 }
 
 .profile-name{
-  color:#e5d0a4;
-  font-size:13px;
+  color:#ead09a;
+  font-size:12px;
   letter-spacing:2px;
 }
 
 .profile-username{
-  margin-top:5px;
-  color:#746858;
-  font-size:9px;
+  margin-top:4px;
+  color:#766248;
+  font-size:8px;
 }
 
 .profile-stats{
   display:grid;
   grid-template-columns:repeat(2,1fr);
-  gap:7px;
+  gap:6px;
 }
 
 .stat-box{
-  padding:15px 8px;
+  padding:14px 8px;
   text-align:center;
-  border:1px solid rgba(205,164,82,.18);
-  background:rgba(10,8,6,.65);
+  border:1px solid rgba(214,159,57,.25);
+  background:#0b0704;
 }
 
 .stat-value{
-  font-family:"Cormorant Garamond",serif;
-  color:#e2c577;
-  font-size:24px;
+  color:#e8c677;
+  font-family:Cinzel,serif;
+  font-size:21px;
 }
 
 .stat-label{
   margin-top:3px;
-  color:#6e6253;
+  color:#746047;
   font-size:7px;
   letter-spacing:2px;
 }
@@ -588,10 +1201,10 @@ button{
 /* REWARDS */
 
 .reward-card{
-  border:1px solid rgba(205,164,82,.20);
-  background:rgba(10,8,6,.70);
-  padding:15px;
-  margin-bottom:8px;
+  margin-bottom:7px;
+  padding:13px;
+  border:1px solid rgba(214,159,57,.25);
+  background:#0a0704;
 }
 
 .reward-top{
@@ -601,173 +1214,315 @@ button{
 }
 
 .reward-name{
-  color:#dfca9c;
-  font-family:"Cormorant Garamond",serif;
-  font-size:21px;
+  color:#e5ca93;
+  font-family:Cinzel,serif;
+  font-size:17px;
 }
 
 .reward-amount{
-  color:#e3c477;
-  font-family:"Cormorant Garamond",serif;
-  font-size:18px;
+  color:#e9c36d;
+  font-family:Cinzel,serif;
+  font-size:15px;
 }
 
 .reward-description{
   margin-top:4px;
-  color:#716555;
+  color:#79664a;
   font-size:8px;
   line-height:1.5;
 }
 
 .reward-progress{
   height:4px;
-  margin-top:12px;
-  background:#211912;
+  margin-top:10px;
   overflow:hidden;
+  background:#211408;
 }
 
 .reward-progress-bar{
+  width:0;
   height:100%;
-  width:0%;
-  background:linear-gradient(90deg,#9b7135,#e2c477);
+  background:linear-gradient(90deg,#996426,#ebc46e);
 }
 
 .reward-button{
   width:100%;
-  margin-top:11px;
+  margin-top:9px;
   padding:10px;
-  border:1px solid rgba(205,164,82,.35);
-  background:#17100b;
-  color:#d8bd82;
-  font-size:9px;
+  border:1px solid rgba(213,161,64,.4);
+  background:#120b06;
+  color:#d6b36d;
+  font-size:8px;
   letter-spacing:2px;
   cursor:pointer;
 }
 
 .reward-button.claimable{
-  background:linear-gradient(180deg,#dcb96d,#ae8035);
-  color:#140e08;
+  background:linear-gradient(180deg,#edc46d,#a9732d);
+  color:#160e05;
 }
 
-/* DAILY GIFT */
+/* GIFT */
 
 .gift-box{
+  padding:25px 14px;
   text-align:center;
-  padding:25px 15px;
-  border:1px solid rgba(205,164,82,.20);
+  border:1px solid rgba(214,159,57,.25);
   background:
-    radial-gradient(circle at 50% 40%,rgba(192,143,56,.12),transparent 55%),
-    rgba(10,8,6,.65);
+    radial-gradient(
+      circle at 50% 35%,
+      rgba(226,169,56,.14),
+      transparent 60%
+    ),
+    #090604;
 }
 
 .gift-icon{
-  font-family:"Cormorant Garamond",serif;
-  font-size:65px;
-  color:#dcb96d;
-  text-shadow:0 0 25px rgba(220,185,109,.25);
+  font-size:55px;
+  color:#edc16a;
+  filter:drop-shadow(0 0 12px rgba(235,180,62,.35));
 }
 
 .gift-title{
-  margin-top:8px;
-  font-family:"Cormorant Garamond",serif;
-  font-size:27px;
-  color:#ead39c;
+  margin-top:7px;
+  font-family:Cinzel,serif;
+  font-size:22px;
+  color:#ebd09a;
   letter-spacing:2px;
 }
 
 .gift-copy{
-  margin:8px auto 20px;
   max-width:290px;
-  color:#786b59;
-  font-size:10px;
+  margin:8px auto 17px;
+  color:#79674c;
+  font-size:9px;
   line-height:1.7;
 }
 
 .gift-amount{
-  color:#e2c477;
-  font-family:"Cormorant Garamond",serif;
-  font-size:30px;
+  font-family:Cinzel,serif;
+  font-size:28px;
+  color:#eac36f;
 }
 
 .gift-button{
   width:100%;
-  min-height:52px;
-  margin-top:18px;
-  border:1px solid #d9b66a;
-  background:linear-gradient(180deg,#dcb96d,#ae8035);
-  color:#140e08;
-  font-weight:600;
+  min-height:51px;
+  margin-top:16px;
+  font-size:10px;
   letter-spacing:3px;
-  cursor:pointer;
-  touch-action:manipulation;
-}
-
-.gift-button:disabled{
-  opacity:.45;
 }
 
 .streak{
-  margin-top:18px;
+  margin-top:14px;
   text-align:center;
-  color:#766958;
-  font-size:9px;
+  color:#806c4d;
+  font-size:8px;
   letter-spacing:2px;
 }
 
-/* ANIMATION */
+/* =====================================================
+   SPIN ANIMATION
+===================================================== */
 
 .reel.spinning{
-  animation:reelPulse .09s linear infinite alternate;
+  animation:reelPulse .08s linear infinite alternate;
 }
 
 @keyframes reelPulse{
-  from{transform:translateY(-2px)}
-  to{transform:translateY(2px)}
+  from{
+    transform:translateY(-3px);
+    filter:brightness(.85);
+  }
+  to{
+    transform:translateY(3px);
+    filter:brightness(1.2);
+  }
 }
 
 .win-flash{
-  animation:winFlash .55s ease;
+  animation:winFlash .7s ease;
 }
 
 @keyframes winFlash{
-  0%{box-shadow:inset 0 0 0 rgba(224,189,112,0)}
-  50%{box-shadow:inset 0 0 30px rgba(224,189,112,.28)}
-  100%{box-shadow:inset 0 0 0 rgba(224,189,112,0)}
+  0%{
+    box-shadow:0 0 0 rgba(240,190,73,0);
+  }
+  45%{
+    box-shadow:
+      0 0 45px rgba(240,190,73,.65),
+      inset 0 0 40px rgba(240,190,73,.25);
+  }
+  100%{
+    box-shadow:0 0 0 rgba(240,190,73,0);
+  }
 }
+
+/* =====================================================
+   MOBILE
+===================================================== */
 
 @media(max-width:430px){
 
-  .app{
-    padding:8px;
+  .screen{
+    padding:7px 7px 91px;
   }
 
-  .login-card{
-    padding:40px 22px 27px;
+  .game-header{
+    grid-template-columns:1fr auto;
   }
 
-  .brand{
-    font-size:49px;
+  .player-vip{
+    min-height:60px;
+    padding:7px 9px;
   }
 
-  .brand-sub{
-    font-size:25px;
+  .avatar-ring{
+    width:42px;
+    height:42px;
+    font-size:17px;
+  }
+
+  .player-name-big{
+    font-size:14px;
+  }
+
+  .vip-progress{
+    width:70px;
+  }
+
+  .balance-box{
+    min-width:119px;
+    height:60px;
+    padding:7px 8px;
+  }
+
+  .coin-icon{
+    width:32px;
+    height:32px;
+    font-size:17px;
+  }
+
+  .balance-number{
+    font-size:16px;
+  }
+
+  .plus-btn{
+    width:27px;
+    height:27px;
+    font-size:18px;
+  }
+
+  .logo-main{
+    font-size:38px;
+    letter-spacing:4px;
+  }
+
+  .logo-sub{
+    font-size:20px;
+    letter-spacing:7px;
+  }
+
+  .logo-crown{
+    font-size:35px;
+  }
+
+  .reel-window{
+    padding:5px;
   }
 
   .symbol-art{
-    font-size:28px;
+    font-size:25px;
   }
 
   .symbol-seven .symbol-art{
-    font-size:34px;
-  }
-
-  .symbol-k .symbol-art{
     font-size:36px;
   }
 
-  .player-row{
-    grid-template-columns:35px 1fr auto;
+  .symbol-heart .symbol-art{
+    font-size:34px;
   }
+
+  .symbol-diamond .symbol-art{
+    font-size:32px;
+  }
+
+  .symbol-k .symbol-art{
+    font-size:27px;
+  }
+
+  .symbol-spade .symbol-art{
+    font-size:31px;
+  }
+
+  .spin-section{
+    grid-template-columns:57px 1fr 57px;
+  }
+
+  .side-control{
+    height:60px;
+  }
+
+  .spin-btn{
+    height:67px;
+    font-size:25px;
+  }
+
+  .feature-grid{
+    gap:5px;
+  }
+
+  .feature-card{
+    min-height:69px;
+  }
+
+  .players{
+    gap:3px;
+  }
+
+  .player-row{
+    min-height:76px;
+  }
+
+  .player-name{
+    font-size:6px;
+  }
+
+  .player-balance{
+    font-size:8px;
+  }
+
+  .nav-icon{
+    font-size:21px;
+  }
+
+  .nav-label{
+    font-size:6px;
+  }
+}
+
+@media(max-width:350px){
+
+  .balance-box{
+    min-width:105px;
+  }
+
+  .balance-info{
+    display:none;
+  }
+
+  .players{
+    grid-template-columns:repeat(5,1fr);
+  }
+
+  .logo-main{
+    font-size:32px;
+  }
+
+  .logo-sub{
+    font-size:17px;
+  }
+
 }
 </style>
 </head>
@@ -776,16 +1531,31 @@ button{
 
 <div class="app">
 
-<!-- LOGIN -->
+<!-- =====================================================
+     LOGIN
+===================================================== -->
 
-<main id="loginScreen" class="screen">
+<main id="loginScreen" class="screen login-screen">
 
-<section class="card login-card">
+<section class="luxury-card login-card">
 
-<div class="eyebrow">WELCOME TO</div>
+<div class="crown">♛</div>
 
-<div class="brand">KIMIA</div>
-<div class="brand-sub">PRIVÉ</div>
+<div class="eyebrow">
+WELCOME TO
+</div>
+
+<div class="brand">
+KIMIA
+</div>
+
+<div class="brand-sub">
+PRIVÉ
+</div>
+
+<div class="club">
+PRIVATE FORTUNE CLUB
+</div>
 
 <div class="ornament">
 <span class="diamond"></span>
@@ -808,90 +1578,327 @@ ENTER PRIVÉ
 </main>
 
 
-<!-- GAME -->
+<!-- =====================================================
+     GAME
+===================================================== -->
 
 <main id="gameScreen" class="screen game-screen hidden">
 
-<div class="topbar">
+<!-- HEADER -->
 
-<div class="logo-small">
-KIMIA PRIVÉ
+<div class="game-header">
+
+<div class="player-vip">
+
+<div id="headerAvatar" class="avatar-ring">
+K
 </div>
 
-<div id="vipBadge" class="vip">
-PRIVÉ
+<div class="player-details">
+
+<div id="headerPlayerName" class="player-name-big">
+KIMIA
 </div>
 
-</div>
+<div class="vip-line">
 
+<span class="vip-crown">♛</span>
 
-<!-- QUICK MENU -->
-
-<div class="quick-menu">
-
-<button class="menu-btn" id="profileBtn" type="button">
-<span class="menu-icon">♙</span>
-PROFILE
-</button>
-
-<button class="menu-btn" id="rewardsBtn" type="button">
-<span class="menu-icon">◇</span>
-REWARDS
-</button>
-
-<button class="menu-btn" id="giftBtn" type="button">
-<span class="menu-icon">✦</span>
-DAILY GIFT
-</button>
+<span id="vipBadge" class="vip-level">
+VIP LEVEL 0
+</span>
 
 </div>
 
-
-<!-- BALANCE -->
-
-<section class="card balance-card">
-
-<div>
-
-<div class="balance-label">
-PRIVATE BALANCE
+<div class="vip-progress">
+<div id="vipProgressBar" class="vip-progress-bar"></div>
 </div>
 
-<div id="balance" class="balance">
+</div>
+
+</div>
+
+
+<div class="balance-box">
+
+<div class="coin-icon">
+◉
+</div>
+
+<div class="balance-info">
+
+<div class="balance-caption">
+BALANCE
+</div>
+
+<div id="balance" class="balance-number">
 0
 </div>
 
 </div>
 
-<div id="playerName" class="balance-label">
-MEMBER
+<button id="balancePlus" class="plus-btn" type="button">
++
+</button>
+
 </div>
 
-</section>
+</div>
+
+
+<!-- DAILY BONUS -->
+
+<div id="bonusBar" class="bonus-bar">
+
+<div class="bonus-left">
+
+<div class="bonus-icon">
+♔
+</div>
+
+<div>
+
+<div class="bonus-title">
+DAILY BONUS
+</div>
+
+<div id="bonusTime" class="bonus-time">
+AVAILABLE NOW
+</div>
+
+</div>
+
+</div>
+
+<div class="chevron">
+›
+</div>
+
+</div>
+
+
+<!-- BRAND -->
+
+<div class="logo-area">
+
+<div class="logo-crown">
+♛
+</div>
+
+<div class="logo-main">
+KIMIA
+</div>
+
+<div class="logo-sub">
+PRIVÉ
+</div>
+
+<div class="logo-tagline">
+PRIVATE FORTUNE CLUB
+</div>
+
+</div>
 
 
 <!-- SLOT MACHINE -->
 
-<section class="card reel-card">
+<section class="machine">
+
+<div class="machine-top">
+
+<div class="machine-emblem">
+♛
+</div>
+
+</div>
+
+
+<div class="reel-window">
 
 <div class="reels" id="reels"></div>
 
-<div class="controls">
+</div>
 
-<div class="bet-row">
 
-<button class="bet-btn active" data-bet="300" type="button">300</button>
-<button class="bet-btn" data-bet="600" type="button">600</button>
-<button class="bet-btn" data-bet="1500" type="button">1,500</button>
-<button class="bet-btn" data-bet="3000" type="button">3,000</button>
+<!-- MACHINE SETTINGS -->
+
+<div class="machine-controls">
+
+<div class="control-box">
+
+<div class="control-label">
+LINES
+</div>
+
+<div class="control-arrows">
+
+<span id="lineDown" class="arrow">‹</span>
+
+<span id="lineValue" class="control-value">
+5
+</span>
+
+<span id="lineUp" class="arrow">›</span>
 
 </div>
+
+</div>
+
+
+<div class="control-box">
+
+<div class="control-label">
+BET
+</div>
+
+<div class="control-arrows">
+
+<span class="arrow">‹</span>
+
+<span id="betDisplay" class="control-value">
+300
+</span>
+
+<span class="arrow">›</span>
+
+</div>
+
+</div>
+
+
+<div class="control-box">
+
+<div class="control-label">
+TOTAL BET
+</div>
+
+<div class="control-value">
+<span id="totalBetDisplay">
+300
+</span>
+</div>
+
+</div>
+
+</div>
+
+
+<!-- SPIN -->
+
+<div class="spin-section">
+
+<button id="autoBtn" class="side-control" type="button">
+
+<span class="side-icon">
+↻
+</span>
+
+<span class="side-text">
+AUTO
+</span>
+
+</button>
+
 
 <button id="spinBtn" class="spin-btn" type="button">
 SPIN
 </button>
 
+
+<button id="turboBtn" class="side-control" type="button">
+
+<span class="side-icon">
+ϟ
+</span>
+
+<span class="side-text">
+TURBO
+</span>
+
+</button>
+
+</div>
+
+
 <div id="gameMessage" class="message"></div>
+
+</section>
+
+
+<!-- FEATURE CARDS -->
+
+<div class="feature-grid">
+
+<button id="giftFeatureBtn" class="feature-card" type="button">
+
+<div class="feature-icon">
+♔
+</div>
+
+<div class="feature-title">
+DAILY BONUS
+</div>
+
+<div class="feature-copy">
+FREE COINS & REWARDS
+</div>
+
+</button>
+
+
+<button id="jackpotFeatureBtn" class="feature-card" type="button">
+
+<div class="feature-icon">
+◇
+</div>
+
+<div class="feature-title">
+JACKPOT
+</div>
+
+<div class="feature-copy">
+♛ 1,248,730
+</div>
+
+</button>
+
+
+<button id="winsFeatureBtn" class="feature-card" type="button">
+
+<div class="feature-icon">
+♛
+</div>
+
+<div class="feature-title">
+TOP WINS
+</div>
+
+<div class="feature-copy">
+SEE BIGGEST WINS
+</div>
+
+</button>
+
+</div>
+
+
+<!-- JACKPOT -->
+
+<section class="jackpot-card">
+
+<div class="jackpot-icon">
+◇
+</div>
+
+<div>
+
+<div class="jackpot-caption">
+PRIVÉ JACKPOT
+</div>
+
+<div class="jackpot-number">
+1,248,730
+</div>
 
 </div>
 
@@ -900,14 +1907,24 @@ SPIN
 
 <!-- LEADERBOARD -->
 
-<section class="card leaderboard-card">
+<section class="luxury-card leaderboard-card">
 
-<div class="leaderboard-title">
+<div class="section-heading">
+
+<div class="section-title">
+
+<span class="section-title-icon">
+♛
+</span>
+
 TOP PLAYERS
+
 </div>
 
-<div class="leaderboard-subtitle">
-PRIVÉ LEADERBOARD
+<div class="view-all">
+VIEW ALL ›
+</div>
+
 </div>
 
 <div id="players" class="players">
@@ -925,21 +1942,104 @@ LOADING PLAYERS…
 </div>
 
 
-<!-- PROFILE -->
+<!-- =====================================================
+     BOTTOM NAV
+===================================================== -->
+
+<nav id="bottomNav" class="bottom-nav hidden">
+
+<button class="nav-btn active" id="homeNav" type="button">
+
+<span class="nav-icon">
+⌂
+</span>
+
+<span class="nav-label">
+HOME
+</span>
+
+</button>
+
+
+<button class="nav-btn" id="slotsNav" type="button">
+
+<span class="nav-icon">
+▣
+</span>
+
+<span class="nav-label">
+SLOTS
+</span>
+
+</button>
+
+
+<button class="nav-btn" id="leaderboardNav" type="button">
+
+<span class="nav-icon">
+♜
+</span>
+
+<span class="nav-label">
+LEADERBOARD
+</span>
+
+</button>
+
+
+<button class="nav-btn" id="walletNav" type="button">
+
+<span class="nav-icon">
+▱
+</span>
+
+<span class="nav-label">
+WALLET
+</span>
+
+</button>
+
+
+<button class="nav-btn" id="profileNav" type="button">
+
+<span class="nav-icon">
+♙
+</span>
+
+<span class="nav-label">
+PROFILE
+</span>
+
+</button>
+
+</nav>
+
+
+<!-- =====================================================
+     PROFILE MODAL
+===================================================== -->
 
 <div id="profileModal" class="modal hidden">
 
 <div class="modal-card">
 
-<button class="modal-close" data-close="profileModal" type="button">×</button>
+<button class="modal-close" data-close="profileModal" type="button">
+×
+</button>
 
-<div class="modal-title">PROFILE</div>
+<div class="modal-title">
+PROFILE
+</div>
 
-<div class="modal-subtitle">YOUR PRIVÉ ACCOUNT</div>
+<div class="modal-subtitle">
+YOUR PRIVÉ ACCOUNT
+</div>
 
 <div class="profile-head">
 
-<div id="profileAvatar" class="profile-avatar">K</div>
+<div id="profileAvatar" class="profile-avatar">
+K
+</div>
 
 <div id="profileName" class="profile-name">
 PRIVÉ MEMBER
@@ -954,23 +2054,49 @@ PRIVÉ MEMBER
 <div class="profile-stats">
 
 <div class="stat-box">
-<div id="profileBalance" class="stat-value">0</div>
-<div class="stat-label">BALANCE</div>
+
+<div id="profileBalance" class="stat-value">
+0
+</div>
+
+<div class="stat-label">
+BALANCE
+</div>
+
 </div>
 
 <div class="stat-box">
-<div id="profileVip" class="stat-value">0</div>
-<div class="stat-label">VIP LEVEL</div>
+
+<div id="profileVip" class="stat-value">
+0
+</div>
+
+<div class="stat-label">
+VIP LEVEL
+</div>
+
 </div>
 
 <div class="stat-box">
-<div id="profileSpins" class="stat-value">0</div>
-<div class="stat-label">SPINS</div>
+
+<div id="profileSpins" class="stat-value">
+0
+</div>
+
+<div class="stat-label">
+SPINS
+</div>
+
 </div>
 
 <div class="stat-box">
-<div id="profileWins" class="stat-value">0</div>
-<div class="stat-label">WINS</div>
+
+<div id="profileWins" class="stat-value">
+0
+</div>
+
+<div class="stat-label">
+WINS
 </div>
 
 </div>
@@ -979,26 +2105,41 @@ PRIVÉ MEMBER
 
 </div>
 
+</div>
 
-<!-- REWARDS -->
+
+<!-- =====================================================
+     REWARDS MODAL
+===================================================== -->
 
 <div id="rewardsModal" class="modal hidden">
 
 <div class="modal-card">
 
-<button class="modal-close" data-close="rewardsModal" type="button">×</button>
+<button class="modal-close" data-close="rewardsModal" type="button">
+×
+</button>
 
-<div class="modal-title">REWARDS</div>
+<div class="modal-title">
+REWARDS
+</div>
 
-<div class="modal-subtitle">PRIVÉ REWARD COLLECTION</div>
+<div class="modal-subtitle">
+PRIVÉ REWARD COLLECTION
+</div>
+
 
 <div class="reward-card">
 
 <div class="reward-top">
 
-<div class="reward-name">FIRST SPIN</div>
+<div class="reward-name">
+FIRST SPIN
+</div>
 
-<div class="reward-amount">+500</div>
+<div class="reward-amount">
++500
+</div>
 
 </div>
 
@@ -1021,9 +2162,13 @@ IN PROGRESS
 
 <div class="reward-top">
 
-<div class="reward-name">HIGH ROLLER</div>
+<div class="reward-name">
+HIGH ROLLER
+</div>
 
-<div class="reward-amount">+2,500</div>
+<div class="reward-amount">
++2,500
+</div>
 
 </div>
 
@@ -1046,9 +2191,13 @@ IN PROGRESS
 
 <div class="reward-top">
 
-<div class="reward-name">PRIVÉ ELITE</div>
+<div class="reward-name">
+PRIVÉ ELITE
+</div>
 
-<div class="reward-amount">+10,000</div>
+<div class="reward-amount">
++10,000
+</div>
 
 </div>
 
@@ -1071,21 +2220,31 @@ LOCKED
 </div>
 
 
-<!-- DAILY GIFT -->
+<!-- =====================================================
+     DAILY GIFT MODAL
+===================================================== -->
 
 <div id="giftModal" class="modal hidden">
 
 <div class="modal-card">
 
-<button class="modal-close" data-close="giftModal" type="button">×</button>
+<button class="modal-close" data-close="giftModal" type="button">
+×
+</button>
 
-<div class="modal-title">DAILY GIFT</div>
+<div class="modal-title">
+DAILY GIFT
+</div>
 
-<div class="modal-subtitle">A LITTLE PRIVÉ SURPRISE</div>
+<div class="modal-subtitle">
+A LITTLE PRIVÉ SURPRISE
+</div>
 
 <div class="gift-box">
 
-<div class="gift-icon">✦</div>
+<div class="gift-icon">
+♔
+</div>
 
 <div class="gift-title">
 TODAY'S GIFT
@@ -1116,6 +2275,10 @@ CURRENT STREAK · 1 DAY
 
 </div>
 
+
+<!-- =====================================================
+     JAVASCRIPT
+===================================================== -->
 
 <script>
 (function(){
@@ -1164,10 +2327,16 @@ const balanceEl =
   document.getElementById("balance");
 
 const playerNameEl =
-  document.getElementById("playerName");
+  document.getElementById("headerPlayerName");
 
 const vipBadge =
   document.getElementById("vipBadge");
+
+const headerAvatar =
+  document.getElementById("headerAvatar");
+
+const vipProgressBar =
+  document.getElementById("vipProgressBar");
 
 const reelsEl =
   document.getElementById("reels");
@@ -1180,15 +2349,6 @@ const gameMessage =
 
 const playersEl =
   document.getElementById("players");
-
-const profileBtn =
-  document.getElementById("profileBtn");
-
-const rewardsBtn =
-  document.getElementById("rewardsBtn");
-
-const giftBtn =
-  document.getElementById("giftBtn");
 
 const profileModal =
   document.getElementById("profileModal");
@@ -1208,10 +2368,16 @@ const giftMessage =
 const streakText =
   document.getElementById("streakText");
 
+const bottomNav =
+  document.getElementById("bottomNav");
+
 
 let selectedBet = 300;
 let currentPlayer = null;
 let spinning = false;
+let turboMode = false;
+let autoMode = false;
+let autoTimer = null;
 
 
 /* =====================================================
@@ -1307,11 +2473,6 @@ function getInitData(){
   }
 
 
-  /*
-    initData is the signed Telegram payload
-    that the backend uses to identify the player.
-  */
-
   const initData =
     typeof tg.initData === "string"
       ? tg.initData.trim()
@@ -1358,10 +2519,7 @@ function updatePlayer(player){
     typeof name === "string" &&
     name.startsWith("@")
   ){
-
-    name =
-      name.substring(1);
-
+    name = name.substring(1);
   }
 
 
@@ -1374,9 +2532,22 @@ function updatePlayer(player){
 
 
   vipBadge.textContent =
-    vip > 0
-      ? `VIP ${vip}`
-      : "PRIVÉ";
+    `VIP LEVEL ${vip}`;
+
+
+  vipProgressBar.style.width =
+    Math.min(100,Math.max(0,(vip/5)*100)) + "%";
+
+
+  const initial =
+    String(name)
+      .trim()
+      .charAt(0)
+      .toUpperCase() || "K";
+
+
+  headerAvatar.textContent =
+    initial;
 
 }
 
@@ -1482,9 +2653,7 @@ function openRewards(){
 
 
   const spins =
-    Number(
-      currentPlayer.spins || 0
-    );
+    Number(currentPlayer.spins || 0);
 
 
   const wagered =
@@ -1496,15 +2665,11 @@ function openRewards(){
 
 
   const vip =
-    Number(
-      currentPlayer.vipLevel || 0
-    );
+    Number(currentPlayer.vipLevel || 0);
 
 
   const firstProgress =
-    spins > 0
-      ? 100
-      : 0;
+    spins > 0 ? 100 : 0;
 
 
   const wagerProgress =
@@ -1550,18 +2715,10 @@ function openRewards(){
     firstButton.textContent =
       "COMPLETED";
 
-    firstButton.classList.remove(
-      "claimable"
-    );
-
   }else{
 
     firstButton.textContent =
       "IN PROGRESS";
-
-    firstButton.classList.remove(
-      "claimable"
-    );
 
   }
 
@@ -1647,13 +2804,6 @@ function openGift(){
 }
 
 
-/*
-  Visual claim for now.
-  The actual persistent daily-gift
-  claim should be connected to PostgreSQL
-  through a backend endpoint.
-*/
-
 giftClaimBtn.addEventListener(
   "click",
   function(){
@@ -1677,20 +2827,16 @@ giftClaimBtn.addEventListener(
    MODALS
 ===================================================== */
 
-profileBtn.addEventListener(
-  "click",
-  openProfile
-);
+function closeModal(id){
 
-rewardsBtn.addEventListener(
-  "click",
-  openRewards
-);
+  const modal =
+    document.getElementById(id);
 
-giftBtn.addEventListener(
-  "click",
-  openGift
-);
+  if(modal){
+    modal.classList.add("hidden");
+  }
+
+}
 
 
 document
@@ -1701,17 +2847,9 @@ document
       "click",
       function(){
 
-        const id =
-          button.dataset.close;
-
-        const modal =
-          document.getElementById(id);
-
-        if(modal){
-          modal.classList.add(
-            "hidden"
-          );
-        }
+        closeModal(
+          button.dataset.close
+        );
 
       }
     );
@@ -1838,14 +2976,12 @@ function renderLeaderboard(players){
 
 
   players
-    .slice(0,10)
+    .slice(0,5)
     .forEach(
       (player,index) => {
 
         const row =
-          document.createElement(
-            "div"
-          );
+          document.createElement("div");
 
 
         row.className =
@@ -1860,7 +2996,7 @@ function renderLeaderboard(players){
         const username =
           player.username ||
           player.name ||
-          "Anonymous Player";
+          "Anonymous";
 
 
         const balance =
@@ -1876,7 +3012,7 @@ function renderLeaderboard(players){
         row.innerHTML = `
 
           <div class="player-rank">
-            #${rank}
+            ${rank}
           </div>
 
           <div class="player-info">
@@ -1887,14 +3023,10 @@ function renderLeaderboard(players){
               )}
             </div>
 
-            <div class="player-label">
-              PRIVÉ MEMBER
-            </div>
-
           </div>
 
           <div class="player-balance">
-            ${formattedBalance}
+            ◉ ${formattedBalance}
           </div>
 
         `;
@@ -1937,15 +3069,9 @@ function normalizeSymbol(raw){
   let value =
     String(raw)
       .trim()
-      .toLowerCase();
-
-
-  value =
-    value.replace(/\uFE0F/g,"");
-
-
-  value =
-    value.replace(/\u200D/g,"");
+      .toLowerCase()
+      .replace(/\uFE0F/g,"")
+      .replace(/\u200D/g,"");
 
 
   if(
@@ -2050,7 +3176,7 @@ function symbolMarkup(rawSymbol){
     art = "♥";
 
   if(symbol === "K")
-    art = "K";
+    art = "KP";
 
   if(symbol === "SPADE")
     art = "♠";
@@ -2101,9 +3227,7 @@ function renderSymbols(
     rawSymbol => {
 
       const reel =
-        document.createElement(
-          "div"
-        );
+        document.createElement("div");
 
 
       reel.className =
@@ -2152,50 +3276,128 @@ renderSymbols([
 
 
 /* =====================================================
-   BET BUTTONS
+   BET
 ===================================================== */
 
+function updateBetDisplay(){
+
+  document.getElementById(
+    "betDisplay"
+  ).textContent =
+    selectedBet.toLocaleString();
+
+
+  document.getElementById(
+    "totalBetDisplay"
+  ).textContent =
+    selectedBet.toLocaleString();
+
+}
+
+
+function cycleBet(direction){
+
+  if(spinning){
+    return;
+  }
+
+
+  const bets = [
+    300,
+    600,
+    1500,
+    3000
+  ];
+
+
+  let index =
+    bets.indexOf(selectedBet);
+
+
+  if(index === -1){
+    index = 0;
+  }
+
+
+  index += direction;
+
+
+  if(index < 0){
+    index = bets.length - 1;
+  }
+
+
+  if(index >= bets.length){
+    index = 0;
+  }
+
+
+  selectedBet =
+    bets[index];
+
+
+  updateBetDisplay();
+
+  gameMessage.textContent =
+    `BET ${selectedBet.toLocaleString()}`;
+
+}
+
+
 document
-  .querySelectorAll(".bet-btn")
-  .forEach(button => {
+  .getElementById("lineDown")
+  .addEventListener(
+    "click",
+    function(){
 
-    button.addEventListener(
-      "click",
-      function(){
+      document.getElementById(
+        "lineValue"
+      ).textContent = "5";
 
-        if(spinning){
-          return;
-        }
-
-
-        document
-          .querySelectorAll(".bet-btn")
-          .forEach(
-            btn =>
-              btn.classList.remove(
-                "active"
-              )
-          );
+    }
+  );
 
 
-        button.classList.add(
-          "active"
-        );
+document
+  .getElementById("lineUp")
+  .addEventListener(
+    "click",
+    function(){
+
+      document.getElementById(
+        "lineValue"
+      ).textContent = "5";
+
+    }
+  );
 
 
-        selectedBet =
-          Number(
-            button.dataset.bet
-          );
+/*
+  The bet arrows use the same real
+  bet values as the existing game.
+*/
 
+document
+  .querySelectorAll(".control-box")
+  [1]
+  .addEventListener(
+    "click",
+    function(event){
 
-        gameMessage.textContent =
-          `BET ${selectedBet.toLocaleString()}`;
+      const rect =
+        this.getBoundingClientRect();
 
-      }
-    );
+      const midpoint =
+        rect.left + rect.width / 2;
 
-  });
+      cycleBet(
+        event.clientX >= midpoint
+          ? 1
+          : -1
+      );
+
+    }
+  );
 
 
 /* =====================================================
@@ -2229,11 +3431,12 @@ async function spin(){
   gameMessage.textContent = "";
 
 
-  /*
-    Animation runs independently.
-    This prevents a slow API response
-    from preventing the visual spin.
-  */
+  const animationSpeed =
+    turboMode ? 55 : 90;
+
+  const animationCount =
+    turboMode ? 8 : 12;
+
 
   const animationPromise =
     new Promise(resolve => {
@@ -2280,7 +3483,7 @@ async function spin(){
             count++;
 
 
-            if(count >= 12){
+            if(count >= animationCount){
 
               clearInterval(timer);
 
@@ -2289,7 +3492,7 @@ async function spin(){
             }
 
           },
-          90
+          animationSpeed
         );
 
     });
@@ -2310,10 +3513,6 @@ async function spin(){
         }
       );
 
-
-    /*
-      Wait for the real server result.
-    */
 
     const [
       ,
@@ -2342,10 +3541,6 @@ async function spin(){
       false
     );
 
-
-    /*
-      Update player data.
-    */
 
     currentPlayer = {
       ...currentPlayer,
@@ -2394,16 +3589,13 @@ async function spin(){
 
 
     const win =
-      Number(
-        data.win || 0
-      );
+      Number(data.win || 0);
 
 
     if(win > 0){
 
       gameMessage.textContent =
         `WIN · ${win.toLocaleString()} PRIVÉ COINS`;
-
 
       reelsEl.classList.add(
         "win-flash"
@@ -2418,9 +3610,8 @@ async function spin(){
           );
 
         },
-        600
+        700
       );
-
 
     }else{
 
@@ -2431,6 +3622,30 @@ async function spin(){
 
 
     loadLeaderboard();
+
+
+    if(autoMode){
+
+      autoTimer =
+        setTimeout(
+          function(){
+
+            spinning = false;
+
+            spinBtn.disabled = false;
+
+            spinBtn.textContent =
+              "SPIN";
+
+            spin();
+
+          },
+          turboMode ? 250 : 650
+        );
+
+      return;
+
+    }
 
 
   }catch(error){
@@ -2454,23 +3669,23 @@ async function spin(){
 
   }finally{
 
-    /*
-      Always unlock the button.
-    */
+    if(!autoMode){
 
-    setTimeout(
-      function(){
+      setTimeout(
+        function(){
 
-        spinning = false;
+          spinning = false;
 
-        spinBtn.disabled = false;
+          spinBtn.disabled = false;
 
-        spinBtn.textContent =
-          "SPIN";
+          spinBtn.textContent =
+            "SPIN";
 
-      },
-      350
-    );
+        },
+        350
+      );
+
+    }
 
   }
 
@@ -2483,9 +3698,7 @@ async function spin(){
 
 async function login(){
 
-  if(
-    loginBtn.disabled
-  ){
+  if(loginBtn.disabled){
     return;
   }
 
@@ -2546,20 +3759,18 @@ async function login(){
       data;
 
 
-    updatePlayer(
-      data
-    );
+    updatePlayer(data);
 
-
-    /*
-      THIS IS THE ACTUAL SCREEN SWITCH.
-    */
 
     loginScreen.classList.add(
       "hidden"
     );
 
     gameScreen.classList.remove(
+      "hidden"
+    );
+
+    bottomNav.classList.remove(
       "hidden"
     );
 
@@ -2585,11 +3796,6 @@ async function login(){
         : "Login failed.";
 
 
-    /*
-      Leave the button usable so
-      the player can retry.
-    */
-
   }finally{
 
     loginBtn.disabled = false;
@@ -2603,20 +3809,244 @@ async function login(){
 
 
 /* =====================================================
-   BUTTON EVENTS
+   EXTRA CONTROLS
 ===================================================== */
 
-loginBtn.addEventListener(
-  "click",
-  function(event){
+document
+  .getElementById("autoBtn")
+  .addEventListener(
+    "click",
+    function(){
 
-    event.preventDefault();
+      autoMode = !autoMode;
 
-    login();
+      this.style.borderColor =
+        autoMode
+          ? "#f0c66d"
+          : "#b27b2a";
 
+      this.querySelector(
+        ".side-text"
+      ).textContent =
+        autoMode ? "AUTO ON" : "AUTO";
+
+      gameMessage.textContent =
+        autoMode
+          ? "AUTO SPIN ENABLED"
+          : "AUTO SPIN DISABLED";
+
+    }
+  );
+
+
+document
+  .getElementById("turboBtn")
+  .addEventListener(
+    "click",
+    function(){
+
+      turboMode = !turboMode;
+
+      this.style.borderColor =
+        turboMode
+          ? "#f0c66d"
+          : "#b27b2a";
+
+      this.querySelector(
+        ".side-text"
+      ).textContent =
+        turboMode ? "TURBO ON" : "TURBO";
+
+      gameMessage.textContent =
+        turboMode
+          ? "TURBO MODE ENABLED"
+          : "TURBO MODE DISABLED";
+
+    }
+  );
+
+
+/* =====================================================
+   NAVIGATION
+===================================================== */
+
+function setActiveNav(id){
+
+  document
+    .querySelectorAll(".nav-btn")
+    .forEach(
+      button =>
+        button.classList.remove("active")
+    );
+
+
+  const button =
+    document.getElementById(id);
+
+
+  if(button){
+    button.classList.add("active");
   }
-);
 
+}
+
+
+document
+  .getElementById("homeNav")
+  .addEventListener(
+    "click",
+    function(){
+
+      setActiveNav("homeNav");
+
+      window.scrollTo({
+        top:0,
+        behavior:"smooth"
+      });
+
+    }
+  );
+
+
+document
+  .getElementById("slotsNav")
+  .addEventListener(
+    "click",
+    function(){
+
+      setActiveNav("slotsNav");
+
+      document
+        .querySelector(".machine")
+        .scrollIntoView({
+          behavior:"smooth",
+          block:"center"
+        });
+
+    }
+  );
+
+
+document
+  .getElementById("leaderboardNav")
+  .addEventListener(
+    "click",
+    function(){
+
+      setActiveNav("leaderboardNav");
+
+      document
+        .querySelector(".leaderboard-card")
+        .scrollIntoView({
+          behavior:"smooth",
+          block:"center"
+        });
+
+    }
+  );
+
+
+document
+  .getElementById("profileNav")
+  .addEventListener(
+    "click",
+    function(){
+
+      setActiveNav("profileNav");
+
+      openProfile();
+
+    }
+  );
+
+
+document
+  .getElementById("walletNav")
+  .addEventListener(
+    "click",
+    function(){
+
+      gameMessage.textContent =
+        "WALLET · YOUR PRIVÉ BALANCE IS SHOWN ABOVE.";
+
+      window.scrollTo({
+        top:0,
+        behavior:"smooth"
+      });
+
+    }
+  );
+
+
+/* =====================================================
+   FEATURE BUTTONS
+===================================================== */
+
+document
+  .getElementById("giftFeatureBtn")
+  .addEventListener(
+    "click",
+    openGift
+  );
+
+
+document
+  .getElementById("jackpotFeatureBtn")
+  .addEventListener(
+    "click",
+    function(){
+
+      gameMessage.textContent =
+        "PRIVÉ JACKPOT · 1,248,730";
+
+    }
+  );
+
+
+document
+  .getElementById("winsFeatureBtn")
+  .addEventListener(
+    "click",
+    function(){
+
+      gameMessage.textContent =
+        "TOP WINS · LEADERBOARD BELOW";
+
+      document
+        .querySelector(".leaderboard-card")
+        .scrollIntoView({
+          behavior:"smooth",
+          block:"center"
+        });
+
+    }
+  );
+
+
+document
+  .getElementById("bonusBar")
+  .addEventListener(
+    "click",
+    openGift
+  );
+
+
+document
+  .getElementById("balancePlus")
+  .addEventListener(
+    "click",
+    function(){
+
+      gameMessage.textContent =
+        "PRIVÉ WALLET · BALANCE";
+
+    }
+  );
+
+
+/* =====================================================
+   SPIN BUTTON
+===================================================== */
 
 spinBtn.addEventListener(
   "click",
@@ -2638,11 +4068,6 @@ window.addEventListener(
   "load",
   function(){
 
-    /*
-      Give Telegram a moment to finish
-      initializing before attempting login.
-    */
-
     setTimeout(
       function(){
 
@@ -2662,6 +4087,92 @@ window.addEventListener(
 
   }
 );
+
+
+/* =====================================================
+   BONUS TIMER
+===================================================== */
+
+function updateBonusTimer(){
+
+  const now =
+    new Date();
+
+
+  const tomorrow =
+    new Date(now);
+
+
+  tomorrow.setHours(
+    24,
+    0,
+    0,
+    0
+  );
+
+
+  const diff =
+    tomorrow.getTime() -
+    now.getTime();
+
+
+  const totalSeconds =
+    Math.max(
+      0,
+      Math.floor(diff / 1000)
+    );
+
+
+  const hours =
+    Math.floor(
+      totalSeconds / 3600
+    );
+
+
+  const minutes =
+    Math.floor(
+      (totalSeconds % 3600) / 60
+    );
+
+
+  const seconds =
+    totalSeconds % 60;
+
+
+  const formatted =
+    String(hours).padStart(2,"0") +
+    ":" +
+    String(minutes).padStart(2,"0") +
+    ":" +
+    String(seconds).padStart(2,"0");
+
+
+  document.getElementById(
+    "bonusTime"
+  ).textContent =
+    formatted;
+
+}
+
+
+updateBonusTimer();
+
+setInterval(
+  updateBonusTimer,
+  1000
+);
+
+
+/* =====================================================
+   PROFILE BUTTON
+===================================================== */
+
+document
+  .getElementById("profileNav")
+  .addEventListener(
+    "click",
+    openProfile
+  );
 
 
 })();
