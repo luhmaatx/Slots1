@@ -67,17 +67,17 @@ button{
     0 0 45px rgba(158,113,42,.08);
 }
 
+.login-card{
+  padding:48px 30px 32px;
+  text-align:center;
+}
+
 .card:before{
   content:"";
   position:absolute;
   inset:8px;
   border:1px solid rgba(206,165,83,.10);
   pointer-events:none;
-}
-
-.login-card{
-  padding:48px 30px 32px;
-  text-align:center;
 }
 
 .eyebrow{
@@ -147,7 +147,8 @@ button{
   width:100%;
   min-height:58px;
   border:1px solid #e0bc6c;
-  background:linear-gradient(180deg,#e0bd70,#b9893b);
+  background:
+    linear-gradient(180deg,#e0bd70,#b9893b);
   color:#160f09;
   font-weight:600;
   letter-spacing:3px;
@@ -178,9 +179,7 @@ button{
   display:none!important;
 }
 
-/* =========================
-   GAME
-========================= */
+/* GAME */
 
 .game-screen{
   width:min(620px,100%);
@@ -233,14 +232,6 @@ button{
   padding:18px;
 }
 
-.collection-title{
-  text-align:center;
-  font-size:9px;
-  letter-spacing:6px;
-  color:#a88b5a;
-  margin:0 0 14px;
-}
-
 .reels{
   display:grid;
   grid-template-columns:repeat(5,1fr);
@@ -258,14 +249,6 @@ button{
   background:
     radial-gradient(circle at 50% 40%,rgba(145,104,42,.12),transparent 60%),
     #0c0907;
-  transition:transform .12s ease,box-shadow .12s ease;
-}
-
-.reel.winner{
-  box-shadow:
-    inset 0 0 22px rgba(231,194,102,.18),
-    0 0 15px rgba(231,194,102,.18);
-  border-color:rgba(231,194,102,.7);
 }
 
 .symbol{
@@ -313,7 +296,8 @@ button{
 }
 
 .symbol-rose .symbol-art{
-  font-size:32px;
+  font-size:38px;
+  letter-spacing:2px;
 }
 
 .symbol-spade .symbol-art{
@@ -322,33 +306,6 @@ button{
 
 .symbol-star .symbol-art{
   font-size:32px;
-}
-
-/* animated spin */
-.reel.spinning .symbol-art{
-  animation:
-    symbolFlash .09s linear infinite alternate,
-    symbolBounce .18s ease-in-out infinite alternate;
-}
-
-@keyframes symbolFlash{
-  from{
-    opacity:.45;
-    transform:scale(.88);
-  }
-  to{
-    opacity:1;
-    transform:scale(1.05);
-  }
-}
-
-@keyframes symbolBounce{
-  from{
-    filter:blur(.2px);
-  }
-  to{
-    filter:blur(1.2px);
-  }
 }
 
 .controls{
@@ -369,7 +326,6 @@ button{
   padding:11px 4px;
   font-size:10px;
   letter-spacing:1px;
-  cursor:pointer;
 }
 
 .bet-btn.active{
@@ -386,12 +342,10 @@ button{
   color:#140e08;
   font-weight:600;
   letter-spacing:4px;
-  cursor:pointer;
 }
 
 .spin-btn:disabled{
   opacity:.55;
-  cursor:wait;
 }
 
 .message{
@@ -411,7 +365,6 @@ button{
 }
 
 @media(max-width:430px){
-
   .login-card{
     padding:40px 22px 27px;
   }
@@ -472,65 +425,32 @@ button{
   <main id="gameScreen" class="screen game-screen hidden">
 
     <div class="topbar">
-
-      <div class="logo-small">
-        KIMIA PRIVÉ
-      </div>
-
-      <div id="vipBadge" class="vip">
-        PRIVÉ
-      </div>
-
+      <div class="logo-small">KIMIA PRIVÉ</div>
+      <div id="vipBadge" class="vip">PRIVÉ</div>
     </div>
 
-
     <section class="card balance-card">
-
       <div>
-        <div class="balance-label">
-          PRIVATE BALANCE
-        </div>
-
-        <div id="balance" class="balance">
-          0
-        </div>
+        <div class="balance-label">PRIVATE BALANCE</div>
+        <div id="balance" class="balance">0</div>
       </div>
 
       <div id="playerName" class="balance-label">
         MEMBER
       </div>
-
     </section>
 
-
     <section class="card reel-card">
-
-      <div class="collection-title">
-        PRIVÉ COLLECTION
-      </div>
 
       <div id="reels" class="reels"></div>
 
       <div class="controls">
 
         <div class="bet-row">
-
-          <button class="bet-btn active" data-bet="300">
-            300
-          </button>
-
-          <button class="bet-btn" data-bet="600">
-            600
-          </button>
-
-          <button class="bet-btn" data-bet="1500">
-            1,500
-          </button>
-
-          <button class="bet-btn" data-bet="3000">
-            3,000
-          </button>
-
+          <button class="bet-btn active" data-bet="300">300</button>
+          <button class="bet-btn" data-bet="600">600</button>
+          <button class="bet-btn" data-bet="1500">1,500</button>
+          <button class="bet-btn" data-bet="3000">3,000</button>
         </div>
 
         <button id="spinBtn" class="spin-btn">
@@ -540,7 +460,6 @@ button{
         <div id="gameMessage" class="message"></div>
 
       </div>
-
     </section>
 
   </main>
@@ -551,634 +470,347 @@ button{
 <script>
 (function(){
 
-"use strict";
+  "use strict";
 
+  /* =====================================================
+     TELEGRAM
+  ===================================================== */
 
-/* =====================================================
-   TELEGRAM
-===================================================== */
-
-const tg =
-  window.Telegram &&
-  window.Telegram.WebApp
+  const tg = window.Telegram && window.Telegram.WebApp
     ? window.Telegram.WebApp
     : null;
 
-if(tg){
-
-  try{
-
-    tg.ready();
-    tg.expand();
-
-    if(typeof tg.enableClosingConfirmation === "function"){
+  if(tg){
+    try{
+      tg.ready();
+      tg.expand();
       tg.enableClosingConfirmation();
+    }catch(e){
+      console.warn("Telegram WebApp setup:",e);
     }
-
-  }catch(error){
-
-    console.warn(
-      "Telegram WebApp setup:",
-      error
-    );
-
   }
 
-}
+  /* =====================================================
+     DOM
+  ===================================================== */
 
+  const loginScreen = document.getElementById("loginScreen");
+  const gameScreen = document.getElementById("gameScreen");
+  const loginBtn = document.getElementById("loginBtn");
+  const loginStatus = document.getElementById("loginStatus");
+  const balanceEl = document.getElementById("balance");
+  const playerNameEl = document.getElementById("playerName");
+  const vipBadge = document.getElementById("vipBadge");
+  const reelsEl = document.getElementById("reels");
+  const spinBtn = document.getElementById("spinBtn");
+  const gameMessage = document.getElementById("gameMessage");
 
-/* =====================================================
-   DOM
-===================================================== */
+  let selectedBet = 300;
+  let currentPlayer = null;
+  let spinning = false;
 
-const loginScreen =
-  document.getElementById("loginScreen");
+  /* =====================================================
+     API
+  ===================================================== */
 
-const gameScreen =
-  document.getElementById("gameScreen");
+  async function apiPost(endpoint, body){
 
-const loginBtn =
-  document.getElementById("loginBtn");
+    const response = await fetch(endpoint,{
+      method:"POST",
+      headers:{
+        "Content-Type":"application/json",
+        "Accept":"application/json"
+      },
+      body:JSON.stringify(body)
+    });
 
-const loginStatus =
-  document.getElementById("loginStatus");
+    const text = await response.text();
 
-const balanceEl =
-  document.getElementById("balance");
+    let data = null;
 
-const playerNameEl =
-  document.getElementById("playerName");
-
-const vipBadge =
-  document.getElementById("vipBadge");
-
-const reelsEl =
-  document.getElementById("reels");
-
-const spinBtn =
-  document.getElementById("spinBtn");
-
-const gameMessage =
-  document.getElementById("gameMessage");
-
-
-let selectedBet = 300;
-let currentPlayer = null;
-let spinning = false;
-
-
-/* =====================================================
-   API
-===================================================== */
-
-async function apiPost(endpoint,body){
-
-  const response =
-    await fetch(
-      endpoint,
-      {
-        method:"POST",
-
-        headers:{
-          "Content-Type":"application/json",
-          "Accept":"application/json"
-        },
-
-        body:JSON.stringify(body)
+    if(text){
+      try{
+        data = JSON.parse(text);
+      }catch(error){
+        throw new Error(
+          "Server returned invalid JSON."
+        );
       }
-    );
+    }
 
-  const text =
-    await response.text();
+    if(!response.ok){
 
-  let data = null;
+      const serverError =
+        data && data.error
+          ? data.error
+          : `Server returned HTTP ${response.status}.`;
 
-  if(text){
+      throw new Error(serverError);
+    }
+
+    if(!data){
+      throw new Error(
+        "Server returned an empty response."
+      );
+    }
+
+    return data;
+  }
+
+
+  /* =====================================================
+     TELEGRAM INIT DATA
+  ===================================================== */
+
+  function getInitData(){
+
+    if(!tg){
+      throw new Error(
+        "Telegram WebApp is not available."
+      );
+    }
+
+    const initData = tg.initData;
+
+    if(!initData){
+      throw new Error(
+        "Telegram did not provide login data. Open the game from the Telegram bot."
+      );
+    }
+
+    return initData;
+  }
+
+
+  /* =====================================================
+     LOGIN
+  ===================================================== */
+
+  async function login(){
+
+    if(loginBtn.disabled){
+      return;
+    }
+
+    loginBtn.disabled = true;
+    loginBtn.textContent = "CONNECTING…";
+    loginStatus.textContent = "";
 
     try{
 
-      data = JSON.parse(text);
+      const initData = getInitData();
 
-    }catch(error){
-
-      throw new Error(
-        "Server returned invalid JSON."
-      );
-
-    }
-
-  }
-
-  if(!response.ok){
-
-    const serverError =
-      data && data.error
-        ? data.error
-        : `Server returned HTTP ${response.status}.`;
-
-    throw new Error(serverError);
-  }
-
-  if(!data){
-
-    throw new Error(
-      "Server returned an empty response."
-    );
-
-  }
-
-  return data;
-}
-
-
-/* =====================================================
-   TELEGRAM INIT DATA
-===================================================== */
-
-function getInitData(){
-
-  if(!tg){
-
-    throw new Error(
-      "Telegram WebApp is not available."
-    );
-
-  }
-
-  const initData =
-    tg.initData;
-
-  if(!initData){
-
-    throw new Error(
-      "Telegram did not provide login data. Open the game from the Telegram bot."
-    );
-
-  }
-
-  return initData;
-}
-
-
-/* =====================================================
-   LOGIN
-===================================================== */
-
-async function login(){
-
-  if(loginBtn.disabled){
-    return;
-  }
-
-  loginBtn.disabled = true;
-  loginBtn.textContent = "CONNECTING…";
-  loginStatus.textContent = "";
-
-  try{
-
-    const initData =
-      getInitData();
-
-    const data =
-      await apiPost(
+      const data = await apiPost(
         "/api/me",
         {
           initData:initData
         }
       );
 
+      if(!data || typeof data !== "object"){
+        throw new Error(
+          "The server returned an incomplete account response."
+        );
+      }
+
+      if(
+        data.id === undefined ||
+        data.balance === undefined
+      ){
+        throw new Error(
+          "The server returned an incomplete account response."
+        );
+      }
+
+      currentPlayer = data;
+
+      updatePlayer(data);
+
+      loginScreen.classList.add("hidden");
+      gameScreen.classList.remove("hidden");
+
+      loginStatus.textContent = "";
+
+    }catch(error){
+
+      console.error("LOGIN ERROR:",error);
+
+      loginStatus.textContent =
+        error && error.message
+          ? error.message
+          : "Login failed.";
+
+    }finally{
+
+      loginBtn.disabled = false;
+      loginBtn.textContent = "ENTER PRIVÉ";
+    }
+  }
+
+
+  /* =====================================================
+     PLAYER DISPLAY
+  ===================================================== */
+
+  function updatePlayer(player){
+
+    const balance =
+      Number(player.balance);
+
+    balanceEl.textContent =
+      Number.isFinite(balance)
+        ? balance.toLocaleString()
+        : "0";
+
+    let name =
+      player.username ||
+      "PRIVÉ MEMBER";
+
     if(
-      !data ||
-      typeof data !== "object"
+      typeof name === "string" &&
+      name.startsWith("@")
     ){
-
-      throw new Error(
-        "The server returned an incomplete account response."
-      );
-
+      name = name.substring(1);
     }
 
-    if(
-      data.id === undefined ||
-      data.balance === undefined
-    ){
+    playerNameEl.textContent =
+      name.toUpperCase();
 
-      throw new Error(
-        "The server returned an incomplete account response."
-      );
+    const vip =
+      Number(player.vipLevel || 0);
 
+    if(vip > 0){
+      vipBadge.textContent =
+        `VIP ${vip}`;
+    }else{
+      vipBadge.textContent =
+        "PRIVÉ";
+    }
+  }
+
+
+  /* =====================================================
+     LUXURY SYMBOL ART
+     
+     Server still sends the actual symbols.
+     🌹 is intentionally displayed as K.
+  ===================================================== */
+
+  function symbolClass(symbol){
+
+    if(symbol === "💎") return "symbol-diamond";
+    if(symbol === "7️⃣") return "symbol-seven";
+    if(symbol === "💗") return "symbol-heart";
+    if(symbol === "🌹") return "symbol-rose";
+    if(symbol === "♠️") return "symbol-spade";
+    if(symbol === "✨") return "symbol-star";
+
+    return "symbol-star";
+  }
+
+
+  function symbolMarkup(symbol){
+
+    let art = "✦";
+
+    if(symbol === "💎"){
+      art = "◆";
     }
 
-    currentPlayer = data;
+    if(symbol === "7️⃣"){
+      art = "7";
+    }
 
-    updatePlayer(data);
+    if(symbol === "💗"){
+      art = "♥";
+    }
 
-    loginScreen.classList.add("hidden");
-    gameScreen.classList.remove("hidden");
+    /* FLOWER → K */
+    if(symbol === "🌹"){
+      art = "K";
+    }
 
-    loginStatus.textContent = "";
+    if(symbol === "♠️"){
+      art = "♠";
+    }
 
-  }catch(error){
+    if(symbol === "✨"){
+      art = "✦";
+    }
 
-    console.error(
-      "LOGIN ERROR:",
-      error
-    );
-
-    loginStatus.textContent =
-      error && error.message
-        ? error.message
-        : "Login failed.";
-
-  }finally{
-
-    loginBtn.disabled = false;
-    loginBtn.textContent = "ENTER PRIVÉ";
-
-  }
-
-}
-
-
-/* =====================================================
-   PLAYER DISPLAY
-===================================================== */
-
-function updatePlayer(player){
-
-  const balance =
-    Number(player.balance);
-
-  balanceEl.textContent =
-    Number.isFinite(balance)
-      ? balance.toLocaleString()
-      : "0";
-
-
-  let name =
-    player.username ||
-    player.first_name ||
-    "PRIVÉ MEMBER";
-
-
-  if(
-    typeof name === "string" &&
-    name.startsWith("@")
-  ){
-
-    name =
-      name.substring(1);
-
+    return `
+      <div class="symbol ${symbolClass(symbol)}">
+        <span class="symbol-art">${art}</span>
+      </div>
+    `;
   }
 
 
-  playerNameEl.textContent =
-    String(name).toUpperCase();
+  /* =====================================================
+     REELS
+  ===================================================== */
 
+  function renderSymbols(symbols){
 
-  const vip =
-    Number(player.vipLevel || 0);
+    reelsEl.innerHTML = "";
 
+    if(!Array.isArray(symbols) || symbols.length !== 15){
 
-  vipBadge.textContent =
-    vip > 0
-      ? `VIP ${vip}`
-      : "PRIVÉ";
-}
+      for(let i=0;i<15;i++){
 
+        const reel =
+          document.createElement("div");
 
-/* =====================================================
-   SYMBOL NORMALIZATION
-   This is the important fix.
-   
-   The server may return:
-   💎
-   diamond
-   DIAMOND
-   "💎 "
-   7️⃣
-   seven
-   7
-   etc.
-   
-   Everything is normalized before rendering.
-===================================================== */
+        reel.className = "reel";
 
-function normalizeSymbol(symbol){
+        reel.innerHTML = symbolMarkup("✨");
 
-  if(symbol === null || symbol === undefined){
-    return "star";
-  }
+        reelsEl.appendChild(reel);
+      }
 
-  const value =
-    String(symbol)
-      .trim()
-      .toLowerCase();
+      return;
+    }
 
-
-  /* DIAMOND */
-
-  if(
-    value === "💎" ||
-    value === "diamond" ||
-    value === "diamonds" ||
-    value === "gem" ||
-    value === "gems"
-  ){
-
-    return "diamond";
-
-  }
-
-
-  /* SEVEN */
-
-  if(
-    value === "7" ||
-    value === "7️⃣" ||
-    value === "seven" ||
-    value === "sevens"
-  ){
-
-    return "seven";
-
-  }
-
-
-  /* HEART */
-
-  if(
-    value === "♥" ||
-    value === "♥️" ||
-    value === "💗" ||
-    value === "❤️" ||
-    value === "heart" ||
-    value === "hearts"
-  ){
-
-    return "heart";
-
-  }
-
-
-  /* ROSE */
-
-  if(
-    value === "🌹" ||
-    value === "rose" ||
-    value === "roses"
-  ){
-
-    return "rose";
-
-  }
-
-
-  /* SPADE */
-
-  if(
-    value === "♠" ||
-    value === "♠️" ||
-    value === "spade" ||
-    value === "spades"
-  ){
-
-    return "spade";
-
-  }
-
-
-  /* STAR */
-
-  if(
-    value === "✨" ||
-    value === "✦" ||
-    value === "star" ||
-    value === "stars" ||
-    value === "sparkle" ||
-    value === "sparkles"
-  ){
-
-    return "star";
-
-  }
-
-
-  /*
-    Extra compatibility:
-    Some servers use numeric symbol indexes.
-  */
-
-  if(value === "0"){
-    return "diamond";
-  }
-
-  if(value === "1"){
-    return "seven";
-  }
-
-  if(value === "2"){
-    return "heart";
-  }
-
-  if(value === "3"){
-    return "rose";
-  }
-
-  if(value === "4"){
-    return "spade";
-  }
-
-  if(value === "5"){
-    return "star";
-  }
-
-
-  return "star";
-}
-
-
-/* =====================================================
-   SYMBOL CLASS
-===================================================== */
-
-function symbolClass(symbol){
-
-  const normalized =
-    normalizeSymbol(symbol);
-
-  return `symbol-${normalized}`;
-}
-
-
-/* =====================================================
-   SYMBOL ART
-===================================================== */
-
-function symbolArt(symbol){
-
-  const normalized =
-    normalizeSymbol(symbol);
-
-
-  if(normalized === "diamond"){
-    return "◆";
-  }
-
-
-  if(normalized === "seven"){
-    return "7";
-  }
-
-
-  if(normalized === "heart"){
-    return "♥";
-  }
-
-
-  if(normalized === "rose"){
-    return "✿";
-  }
-
-
-  if(normalized === "spade"){
-    return "♠";
-  }
-
-
-  return "✦";
-}
-
-
-/* =====================================================
-   SYMBOL MARKUP
-===================================================== */
-
-function symbolMarkup(symbol){
-
-  return `
-    <div class="symbol ${symbolClass(symbol)}">
-      <span class="symbol-art">
-        ${symbolArt(symbol)}
-      </span>
-    </div>
-  `;
-}
-
-
-/* =====================================================
-   REELS
-===================================================== */
-
-function renderSymbols(symbols,options={}){
-
-  const isSpinning =
-    options.spinning === true;
-
-
-  reelsEl.innerHTML = "";
-
-
-  let safeSymbols =
-    Array.isArray(symbols)
-      ? symbols
-      : [];
-
-
-  /*
-    Always maintain the 5 × 3 layout.
-  */
-
-  if(safeSymbols.length !== 15){
-
-    safeSymbols =
-      Array.from(
-        {length:15},
-        () => "✨"
-      );
-
-  }
-
-
-  safeSymbols
-    .slice(0,15)
-    .forEach(symbol => {
+    symbols.forEach(symbol => {
 
       const reel =
         document.createElement("div");
 
-      reel.className =
-        "reel" +
-        (isSpinning ? " spinning" : "");
+      reel.className = "reel";
 
       reel.innerHTML =
         symbolMarkup(symbol);
 
       reelsEl.appendChild(reel);
-
     });
-}
+  }
 
 
-/* =====================================================
-   RANDOM ANIMATION SYMBOLS
-===================================================== */
+  /* =====================================================
+     INITIAL REELS
+  ===================================================== */
 
-const animationSymbols = [
-  "💎",
-  "7️⃣",
-  "💗",
-  "🌹",
-  "♠️",
-  "✨"
-];
+  renderSymbols([
+    "💎","7️⃣","💗","🌹","♠️",
+    "✨","💎","♥","🌹","♠️",
+    "7️⃣","💗","✨","💎","🌹"
+  ]);
 
 
-function randomSymbols(){
+  /* =====================================================
+     BET SELECTION
+  ===================================================== */
 
-  return Array.from(
-    {length:15},
-    () =>
-      animationSymbols[
-        Math.floor(
-          Math.random() *
-          animationSymbols.length
-        )
-      ]
-  );
+  document.querySelectorAll(".bet-btn")
+    .forEach(button => {
 
-}
-
-
-/* =====================================================
-   INITIAL REELS
-===================================================== */
-
-renderSymbols([
-  "💎","7️⃣","💗","🌹","♠️",
-  "✨","💎","♥️","🌹","♠️",
-  "7️⃣","💗","✨","💎","🌹"
-]);
-
-
-/* =====================================================
-   BET SELECTION
-===================================================== */
-
-document
-  .querySelectorAll(".bet-btn")
-  .forEach(button => {
-
-    button.addEventListener(
-      "click",
-      () => {
+      button.addEventListener("click",() => {
 
         if(spinning){
           return;
         }
 
-        document
-          .querySelectorAll(".bet-btn")
+        document.querySelectorAll(".bet-btn")
           .forEach(btn =>
             btn.classList.remove("active")
           );
@@ -1190,215 +822,185 @@ document
 
         gameMessage.textContent =
           `BET ${selectedBet.toLocaleString()}`;
-
-      }
-    );
-
-  });
-
-
-/* =====================================================
-   SPIN
-===================================================== */
-
-async function spin(){
-
-  if(spinning){
-    return;
-  }
-
-
-  spinning = true;
-
-  spinBtn.disabled = true;
-  spinBtn.textContent = "SPINNING…";
-  gameMessage.textContent = "";
-
-
-  /*
-    Keep animation running until
-    the server response arrives.
-  */
-
-  let animationTimer = null;
-
-
-  try{
-
-    const initData =
-      getInitData();
-
-
-    animationTimer =
-      setInterval(
-        () => {
-
-          renderSymbols(
-            randomSymbols(),
-            {
-              spinning:true
-            }
-          );
-
-        },
-        85
-      );
-
-
-    const data =
-      await apiPost(
-        "/api/spin",
-        {
-          initData:initData,
-          bet:selectedBet
-        }
-      );
-
-
-    if(
-      !data ||
-      !Array.isArray(data.symbols)
-    ){
-
-      throw new Error(
-        "The server returned an incomplete spin response."
-      );
-
-    }
-
-
-    clearInterval(animationTimer);
-    animationTimer = null;
-
-
-    /*
-      IMPORTANT:
-      Render the server's actual result.
-      normalizeSymbol() prevents recognized
-      symbols from becoming diamonds.
-    */
-
-    renderSymbols(
-      data.symbols
-    );
-
-
-    if(data.balance !== undefined){
-
-      updatePlayer({
-        ...currentPlayer,
-        balance:data.balance,
-        vipLevel:data.vipLevel,
-        username:data.username
       });
 
+    });
 
-      currentPlayer = {
-        ...currentPlayer,
-        balance:data.balance,
-        vipLevel:data.vipLevel,
-        username:data.username
-      };
 
+  /* =====================================================
+     SPIN
+  ===================================================== */
+
+  async function spin(){
+
+    if(spinning){
+      return;
     }
 
+    spinning = true;
+    spinBtn.disabled = true;
+    spinBtn.textContent = "SPINNING…";
+    gameMessage.textContent = "";
 
-    const win =
-      Number(data.win || 0);
+    try{
+
+      const initData =
+        getInitData();
+
+      let animationCount = 0;
+
+      const animation =
+        setInterval(() => {
+
+          const fakeSymbols =
+            Array.from(
+              {length:15},
+              () => {
+
+                const choices = [
+                  "💎",
+                  "7️⃣",
+                  "💗",
+                  "🌹",
+                  "♠️",
+                  "✨"
+                ];
+
+                return choices[
+                  Math.floor(
+                    Math.random() * choices.length
+                  )
+                ];
+              }
+            );
+
+          renderSymbols(fakeSymbols);
+
+          animationCount++;
+
+          if(animationCount >= 8){
+            clearInterval(animation);
+          }
+
+        },90);
 
 
-    if(win > 0){
+      const data =
+        await apiPost(
+          "/api/spin",
+          {
+            initData:initData,
+            bet:selectedBet
+          }
+        );
+
+
+      if(
+        !data ||
+        !Array.isArray(data.symbols)
+      ){
+        throw new Error(
+          "The server returned an incomplete spin response."
+        );
+      }
+
+      clearInterval(animation);
+
+      renderSymbols(data.symbols);
+
+      if(data.balance !== undefined){
+
+        updatePlayer({
+          ...currentPlayer,
+          balance:data.balance,
+          vipLevel:data.vipLevel,
+          username:data.username
+        });
+
+        currentPlayer = {
+          ...currentPlayer,
+          balance:data.balance,
+          vipLevel:data.vipLevel,
+          username:data.username
+        };
+      }
+
+      const win =
+        Number(data.win || 0);
+
+      if(win > 0){
+
+        gameMessage.textContent =
+          `WIN · ${win.toLocaleString()} PRIVÉ COINS`;
+
+      }else{
+
+        gameMessage.textContent =
+          "NO WIN · TRY AGAIN";
+      }
+
+    }catch(error){
+
+      console.error("SPIN ERROR:",error);
 
       gameMessage.textContent =
-        `WIN · ${win.toLocaleString()} PRIVÉ COINS`;
+        error && error.message
+          ? error.message
+          : "Spin failed.";
 
-    }else{
+    }finally{
 
-      gameMessage.textContent =
-        "NO WIN · TRY AGAIN";
-
-    }
-
-
-  }catch(error){
-
-    if(animationTimer){
-      clearInterval(animationTimer);
-    }
-
-    console.error(
-      "SPIN ERROR:",
-      error
-    );
-
-    gameMessage.textContent =
-      error && error.message
-        ? error.message
-        : "Spin failed.";
-
-
-  }finally{
-
-    setTimeout(
-      () => {
+      setTimeout(() => {
 
         spinning = false;
-
         spinBtn.disabled = false;
-
         spinBtn.textContent = "SPIN";
 
-      },
-      350
-    );
-
+      },350);
+    }
   }
 
-}
+
+  /* =====================================================
+     BUTTONS
+  ===================================================== */
+
+  loginBtn.addEventListener(
+    "click",
+    login
+  );
+
+  spinBtn.addEventListener(
+    "click",
+    spin
+  );
 
 
-/* =====================================================
-   BUTTONS
-===================================================== */
+  /* =====================================================
+     AUTO LOGIN
+  ===================================================== */
 
-loginBtn.addEventListener(
-  "click",
-  login
-);
+  window.addEventListener(
+    "load",
+    () => {
 
+      if(
+        tg &&
+        tg.initData
+      ){
 
-spinBtn.addEventListener(
-  "click",
-  spin
-);
-
-
-/* =====================================================
-   AUTO LOGIN
-===================================================== */
-
-window.addEventListener(
-  "load",
-  () => {
-
-    if(
-      tg &&
-      tg.initData
-    ){
-
-      setTimeout(
-        login,
-        150
-      );
+        setTimeout(
+          login,
+          150
+        );
+      }
 
     }
-
-  }
-);
+  );
 
 
 })();
 </script>
 
 </body>
-  </html>
+</html>
