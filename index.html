@@ -44,8 +44,7 @@ body{
   overflow-x:hidden;
 }
 
-button,
-input{
+button,input{
   font:inherit;
 }
 
@@ -203,6 +202,13 @@ button{
   font-size:24px;
 }
 
+.reel.win{
+  border-color:var(--gold);
+  box-shadow:
+    inset 0 0 20px rgba(214,177,105,.12),
+    0 0 14px rgba(214,177,105,.18);
+}
+
 .payline{
   margin:12px 0 4px;
   text-align:center;
@@ -251,6 +257,17 @@ button{
 
 .bet-btn.selected{
   border-color:var(--gold);
+  color:var(--gold2);
+}
+
+/* WIN MESSAGE */
+
+.win-message{
+  min-height:18px;
+  margin-top:10px;
+  text-align:center;
+  font-family:"Cormorant Garamond",serif;
+  font-size:18px;
   color:var(--gold2);
 }
 
@@ -647,12 +664,22 @@ button{
   <div class="subtitle">PLAY • WIN • PRIVÉ</div>
 </header>
 
+<!-- BALANCE -->
+
 <div class="balance-card">
+
   <div class="balance-label">PRIVÉ COINS</div>
+
   <div class="balance-row">
+
     <div class="balance" id="balance">—</div>
-    <div class="vip-pill" id="vipStatus">VIP</div>
+
+    <div class="vip-pill" id="vipStatus">
+      VIP
+    </div>
+
   </div>
+
 </div>
 
 <!-- PLAY -->
@@ -662,60 +689,95 @@ button{
   <div class="slot-machine">
 
     <div class="reels" id="reels">
+
       <div class="reel">
-        <div class="symbol">♛</div>
-        <div class="symbol small">✦</div>
-        <div class="symbol">♠</div>
+        <div class="symbol">💎</div>
+        <div class="symbol small">✨</div>
+        <div class="symbol">♠️</div>
       </div>
 
       <div class="reel">
-        <div class="symbol">◆</div>
-        <div class="symbol small">♥</div>
-        <div class="symbol">✦</div>
+        <div class="symbol">7️⃣</div>
+        <div class="symbol small">💗</div>
+        <div class="symbol">✨</div>
       </div>
 
       <div class="reel">
-        <div class="symbol">♛</div>
-        <div class="symbol small">◆</div>
-        <div class="symbol">♥</div>
+        <div class="symbol">💎</div>
+        <div class="symbol small">🌹</div>
+        <div class="symbol">💗</div>
       </div>
 
       <div class="reel">
-        <div class="symbol">✦</div>
-        <div class="symbol small">♠</div>
-        <div class="symbol">◆</div>
+        <div class="symbol">✨</div>
+        <div class="symbol small">♠️</div>
+        <div class="symbol">💎</div>
       </div>
 
       <div class="reel">
-        <div class="symbol">♥</div>
-        <div class="symbol small">♛</div>
-        <div class="symbol">✦</div>
+        <div class="symbol">💗</div>
+        <div class="symbol small">7️⃣</div>
+        <div class="symbol">✨</div>
       </div>
+
     </div>
 
-    <div class="payline">5 REELS • 3 ROWS</div>
+    <div class="payline">
+      5 REELS • 3 ROWS • 5 PAYLINES
+    </div>
 
     <div class="bet-row">
-      <button class="bet-btn selected" data-bet="100">100</button>
-      <button class="bet-btn" data-bet="250">250</button>
-      <button class="bet-btn" data-bet="500">500</button>
-      <button class="bet-btn" data-bet="1000">1K</button>
+
+      <button class="bet-btn selected" data-bet="300">
+        300
+      </button>
+
+      <button class="bet-btn" data-bet="600">
+        600
+      </button>
+
+      <button class="bet-btn" data-bet="1500">
+        1.5K
+      </button>
+
+      <button class="bet-btn" data-bet="3000">
+        3K
+      </button>
+
     </div>
 
-    <button class="spin-btn" id="spinBtn">SPIN</button>
+    <button class="spin-btn" id="spinBtn">
+      SPIN
+    </button>
+
+    <div class="win-message" id="winMessage"></div>
 
   </div>
 
   <div class="action-grid">
-    <button class="action-btn" onclick="showScreen('rewards')">
+
+    <button class="action-btn"
+      onclick="showScreen('rewards')">
+
       <strong>🎁 REWARDS</strong>
-      <span>Redeem your coins</span>
+
+      <span>
+        Redeem your coins
+      </span>
+
     </button>
 
-    <button class="action-btn" onclick="showScreen('gift')">
+    <button class="action-btn"
+      onclick="showScreen('gift')">
+
       <strong>🎀 GIFT COINS</strong>
-      <span>Send coins to a player</span>
+
+      <span>
+        Send coins to a player
+      </span>
+
     </button>
+
   </div>
 
 </section>
@@ -724,28 +786,55 @@ button{
 
 <section class="screen" id="screen-wallet">
 
-  <div class="section-title">Your Wallet</div>
+  <div class="section-title">
+    Your Wallet
+  </div>
+
   <div class="section-sub">
     Keep track of your PRIVÉ coins and every movement in your account.
   </div>
 
   <div class="wallet-box">
-    <div class="wallet-label">AVAILABLE COINS</div>
-    <div class="wallet-number" id="walletBalance">—</div>
+
+    <div class="wallet-label">
+      AVAILABLE COINS
+    </div>
+
+    <div class="wallet-number" id="walletBalance">
+      —
+    </div>
+
   </div>
 
   <div class="history">
-    <div class="section-title" style="font-size:22px">Recent Activity</div>
+
+    <div class="section-title"
+      style="font-size:22px">
+      Recent Activity
+    </div>
 
     <div id="historyList">
+
       <div class="history-item">
+
         <div class="history-left">
-          <strong>Wallet initialized</strong>
-          <span>Your activity will appear here</span>
+
+          <strong>
+            Wallet initialized
+          </strong>
+
+          <span>
+            Your activity will appear here
+          </span>
+
         </div>
+
         <div>—</div>
+
       </div>
+
     </div>
+
   </div>
 
 </section>
@@ -754,105 +843,182 @@ button{
 
 <section class="screen" id="screen-rewards">
 
-  <div class="section-title">PRIVÉ Rewards</div>
+  <div class="section-title">
+    PRIVÉ Rewards
+  </div>
 
   <div class="section-sub">
     Turn your coins into exclusive perks, discounts and access.
   </div>
 
   <div class="reward-card">
+
     <div class="reward-top">
+
       <div>
-        <div class="reward-name">10% OFF</div>
+
+        <div class="reward-name">
+          10% OFF
+        </div>
+
         <div class="reward-desc">
           Take 10% off an eligible PRIVÉ subscription.
         </div>
+
       </div>
-      <div class="reward-icon">✦</div>
+
+      <div class="reward-icon">
+        ✦
+      </div>
+
     </div>
 
-    <div class="reward-cost">5,000 COINS</div>
+    <div class="reward-cost">
+      5,000 COINS
+    </div>
 
-    <button class="redeem-btn"
+    <button
+      class="redeem-btn"
       onclick="requestRedeem('10% OFF Subscription',5000)">
       REDEEM
     </button>
+
   </div>
 
   <div class="reward-card">
+
     <div class="reward-top">
+
       <div>
-        <div class="reward-name">24-HOUR ACCESS</div>
+
+        <div class="reward-name">
+          24-HOUR ACCESS
+        </div>
+
         <div class="reward-desc">
           Unlock a 24-hour access reward.
         </div>
+
       </div>
-      <div class="reward-icon">♛</div>
+
+      <div class="reward-icon">
+        ♛
+      </div>
+
     </div>
 
-    <div class="reward-cost">10,000 COINS</div>
+    <div class="reward-cost">
+      10,000 COINS
+    </div>
 
-    <button class="redeem-btn"
+    <button
+      class="redeem-btn"
       onclick="requestRedeem('24-Hour Access',10000)">
       REDEEM
     </button>
+
   </div>
 
   <div class="reward-card">
+
     <div class="reward-top">
+
       <div>
-        <div class="reward-name">25% OFF</div>
+
+        <div class="reward-name">
+          25% OFF
+        </div>
+
         <div class="reward-desc">
           Receive 25% off an eligible subscription or content purchase.
         </div>
+
       </div>
-      <div class="reward-icon">◆</div>
+
+      <div class="reward-icon">
+        ◆
+      </div>
+
     </div>
 
-    <div class="reward-cost">25,000 COINS</div>
+    <div class="reward-cost">
+      25,000 COINS
+    </div>
 
-    <button class="redeem-btn"
+    <button
+      class="redeem-btn"
       onclick="requestRedeem('25% OFF Subscription',25000)">
       REDEEM
     </button>
+
   </div>
 
   <div class="reward-card">
+
     <div class="reward-top">
+
       <div>
-        <div class="reward-name">7-DAY PRIVÉ</div>
+
+        <div class="reward-name">
+          7-DAY PRIVÉ
+        </div>
+
         <div class="reward-desc">
           Unlock a seven-day promotional access reward.
         </div>
+
       </div>
-      <div class="reward-icon">♥</div>
+
+      <div class="reward-icon">
+        ♥
+      </div>
+
     </div>
 
-    <div class="reward-cost">50,000 COINS</div>
+    <div class="reward-cost">
+      50,000 COINS
+    </div>
 
-    <button class="redeem-btn"
+    <button
+      class="redeem-btn"
       onclick="requestRedeem('7-Day Privé Access',50000)">
       REDEEM
     </button>
+
   </div>
 
   <div class="reward-card">
+
     <div class="reward-top">
+
       <div>
-        <div class="reward-name">MYSTERY PRIVÉ</div>
+
+        <div class="reward-name">
+          MYSTERY PRIVÉ
+        </div>
+
         <div class="reward-desc">
           A surprise reward selected from the current PRIVÉ collection.
         </div>
+
       </div>
-      <div class="reward-icon">?</div>
+
+      <div class="reward-icon">
+        ?
+      </div>
+
     </div>
 
-    <div class="reward-cost">75,000 COINS</div>
+    <div class="reward-cost">
+      75,000 COINS
+    </div>
 
-    <button class="redeem-btn"
+    <button
+      class="redeem-btn"
       onclick="requestRedeem('Mystery Privé Reward',75000)">
       REDEEM
     </button>
+
   </div>
 
 </section>
@@ -861,7 +1027,9 @@ button{
 
 <section class="screen" id="screen-gift">
 
-  <div class="section-title">Gift Coins</div>
+  <div class="section-title">
+    Gift Coins
+  </div>
 
   <div class="section-sub">
     Send PRIVÉ coins to another player.
@@ -869,7 +1037,9 @@ button{
 
   <div class="form-box">
 
-    <label class="field-label">RECIPIENT TELEGRAM USERNAME</label>
+    <label class="field-label">
+      RECIPIENT TELEGRAM USERNAME
+    </label>
 
     <input
       class="text-input"
@@ -878,7 +1048,9 @@ button{
       autocomplete="off"
     >
 
-    <label class="field-label" style="margin-top:18px">
+    <label
+      class="field-label"
+      style="margin-top:18px">
       GIFT AMOUNT
     </label>
 
@@ -919,7 +1091,9 @@ button{
       style="margin-top:9px"
     >
 
-    <button class="gift-btn" onclick="prepareGift()">
+    <button
+      class="gift-btn"
+      onclick="prepareGift()">
       SEND COINS
     </button>
 
@@ -931,7 +1105,9 @@ button{
 
 <section class="screen" id="screen-vip">
 
-  <div class="section-title">PRIVÉ VIP</div>
+  <div class="section-title">
+    PRIVÉ VIP
+  </div>
 
   <div class="section-sub">
     Higher status. Better perks. More PRIVÉ.
@@ -939,18 +1115,29 @@ button{
 
   <div class="vip-card">
 
-    <div class="vip-crown">♛</div>
+    <div class="vip-crown">
+      ♛
+    </div>
 
-    <div class="vip-level" id="vipLevel">
+    <div
+      class="vip-level"
+      id="vipLevel">
       PRIVÉ MEMBER
     </div>
 
-    <div class="section-sub" style="margin:8px 0 0">
+    <div
+      class="section-sub"
+      style="margin:8px 0 0">
       Your VIP benefits will appear here.
     </div>
 
     <div class="progress">
-      <div class="progress-bar" id="vipProgress"></div>
+
+      <div
+        class="progress-bar"
+        id="vipProgress">
+      </div>
+
     </div>
 
     <div style="
@@ -966,13 +1153,27 @@ button{
   <div class="action-grid">
 
     <button class="action-btn">
-      <strong>✦ COIN BONUS</strong>
-      <span>Higher VIP levels can receive boosted rewards.</span>
+
+      <strong>
+        ✦ COIN BONUS
+      </strong>
+
+      <span>
+        Higher VIP levels can receive boosted rewards.
+      </span>
+
     </button>
 
     <button class="action-btn">
-      <strong>♛ VIP REWARDS</strong>
-      <span>Special rewards can be limited to VIP players.</span>
+
+      <strong>
+        ♛ VIP REWARDS
+      </strong>
+
+      <span>
+        Special rewards can be limited to VIP players.
+      </span>
+
     </button>
 
   </div>
@@ -985,54 +1186,99 @@ button{
 
 <nav class="bottom-nav">
 
-  <button class="nav-btn active" data-screen="play">
-    <span class="nav-icon">🎰</span>
+  <button
+    class="nav-btn active"
+    data-screen="play">
+
+    <span class="nav-icon">
+      🎰
+    </span>
+
     PLAY
+
   </button>
 
-  <button class="nav-btn" data-screen="wallet">
-    <span class="nav-icon">💎</span>
+  <button
+    class="nav-btn"
+    data-screen="wallet">
+
+    <span class="nav-icon">
+      💎
+    </span>
+
     WALLET
+
   </button>
 
-  <button class="nav-btn" data-screen="rewards">
-    <span class="nav-icon">🎁</span>
+  <button
+    class="nav-btn"
+    data-screen="rewards">
+
+    <span class="nav-icon">
+      🎁
+    </span>
+
     REWARDS
+
   </button>
 
-  <button class="nav-btn" data-screen="gift">
-    <span class="nav-icon">🎀</span>
+  <button
+    class="nav-btn"
+    data-screen="gift">
+
+    <span class="nav-icon">
+      🎀
+    </span>
+
     GIFT
+
   </button>
 
-  <button class="nav-btn" data-screen="vip">
-    <span class="nav-icon">♛</span>
+  <button
+    class="nav-btn"
+    data-screen="vip">
+
+    <span class="nav-icon">
+      ♛
+    </span>
+
     VIP
+
   </button>
 
 </nav>
 
 <!-- CONFIRMATION MODAL -->
 
-<div class="modal" id="confirmModal">
+<div
+  class="modal"
+  id="confirmModal">
 
   <div class="modal-card">
 
-    <div class="modal-title" id="modalTitle">
+    <div
+      class="modal-title"
+      id="modalTitle">
       Confirm
     </div>
 
-    <div class="modal-text" id="modalText">
+    <div
+      class="modal-text"
+      id="modalText">
       Are you sure?
     </div>
 
     <div class="modal-buttons">
 
-      <button class="cancel" onclick="closeModal()">
+      <button
+        class="cancel"
+        onclick="closeModal()">
         CANCEL
       </button>
 
-      <button class="confirm" id="confirmBtn">
+      <button
+        class="confirm"
+        id="confirmBtn">
         CONFIRM
       </button>
 
@@ -1042,7 +1288,10 @@ button{
 
 </div>
 
-<div class="toast" id="toast"></div>
+<div
+  class="toast"
+  id="toast">
+</div>
 
 <script>
 /* =========================================================
@@ -1050,9 +1299,11 @@ button{
    FRONTEND
    ========================================================= */
 
-const tg = window.Telegram && window.Telegram.WebApp
-  ? window.Telegram.WebApp
-  : null;
+const tg =
+  window.Telegram &&
+  window.Telegram.WebApp
+    ? window.Telegram.WebApp
+    : null;
 
 if(tg){
   tg.ready();
@@ -1060,54 +1311,167 @@ if(tg){
 }
 
 let balance = 0;
-let selectedBet = 100;
+let selectedBet = 300;
 let selectedGift = 0;
 let spinning = false;
 
-/* ---------------------------------------------------------
-   HELPERS
---------------------------------------------------------- */
+let pendingReward = null;
+let pendingGift = null;
 
-const $ = id => document.getElementById(id);
+let activity = [];
+
+/* =========================================================
+   HELPERS
+   ========================================================= */
+
+const $ = id =>
+  document.getElementById(id);
 
 function formatCoins(value){
-  return Number(value || 0).toLocaleString();
+
+  return Number(value || 0)
+    .toLocaleString();
+
 }
 
 function showToast(message){
+
   const toast = $("toast");
 
   toast.textContent = message;
+
   toast.classList.add("show");
 
   clearTimeout(window.toastTimer);
 
-  window.toastTimer = setTimeout(()=>{
-    toast.classList.remove("show");
-  },2600);
+  window.toastTimer =
+    setTimeout(()=>{
+      toast.classList.remove("show");
+    },2600);
+
 }
 
 function setBalance(value){
-  balance = Number(value || 0);
 
-  $("balance").textContent = formatCoins(balance);
-  $("walletBalance").textContent = formatCoins(balance);
+  const newBalance =
+    Number(value);
+
+  if(!Number.isFinite(newBalance)){
+    return;
+  }
+
+  balance = newBalance;
+
+  $("balance").textContent =
+    formatCoins(balance);
+
+  $("walletBalance").textContent =
+    formatCoins(balance);
+
+}
+
+function addActivity(title,description,amount,type){
+
+  activity.unshift({
+    title,
+    description,
+    amount,
+    type
+  });
+
+  activity =
+    activity.slice(0,20);
+
+  renderHistory();
+
+}
+
+function renderHistory(){
+
+  const list =
+    $("historyList");
+
+  if(!activity.length){
+
+    list.innerHTML = `
+      <div class="history-item">
+        <div class="history-left">
+          <strong>Wallet initialized</strong>
+          <span>Your activity will appear here</span>
+        </div>
+        <div>—</div>
+      </div>
+    `;
+
+    return;
+  }
+
+  list.innerHTML =
+    activity.map(item=>{
+
+      const positive =
+        item.type === "plus";
+
+      const amount =
+        item.amount === null
+          ? "—"
+          : (positive ? "+" : "-") +
+            formatCoins(Math.abs(item.amount));
+
+      return `
+        <div class="history-item">
+
+          <div class="history-left">
+
+            <strong>
+              ${escapeHtml(item.title)}
+            </strong>
+
+            <span>
+              ${escapeHtml(item.description)}
+            </span>
+
+          </div>
+
+          <div class="${positive ? "plus" : "minus"}">
+            ${amount}
+          </div>
+
+        </div>
+      `;
+
+    }).join("");
+
+}
+
+function escapeHtml(value){
+
+  return String(value)
+    .replaceAll("&","&amp;")
+    .replaceAll("<","&lt;")
+    .replaceAll(">","&gt;")
+    .replaceAll('"',"&quot;")
+    .replaceAll("'","&#039;");
+
 }
 
 function showScreen(name){
 
-  document.querySelectorAll(".screen")
+  document
+    .querySelectorAll(".screen")
     .forEach(screen=>{
       screen.classList.remove("active");
     });
 
-  const target = $("screen-" + name);
+  const target =
+    $("screen-" + name);
 
   if(target){
     target.classList.add("active");
   }
 
-  document.querySelectorAll(".nav-btn")
+  document
+    .querySelectorAll(".nav-btn")
     .forEach(btn=>{
       btn.classList.toggle(
         "active",
@@ -1119,304 +1483,643 @@ function showScreen(name){
     top:0,
     behavior:"smooth"
   });
+
 }
 
-/* ---------------------------------------------------------
+/* =========================================================
    NAVIGATION
---------------------------------------------------------- */
+   ========================================================= */
 
-document.querySelectorAll(".nav-btn").forEach(btn=>{
-  btn.addEventListener("click",()=>{
-    showScreen(btn.dataset.screen);
-  });
-});
+document
+  .querySelectorAll(".nav-btn")
+  .forEach(btn=>{
 
-/* ---------------------------------------------------------
-   BET
---------------------------------------------------------- */
+    btn.addEventListener("click",()=>{
+      showScreen(btn.dataset.screen);
+    });
 
-document.querySelectorAll(".bet-btn").forEach(btn=>{
-
-  btn.addEventListener("click",()=>{
-
-    document.querySelectorAll(".bet-btn")
-      .forEach(x=>x.classList.remove("selected"));
-
-    btn.classList.add("selected");
-
-    selectedBet = Number(btn.dataset.bet);
   });
 
-});
+/* =========================================================
+   BET SELECTION
+   ========================================================= */
 
-/* ---------------------------------------------------------
+document
+  .querySelectorAll(".bet-btn")
+  .forEach(btn=>{
+
+    btn.addEventListener("click",()=>{
+
+      if(spinning){
+        return;
+      }
+
+      document
+        .querySelectorAll(".bet-btn")
+        .forEach(x=>{
+          x.classList.remove("selected");
+        });
+
+      btn.classList.add("selected");
+
+      selectedBet =
+        Number(btn.dataset.bet);
+
+    });
+
+  });
+
+/* =========================================================
    GIFT AMOUNTS
---------------------------------------------------------- */
+   ========================================================= */
 
-document.querySelectorAll(".amount-btn").forEach(btn=>{
+document
+  .querySelectorAll(".amount-btn")
+  .forEach(btn=>{
 
-  btn.addEventListener("click",()=>{
+    btn.addEventListener("click",()=>{
 
-    document.querySelectorAll(".amount-btn")
-      .forEach(x=>x.classList.remove("selected"));
+      document
+        .querySelectorAll(".amount-btn")
+        .forEach(x=>{
+          x.classList.remove("selected");
+        });
 
-    btn.classList.add("selected");
+      btn.classList.add("selected");
 
-    selectedGift = Number(btn.dataset.gift);
+      selectedGift =
+        Number(btn.dataset.gift);
 
-    $("customAmount").value = "";
+      $("customAmount").value = "";
+
+    });
+
   });
 
-});
-
-/* ---------------------------------------------------------
+/* =========================================================
    SERVER REQUEST
---------------------------------------------------------- */
+   ========================================================= */
 
-async function api(path, options = {}){
+async function api(path,options={}){
 
   const headers = {
     "Content-Type":"application/json"
   };
 
-  if(tg && tg.initData){
-    headers["X-Telegram-Init-Data"] = tg.initData;
+  /*
+    Telegram authentication is sent BOTH ways:
+    - request body
+    - header
+
+    Your current server.js reads req.body.initData.
+  */
+
+  let body =
+    options.body;
+
+  if(
+    body &&
+    typeof body === "string"
+  ){
+
+    try{
+
+      const parsed =
+        JSON.parse(body);
+
+      if(
+        tg &&
+        tg.initData &&
+        !parsed.initData
+      ){
+
+        parsed.initData =
+          tg.initData;
+
+      }
+
+      body =
+        JSON.stringify(parsed);
+
+    }catch{}
+
   }
 
-  const response = await fetch(path,{
-    ...options,
-    headers:{
-      ...headers,
-      ...(options.headers || {})
-    }
-  });
+  if(
+    tg &&
+    tg.initData
+  ){
 
-  const text = await response.text();
+    headers["X-Telegram-Init-Data"] =
+      tg.initData;
+
+  }
+
+  const response =
+    await fetch(path,{
+      ...options,
+      body,
+      headers:{
+        ...headers,
+        ...(options.headers || {})
+      }
+    });
+
+  const text =
+    await response.text();
 
   let data;
 
   try{
-    data = JSON.parse(text);
+
+    data =
+      JSON.parse(text);
+
   }catch{
-    throw new Error("Server returned an invalid response.");
+
+    throw new Error(
+      "Server returned an invalid response."
+    );
+
   }
 
   if(!response.ok){
+
     throw new Error(
       data.error ||
       data.message ||
       "Server request failed."
     );
+
   }
 
   return data;
+
 }
 
-/* ---------------------------------------------------------
+/* =========================================================
    LOAD PLAYER
---------------------------------------------------------- */
+   ========================================================= */
 
 async function loadPlayer(){
 
   try{
 
-    /*
-      Try the existing balance endpoint first.
-      This keeps the frontend compatible with the
-      working KIMIA PRIVÉ backend.
-    */
+    const data =
+      await api("/api/me",{
+        method:"POST",
+        body:JSON.stringify({
+          initData:
+            tg ? tg.initData : ""
+        })
+      });
 
-    let data;
-
-    try{
-      data = await api("/api/me");
-    }catch{
-      data = await api("/api/player");
+    if(!data){
+      throw new Error(
+        "No player data returned."
+      );
     }
 
-    if(data){
+    const newBalance =
+      data.balance;
 
-      const newBalance =
-        data.balance ??
-        data.coins ??
-        data.player?.balance ??
-        data.player?.coins;
+    if(
+      newBalance !== undefined &&
+      newBalance !== null
+    ){
 
-      if(newBalance !== undefined){
-        setBalance(newBalance);
-      }
+      setBalance(newBalance);
 
-      const vip =
-        data.vip ??
-        data.vipLevel ??
-        data.player?.vipLevel;
+    }
 
-      if(vip){
-        $("vipStatus").textContent =
-          String(vip).toUpperCase();
+    const vip =
+      data.vipLevel;
 
-        $("vipLevel").textContent =
-          String(vip).toUpperCase();
-      }
+    if(
+      vip !== undefined &&
+      vip !== null
+    ){
+
+      const vipText =
+        Number(vip) > 0
+          ? "VIP " + vip
+          : "MEMBER";
+
+      $("vipStatus").textContent =
+        vipText;
+
+      $("vipLevel").textContent =
+        vipText;
 
     }
 
   }catch(error){
 
-    /*
-      We don't destroy the game if the optional
-      profile endpoint isn't available yet.
-    */
+    console.error(
+      "Player loading failed:",
+      error.message
+    );
 
-    console.log("Player profile:",error.message);
+    showToast(
+      "LOGIN FAILED · REOPEN GAME"
+    );
 
   }
 
 }
 
-/* ---------------------------------------------------------
-   SPIN
---------------------------------------------------------- */
+/* =========================================================
+   REFRESH BALANCE
+   ========================================================= */
+
+async function refreshBalance(){
+
+  try{
+
+    const data =
+      await api("/api/me",{
+        method:"POST",
+        body:JSON.stringify({
+          initData:
+            tg ? tg.initData : ""
+        })
+      });
+
+    if(
+      data &&
+      data.balance !== undefined
+    ){
+
+      setBalance(
+        data.balance
+      );
+
+    }
+
+    if(
+      data &&
+      data.vipLevel !== undefined
+    ){
+
+      const vipText =
+        Number(data.vipLevel) > 0
+          ? "VIP " + data.vipLevel
+          : "MEMBER";
+
+      $("vipStatus").textContent =
+        vipText;
+
+      $("vipLevel").textContent =
+        vipText;
+
+    }
+
+    return data;
+
+  }catch(error){
+
+    console.error(
+      "Balance refresh failed:",
+      error.message
+    );
+
+    return null;
+
+  }
+
+}
+
+/* =========================================================
+   SLOT SYMBOLS
+   ========================================================= */
 
 const symbols = [
-  "♛",
-  "✦",
-  "◆",
-  "♥",
-  "♠",
-  "♣"
+  "💎",
+  "7️⃣",
+  "💗",
+  "🌹",
+  "♠️",
+  "✨"
 ];
 
 function randomSymbol(){
+
   return symbols[
-    Math.floor(Math.random() * symbols.length)
+    Math.floor(
+      Math.random() *
+      symbols.length
+    )
   ];
+
 }
+
+/* =========================================================
+   REEL ANIMATION
+   ========================================================= */
 
 function animateReels(){
 
-  const reels = document.querySelectorAll(".reel");
+  const reels =
+    document.querySelectorAll(".reel");
 
   reels.forEach((reel,index)=>{
 
+    reel.classList.remove("win");
+
     let count = 0;
 
-    const timer = setInterval(()=>{
+    const timer =
+      setInterval(()=>{
 
-      const children =
-        reel.querySelectorAll(".symbol");
+        const children =
+          reel.querySelectorAll(".symbol");
 
-      children.forEach(symbol=>{
-        symbol.textContent = randomSymbol();
-      });
+        children.forEach(symbol=>{
+          symbol.textContent =
+            randomSymbol();
+        });
 
-      count++;
+        count++;
 
-      if(count > 10 + index * 3){
-        clearInterval(timer);
-      }
+        if(
+          count >
+          12 + index * 3
+        ){
 
-    },55);
+          clearInterval(timer);
+
+        }
+
+      },55);
 
   });
 
 }
 
+/* =========================================================
+   DISPLAY SERVER RESULT
+   ========================================================= */
+
+function displaySpinResult(data){
+
+  if(
+    !data ||
+    !Array.isArray(data.symbols)
+  ){
+
+    return;
+
+  }
+
+  const reels =
+    document.querySelectorAll(".reel");
+
+  /*
+    Server layout:
+    0-4   = top row
+    5-9   = middle row
+    10-14 = bottom row
+  */
+
+  reels.forEach((reel,reelIndex)=>{
+
+    const top =
+      data.symbols[reelIndex];
+
+    const middle =
+      data.symbols[5 + reelIndex];
+
+    const bottom =
+      data.symbols[10 + reelIndex];
+
+    const cells =
+      reel.querySelectorAll(".symbol");
+
+    if(cells[0]){
+      cells[0].textContent =
+        top || "✨";
+    }
+
+    if(cells[1]){
+      cells[1].textContent =
+        middle || "✨";
+    }
+
+    if(cells[2]){
+      cells[2].textContent =
+        bottom || "✨";
+    }
+
+  });
+
+  if(
+    Array.isArray(data.winningLines) &&
+    data.winningLines.length
+  ){
+
+    data.winningLines.forEach(lineIndex=>{
+
+      /*
+        Highlight reels involved in winning lines.
+      */
+
+      const line =
+        [
+          [0,1,2,3,4],
+          [5,6,7,8,9],
+          [10,11,12,13,14],
+          [0,6,12,8,4],
+          [10,6,2,8,14]
+        ][lineIndex];
+
+      if(!line){
+        return;
+      }
+
+      line.forEach(index=>{
+
+        const reelIndex =
+          index % 5;
+
+        const reel =
+          reels[reelIndex];
+
+        if(reel){
+          reel.classList.add("win");
+        }
+
+      });
+
+    });
+
+  }
+
+}
+
+/* =========================================================
+   SPIN
+   ========================================================= */
+
 async function spin(){
 
-  if(spinning) return;
+  if(spinning){
+    return;
+  }
 
   if(balance < selectedBet){
-    showToast("NOT ENOUGH PRIVÉ COINS");
+
+    showToast(
+      "NOT ENOUGH PRIVÉ COINS"
+    );
+
     return;
+
   }
 
   spinning = true;
 
-  const button = $("spinBtn");
+  const button =
+    $("spinBtn");
+
+  const winMessage =
+    $("winMessage");
 
   button.disabled = true;
-  button.textContent = "SPINNING…";
+  button.textContent =
+    "SPINNING…";
+
+  winMessage.textContent = "";
 
   animateReels();
 
   try{
 
     /*
-      Existing game endpoint.
-      Your current working backend should handle
-      the actual balance/payout calculation.
+      IMPORTANT:
+      initData is included in the BODY because
+      the current server.js reads req.body.initData.
     */
 
-    const data = await api("/api/spin",{
-      method:"POST",
-      body:JSON.stringify({
-        bet:selectedBet
-      })
-    });
+    const data =
+      await api("/api/spin",{
+        method:"POST",
+        body:JSON.stringify({
+          initData:
+            tg ? tg.initData : "",
+          bet:selectedBet
+        })
+      });
 
-    if(data){
+    /*
+      The server's balance is authoritative.
+      Never calculate the new balance locally.
+    */
 
-      const newBalance =
-        data.balance ??
-        data.coins ??
-        data.newBalance;
+    if(
+      data &&
+      data.balance !== undefined
+    ){
 
-      if(newBalance !== undefined){
-        setBalance(newBalance);
-      }
+      setBalance(
+        data.balance
+      );
 
-      if(data.win !== undefined){
-        if(Number(data.win) > 0){
-          showToast(
-            "✦ YOU WON " +
-            formatCoins(data.win) +
-            " COINS"
-          );
-        }else{
-          showToast("GOOD LUCK NEXT SPIN");
-        }
-      }
+    }
 
-      if(data.message){
-        showToast(data.message);
-      }
+    displaySpinResult(data);
+
+    const win =
+      Number(data?.win || 0);
+
+    if(win > 0){
+
+      winMessage.textContent =
+        "✦ YOU WON " +
+        formatCoins(win) +
+        " COINS";
+
+      showToast(
+        "✦ +" +
+        formatCoins(win) +
+        " PRIVÉ COINS"
+      );
+
+      addActivity(
+        "Spin win",
+        "Winning spin",
+        win,
+        "plus"
+      );
+
+    }else{
+
+      winMessage.textContent =
+        "GOOD LUCK NEXT SPIN";
+
+      addActivity(
+        "Spin",
+        "No payout",
+        selectedBet,
+        "minus"
+      );
 
     }
 
   }catch(error){
 
-    showToast(error.message);
+    showToast(
+      error.message
+    );
+
+    /*
+      If anything went wrong, ask the server
+      for the actual current balance.
+    */
+
+    await refreshBalance();
 
   }finally{
 
     setTimeout(()=>{
+
       spinning = false;
+
       button.disabled = false;
-      button.textContent = "SPIN";
+      button.textContent =
+        "SPIN";
+
     },850);
 
   }
 
 }
 
-/* ---------------------------------------------------------
+/* =========================================================
    SPIN BUTTON
---------------------------------------------------------- */
+   ========================================================= */
 
-$("spinBtn").addEventListener("click",spin);
+$("spinBtn")
+  .addEventListener(
+    "click",
+    spin
+  );
 
-/* ---------------------------------------------------------
+/* =========================================================
    REWARD REDEMPTION
---------------------------------------------------------- */
-
-let pendingReward = null;
+   ========================================================= */
 
 function requestRedeem(name,cost){
 
   if(balance < cost){
-    showToast("YOU NEED MORE PRIVÉ COINS");
+
+    showToast(
+      "YOU NEED " +
+      formatCoins(cost - balance) +
+      " MORE COINS"
+    );
+
     return;
+
   }
 
   pendingReward = {
@@ -1424,103 +2127,130 @@ function requestRedeem(name,cost){
     cost
   };
 
-  $("modalTitle").textContent = "Redeem Reward";
+  $("modalTitle").textContent =
+    "Redeem Reward";
 
   $("modalText").innerHTML =
     "Redeem <strong>" +
-    name +
+    escapeHtml(name) +
     "</strong> for <strong>" +
     formatCoins(cost) +
     " coins</strong>?";
 
-  $("confirmBtn").onclick = confirmRedeem;
+  $("confirmBtn").textContent =
+    "REDEEM";
 
-  $("confirmModal").classList.add("show");
+  $("confirmBtn").onclick =
+    confirmRedeem;
+
+  $("confirmModal")
+    .classList.add("show");
+
 }
 
 async function confirmRedeem(){
 
-  if(!pendingReward) return;
+  if(!pendingReward){
+    return;
+  }
 
-  const reward = pendingReward;
+  const reward =
+    pendingReward;
 
   closeModal();
 
   try{
 
-    /*
-      Optional backend endpoint.
-      This will be connected when we add the
-      reward system to server.js.
-    */
+    const data =
+      await api(
+        "/api/rewards/redeem",
+        {
+          method:"POST",
+          body:JSON.stringify({
+            initData:
+              tg ? tg.initData : "",
+            reward:reward.name,
+            cost:reward.cost
+          })
+        }
+      );
 
-    const data = await api("/api/rewards/redeem",{
-      method:"POST",
-      body:JSON.stringify({
-        reward:reward.name,
-        cost:reward.cost
-      })
-    });
+    if(
+      data &&
+      data.balance !== undefined
+    ){
 
-    if(data){
-
-      if(data.balance !== undefined){
-        setBalance(data.balance);
-      }
-
-      if(data.code){
-
-        $("modalTitle").textContent =
-          "Reward Unlocked";
-
-        $("modalText").innerHTML =
-          "<strong>" + reward.name +
-          "</strong><br><br>" +
-          "Your reward code:<br><br>" +
-          "<strong style='font-size:18px;color:var(--gold2)'>" +
-          data.code +
-          "</strong>";
-
-        $("confirmBtn").textContent = "DONE";
-        $("confirmBtn").onclick = closeModal;
-
-        $("confirmModal").classList.add("show");
-
-      }else{
-
-        showToast("REWARD UNLOCKED ✦");
-
-      }
+      setBalance(
+        data.balance
+      );
 
     }
 
+    if(data?.code){
+
+      $("modalTitle").textContent =
+        "Reward Unlocked";
+
+      $("modalText").innerHTML =
+        "<strong>" +
+        escapeHtml(reward.name) +
+        "</strong><br><br>" +
+        "Your reward code:<br><br>" +
+        "<strong style='font-size:18px;color:var(--gold2)'>" +
+        escapeHtml(data.code) +
+        "</strong>";
+
+      $("confirmBtn").textContent =
+        "DONE";
+
+      $("confirmBtn").onclick =
+        closeModal;
+
+      $("confirmModal")
+        .classList.add("show");
+
+    }else{
+
+      showToast(
+        "REWARD UNLOCKED ✦"
+      );
+
+    }
+
+    addActivity(
+      "Reward redeemed",
+      reward.name,
+      reward.cost,
+      "minus"
+    );
+
   }catch(error){
 
-    /*
-      Until the backend reward endpoint exists,
-      give a clear message rather than pretending
-      the redemption succeeded.
-    */
-
     showToast(
-      "Rewards are being connected to your wallet."
+      error.message
     );
+
+    await refreshBalance();
 
   }
 
 }
 
-/* ---------------------------------------------------------
+/* =========================================================
    GIFT COINS
---------------------------------------------------------- */
+   ========================================================= */
 
 function prepareGift(){
 
   const recipient =
-    $("recipient").value.trim();
+    $("recipient")
+      .value
+      .trim();
 
   const custom =
-    Number($("customAmount").value);
+    Number(
+      $("customAmount").value
+    );
 
   const amount =
     custom > 0
@@ -1528,18 +2258,65 @@ function prepareGift(){
       : selectedGift;
 
   if(!recipient){
-    showToast("ENTER A TELEGRAM USERNAME");
+
+    showToast(
+      "ENTER A TELEGRAM USERNAME"
+    );
+
     return;
+
   }
 
-  if(!amount || amount <= 0){
-    showToast("SELECT A GIFT AMOUNT");
+  if(
+    !Number.isSafeInteger(amount) ||
+    amount <= 0
+  ){
+
+    showToast(
+      "ENTER A VALID GIFT AMOUNT"
+    );
+
     return;
+
   }
 
   if(balance < amount){
-    showToast("NOT ENOUGH PRIVÉ COINS");
+
+    showToast(
+      "NOT ENOUGH PRIVÉ COINS"
+    );
+
     return;
+
+  }
+
+  /*
+    Prevent accidentally gifting to yourself
+    when Telegram username is available.
+  */
+
+  const me =
+    tg &&
+    tg.initDataUnsafe &&
+    tg.initDataUnsafe.user
+      ? tg.initDataUnsafe.user.username
+      : "";
+
+  const cleanRecipient =
+    recipient.replace(/^@/,"").toLowerCase();
+
+  if(
+    me &&
+    cleanRecipient ===
+    String(me).toLowerCase()
+  ){
+
+    showToast(
+      "YOU CANNOT GIFT YOURSELF"
+    );
+
+    return;
+
   }
 
   pendingGift = {
@@ -1555,7 +2332,7 @@ function prepareGift(){
     formatCoins(amount) +
     " coins</strong> to<br><br>" +
     "<strong>" +
-    recipient +
+    escapeHtml(recipient) +
     "</strong>?";
 
   $("confirmBtn").textContent =
@@ -1564,110 +2341,158 @@ function prepareGift(){
   $("confirmBtn").onclick =
     confirmGift;
 
-  $("confirmModal").classList.add("show");
-}
+  $("confirmModal")
+    .classList.add("show");
 
-let pendingGift = null;
+}
 
 async function confirmGift(){
 
-  if(!pendingGift) return;
+  if(!pendingGift){
+    return;
+  }
 
-  const gift = pendingGift;
+  const gift =
+    pendingGift;
 
   closeModal();
 
   try{
 
-    const data = await api("/api/gift",{
-      method:"POST",
-      body:JSON.stringify({
-        recipient:gift.recipient,
-        amount:gift.amount
-      })
-    });
-
-    if(data){
-
-      if(data.balance !== undefined){
-        setBalance(data.balance);
-      }
-
-      showToast(
-        "🎀 " +
-        formatCoins(gift.amount) +
-        " COINS SENT"
+    const data =
+      await api(
+        "/api/gift",
+        {
+          method:"POST",
+          body:JSON.stringify({
+            initData:
+              tg ? tg.initData : "",
+            recipient:
+              gift.recipient,
+            amount:
+              gift.amount
+          })
+        }
       );
 
-      $("recipient").value = "";
-      $("customAmount").value = "";
+    if(
+      data &&
+      data.balance !== undefined
+    ){
 
-      selectedGift = 0;
-
-      document.querySelectorAll(".amount-btn")
-        .forEach(x=>x.classList.remove("selected"));
+      setBalance(
+        data.balance
+      );
 
     }
+
+    showToast(
+      "🎀 " +
+      formatCoins(gift.amount) +
+      " COINS SENT"
+    );
+
+    addActivity(
+      "Coins gifted",
+      "Sent to " + gift.recipient,
+      gift.amount,
+      "minus"
+    );
+
+    $("recipient").value = "";
+    $("customAmount").value = "";
+
+    selectedGift = 0;
+
+    document
+      .querySelectorAll(".amount-btn")
+      .forEach(x=>{
+        x.classList.remove("selected");
+      });
 
   }catch(error){
 
     showToast(
-      "Coin gifting is being connected to your wallet."
+      error.message
     );
+
+    await refreshBalance();
 
   }
 
 }
 
-/* ---------------------------------------------------------
+/* =========================================================
    MODAL
---------------------------------------------------------- */
+   ========================================================= */
 
 function closeModal(){
 
-  $("confirmModal").classList.remove("show");
+  $("confirmModal")
+    .classList.remove("show");
 
   pendingReward = null;
   pendingGift = null;
 
-  $("confirmBtn").textContent = "CONFIRM";
-}
+  $("confirmBtn").textContent =
+    "CONFIRM";
 
-$("confirmModal").addEventListener("click",event=>{
-
-  if(event.target === $("confirmModal")){
-    closeModal();
-  }
-
-});
-
-/* ---------------------------------------------------------
-   DEMO / LOCAL FALLBACK
----------------------------------------------------------
-
-   If the existing backend sends the balance through
-   another mechanism, this won't interfere with it.
---------------------------------------------------------- */
-
-function initializeFallback(){
-
-  const saved =
-    localStorage.getItem("kimia_prive_demo_balance");
-
-  if(saved !== null && balance === 0){
-    setBalance(Number(saved));
-  }
+  $("confirmBtn").onclick =
+    null;
 
 }
 
-/* ---------------------------------------------------------
+$("confirmModal")
+  .addEventListener(
+    "click",
+    event=>{
+
+      if(
+        event.target ===
+        $("confirmModal")
+      ){
+
+        closeModal();
+
+      }
+
+    }
+  );
+
+/* =========================================================
+   AUTO REFRESH
+   =========================================================
+
+   This periodically asks the server for the real
+   PostgreSQL balance.
+
+   That means if another action changes the balance,
+   the displayed coins can catch up without relying
+   on localStorage or an old frontend value.
+========================================================= */
+
+setInterval(()=>{
+
+  if(
+    !spinning &&
+    document.visibilityState === "visible"
+  ){
+
+    refreshBalance();
+
+  }
+
+},15000);
+
+/* =========================================================
    START
---------------------------------------------------------- */
+   ========================================================= */
 
-initializeFallback();
+setBalance(0);
+
 loadPlayer();
 
 </script>
 
 </body>
-        </html>
+      </html>
