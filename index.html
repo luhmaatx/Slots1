@@ -14,16 +14,17 @@
 :root{
   --bg:#090706;
   --panel:#120e0c;
-  --panel2:#18120f;
+  --panel2:#1b130f;
   --gold:#d6b169;
-  --gold2:#f4dca5;
-  --gold3:#8d6732;
-  --cream:#f7eddb;
-  --muted:#a99b88;
-  --danger:#d47777;
+  --gold2:#f5dfa9;
+  --gold3:#89652f;
+  --cream:#f8eedf;
+  --muted:#a99a86;
+  --peach:#ff9c91;
+  --peach2:#ffd0c0;
+  --peach3:#b9474e;
+  --red:#9b263d;
   --green:#9bc995;
-  --peach:#ff9e91;
-  --peach2:#ffc4ae;
 }
 
 *{
@@ -35,9 +36,9 @@ html,body{
   margin:0;
   min-height:100%;
   background:
-    radial-gradient(circle at 50% -5%,rgba(214,177,105,.18),transparent 31%),
-    radial-gradient(circle at 15% 35%,rgba(255,158,145,.045),transparent 25%),
-    linear-gradient(180deg,#0c0908 0%,#050404 100%);
+    radial-gradient(circle at 50% -10%,rgba(214,177,105,.18),transparent 32%),
+    radial-gradient(circle at 15% 35%,rgba(255,156,145,.055),transparent 25%),
+    linear-gradient(180deg,#0d0a08 0%,#040303 100%);
   color:var(--cream);
   font-family:Montserrat,sans-serif;
 }
@@ -53,8 +54,10 @@ button,input{
 
 button{
   cursor:pointer;
-  -webkit-user-select:none;
-  user-select:none;
+}
+
+button:disabled{
+  cursor:default;
 }
 
 #app{
@@ -87,8 +90,8 @@ button{
   color:var(--gold2);
   font-weight:600;
   text-shadow:
-    0 0 10px rgba(242,214,155,.14),
-    0 2px 8px rgba(0,0,0,.8);
+    0 0 12px rgba(245,223,169,.18),
+    0 3px 9px rgba(0,0,0,.9);
 }
 
 .subtitle{
@@ -105,15 +108,15 @@ button{
 
 .balance-card{
   margin:14px 16px 8px;
-  padding:14px 16px;
-  border:1px solid rgba(214,177,105,.32);
-  border-radius:17px;
+  padding:15px 17px;
+  border:1px solid rgba(214,177,105,.34);
+  border-radius:18px;
   background:
-    radial-gradient(circle at 20% 0%,rgba(214,177,105,.11),transparent 45%),
-    linear-gradient(145deg,rgba(214,177,105,.085),rgba(255,255,255,.012));
+    radial-gradient(circle at 20% 0%,rgba(214,177,105,.12),transparent 45%),
+    linear-gradient(145deg,rgba(214,177,105,.09),rgba(255,255,255,.012));
   box-shadow:
-    0 14px 38px rgba(0,0,0,.34),
-    inset 0 1px 0 rgba(255,255,255,.045);
+    0 16px 42px rgba(0,0,0,.42),
+    inset 0 1px 0 rgba(255,255,255,.055);
 }
 
 .balance-label{
@@ -126,26 +129,27 @@ button{
   display:flex;
   align-items:center;
   justify-content:space-between;
-  margin-top:3px;
+  margin-top:2px;
 }
 
 .balance{
   font-family:"Cormorant Garamond",serif;
-  font-size:34px;
+  font-size:36px;
   color:var(--gold2);
   text-shadow:
-    0 0 15px rgba(214,177,105,.13),
-    0 3px 8px rgba(0,0,0,.8);
+    0 0 16px rgba(214,177,105,.15),
+    0 3px 9px rgba(0,0,0,.9);
 }
 
 .vip-pill{
-  border:1px solid var(--gold);
+  border:1px solid rgba(214,177,105,.75);
   color:var(--gold2);
   border-radius:50px;
-  padding:6px 10px;
+  padding:7px 11px;
   font-size:8px;
   letter-spacing:1.5px;
-  background:rgba(214,177,105,.035);
+  background:
+    linear-gradient(145deg,rgba(214,177,105,.10),rgba(214,177,105,.025));
 }
 
 /* =========================================================
@@ -161,9 +165,9 @@ button{
   justify-content:center;
   padding:22px;
   background:
-    radial-gradient(circle at 50% 35%,rgba(214,177,105,.12),transparent 35%),
-    rgba(3,2,2,.96);
-  backdrop-filter:blur(16px);
+    radial-gradient(circle at 50% 35%,rgba(214,177,105,.13),transparent 36%),
+    rgba(3,2,2,.97);
+  backdrop-filter:blur(17px);
 }
 
 .login-overlay.hidden{
@@ -171,54 +175,74 @@ button{
 }
 
 .login-card{
+  position:relative;
   width:100%;
   max-width:390px;
-  padding:30px 24px;
+  padding:31px 24px 26px;
   text-align:center;
-  border:1px solid rgba(214,177,105,.42);
-  border-radius:22px;
+  border:1px solid rgba(214,177,105,.43);
+  border-radius:23px;
   background:
-    radial-gradient(circle at 50% 0%,rgba(214,177,105,.12),transparent 50%),
-    linear-gradient(145deg,#18110d,#0c0807);
+    radial-gradient(circle at 50% 0%,rgba(214,177,105,.13),transparent 50%),
+    linear-gradient(145deg,#19120e,#0b0807);
   box-shadow:
-    0 30px 90px rgba(0,0,0,.8),
-    inset 0 1px 0 rgba(255,255,255,.05);
+    0 35px 100px rgba(0,0,0,.86),
+    inset 0 1px 0 rgba(255,255,255,.055);
+}
+
+.login-card:before{
+  content:"";
+  position:absolute;
+  inset:8px;
+  border:1px solid rgba(214,177,105,.08);
+  border-radius:17px;
+  pointer-events:none;
 }
 
 .login-logo{
+  position:relative;
   font-family:"Cormorant Garamond",serif;
-  font-size:31px;
+  font-size:32px;
   letter-spacing:5px;
   color:var(--gold2);
+  text-shadow:
+    0 0 14px rgba(245,223,169,.16),
+    0 3px 8px rgba(0,0,0,.8);
 }
 
 .login-status{
-  margin-top:8px;
+  position:relative;
+  margin-top:9px;
+  min-height:38px;
   color:var(--muted);
   font-size:9px;
   line-height:1.7;
-  min-height:32px;
 }
 
 .login-retry{
+  position:relative;
   width:100%;
-  margin-top:20px;
-  padding:14px;
+  margin-top:18px;
+  padding:15px;
   border:1px solid var(--gold);
   border-radius:11px;
-  background:linear-gradient(180deg,#e1c17a,#a77c38);
+  background:
+    linear-gradient(180deg,#ead18e 0%,#c39a50 58%,#956d32 100%);
   color:#100b07;
   font-weight:700;
-  letter-spacing:1.5px;
+  letter-spacing:1.7px;
   box-shadow:
-    0 8px 20px rgba(214,177,105,.16),
-    inset 0 1px 0 rgba(255,255,255,.4);
+    0 8px 22px rgba(214,177,105,.16),
+    inset 0 1px 0 rgba(255,255,255,.45);
   pointer-events:auto;
+}
+
+.login-retry:active{
+  transform:scale(.985);
 }
 
 .login-retry:disabled{
   opacity:.55;
-  cursor:wait;
 }
 
 /* =========================================================
@@ -237,14 +261,14 @@ button{
 .section-title{
   margin:19px 0 5px;
   font-family:"Cormorant Garamond",serif;
-  font-size:28px;
+  font-size:29px;
   color:var(--gold2);
 }
 
 .section-sub{
   font-size:10px;
   color:var(--muted);
-  line-height:1.6;
+  line-height:1.65;
   margin-bottom:17px;
 }
 
@@ -255,15 +279,15 @@ button{
 .slot-machine{
   margin-top:14px;
   padding:14px;
-  border:1px solid rgba(214,177,105,.35);
-  border-radius:21px;
+  border:1px solid rgba(214,177,105,.37);
+  border-radius:22px;
   background:
-    radial-gradient(circle at 50% 0%,rgba(214,177,105,.08),transparent 45%),
-    linear-gradient(145deg,#1a130f,#0a0807);
+    radial-gradient(circle at 50% 0%,rgba(214,177,105,.10),transparent 45%),
+    linear-gradient(145deg,#1b130f,#090706);
   box-shadow:
-    0 22px 60px rgba(0,0,0,.58),
-    inset 0 1px 0 rgba(255,255,255,.035),
-    inset 0 -20px 30px rgba(0,0,0,.25);
+    0 24px 65px rgba(0,0,0,.63),
+    inset 0 1px 0 rgba(255,255,255,.04),
+    inset 0 -22px 32px rgba(0,0,0,.27);
 }
 
 .reels{
@@ -271,18 +295,18 @@ button{
   grid-template-columns:repeat(5,1fr);
   gap:6px;
   padding:8px;
-  border-radius:15px;
+  border-radius:16px;
   background:
-    linear-gradient(145deg,#080706,#020202);
-  border:1px solid rgba(214,177,105,.22);
+    linear-gradient(145deg,#0b0908,#020202);
+  border:1px solid rgba(214,177,105,.23);
   box-shadow:
-    inset 0 0 25px rgba(0,0,0,.95),
-    0 3px 15px rgba(0,0,0,.4);
+    inset 0 0 28px rgba(0,0,0,.98),
+    0 4px 17px rgba(0,0,0,.45);
 }
 
 .reel{
   position:relative;
-  height:105px;
+  height:96px;
   display:flex;
   flex-direction:column;
   align-items:center;
@@ -290,10 +314,10 @@ button{
   overflow:hidden;
   border-radius:10px;
   background:
-    linear-gradient(180deg,#241a14,#0a0807);
-  border:1px solid rgba(214,177,105,.13);
+    linear-gradient(180deg,#261b14,#0a0807);
+  border:1px solid rgba(214,177,105,.15);
   box-shadow:
-    inset 0 0 18px rgba(0,0,0,.9),
+    inset 0 0 19px rgba(0,0,0,.93),
     inset 0 1px 0 rgba(255,255,255,.035);
 }
 
@@ -301,15 +325,15 @@ button{
   content:"";
   position:absolute;
   inset:0;
-  z-index:4;
   pointer-events:none;
+  z-index:5;
   background:
     linear-gradient(
       180deg,
-      rgba(255,255,255,.07),
-      transparent 18%,
-      transparent 76%,
-      rgba(0,0,0,.3)
+      rgba(255,255,255,.055),
+      transparent 22%,
+      transparent 73%,
+      rgba(0,0,0,.28)
     );
 }
 
@@ -320,27 +344,37 @@ button{
   right:0;
   top:50%;
   height:1px;
-  z-index:5;
+  background:rgba(214,177,105,.12);
+  box-shadow:0 0 8px rgba(214,177,105,.09);
   pointer-events:none;
-  background:rgba(244,220,165,.08);
-  box-shadow:0 0 8px rgba(214,177,105,.08);
+  z-index:6;
 }
 
 .symbol{
   position:relative;
-  z-index:3;
-  width:42px;
-  height:31px;
+  z-index:4;
+  width:40px;
+  height:30px;
   display:flex;
   align-items:center;
   justify-content:center;
-  flex:none;
-  transition:transform .12s,filter .12s;
+  line-height:1;
   transform-origin:center;
+  transition:transform .18s,filter .18s;
+}
+
+.symbol.flash{
+  animation:symbolFlash .3s ease;
+}
+
+@keyframes symbolFlash{
+  0%{transform:scale(.75);filter:brightness(.6)}
+  50%{transform:scale(1.16);filter:brightness(1.7)}
+  100%{transform:scale(1);filter:brightness(1)}
 }
 
 /* =========================================================
-   CSS 3D DIAMOND
+   DIAMOND — CSS 3D
 ========================================================= */
 
 .symbol.diamond{
@@ -352,135 +386,134 @@ button{
     linear-gradient(
       135deg,
       #fff 0%,
-      #e8fbff 12%,
-      #7de5ff 35%,
-      #3397ca 56%,
-      #17527e 76%,
-      #0c1c31 100%
+      #d9f8ff 14%,
+      #73ddff 39%,
+      #3387c2 67%,
+      #10273e 100%
     );
-  border:1px solid rgba(255,255,255,.5);
+  border:1px solid rgba(255,255,255,.55);
   box-shadow:
-    inset 4px 4px 5px rgba(255,255,255,.85),
-    inset -6px -6px 8px rgba(0,0,0,.48),
-    0 5px 5px rgba(0,0,0,.9),
-    0 0 12px rgba(80,210,255,.38);
+    inset 4px 4px 5px rgba(255,255,255,.78),
+    inset -6px -6px 8px rgba(0,0,0,.45),
+    0 4px 4px rgba(0,0,0,.8),
+    0 0 11px rgba(82,210,255,.35);
 }
 
 .symbol.diamond:before{
   content:"";
   position:absolute;
-  left:4px;
-  top:3px;
-  width:8px;
-  height:14px;
-  background:linear-gradient(180deg,rgba(255,255,255,.9),rgba(255,255,255,0));
-  transform:rotate(0deg);
-  filter:blur(.5px);
+  width:9px;
+  height:20px;
+  left:5px;
+  top:1px;
+  background:linear-gradient(180deg,rgba(255,255,255,.85),transparent);
+  transform:rotate(-8deg);
+  filter:blur(1px);
 }
 
 .symbol.diamond:after{
   content:"";
   position:absolute;
-  width:8px;
-  height:8px;
+  width:7px;
+  height:7px;
+  right:3px;
   top:3px;
-  left:4px;
   border-radius:50%;
-  background:rgba(255,255,255,.8);
+  background:rgba(255,255,255,.78);
   filter:blur(2px);
 }
 
 /* =========================================================
-   CSS 3D PEACH
+   PEACH — CSS 3D
 ========================================================= */
 
 .symbol.peach{
-  width:36px;
-  height:29px;
-  border-radius:52% 48% 48% 52%;
+  width:34px;
+  height:28px;
+  border-radius:55% 48% 50% 50%;
   background:
     radial-gradient(
       circle at 31% 22%,
-      rgba(255,255,255,.75) 0 7%,
-      transparent 11%
+      rgba(255,255,255,.8) 0 7%,
+      transparent 10%
+    ),
+    radial-gradient(
+      circle at 66% 72%,
+      rgba(128,29,34,.28),
+      transparent 45%
     ),
     linear-gradient(
       145deg,
       #ffd5c7 0%,
-      #ffad9a 25%,
-      #ff827b 57%,
-      #bf3e4b 100%
+      #ffab99 28%,
+      #f47772 58%,
+      #c83e4e 100%
     );
-  border:1px solid rgba(255,215,198,.45);
+  border:1px solid rgba(255,208,193,.42);
   box-shadow:
-    inset 5px 4px 7px rgba(255,255,255,.4),
-    inset -7px -6px 8px rgba(100,15,25,.43),
-    0 5px 7px rgba(0,0,0,.9),
-    0 0 13px rgba(255,120,110,.3);
+    inset 5px 5px 8px rgba(255,255,255,.42),
+    inset -7px -6px 9px rgba(109,20,30,.42),
+    0 5px 7px rgba(0,0,0,.86),
+    0 0 13px rgba(255,132,118,.28);
 }
 
 .symbol.peach:before{
   content:"";
   position:absolute;
-  width:15px;
+  width:14px;
   height:8px;
   top:-6px;
-  right:3px;
+  right:1px;
   border-radius:100% 0 100% 0;
   background:
-    linear-gradient(
-      135deg,
-      #e6c77c,
-      #8e7136
-    );
-  transform:rotate(-20deg);
+    linear-gradient(135deg,#e1c681,#887039);
+  transform:rotate(-22deg);
   box-shadow:
-    1px 2px 2px rgba(0,0,0,.65),
-    inset 2px 1px 2px rgba(255,255,255,.3);
+    1px 2px 3px rgba(0,0,0,.55),
+    inset 1px 1px 2px rgba(255,255,255,.3);
 }
 
 .symbol.peach:after{
   content:"";
   position:absolute;
   width:3px;
-  height:19px;
+  height:18px;
   top:5px;
-  left:17px;
+  left:15px;
   border-radius:50%;
-  background:rgba(119,35,35,.3);
+  background:rgba(105,28,31,.28);
 }
 
 /* =========================================================
-   CSS 3D HEART
+   HEART — CSS 3D
 ========================================================= */
 
 .symbol.heart{
-  width:25px;
-  height:25px;
+  width:27px;
+  height:27px;
   transform:rotate(-45deg);
   border-radius:5px 0 5px 0;
   background:
     linear-gradient(
       145deg,
-      #ffd0d7 0%,
-      #ff8298 28%,
-      #ce3c59 60%,
-      #681829 100%
+      #ffd0d6 0%,
+      #ff839b 25%,
+      #bd3450 64%,
+      #621729 100%
     );
-  border:1px solid rgba(255,190,200,.38);
   box-shadow:
-    inset 4px 4px 5px rgba(255,255,255,.38),
+    inset 4px 4px 6px rgba(255,255,255,.38),
     inset -6px -6px 8px rgba(65,0,12,.5),
     0 5px 8px rgba(0,0,0,.85),
-    0 0 12px rgba(255,80,120,.3);
+    0 0 12px rgba(255,83,119,.25);
 }
 
 .symbol.heart:before,
 .symbol.heart:after{
   content:"";
   position:absolute;
-  width:25px;
-  height:25px;
+  width:27px;
+  height:27px;
   border-radius:50%;
   background:inherit;
 }
@@ -491,172 +524,105 @@ button{
 }
 
 .symbol.heart:after{
-  left:13px;
   top:0;
+  left:13px;
+}
+
+.symbol.heart span{
+  display:none;
 }
 
 /* =========================================================
-   CSS 3D SPADE
+   7 — GOLD 3D
+========================================================= */
+
+.symbol.seven{
+  width:34px;
+  height:40px;
+  font-family:"Cormorant Garamond",serif;
+  font-size:38px;
+  font-weight:700;
+  color:#ffe7a6;
+  text-shadow:
+    1px 1px 0 #fff3c7,
+    2px 3px 0 #c79a4d,
+    3px 5px 0 #785321,
+    4px 7px 6px rgba(0,0,0,.9),
+    0 0 15px rgba(244,216,143,.4);
+}
+
+/* =========================================================
+   SPADE — BLACK 3D
 ========================================================= */
 
 .symbol.spade{
-  width:29px;
-  height:30px;
-  background:
-    linear-gradient(
-      145deg,
-      #79736c 0%,
-      #34302d 25%,
-      #11100f 62%,
-      #030303 100%
-    );
-  clip-path:polygon(
-    50% 0,
-    100% 57%,
-    82% 73%,
-    68% 75%,
-    68% 100%,
-    32% 100%,
-    32% 75%,
-    18% 73%,
-    0 57%
-  );
-  filter:
-    drop-shadow(0 5px 5px rgba(0,0,0,.95));
+  width:30px;
+  height:33px;
+  position:relative;
 }
 
 .symbol.spade:before{
   content:"";
   position:absolute;
-  width:8px;
-  height:17px;
-  left:9px;
-  top:4px;
-  background:linear-gradient(
-    180deg,
-    rgba(255,255,255,.65),
-    rgba(255,255,255,0)
-  );
-  transform:rotate(24deg);
-  border-radius:50%;
+  width:25px;
+  height:25px;
+  left:2px;
+  top:1px;
+  background:
+    linear-gradient(145deg,#777,#262626 40%,#050505 100%);
+  transform:rotate(45deg);
+  border-radius:55% 0 55% 0;
+  box-shadow:
+    inset 3px 3px 4px rgba(255,255,255,.22),
+    inset -5px -5px 7px rgba(0,0,0,.8),
+    0 5px 7px rgba(0,0,0,.9);
 }
 
-/* =========================================================
-   3D SEVEN
-========================================================= */
-
-.symbol.seven{
-  font-family:"Cormorant Garamond",serif;
-  font-size:39px;
-  line-height:1;
-  font-weight:700;
-  color:#f9dfa0;
-  text-shadow:
-    1px 1px 0 #fff2c7,
-    2px 3px 0 #9b7134,
-    3px 5px 0 #5e411d,
-    4px 7px 6px rgba(0,0,0,.9),
-    0 0 14px rgba(242,214,155,.4);
-}
-
-/* =========================================================
-   3D SPARKLE
-========================================================= */
-
-.symbol.sparkle{
-  font-size:0;
-}
-
-.symbol.sparkle:before{
+.symbol.spade:after{
   content:"";
   position:absolute;
   width:9px;
-  height:34px;
-  border-radius:50%;
-  background:
-    linear-gradient(
-      180deg,
-      transparent,
-      #fff8dd 25%,
-      #e9c978 50%,
-      #fff8dd 75%,
-      transparent
-    );
-  box-shadow:
-    0 0 7px rgba(255,245,205,.9),
-    0 0 17px rgba(214,177,105,.55);
-}
-
-.symbol.sparkle:after{
-  content:"";
-  position:absolute;
-  width:34px;
-  height:9px;
-  border-radius:50%;
-  background:
-    linear-gradient(
-      90deg,
-      transparent,
-      #fff8dd 25%,
-      #e9c978 50%,
-      #fff8dd 75%,
-      transparent
-    );
-  box-shadow:
-    0 0 7px rgba(255,245,205,.9),
-    0 0 17px rgba(214,177,105,.55);
+  height:17px;
+  left:10px;
+  top:18px;
+  background:linear-gradient(90deg,#111,#555,#090909);
+  clip-path:polygon(0 0,100% 0,72% 100%,28% 100%);
+  box-shadow:0 4px 5px rgba(0,0,0,.8);
 }
 
 /* =========================================================
-   SPINNING EFFECT
+   SPARKLE — LIGHT EFFECT
 ========================================================= */
 
-.reels.spinning .symbol{
-  animation:
-    symbolPulse .16s linear infinite alternate;
+.symbol.sparkle{
+  width:34px;
+  height:34px;
 }
 
-@keyframes symbolPulse{
-  from{
-    transform:translateY(-3px) scale(.94);
-    filter:brightness(.9);
-  }
-  to{
-    transform:translateY(3px) scale(1.04);
-    filter:brightness(1.25);
-  }
+.symbol.sparkle:before{
+  content:"✦";
+  position:absolute;
+  inset:0;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  color:#fff4cb;
+  font-size:30px;
+  text-shadow:
+    0 0 4px #fff,
+    0 0 9px rgba(255,241,185,.95),
+    0 0 17px rgba(214,177,105,.75),
+    0 3px 5px rgba(0,0,0,.9);
+  animation:sparkleGlow 1.8s ease-in-out infinite;
 }
 
-.reels.spinning .symbol.diamond{
-  animation:
-    diamondSpin .22s linear infinite;
-}
-
-@keyframes diamondSpin{
-  from{
-    transform:rotate(45deg) scale(.9);
-  }
-  to{
-    transform:rotate(225deg) scale(1.05);
-  }
-}
-
-.reels.spinning .symbol.heart{
-  animation:
-    heartPulse .2s ease-in-out infinite alternate;
-}
-
-@keyframes heartPulse{
-  from{
-    transform:rotate(-45deg) scale(.9);
-  }
-  to{
-    transform:rotate(-45deg) scale(1.08);
-  }
+@keyframes sparkleGlow{
+  0%,100%{transform:scale(.88);opacity:.72}
+  50%{transform:scale(1.13);opacity:1}
 }
 
 /* =========================================================
-   PAYLINE / SPIN / BET
+   SPIN
 ========================================================= */
 
 .payline{
@@ -674,13 +640,18 @@ button{
   border:1px solid var(--gold);
   border-radius:12px;
   background:
-    linear-gradient(180deg,#e5c47c,#aa7e3b 72%,#805d2c);
+    linear-gradient(
+      180deg,
+      #ead08b 0%,
+      #c29a50 52%,
+      #8d662f 100%
+    );
   color:#120d08;
   font-weight:700;
   letter-spacing:3px;
   box-shadow:
-    0 9px 25px rgba(214,177,105,.18),
-    inset 0 1px 0 rgba(255,255,255,.35);
+    0 10px 27px rgba(214,177,105,.19),
+    inset 0 1px 0 rgba(255,255,255,.42);
 }
 
 .spin-btn:active{
@@ -689,7 +660,6 @@ button{
 
 .spin-btn:disabled{
   opacity:.45;
-  cursor:wait;
 }
 
 .bet-row{
@@ -711,9 +681,15 @@ button{
 .bet-btn.selected{
   border-color:var(--gold);
   color:var(--gold2);
-  background:rgba(214,177,105,.06);
+  background:
+    linear-gradient(
+      145deg,
+      rgba(214,177,105,.11),
+      rgba(214,177,105,.025)
+    );
   box-shadow:
-    inset 0 0 12px rgba(214,177,105,.04);
+    inset 0 0 12px rgba(214,177,105,.055),
+    0 0 9px rgba(214,177,105,.04);
 }
 
 /* =========================================================
@@ -732,14 +708,12 @@ button{
   border-radius:13px;
   border:1px solid rgba(214,177,105,.25);
   background:
-    linear-gradient(145deg,#17100d,#0d0908);
+    linear-gradient(145deg,#18110e,#0c0908);
   color:var(--cream);
   text-align:left;
-  box-shadow:0 8px 20px rgba(0,0,0,.25);
-}
-
-.action-btn:active{
-  transform:scale(.985);
+  box-shadow:
+    0 9px 22px rgba(0,0,0,.28),
+    inset 0 1px 0 rgba(255,255,255,.025);
 }
 
 .action-btn strong{
@@ -755,6 +729,67 @@ button{
 }
 
 /* =========================================================
+   WALLET
+========================================================= */
+
+.wallet-box{
+  padding:21px;
+  margin-top:12px;
+  border:1px solid rgba(214,177,105,.3);
+  border-radius:18px;
+  background:
+    radial-gradient(circle at 50% 0%,rgba(214,177,105,.09),transparent 55%),
+    linear-gradient(145deg,#18120e,#0d0908);
+  text-align:center;
+  box-shadow:0 16px 38px rgba(0,0,0,.4);
+}
+
+.wallet-number{
+  font-family:"Cormorant Garamond",serif;
+  font-size:44px;
+  color:var(--gold2);
+  text-shadow:
+    0 3px 10px rgba(0,0,0,.85),
+    0 0 15px rgba(214,177,105,.11);
+}
+
+.wallet-label{
+  font-size:8px;
+  letter-spacing:3px;
+  color:var(--muted);
+}
+
+.history{
+  margin-top:15px;
+}
+
+.history-item{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  padding:13px 2px;
+  border-bottom:1px solid rgba(214,177,105,.1);
+}
+
+.history-left strong{
+  display:block;
+  font-size:10px;
+}
+
+.history-left span{
+  font-size:8px;
+  color:var(--muted);
+}
+
+.plus{
+  color:var(--green);
+}
+
+.minus{
+  color:#d47777;
+}
+
+/* =========================================================
    REWARDS
 ========================================================= */
 
@@ -765,9 +800,9 @@ button{
   border:1px solid rgba(214,177,105,.24);
   border-radius:16px;
   background:
-    radial-gradient(circle at 100% 0%,rgba(214,177,105,.06),transparent 40%),
+    radial-gradient(circle at 100% 0%,rgba(214,177,105,.065),transparent 40%),
     linear-gradient(145deg,#17100d,#0d0908);
-  box-shadow:0 10px 28px rgba(0,0,0,.25);
+  box-shadow:0 11px 29px rgba(0,0,0,.28);
 }
 
 .reward-top{
@@ -777,6 +812,7 @@ button{
 }
 
 .reward-icon{
+  flex:0 0 38px;
   width:38px;
   height:38px;
   display:flex;
@@ -786,6 +822,7 @@ button{
   border-radius:12px;
   color:var(--gold2);
   background:rgba(214,177,105,.045);
+  box-shadow:inset 0 0 14px rgba(214,177,105,.04);
 }
 
 .reward-name{
@@ -824,65 +861,6 @@ button{
 }
 
 /* =========================================================
-   WALLET
-========================================================= */
-
-.wallet-box{
-  padding:20px;
-  margin-top:12px;
-  border:1px solid rgba(214,177,105,.3);
-  border-radius:18px;
-  background:
-    radial-gradient(circle at 50% 0%,rgba(214,177,105,.08),transparent 55%),
-    linear-gradient(145deg,#18120e,#0d0908);
-  text-align:center;
-  box-shadow:0 15px 35px rgba(0,0,0,.35);
-}
-
-.wallet-number{
-  font-family:"Cormorant Garamond",serif;
-  font-size:43px;
-  color:var(--gold2);
-  text-shadow:0 3px 9px rgba(0,0,0,.8);
-}
-
-.wallet-label{
-  font-size:8px;
-  letter-spacing:3px;
-  color:var(--muted);
-}
-
-.history{
-  margin-top:15px;
-}
-
-.history-item{
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  padding:13px 2px;
-  border-bottom:1px solid rgba(214,177,105,.1);
-}
-
-.history-left strong{
-  display:block;
-  font-size:10px;
-}
-
-.history-left span{
-  font-size:8px;
-  color:var(--muted);
-}
-
-.plus{
-  color:var(--green);
-}
-
-.minus{
-  color:var(--danger);
-}
-
-/* =========================================================
    GIFT
 ========================================================= */
 
@@ -891,9 +869,8 @@ button{
   padding:18px;
   border:1px solid rgba(214,177,105,.28);
   border-radius:17px;
-  background:
-    linear-gradient(145deg,#15100d,#0d0908);
-  box-shadow:0 12px 30px rgba(0,0,0,.28);
+  background:linear-gradient(145deg,#15100d,#0d0908);
+  box-shadow:0 12px 30px rgba(0,0,0,.3);
 }
 
 .field-label{
@@ -916,6 +893,7 @@ button{
 
 .text-input:focus{
   border-color:var(--gold);
+  box-shadow:0 0 0 2px rgba(214,177,105,.05);
 }
 
 .amount-grid{
@@ -937,6 +915,7 @@ button{
 .amount-btn.selected{
   border-color:var(--gold);
   color:var(--gold2);
+  background:rgba(214,177,105,.06);
 }
 
 .gift-btn{
@@ -961,17 +940,18 @@ button{
   border-radius:18px;
   border:1px solid var(--gold);
   background:
-    radial-gradient(circle at 50% 0%,rgba(214,177,105,.13),transparent 50%),
+    radial-gradient(circle at 50% 0%,rgba(214,177,105,.14),transparent 50%),
     #100b09;
   text-align:center;
-  box-shadow:0 18px 45px rgba(0,0,0,.35);
+  box-shadow:0 19px 48px rgba(0,0,0,.4);
 }
 
 .vip-crown{
-  font-family:"Cormorant Garamond",serif;
-  font-size:40px;
+  font-size:36px;
   color:var(--gold2);
-  text-shadow:0 0 12px rgba(214,177,105,.3);
+  text-shadow:
+    0 0 12px rgba(214,177,105,.3),
+    0 3px 5px rgba(0,0,0,.8);
 }
 
 .vip-level{
@@ -990,9 +970,10 @@ button{
 }
 
 .progress-bar{
-  width:62%;
+  width:0%;
   height:100%;
   background:linear-gradient(90deg,#9d7133,#f0d493);
+  transition:width .5s ease;
 }
 
 /* =========================================================
@@ -1007,7 +988,7 @@ button{
   align-items:center;
   justify-content:center;
   padding:20px;
-  background:rgba(0,0,0,.78);
+  background:rgba(0,0,0,.79);
   backdrop-filter:blur(9px);
 }
 
@@ -1024,7 +1005,7 @@ button{
   background:
     radial-gradient(circle at 50% 0%,rgba(214,177,105,.1),transparent 50%),
     #100c0a;
-  box-shadow:0 25px 80px rgba(0,0,0,.7);
+  box-shadow:0 25px 80px rgba(0,0,0,.75);
   text-align:center;
 }
 
@@ -1094,98 +1075,8 @@ button{
 
 .nav-icon{
   display:block;
-  width:19px;
-  height:19px;
-  margin:0 auto 3px;
-  position:relative;
-}
-
-/* CSS NAV ICONS */
-
-.nav-icon.crown:before{
-  content:"";
-  position:absolute;
-  left:2px;
-  top:5px;
-  width:15px;
-  height:10px;
-  border:1.5px solid currentColor;
-  border-top:0;
-  clip-path:polygon(0 0,25% 45%,50% 0,75% 45%,100% 0,90% 100%,10% 100%);
-}
-
-.nav-icon.diamond{
-  width:14px;
-  height:14px;
-  margin-top:2px;
-  margin-bottom:6px;
-  transform:rotate(45deg);
-  border:1.5px solid currentColor;
-}
-
-.nav-icon.sparkle:before,
-.nav-icon.sparkle:after{
-  content:"";
-  position:absolute;
-  background:currentColor;
-  border-radius:50%;
-}
-
-.nav-icon.sparkle:before{
-  width:3px;
-  height:18px;
-  left:8px;
-  top:0;
-}
-
-.nav-icon.sparkle:after{
-  width:18px;
-  height:3px;
-  left:0;
-  top:8px;
-}
-
-.nav-icon.gift:before{
-  content:"";
-  position:absolute;
-  left:2px;
-  top:6px;
-  width:15px;
-  height:10px;
-  border:1.5px solid currentColor;
-  border-radius:2px;
-}
-
-.nav-icon.gift:after{
-  content:"";
-  position:absolute;
-  left:8px;
-  top:4px;
-  width:3px;
-  height:14px;
-  background:currentColor;
-}
-
-.nav-icon.vip:before{
-  content:"";
-  position:absolute;
-  left:2px;
-  top:2px;
-  width:15px;
-  height:15px;
-  border:1.5px solid currentColor;
-  border-radius:50%;
-}
-
-.nav-icon.vip:after{
-  content:"V";
-  position:absolute;
-  left:0;
-  right:0;
-  top:2px;
-  text-align:center;
-  font-size:10px;
-  font-weight:700;
+  font-size:18px;
+  margin-bottom:3px;
 }
 
 .nav-btn.active{
@@ -1200,7 +1091,7 @@ button{
   position:fixed;
   z-index:600;
   left:50%;
-  bottom:85px;
+  bottom:87px;
   transform:translate(-50%,20px);
   width:calc(100% - 40px);
   max-width:420px;
@@ -1226,17 +1117,25 @@ button{
   display:none!important;
 }
 
+/* =========================================================
+   MOBILE
+========================================================= */
+
 @media(max-width:370px){
   .reel{
-    height:94px;
+    height:88px;
   }
 
   .symbol{
-    transform:scale(.9);
+    transform:scale(.88);
+  }
+
+  .symbol.diamond{
+    transform:rotate(45deg) scale(.88);
   }
 
   .brand{
-    font-size:26px;
+    font-size:27px;
   }
 }
 </style>
@@ -1252,9 +1151,7 @@ button{
 
   <div class="login-card">
 
-    <div class="login-logo">
-      KIMIA PRIVÉ
-    </div>
+    <div class="login-logo">KIMIA PRIVÉ</div>
 
     <div class="login-status" id="loginStatus">
       Connecting to your PRIVÉ account…
@@ -1280,17 +1177,23 @@ button{
 </header>
 
 <div class="balance-card">
-  <div class="balance-label">PRIVÉ COINS</div>
+
+  <div class="balance-label">
+    PRIVÉ COINS
+  </div>
 
   <div class="balance-row">
 
-    <div class="balance" id="balance">—</div>
+    <div class="balance" id="balance">
+      —
+    </div>
 
     <div class="vip-pill" id="vipStatus">
       VIP 0
     </div>
 
   </div>
+
 </div>
 
 <!-- =======================================================
@@ -1303,15 +1206,11 @@ button{
 
     <div class="reels" id="reels">
 
-      <!-- REEL 1 -->
-
       <div class="reel">
         <div class="symbol diamond"></div>
         <div class="symbol sparkle"></div>
         <div class="symbol peach"></div>
       </div>
-
-      <!-- REEL 2 -->
 
       <div class="reel">
         <div class="symbol seven">7</div>
@@ -1319,23 +1218,17 @@ button{
         <div class="symbol sparkle"></div>
       </div>
 
-      <!-- REEL 3 -->
-
       <div class="reel">
         <div class="symbol diamond"></div>
         <div class="symbol peach"></div>
         <div class="symbol heart"></div>
       </div>
 
-      <!-- REEL 4 -->
-
       <div class="reel">
         <div class="symbol sparkle"></div>
         <div class="symbol spade"></div>
         <div class="symbol diamond"></div>
       </div>
-
-      <!-- REEL 5 -->
 
       <div class="reel">
         <div class="symbol heart"></div>
@@ -1377,12 +1270,12 @@ button{
 
   <div class="action-grid">
 
-    <button class="action-btn" onclick="showScreen('rewards')">
+    <button class="action-btn" type="button" onclick="showScreen('rewards')">
       <strong>REWARDS</strong>
       <span>Redeem your PRIVÉ coins</span>
     </button>
 
-    <button class="action-btn" onclick="showScreen('gift')">
+    <button class="action-btn" type="button" onclick="showScreen('gift')">
       <strong>GIFT COINS</strong>
       <span>Send coins to another player</span>
     </button>
@@ -1428,15 +1321,8 @@ button{
       <div class="history-item">
 
         <div class="history-left">
-
-          <strong>
-            Account connected
-          </strong>
-
-          <span>
-            Your current server balance is shown above.
-          </span>
-
+          <strong>Account connected</strong>
+          <span>Your current server balance is shown above.</span>
         </div>
 
         <div>—</div>
@@ -1479,9 +1365,7 @@ button{
 
       </div>
 
-      <div class="reward-icon">
-        %
-      </div>
+      <div class="reward-icon">%</div>
 
     </div>
 
@@ -1491,6 +1375,7 @@ button{
 
     <button
       class="redeem-btn"
+      type="button"
       onclick="requestRedeem('10% OFF Subscription',5000)"
     >
       REDEEM
@@ -1514,9 +1399,7 @@ button{
 
       </div>
 
-      <div class="reward-icon">
-        24
-      </div>
+      <div class="reward-icon">24</div>
 
     </div>
 
@@ -1526,6 +1409,7 @@ button{
 
     <button
       class="redeem-btn"
+      type="button"
       onclick="requestRedeem('24-Hour Access',10000)"
     >
       REDEEM
@@ -1549,9 +1433,7 @@ button{
 
       </div>
 
-      <div class="reward-icon">
-        ◆
-      </div>
+      <div class="reward-icon">◆</div>
 
     </div>
 
@@ -1561,6 +1443,7 @@ button{
 
     <button
       class="redeem-btn"
+      type="button"
       onclick="requestRedeem('25% OFF Subscription',25000)"
     >
       REDEEM
@@ -1584,9 +1467,7 @@ button{
 
       </div>
 
-      <div class="reward-icon">
-        7
-      </div>
+      <div class="reward-icon">7</div>
 
     </div>
 
@@ -1596,6 +1477,7 @@ button{
 
     <button
       class="redeem-btn"
+      type="button"
       onclick="requestRedeem('7-Day Privé Access',50000)"
     >
       REDEEM
@@ -1619,9 +1501,7 @@ button{
 
       </div>
 
-      <div class="reward-icon">
-        ?
-      </div>
+      <div class="reward-icon">?</div>
 
     </div>
 
@@ -1631,6 +1511,7 @@ button{
 
     <button
       class="redeem-btn"
+      type="button"
       onclick="requestRedeem('Mystery Privé Reward',75000)"
     >
       REDEEM
@@ -1668,36 +1549,33 @@ button{
       maxlength="64"
     >
 
-    <label
-      class="field-label"
-      style="margin-top:18px"
-    >
+    <label class="field-label" style="margin-top:18px">
       GIFT AMOUNT
     </label>
 
     <div class="amount-grid">
 
-      <button class="amount-btn" data-gift="1000">
+      <button class="amount-btn" type="button" data-gift="1000">
         1,000
       </button>
 
-      <button class="amount-btn" data-gift="5000">
+      <button class="amount-btn" type="button" data-gift="5000">
         5,000
       </button>
 
-      <button class="amount-btn" data-gift="10000">
+      <button class="amount-btn" type="button" data-gift="10000">
         10,000
       </button>
 
-      <button class="amount-btn" data-gift="25000">
+      <button class="amount-btn" type="button" data-gift="25000">
         25,000
       </button>
 
-      <button class="amount-btn" data-gift="50000">
+      <button class="amount-btn" type="button" data-gift="50000">
         50,000
       </button>
 
-      <button class="amount-btn" data-gift="100000">
+      <button class="amount-btn" type="button" data-gift="100000">
         100,000
       </button>
 
@@ -1717,6 +1595,7 @@ button{
       class="gift-btn"
       id="giftBtn"
       type="button"
+      onclick="prepareGift()"
     >
       SEND COINS
     </button>
@@ -1745,25 +1624,16 @@ button{
       ♛
     </div>
 
-    <div
-      class="vip-level"
-      id="vipLevel"
-    >
+    <div class="vip-level" id="vipLevel">
       PRIVÉ MEMBER
     </div>
 
-    <div
-      class="section-sub"
-      style="margin:8px 0 0"
-    >
+    <div class="section-sub" style="margin:8px 0 0">
       Your VIP benefits will appear here.
     </div>
 
     <div class="progress">
-      <div
-        class="progress-bar"
-        id="vipProgress"
-      ></div>
+      <div class="progress-bar" id="vipProgress"></div>
     </div>
 
     <div style="
@@ -1778,28 +1648,14 @@ button{
 
   <div class="action-grid">
 
-    <button class="action-btn">
-
-      <strong>
-        COIN BONUS
-      </strong>
-
-      <span>
-        Higher VIP levels can receive boosted rewards.
-      </span>
-
+    <button class="action-btn" type="button">
+      <strong>COIN BONUS</strong>
+      <span>Higher VIP levels can receive boosted rewards.</span>
     </button>
 
-    <button class="action-btn">
-
-      <strong>
-        VIP REWARDS
-      </strong>
-
-      <span>
-        Special rewards can be limited to VIP players.
-      </span>
-
+    <button class="action-btn" type="button">
+      <strong>VIP REWARDS</strong>
+      <span>Special rewards can be limited to VIP players.</span>
     </button>
 
   </div>
@@ -1809,93 +1665,61 @@ button{
 </div>
 
 <!-- =======================================================
-     BOTTOM NAV
+     NAV
 ======================================================= -->
 
 <nav class="bottom-nav">
 
-  <button
-    class="nav-btn active"
-    data-screen="play"
-  >
-    <span class="nav-icon crown"></span>
+  <button class="nav-btn active" type="button" data-screen="play">
+    <span class="nav-icon">♛</span>
     PLAY
   </button>
 
-  <button
-    class="nav-btn"
-    data-screen="wallet"
-  >
-    <span class="nav-icon diamond"></span>
+  <button class="nav-btn" type="button" data-screen="wallet">
+    <span class="nav-icon">◆</span>
     WALLET
   </button>
 
-  <button
-    class="nav-btn"
-    data-screen="rewards"
-  >
-    <span class="nav-icon sparkle"></span>
+  <button class="nav-btn" type="button" data-screen="rewards">
+    <span class="nav-icon">✦</span>
     REWARDS
   </button>
 
-  <button
-    class="nav-btn"
-    data-screen="gift"
-  >
-    <span class="nav-icon gift"></span>
+  <button class="nav-btn" type="button" data-screen="gift">
+    <span class="nav-icon">♡</span>
     GIFT
   </button>
 
-  <button
-    class="nav-btn"
-    data-screen="vip"
-  >
-    <span class="nav-icon vip"></span>
+  <button class="nav-btn" type="button" data-screen="vip">
+    <span class="nav-icon">♛</span>
     VIP
   </button>
 
 </nav>
 
 <!-- =======================================================
-     CONFIRMATION MODAL
+     MODAL
 ======================================================= -->
 
-<div
-  class="modal"
-  id="confirmModal"
->
+<div class="modal" id="confirmModal">
 
   <div class="modal-card">
 
-    <div
-      class="modal-title"
-      id="modalTitle"
-    >
+    <div class="modal-title" id="modalTitle">
       Confirm
     </div>
 
-    <div
-      class="modal-text"
-      id="modalText"
-    >
+    <div class="modal-text" id="modalText">
       Are you sure?
     </div>
 
     <div class="modal-buttons">
 
-      <button
-        class="cancel"
-        id="cancelModal"
-        type="button"
-      >
+      <button class="cancel" type="button" onclick="closeModal()">
         CANCEL
       </button>
 
-      <button
-        class="confirm"
-        id="confirmBtn"
-        type="button"
-      >
+      <button class="confirm" type="button" id="confirmBtn">
         CONFIRM
       </button>
 
@@ -1905,15 +1729,18 @@ button{
 
 </div>
 
-<div
-  class="toast"
-  id="toast"
-></div>
+<div class="toast" id="toast"></div>
 
 <script>
 /* =========================================================
    KIMIA PRIVÉ
-   SERVER-SYNCED FRONTEND
+   SERVER-MATCHED FRONTEND
+========================================================= */
+
+"use strict";
+
+/* =========================================================
+   TELEGRAM
 ========================================================= */
 
 const tg =
@@ -1926,7 +1753,9 @@ if(tg){
   try{
     tg.ready();
     tg.expand();
-  }catch(e){}
+  }catch(error){
+    console.warn("Telegram WebApp initialization:",error);
+  }
 }
 
 /* =========================================================
@@ -1938,6 +1767,7 @@ let selectedBet = 300;
 let selectedGift = 0;
 let spinning = false;
 let loggedIn = false;
+let loginInProgress = false;
 
 let pendingReward = null;
 let pendingGift = null;
@@ -1949,48 +1779,13 @@ const BET_OPTIONS = [
   3000
 ];
 
-/*
-  IMPORTANT:
+/* =========================================================
+   CSS SYMBOL IDs
+   These are ONLY internal identifiers.
+   No emoji is ever rendered to the screen.
+========================================================= */
 
-  These are ONLY the possible values coming back
-  from the existing server.
-
-  They are NEVER inserted into the page.
-
-  Each value is translated into CSS artwork.
-*/
-
-const SYMBOL_TYPE = {
-
-  "💎":"diamond",
-  "💎️":"diamond",
-
-  "7️⃣":"seven",
-  "7":"seven",
-
-  "💗":"heart",
-  "❤️":"heart",
-  "♥️":"heart",
-
-  "🌹":"peach",
-  "🍑":"peach",
-
-  "♠️":"spade",
-  "♠":"spade",
-
-  "✨":"sparkle",
-  "✦":"sparkle"
-
-};
-
-/*
-  CSS-only animation symbols.
-
-  Notice that these are TYPE NAMES,
-  NOT emoji strings.
-*/
-
-const VISUAL_TYPES = [
+const VISUAL_SYMBOLS = [
   "diamond",
   "seven",
   "heart",
@@ -1999,28 +1794,65 @@ const VISUAL_TYPES = [
   "sparkle"
 ];
 
+/*
+  server.js returns:
+
+    💎
+    7️⃣
+    💗
+    🌹
+    ♠️
+    ✨
+
+  We translate those server values into
+  the CSS artwork above.
+*/
+
+const SERVER_SYMBOL_MAP = {
+  "💎":"diamond",
+  "7️⃣":"seven",
+  "💗":"heart",
+  "🌹":"peach",
+  "♠️":"spade",
+  "✨":"sparkle"
+};
+
 /* =========================================================
-   DOM HELPER
+   HELPERS
 ========================================================= */
 
 function $(id){
   return document.getElementById(id);
 }
 
-/* =========================================================
-   BALANCE
-========================================================= */
-
 function formatCoins(value){
+  const number = Number(value);
 
-  const n = Number(value);
-
-  if(!Number.isFinite(n)){
+  if(!Number.isFinite(number)){
     return "0";
   }
 
-  return Math.floor(n).toLocaleString();
+  return number.toLocaleString("en-US");
+}
 
+function showToast(message){
+
+  const toast = $("toast");
+
+  if(!toast){
+    return;
+  }
+
+  toast.textContent = String(message);
+
+  toast.classList.add("show");
+
+  clearTimeout(window.__toastTimer);
+
+  window.__toastTimer =
+    setTimeout(()=>{
+      toast.classList.remove("show");
+    },2800);
 }
 
 function setBalance(value){
@@ -2028,7 +1860,7 @@ function setBalance(value){
   const numeric = Number(value);
 
   if(!Number.isFinite(numeric)){
-    return;
+    return false;
   }
 
   balance = numeric;
@@ -2039,48 +1871,89 @@ function setBalance(value){
   $("walletBalance").textContent =
     formatCoins(balance);
 
+  updateBetButtons();
+
+  return true;
 }
 
 function setVip(value){
 
-  if(
-    value === undefined ||
-    value === null ||
-    value === ""
-  ){
+  const numeric = Number(value);
+
+  if(!Number.isFinite(numeric)){
     return;
   }
 
-  const text =
-    "VIP " + String(value);
-
   $("vipStatus").textContent =
-    text;
+    "VIP " + numeric;
 
   $("vipLevel").textContent =
-    text;
+    numeric > 0
+      ? "PRIVÉ VIP " + numeric
+      : "PRIVÉ MEMBER";
 
+  const progress =
+    Math.max(
+      0,
+      Math.min(
+        100,
+        numeric * 20
+      )
+    );
+
+  $("vipProgress").style.width =
+    progress + "%";
 }
 
-/* =========================================================
-   TOAST
-========================================================= */
+function updateBetButtons(){
 
-function showToast(message){
+  document
+    .querySelectorAll(".bet-btn")
+    .forEach(btn=>{
 
-  const toast = $("toast");
+      const bet =
+        Number(btn.dataset.bet);
 
-  toast.textContent = String(message || "");
+      btn.disabled =
+        spinning ||
+        balance < bet;
 
-  toast.classList.add("show");
+      btn.classList.toggle(
+        "selected",
+        bet === selectedBet
+      );
 
-  clearTimeout(window.kimiaToastTimer);
+    });
 
-  window.kimiaToastTimer =
-    setTimeout(()=>{
-      toast.classList.remove("show");
-    },2800);
+  /*
+    If the currently selected bet is
+    no longer affordable, select the
+    largest affordable server-approved bet.
+  */
 
+  if(balance < selectedBet){
+
+    const affordable =
+      BET_OPTIONS.filter(
+        bet=>balance >= bet
+      );
+
+    if(affordable.length){
+
+      selectedBet =
+        affordable[affordable.length - 1];
+
+      document
+        .querySelectorAll(".bet-btn")
+        .forEach(btn=>{
+          btn.classList.toggle(
+            "selected",
+            Number(btn.dataset.bet) === selectedBet
+          );
+        });
+
+    }
+  }
 }
 
 /* =========================================================
@@ -2115,19 +1988,15 @@ function showScreen(name){
     top:0,
     behavior:"smooth"
   });
-
 }
 
 document
   .querySelectorAll(".nav-btn")
   .forEach(btn=>{
 
-    btn.addEventListener(
-      "click",
-      ()=>{
-        showScreen(btn.dataset.screen);
-      }
-    );
+    btn.addEventListener("click",()=>{
+      showScreen(btn.dataset.screen);
+    });
 
   });
 
@@ -2139,29 +2008,40 @@ document
   .querySelectorAll(".bet-btn")
   .forEach(btn=>{
 
-    btn.addEventListener(
-      "click",
-      ()=>{
+    btn.addEventListener("click",()=>{
 
-        const bet =
-          Number(btn.dataset.bet);
-
-        if(!BET_OPTIONS.includes(bet)){
-          return;
-        }
-
-        document
-          .querySelectorAll(".bet-btn")
-          .forEach(x=>{
-            x.classList.remove("selected");
-          });
-
-        btn.classList.add("selected");
-
-        selectedBet = bet;
-
+      if(spinning){
+        return;
       }
-    );
+
+      const bet =
+        Number(btn.dataset.bet);
+
+      if(!BET_OPTIONS.includes(bet)){
+        return;
+      }
+
+      if(balance < bet){
+
+        showToast(
+          "NOT ENOUGH PRIVÉ COINS"
+        );
+
+        return;
+      }
+
+      selectedBet = bet;
+
+      document
+        .querySelectorAll(".bet-btn")
+        .forEach(x=>{
+          x.classList.toggle(
+            "selected",
+            Number(x.dataset.bet) === selectedBet
+          );
+        });
+
+    });
 
   });
 
@@ -2173,25 +2053,22 @@ document
   .querySelectorAll(".amount-btn")
   .forEach(btn=>{
 
-    btn.addEventListener(
-      "click",
-      ()=>{
+    btn.addEventListener("click",()=>{
 
-        document
-          .querySelectorAll(".amount-btn")
-          .forEach(x=>{
-            x.classList.remove("selected");
-          });
+      document
+        .querySelectorAll(".amount-btn")
+        .forEach(x=>{
+          x.classList.remove("selected");
+        });
 
-        btn.classList.add("selected");
+      btn.classList.add("selected");
 
-        selectedGift =
-          Number(btn.dataset.gift);
+      selectedGift =
+        Number(btn.dataset.gift);
 
-        $("customAmount").value = "";
+      $("customAmount").value = "";
 
-      }
-    );
+    });
 
   });
 
@@ -2199,22 +2076,23 @@ document
    API
 ========================================================= */
 
-async function api(path, options = {}){
+async function api(path,options={}){
 
   if(!tg){
-
     throw new Error(
-      "Open KIMIA PRIVÉ from Telegram."
+      "Telegram WebApp is unavailable. Open KIMIA PRIVÉ inside Telegram."
     );
-
   }
 
-  if(!tg.initData){
+  const initData =
+    typeof tg.initData === "string"
+      ? tg.initData
+      : "";
 
+  if(!initData){
     throw new Error(
-      "Telegram account data is unavailable. Reopen the game from Telegram."
+      "Telegram login data is unavailable. Close the game and reopen it from Telegram."
     );
-
   }
 
   let body = {};
@@ -2225,54 +2103,58 @@ async function api(path, options = {}){
 
       try{
         body = JSON.parse(options.body);
-      }catch(e){
-        body = {};
+      }catch{
+        throw new Error(
+          "Invalid request data."
+        );
       }
 
-    }else{
+    }else if(
+      typeof options.body === "object"
+    ){
 
-      body = options.body;
+      body = {
+        ...options.body
+      };
 
     }
 
   }
 
   /*
-    server.js expects initData in req.body.
+    THIS IS THE EXACT CONTRACT
+    REQUIRED BY YOUR SERVER.JS:
+
+      req.body.initData
   */
 
-  body.initData = tg.initData;
+  body.initData = initData;
 
   const response =
     await fetch(path,{
-
-      method:
-        options.method || "POST",
+      method:options.method || "POST",
 
       headers:{
-        "Content-Type":"application/json"
+        "Content-Type":"application/json",
+        ...(options.headers || {})
       },
 
-      body:
-        JSON.stringify(body)
+      body:JSON.stringify(body),
 
+      cache:"no-store"
     });
 
   const text =
     await response.text();
 
-  let data = null;
+  let data;
 
   try{
-
     data = JSON.parse(text);
-
-  }catch(e){
-
+  }catch{
     throw new Error(
-      "Server returned an invalid response."
+      "The server returned an invalid response."
     );
-
   }
 
   if(!response.ok){
@@ -2286,7 +2168,6 @@ async function api(path, options = {}){
   }
 
   return data;
-
 }
 
 /* =========================================================
@@ -2294,6 +2175,12 @@ async function api(path, options = {}){
 ========================================================= */
 
 async function loginPlayer(){
+
+  if(loginInProgress){
+    return;
+  }
+
+  loginInProgress = true;
 
   const overlay =
     $("loginOverlay");
@@ -2304,36 +2191,6 @@ async function loginPlayer(){
   const retry =
     $("loginRetry");
 
-  if(!tg){
-
-    status.innerHTML =
-      "<strong style='color:var(--cream)'>" +
-      "OPEN FROM TELEGRAM" +
-      "</strong><br>" +
-      "This game must be opened inside Telegram.";
-
-    retry.disabled = false;
-    retry.textContent = "RETRY LOGIN";
-
-    return;
-
-  }
-
-  if(!tg.initData){
-
-    status.innerHTML =
-      "<strong style='color:var(--cream)'>" +
-      "TELEGRAM DATA NOT FOUND" +
-      "</strong><br>" +
-      "Close the game and reopen it from the KIMIA PRIVÉ Telegram button.";
-
-    retry.disabled = false;
-    retry.textContent = "RETRY LOGIN";
-
-    return;
-
-  }
-
   retry.disabled = true;
   retry.textContent = "CONNECTING…";
 
@@ -2343,7 +2200,22 @@ async function loginPlayer(){
   try{
 
     /*
-      Existing server endpoint.
+      SERVER:
+
+        POST /api/me
+
+      BODY:
+
+        {
+          initData: "..."
+        }
+
+      RESPONSE:
+
+        id
+        username
+        balance
+        vipLevel
     */
 
     const data =
@@ -2352,23 +2224,43 @@ async function loginPlayer(){
         body:{}
       });
 
+    if(!data){
+
+      throw new Error(
+        "No account data was returned."
+      );
+
+    }
+
     if(
-      !data ||
       data.balance === undefined ||
       data.balance === null
     ){
 
       throw new Error(
-        "The server did not return your coin balance."
+        "Your PRIVÉ coin balance was not returned by the server."
       );
 
     }
 
-    setBalance(data.balance);
+    if(!setBalance(data.balance)){
 
-    setVip(data.vipLevel);
+      throw new Error(
+        "The server returned an invalid coin balance."
+      );
+
+    }
+
+    setVip(
+      data.vipLevel
+    );
 
     loggedIn = true;
+
+    status.textContent =
+      data.username
+        ? "Welcome back, @" + data.username
+        : "Your PRIVÉ account is connected.";
 
     overlay.classList.add("hidden");
 
@@ -2376,267 +2268,203 @@ async function loginPlayer(){
       "WELCOME TO KIMIA PRIVÉ"
     );
 
+    updateBetButtons();
+
   }catch(error){
 
     loggedIn = false;
 
+    console.error(
+      "KIMIA PRIVÉ login error:",
+      error
+    );
+
     status.innerHTML =
-      "<strong style='color:var(--cream)'>" +
-      "LOGIN FAILED" +
-      "</strong><br>" +
-      String(
-        error && error.message
-          ? error.message
-          : "Unable to connect to your account."
-      );
+      "<strong style='color:var(--cream)'>LOGIN FAILED</strong>" +
+      "<br>" +
+      "<span>" +
+      escapeHtml(
+        error.message ||
+        "Unable to connect."
+      ) +
+      "</span>";
 
     retry.disabled = false;
     retry.textContent = "RETRY LOGIN";
 
+  }finally{
+
+    loginInProgress = false;
+
   }
-
 }
-
-$("loginRetry")
-  .addEventListener(
-    "click",
-    loginPlayer
-  );
-
-/* =========================================================
-   SYMBOL TRANSLATION
-========================================================= */
 
 /*
-  Convert whatever the server returned
-  into a CSS symbol TYPE.
-
-  The returned server value itself is never
-  placed into innerHTML or textContent.
+  Small HTML escape helper used only
+  for server error text.
 */
 
-function getSymbolType(serverValue){
+function escapeHtml(value){
 
-  if(serverValue === undefined || serverValue === null){
-    return "sparkle";
-  }
-
-  const raw =
-    String(serverValue).trim();
-
-  if(SYMBOL_TYPE[raw]){
-    return SYMBOL_TYPE[raw];
-  }
-
-  /*
-    More tolerant matching for variations
-    from Telegram/JSON encoding.
-  */
-
-  if(
-    raw.includes("💎")
-  ){
-    return "diamond";
-  }
-
-  if(
-    raw.includes("7")
-  ){
-    return "seven";
-  }
-
-  if(
-    raw.includes("💗") ||
-    raw.includes("❤")
-  ){
-    return "heart";
-  }
-
-  if(
-    raw.includes("🌹") ||
-    raw.includes("🍑")
-  ){
-    return "peach";
-  }
-
-  if(
-    raw.includes("♠")
-  ){
-    return "spade";
-  }
-
-  if(
-    raw.includes("✨") ||
-    raw.includes("✦")
-  ){
-    return "sparkle";
-  }
-
-  return "sparkle";
-
+  return String(value)
+    .replace(/&/g,"&amp;")
+    .replace(/</g,"&lt;")
+    .replace(/>/g,"&gt;")
+    .replace(/"/g,"&quot;")
+    .replace(/'/g,"&#039;");
 }
 
 /* =========================================================
-   RENDER CSS SYMBOL
+   RETRY BUTTON
 ========================================================= */
 
-function renderSymbol(element, type){
+$("loginRetry")
+  .addEventListener("click",loginPlayer);
 
-  if(!element){
-    return;
-  }
+/* =========================================================
+   VISUAL SYMBOL RENDERING
+========================================================= */
+
+function renderVisualSymbol(element,visualName){
 
   /*
-    SECURITY + VISUAL RULE:
-
-    Never put server symbol text into the element.
-
-    Only approved CSS classes are used.
+    Completely remove any old text.
+    This prevents server emoji strings
+    from appearing in the reels.
   */
 
-  const allowed = VISUAL_TYPES.includes(type)
-    ? type
-    : "sparkle";
+  element.textContent = "";
 
   element.className =
-    "symbol " + allowed;
+    "symbol";
 
-  /*
-    Only the 7 uses text because it is CSS-styled
-    typography rather than an emoji.
-
-    Every other symbol is entirely CSS generated.
-  */
-
-  if(allowed === "seven"){
-    element.textContent = "7";
-  }else{
-    element.textContent = "";
+  if(
+    !VISUAL_SYMBOLS.includes(visualName)
+  ){
+    visualName = "sparkle";
   }
 
+  element.classList.add(
+    visualName
+  );
+}
+
+function renderServerSymbol(element,serverValue){
+
+  const visual =
+    SERVER_SYMBOL_MAP[serverValue];
+
+  renderVisualSymbol(
+    element,
+    visual || "sparkle"
+  );
+}
+
+/* =========================================================
+   RANDOM VISUAL ANIMATION
+========================================================= */
+
+function randomVisualSymbol(){
+
+  return VISUAL_SYMBOLS[
+    Math.floor(
+      Math.random() *
+      VISUAL_SYMBOLS.length
+    )
+  ];
+}
+
+function animateReels(){
+
+  const reels =
+    document.querySelectorAll(".reel");
+
+  const timers = [];
+
+  reels.forEach((reel,index)=>{
+
+    let count = 0;
+
+    const timer =
+      setInterval(()=>{
+
+        const symbols =
+          reel.querySelectorAll(".symbol");
+
+        symbols.forEach(symbol=>{
+
+          renderVisualSymbol(
+            symbol,
+            randomVisualSymbol()
+          );
+
+        });
+
+        count++;
+
+        if(
+          count >=
+          12 + index * 4
+        ){
+
+          clearInterval(timer);
+
+        }
+
+      },55);
+
+    timers.push(timer);
+
+  });
+
+  return timers;
 }
 
 /* =========================================================
    SERVER RESULT
 ========================================================= */
 
-function renderServerResult(symbols){
+function displaySpinResult(serverSymbols){
 
   if(
-    !Array.isArray(symbols) ||
-    symbols.length !== 15
+    !Array.isArray(serverSymbols) ||
+    serverSymbols.length !== 15
   ){
-    return;
+
+    throw new Error(
+      "The server returned an invalid 5 × 3 spin result."
+    );
+
   }
 
-  const elements =
+  const symbols =
     document.querySelectorAll(
       ".reel .symbol"
     );
 
-  for(let i=0;i<15;i++){
+  serverSymbols.forEach(
+    (serverValue,index)=>{
 
-    if(elements[i]){
+      const element =
+        symbols[index];
 
-      const type =
-        getSymbolType(symbols[i]);
+      if(!element){
+        return;
+      }
 
-      renderSymbol(
-        elements[i],
-        type
+      renderServerSymbol(
+        element,
+        serverValue
       );
 
-    }
+      element.classList.remove("flash");
 
-  }
+      void element.offsetWidth;
 
-}
-
-/* =========================================================
-   CSS-ONLY REEL ANIMATION
-========================================================= */
-
-function randomVisualType(){
-
-  return VISUAL_TYPES[
-    Math.floor(
-      Math.random() *
-      VISUAL_TYPES.length
-    )
-  ];
-
-}
-
-function animateReels(){
-
-  const reels =
-    $("reels");
-
-  reels.classList.add("spinning");
-
-  const reelElements =
-    document.querySelectorAll(".reel");
-
-  reelElements.forEach(
-    (reel,index)=>{
-
-      let count = 0;
-
-      const max =
-        13 + index * 4;
-
-      const timer =
-        setInterval(
-          ()=>{
-
-            const symbols =
-              reel.querySelectorAll(
-                ".symbol"
-              );
-
-            symbols.forEach(
-              symbol=>{
-
-                /*
-                  RANDOM CSS TYPE ONLY.
-
-                  No emoji is created here.
-                */
-
-                renderSymbol(
-                  symbol,
-                  randomVisualType()
-                );
-
-              }
-            );
-
-            count++;
-
-            if(count >= max){
-
-              clearInterval(timer);
-
-            }
-
-          },
-          55
-        );
+      element.classList.add("flash");
 
     }
   );
-
-}
-
-/* =========================================================
-   STOP REEL ANIMATION
-========================================================= */
-
-function stopReelAnimation(){
-
-  $("reels")
-    .classList.remove("spinning");
-
 }
 
 /* =========================================================
@@ -2656,7 +2484,24 @@ async function spin(){
     );
 
     return;
+  }
 
+  if(!Number.isSafeInteger(selectedBet)){
+
+    showToast(
+      "INVALID BET"
+    );
+
+    return;
+  }
+
+  if(!BET_OPTIONS.includes(selectedBet)){
+
+    showToast(
+      "INVALID BET"
+    );
+
+    return;
   }
 
   if(balance < selectedBet){
@@ -2666,7 +2511,6 @@ async function spin(){
     );
 
     return;
-
   }
 
   spinning = true;
@@ -2677,9 +2521,24 @@ async function spin(){
   button.disabled = true;
   button.textContent = "SPINNING…";
 
+  updateBetButtons();
+
   animateReels();
 
   try{
+
+    /*
+      SERVER:
+
+        POST /api/spin
+
+      BODY:
+
+        {
+          initData,
+          bet
+        }
+    */
 
     const data =
       await api("/api/spin",{
@@ -2693,46 +2552,47 @@ async function spin(){
       });
 
     /*
-      SERVER IS AUTHORITATIVE.
-
-      We do not calculate the new balance.
+      Server is authoritative.
+      We never calculate balance
+      on the client.
     */
 
     if(
-      data &&
-      data.balance !== undefined
+      data.balance === undefined
     ){
 
-      setBalance(
-        data.balance
+      throw new Error(
+        "The server did not return your updated balance."
       );
 
     }
 
-    /*
-      Render actual server result using
-      CSS artwork only.
-    */
+    setBalance(
+      data.balance
+    );
 
     if(
-      data &&
-      Array.isArray(data.symbols)
+      data.vipLevel !== undefined
     ){
 
-      renderServerResult(
-        data.symbols
+      setVip(
+        data.vipLevel
       );
 
     }
 
-    if(
-      data &&
-      Number(data.win) > 0
-    ){
+    displaySpinResult(
+      data.symbols
+    );
+
+    const win =
+      Number(data.win || 0);
+
+    if(win > 0){
 
       showToast(
-        "YOU WON " +
-        formatCoins(data.win) +
+        "✦ YOU WON " +
+        formatCoins(win) +
         " COINS"
       );
 
@@ -2746,37 +2606,34 @@ async function spin(){
 
   }catch(error){
 
+    console.error(
+      "KIMIA PRIVÉ spin error:",
+      error
+    );
+
     showToast(
-      error && error.message
-        ? error.message
-        : "SPIN FAILED"
+      error.message ||
+      "Spin failed."
     );
 
   }finally{
 
-    setTimeout(
-      ()=>{
+    setTimeout(()=>{
 
-        stopReelAnimation();
+      spinning = false;
 
-        spinning = false;
+      button.disabled = false;
+      button.textContent = "SPIN";
 
-        button.disabled = false;
-        button.textContent = "SPIN";
+      updateBetButtons();
 
-      },
-      850
-    );
+    },850);
 
   }
-
 }
 
 $("spinBtn")
-  .addEventListener(
-    "click",
-    spin
-  );
+  .addEventListener("click",spin);
 
 /* =========================================================
    REWARDS
@@ -2791,7 +2648,6 @@ function requestRedeem(name,cost){
     );
 
     return;
-
   }
 
   if(balance < cost){
@@ -2801,12 +2657,11 @@ function requestRedeem(name,cost){
     );
 
     return;
-
   }
 
   pendingReward = {
-    name:name,
-    cost:cost
+    name,
+    cost
   };
 
   $("modalTitle").textContent =
@@ -2814,7 +2669,7 @@ function requestRedeem(name,cost){
 
   $("modalText").innerHTML =
     "Redeem <strong>" +
-    name +
+    escapeHtml(name) +
     "</strong> for <strong>" +
     formatCoins(cost) +
     " coins</strong>?";
@@ -2827,7 +2682,6 @@ function requestRedeem(name,cost){
 
   $("confirmModal")
     .classList.add("show");
-
 }
 
 async function confirmRedeem(){
@@ -2836,24 +2690,19 @@ async function confirmRedeem(){
     return;
   }
 
-  const reward =
-    pendingReward;
-
   closeModal();
 
   /*
-    No fake deduction.
+    Your supplied server.js does not currently
+    expose a reward-redemption endpoint.
 
-    Until the corresponding server endpoint
-    exists, the frontend does not pretend
-    the reward was redeemed.
+    Therefore this frontend never pretends
+    that coins were deducted.
   */
 
   showToast(
-    "REWARD REQUEST READY: " +
-    reward.name
+    "REWARD REDEMPTION IS NOT CONNECTED YET"
   );
-
 }
 
 /* =========================================================
@@ -2869,7 +2718,6 @@ function prepareGift(){
     );
 
     return;
-
   }
 
   const recipient =
@@ -2894,27 +2742,18 @@ function prepareGift(){
     );
 
     return;
-
   }
 
-  if(!amount || amount <= 0){
-
-    showToast(
-      "SELECT A GIFT AMOUNT"
-    );
-
-    return;
-
-  }
-
-  if(!Number.isSafeInteger(amount)){
+  if(
+    !Number.isSafeInteger(amount) ||
+    amount <= 0
+  ){
 
     showToast(
       "ENTER A WHOLE NUMBER OF COINS"
     );
 
     return;
-
   }
 
   if(balance < amount){
@@ -2924,12 +2763,11 @@ function prepareGift(){
     );
 
     return;
-
   }
 
   pendingGift = {
-    recipient:recipient,
-    amount:amount
+    recipient,
+    amount
   };
 
   $("modalTitle").textContent =
@@ -2940,7 +2778,7 @@ function prepareGift(){
     formatCoins(amount) +
     " coins</strong> to<br><br>" +
     "<strong>" +
-    recipient +
+    escapeHtml(recipient) +
     "</strong>?";
 
   $("confirmBtn").textContent =
@@ -2951,7 +2789,6 @@ function prepareGift(){
 
   $("confirmModal")
     .classList.add("show");
-
 }
 
 async function confirmGift(){
@@ -2960,23 +2797,18 @@ async function confirmGift(){
     return;
   }
 
-  const gift =
-    pendingGift;
-
   closeModal();
 
   /*
-    No local balance deduction.
+    Your supplied server.js does not currently
+    expose /api/gift.
 
-    This waits for the actual server-side
-    gifting endpoint so the balance cannot
-    become inconsistent.
+    No coins are deducted locally.
   */
 
   showToast(
-    "COIN GIFT REQUEST READY"
+    "COIN GIFTING IS NOT CONNECTED YET"
   );
-
 }
 
 /* =========================================================
@@ -2995,104 +2827,63 @@ function closeModal(){
     "CONFIRM";
 
   $("confirmBtn").onclick = null;
-
 }
 
-$("cancelModal")
-  .addEventListener(
-    "click",
-    closeModal
-  );
-
 $("confirmModal")
-  .addEventListener(
-    "click",
-    event=>{
+  .addEventListener("click",event=>{
 
-      if(
-        event.target ===
-        $("confirmModal")
-      ){
+    if(
+      event.target ===
+      $("confirmModal")
+    ){
 
-        closeModal();
-
-      }
+      closeModal();
 
     }
-  );
+
+  });
 
 /* =========================================================
-   INITIAL SYMBOLS
+   INITIAL STATE
 ========================================================= */
 
-function initializeSymbols(){
+function prepareInitialUI(){
 
-  const initialTypes = [
+  setBalance(0);
+  setVip(0);
 
-    "diamond",
-    "sparkle",
-    "peach",
+  /*
+    Keep the login overlay visible until
+    the server confirms the Telegram account.
+  */
 
-    "seven",
-    "heart",
-    "sparkle",
+  $("loginOverlay")
+    .classList.remove("hidden");
 
-    "diamond",
-    "peach",
-    "heart",
-
-    "sparkle",
-    "spade",
-    "diamond",
-
-    "heart",
-    "seven",
-    "sparkle"
-
-  ];
-
-  const elements =
-    document.querySelectorAll(
-      ".reel .symbol"
-    );
-
-  elements.forEach(
-    (element,index)=>{
-
-      renderSymbol(
-        element,
-        initialTypes[index] || "sparkle"
-      );
-
-    }
-  );
-
+  $("loginRetry").disabled = false;
+  $("loginRetry").textContent = "RETRY LOGIN";
 }
 
 /* =========================================================
    START
 ========================================================= */
 
-initializeSymbols();
+window.addEventListener("load",()=>{
 
-window.addEventListener(
-  "load",
-  ()=>{
+  prepareInitialUI();
 
-    /*
-      Give Telegram WebApp a moment to populate
-      initData before attempting login.
-    */
+  /*
+    Give Telegram WebApp a moment to populate
+    initData before the first authentication attempt.
+  */
 
-    setTimeout(
-      loginPlayer,
-      150
-    );
+  setTimeout(()=>{
+    loginPlayer();
+  },250);
 
-  }
-);
+});
 
 </script>
 
 </body>
-</html>
+  </html>
