@@ -19,8 +19,7 @@
 html,body{
   margin:0;
   width:100%;
-  height:100%;
-  overflow:hidden;
+  min-height:100%;
   background:
     radial-gradient(circle at 50% 25%,rgba(145,104,42,.16),transparent 38%),
     linear-gradient(145deg,#080605,#120d09 48%,#070605);
@@ -38,10 +37,10 @@ button{
 
 .app{
   width:100%;
-  height:100dvh;
+  min-height:100dvh;
   display:flex;
   justify-content:center;
-  align-items:center;
+  align-items:flex-start;
   padding:18px;
 }
 
@@ -111,7 +110,6 @@ button{
   align-items:center;
   gap:16px;
   margin:30px 0 28px;
-  color:#cba45b;
 }
 
 .ornament:before,
@@ -143,12 +141,10 @@ button{
 }
 
 .primary-btn{
-  position:relative;
   width:100%;
   min-height:58px;
   border:1px solid #e0bc6c;
-  background:
-    linear-gradient(180deg,#e0bd70,#b9893b);
+  background:linear-gradient(180deg,#e0bd70,#b9893b);
   color:#160f09;
   font-weight:600;
   letter-spacing:3px;
@@ -230,100 +226,6 @@ button{
   color:#e8c979;
 }
 
-/* =====================================================
-   LEADERBOARD
-===================================================== */
-
-.leaderboard-card{
-  padding:18px;
-  margin-bottom:14px;
-}
-
-.section-title{
-  text-align:center;
-  font-size:9px;
-  letter-spacing:5px;
-  color:#b99658;
-  margin-bottom:15px;
-}
-
-.leaderboard{
-  display:flex;
-  flex-direction:column;
-  gap:7px;
-}
-
-.player-row{
-  display:grid;
-  grid-template-columns:38px 1fr auto;
-  align-items:center;
-  min-height:42px;
-  padding:7px 10px;
-  border:1px solid rgba(205,164,82,.18);
-  background:rgba(20,14,10,.55);
-}
-
-.player-rank{
-  font-family:"Cormorant Garamond",serif;
-  font-size:19px;
-  color:#c9a45a;
-  text-align:center;
-}
-
-.player-info{
-  min-width:0;
-}
-
-.player-name{
-  overflow:hidden;
-  text-overflow:ellipsis;
-  white-space:nowrap;
-  font-size:10px;
-  letter-spacing:1px;
-  color:#d7c39d;
-}
-
-.player-vip{
-  margin-top:2px;
-  font-size:7px;
-  letter-spacing:1.5px;
-  color:#806d51;
-}
-
-.player-balance{
-  font-family:"Cormorant Garamond",serif;
-  font-size:17px;
-  color:#e5c575;
-  white-space:nowrap;
-}
-
-.leaderboard-loading,
-.leaderboard-empty,
-.leaderboard-error{
-  text-align:center;
-  padding:13px 5px;
-  color:#806f59;
-  font-size:9px;
-  letter-spacing:1px;
-}
-
-.player-row:first-child{
-  border-color:rgba(218,177,92,.45);
-  background:linear-gradient(
-    90deg,
-    rgba(188,143,57,.13),
-    rgba(30,20,12,.5)
-  );
-}
-
-.player-row:first-child .player-rank{
-  color:#f0d083;
-}
-
-/* =====================================================
-   REELS
-===================================================== */
-
 .reel-card{
   padding:18px;
 }
@@ -388,11 +290,11 @@ button{
 }
 
 .symbol-heart .symbol-art{
-  font-size:36px;
+  font-size:38px;
 }
 
 .symbol-k .symbol-art{
-  font-size:42px;
+  font-size:43px;
   font-weight:700;
   letter-spacing:0;
 }
@@ -467,10 +369,127 @@ button{
   margin-top:8px;
 }
 
+/* =====================================================
+   TOP PLAYERS
+   IMPORTANT: THIS CARD IS BELOW THE SLOT MACHINE
+===================================================== */
+
+.leaderboard-card{
+  margin-top:14px;
+  padding:20px 18px;
+}
+
+.leaderboard-title{
+  text-align:center;
+  font-size:10px;
+  letter-spacing:6px;
+  color:#c9a65d;
+  margin-bottom:16px;
+}
+
+.leaderboard-subtitle{
+  text-align:center;
+  color:#756a5b;
+  font-size:9px;
+  letter-spacing:2px;
+  margin-top:-8px;
+  margin-bottom:15px;
+}
+
+.players{
+  display:flex;
+  flex-direction:column;
+  gap:6px;
+}
+
+.player-row{
+  display:grid;
+  grid-template-columns:42px 1fr auto;
+  align-items:center;
+  min-height:48px;
+  padding:7px 10px;
+  border:1px solid rgba(205,164,82,.17);
+  background:rgba(12,9,7,.65);
+}
+
+.player-rank{
+  font-family:"Cormorant Garamond",serif;
+  font-size:18px;
+  color:#c9a65d;
+}
+
+.player-info{
+  min-width:0;
+}
+
+.player-name{
+  overflow:hidden;
+  white-space:nowrap;
+  text-overflow:ellipsis;
+  color:#d9c49c;
+  font-size:10px;
+  letter-spacing:1px;
+}
+
+.player-label{
+  margin-top:2px;
+  color:#655b4e;
+  font-size:7px;
+  letter-spacing:2px;
+}
+
+.player-balance{
+  font-family:"Cormorant Garamond",serif;
+  font-size:16px;
+  color:#e1c274;
+}
+
+.leaderboard-loading,
+.leaderboard-empty{
+  text-align:center;
+  padding:14px 4px;
+  color:#756a5b;
+  font-size:10px;
+  letter-spacing:1px;
+}
+
+/* =====================================================
+   SPIN ANIMATION
+===================================================== */
+
+.reel.spinning{
+  animation:reelPulse .09s linear infinite alternate;
+}
+
+@keyframes reelPulse{
+  from{
+    transform:translateY(-2px);
+  }
+  to{
+    transform:translateY(2px);
+  }
+}
+
+.win-flash{
+  animation:winFlash .55s ease;
+}
+
+@keyframes winFlash{
+  0%{
+    box-shadow:inset 0 0 0 rgba(224,189,112,0);
+  }
+  50%{
+    box-shadow:inset 0 0 30px rgba(224,189,112,.28);
+  }
+  100%{
+    box-shadow:inset 0 0 0 rgba(224,189,112,0);
+  }
+}
+
 @media(max-width:430px){
 
   .app{
-    padding:12px;
+    padding:10px;
   }
 
   .login-card{
@@ -498,11 +517,7 @@ button{
   }
 
   .player-row{
-    grid-template-columns:32px 1fr auto;
-  }
-
-  .player-balance{
-    font-size:15px;
+    grid-template-columns:35px 1fr auto;
   }
 }
 </style>
@@ -512,8 +527,12 @@ button{
 
 <div class="app">
 
-  <!-- LOGIN -->
+  <!-- ===================================================
+       LOGIN
+  ==================================================== -->
+
   <main id="loginScreen" class="screen">
+
     <section class="card login-card">
 
       <div class="eyebrow">WELCOME TO</div>
@@ -538,24 +557,43 @@ button{
       <div id="loginStatus" class="status"></div>
 
     </section>
+
   </main>
 
 
-  <!-- GAME -->
+  <!-- ===================================================
+       GAME
+  ==================================================== -->
+
   <main id="gameScreen" class="screen game-screen hidden">
 
     <div class="topbar">
-      <div class="logo-small">KIMIA PRIVÉ</div>
-      <div id="vipBadge" class="vip">PRIVÉ</div>
+
+      <div class="logo-small">
+        KIMIA PRIVÉ
+      </div>
+
+      <div id="vipBadge" class="vip">
+        PRIVÉ
+      </div>
+
     </div>
 
 
     <!-- BALANCE -->
+
     <section class="card balance-card">
 
       <div>
-        <div class="balance-label">PRIVATE BALANCE</div>
-        <div id="balance" class="balance">0</div>
+
+        <div class="balance-label">
+          PRIVATE BALANCE
+        </div>
+
+        <div id="balance" class="balance">
+          0
+        </div>
+
       </div>
 
       <div id="playerName" class="balance-label">
@@ -565,25 +603,8 @@ button{
     </section>
 
 
-    <!-- TOP PLAYERS -->
-    <section class="card leaderboard-card">
-
-      <div class="section-title">
-        TOP PLAYERS
-      </div>
-
-      <div id="leaderboard" class="leaderboard">
-
-        <div class="leaderboard-loading">
-          LOADING PRIVÉ MEMBERS…
-        </div>
-
-      </div>
-
-    </section>
-
-
     <!-- SLOT MACHINE -->
+
     <section class="card reel-card">
 
       <div class="reels" id="reels"></div>
@@ -620,6 +641,31 @@ button{
 
     </section>
 
+
+    <!-- =================================================
+         TOP PLAYERS — BOTTOM OF GAME
+    ================================================== -->
+
+    <section class="card leaderboard-card">
+
+      <div class="leaderboard-title">
+        TOP PLAYERS
+      </div>
+
+      <div class="leaderboard-subtitle">
+        PRIVÉ LEADERBOARD
+      </div>
+
+      <div id="players" class="players">
+
+        <div class="leaderboard-loading">
+          LOADING PLAYERS…
+        </div>
+
+      </div>
+
+    </section>
+
   </main>
 
 </div>
@@ -640,6 +686,7 @@ button{
     window.Telegram.WebApp
       ? window.Telegram.WebApp
       : null;
+
 
   if(tg){
 
@@ -694,8 +741,8 @@ button{
   const gameMessage =
     document.getElementById("gameMessage");
 
-  const leaderboardEl =
-    document.getElementById("leaderboard");
+  const playersEl =
+    document.getElementById("players");
 
 
   let selectedBet = 300;
@@ -724,10 +771,13 @@ button{
         }
       );
 
+
     const text =
       await response.text();
 
+
     let data = null;
+
 
     if(text){
 
@@ -744,64 +794,6 @@ button{
       }
     }
 
-    if(!response.ok){
-
-      const serverError =
-        data && data.error
-          ? data.error
-          : `Server returned HTTP ${response.status}.`;
-
-      throw new Error(serverError);
-    }
-
-    if(!data){
-
-      throw new Error(
-        "Server returned an empty response."
-      );
-
-    }
-
-    return data;
-  }
-
-
-  /* =====================================================
-     GET API
-  ===================================================== */
-
-  async function apiGet(endpoint){
-
-    const response =
-      await fetch(
-        endpoint,
-        {
-          method:"GET",
-          headers:{
-            "Accept":"application/json"
-          }
-        }
-      );
-
-    const text =
-      await response.text();
-
-    let data = null;
-
-    if(text){
-
-      try{
-
-        data = JSON.parse(text);
-
-      }catch(error){
-
-        throw new Error(
-          "Server returned invalid JSON."
-        );
-
-      }
-    }
 
     if(!response.ok){
 
@@ -813,6 +805,7 @@ button{
       throw new Error(serverError);
     }
 
+
     if(!data){
 
       throw new Error(
@@ -821,84 +814,8 @@ button{
 
     }
 
+
     return data;
-  }
-
-
-  /* =====================================================
-     TELEGRAM INIT DATA
-  ===================================================== */
-
-  function getInitData(){
-
-    if(!tg){
-
-      throw new Error(
-        "Telegram WebApp is not available."
-      );
-
-    }
-
-    const initData =
-      tg.initData;
-
-    if(!initData){
-
-      throw new Error(
-        "Telegram did not provide login data. Open the game from the Telegram bot."
-      );
-
-    }
-
-    return initData;
-  }
-
-
-  /* =====================================================
-     PLAYER DISPLAY
-  ===================================================== */
-
-  function updatePlayer(player){
-
-    const balance =
-      Number(player.balance);
-
-    balanceEl.textContent =
-      Number.isFinite(balance)
-        ? balance.toLocaleString()
-        : "0";
-
-    let name =
-      player.username ||
-      "PRIVÉ MEMBER";
-
-    if(
-      typeof name === "string" &&
-      name.startsWith("@")
-    ){
-
-      name =
-        name.substring(1);
-
-    }
-
-    playerNameEl.textContent =
-      name.toUpperCase();
-
-    const vip =
-      Number(player.vipLevel || 0);
-
-    if(vip > 0){
-
-      vipBadge.textContent =
-        `VIP ${vip}`;
-
-    }else{
-
-      vipBadge.textContent =
-        "PRIVÉ";
-
-    }
   }
 
 
@@ -906,99 +823,86 @@ button{
      LEADERBOARD
   ===================================================== */
 
-  function getLeaderboardArray(data){
+  async function loadLeaderboard(){
 
-    if(Array.isArray(data)){
-      return data;
-    }
+    try{
 
-    if(data && Array.isArray(data.players)){
-      return data.players;
-    }
-
-    if(data && Array.isArray(data.leaderboard)){
-      return data.leaderboard;
-    }
-
-    if(data && Array.isArray(data.topPlayers)){
-      return data.topPlayers;
-    }
-
-    return [];
-  }
+      const response =
+        await fetch(
+          "/api/leaderboard",
+          {
+            method:"GET",
+            cache:"no-store",
+            headers:{
+              "Accept":"application/json"
+            }
+          }
+        );
 
 
-  function getPlayerName(player){
-
-    let name =
-      player.username ||
-      player.name ||
-      player.first_name ||
-      player.display_name ||
-      "PRIVÉ MEMBER";
-
-    if(
-      typeof name === "string" &&
-      name.startsWith("@")
-    ){
-
-      name = name.substring(1);
-
-    }
-
-    return String(name);
-  }
+      const text =
+        await response.text();
 
 
-  function getPlayerBalance(player){
+      if(!response.ok){
 
-    const possibleValues = [
+        throw new Error(
+          `Leaderboard HTTP ${response.status}`
+        );
 
-      player.balance,
-      player.coins,
-      player.credits,
-      player.privateBalance
-
-    ];
-
-    for(const value of possibleValues){
-
-      const number =
-        Number(value);
-
-      if(Number.isFinite(number)){
-        return number;
       }
 
-    }
 
-    return 0;
-  }
+      if(!text){
 
+        throw new Error(
+          "Empty leaderboard response."
+        );
 
-  function getPlayerVip(player){
-
-    return Number(
-      player.vipLevel ||
-      player.vip ||
-      0
-    );
-  }
+      }
 
 
-  function renderLeaderboard(data){
-
-    const players =
-      getLeaderboardArray(data);
-
-    leaderboardEl.innerHTML = "";
+      const data =
+        JSON.parse(text);
 
 
-    if(!players.length){
+      const players =
+        Array.isArray(data.players)
+          ? data.players
+          : [];
 
-      leaderboardEl.innerHTML = `
+
+      renderLeaderboard(players);
+
+
+    }catch(error){
+
+      console.error(
+        "LEADERBOARD ERROR:",
+        error
+      );
+
+
+      playersEl.innerHTML = `
         <div class="leaderboard-empty">
-          NO TOP PLAYERS YET
+          LEADERBOARD UNAVAILABLE
+        </div>
+      `;
+
+    }
+  }
+
+
+  function renderLeaderboard(players){
+
+    playersEl.innerHTML = "";
+
+
+    if(!Array.isArray(players) || players.length === 0){
+
+      playersEl.innerHTML = `
+        <div class="leaderboard-empty">
+          NO PLAYERS YET
         </div>
       `;
 
@@ -1018,101 +922,100 @@ button{
 
 
         const rank =
-          document.createElement("div");
-
-        rank.className =
-          "player-rank";
-
-        rank.textContent =
-          `#${index + 1}`;
+          Number(player.rank) || index + 1;
 
 
-        const info =
-          document.createElement("div");
-
-        info.className =
-          "player-info";
-
-
-        const name =
-          document.createElement("div");
-
-        name.className =
-          "player-name";
-
-        name.textContent =
-          getPlayerName(player).toUpperCase();
-
-
-        const vip =
-          document.createElement("div");
-
-        vip.className =
-          "player-vip";
-
-        const vipLevel =
-          getPlayerVip(player);
-
-        vip.textContent =
-          vipLevel > 0
-            ? `VIP ${vipLevel}`
-            : "PRIVÉ MEMBER";
-
-
-        info.appendChild(name);
-        info.appendChild(vip);
+        const username =
+          player.username ||
+          player.name ||
+          "Anonymous Player";
 
 
         const balance =
-          document.createElement("div");
-
-        balance.className =
-          "player-balance";
-
-        balance.textContent =
-          getPlayerBalance(player)
-            .toLocaleString();
+          Number(player.balance);
 
 
-        row.appendChild(rank);
-        row.appendChild(info);
-        row.appendChild(balance);
+        const formattedBalance =
+          Number.isFinite(balance)
+            ? balance.toLocaleString()
+            : "0";
 
-        leaderboardEl.appendChild(row);
+
+        row.innerHTML = `
+
+          <div class="player-rank">
+            #${rank}
+          </div>
+
+          <div class="player-info">
+
+            <div class="player-name">
+              ${escapeHtml(
+                String(username)
+              )}
+            </div>
+
+            <div class="player-label">
+              PRIVÉ MEMBER
+            </div>
+
+          </div>
+
+          <div class="player-balance">
+            ${formattedBalance}
+          </div>
+
+        `;
+
+
+        playersEl.appendChild(row);
 
       });
   }
 
 
-  async function loadLeaderboard(){
+  function escapeHtml(value){
 
-    try{
+    return value
+      .replace(/&/g,"&amp;")
+      .replace(/</g,"&lt;")
+      .replace(/>/g,"&gt;")
+      .replace(/"/g,"&quot;")
+      .replace(/'/g,"&#039;");
 
-      /*
-        Existing leaderboard endpoint.
-      */
+  }
 
-      const data =
-        await apiGet(
-          "/api/leaderboard"
-        );
 
-      renderLeaderboard(data);
+  /* =====================================================
+     TELEGRAM INIT DATA
+  ===================================================== */
 
-    }catch(error){
+  function getInitData(){
 
-      console.error(
-        "LEADERBOARD ERROR:",
-        error
+    if(!tg){
+
+      throw new Error(
+        "Telegram WebApp is not available."
       );
 
-      leaderboardEl.innerHTML = `
-        <div class="leaderboard-error">
-          TOP PLAYERS TEMPORARILY UNAVAILABLE
-        </div>
-      `;
+    }
+
+
+    const initData =
+      tg.initData;
+
+
+    if(!initData){
+
+      throw new Error(
+        "Telegram did not provide login data. Open the game from the Telegram bot."
+      );
 
     }
+
+
+    return initData;
+
   }
 
 
@@ -1126,14 +1029,17 @@ button{
       return;
     }
 
+
     loginBtn.disabled = true;
     loginBtn.textContent = "CONNECTING…";
     loginStatus.textContent = "";
+
 
     try{
 
       const initData =
         getInitData();
+
 
       const data =
         await apiPost(
@@ -1170,26 +1076,18 @@ button{
 
       currentPlayer = data;
 
+
       updatePlayer(data);
 
 
-      loginScreen.classList.add(
-        "hidden"
-      );
-
-      gameScreen.classList.remove(
-        "hidden"
-      );
+      loginScreen.classList.add("hidden");
+      gameScreen.classList.remove("hidden");
 
 
       loginStatus.textContent = "";
 
 
-      /*
-        Load leaderboard immediately
-        after successful login.
-      */
-
+      /* Load leaderboard AFTER game is visible */
       loadLeaderboard();
 
 
@@ -1200,10 +1098,12 @@ button{
         error
       );
 
+
       loginStatus.textContent =
         error && error.message
           ? error.message
           : "Login failed.";
+
 
     }finally{
 
@@ -1211,83 +1111,274 @@ button{
       loginBtn.textContent = "ENTER PRIVÉ";
 
     }
+
   }
 
 
   /* =====================================================
-     SYMBOL ART
+     PLAYER DISPLAY
+  ===================================================== */
+
+  function updatePlayer(player){
+
+    const balance =
+      Number(player.balance);
+
+
+    balanceEl.textContent =
+      Number.isFinite(balance)
+        ? balance.toLocaleString()
+        : "0";
+
+
+    let name =
+      player.username ||
+      player.first_name ||
+      "PRIVÉ MEMBER";
+
+
+    if(
+      typeof name === "string" &&
+      name.startsWith("@")
+    ){
+
+      name =
+        name.substring(1);
+
+    }
+
+
+    playerNameEl.textContent =
+      String(name).toUpperCase();
+
+
+    const vip =
+      Number(player.vipLevel || 0);
+
+
+    if(vip > 0){
+
+      vipBadge.textContent =
+        `VIP ${vip}`;
+
+    }else{
+
+      vipBadge.textContent =
+        "PRIVÉ";
+
+    }
+
+  }
+
+
+  /* =====================================================
+     SYMBOL NORMALIZATION
+     
+     This is the important fix.
+     
+     The frontend now accepts:
+       🌹
+       K
+       rose
+       💎
+       diamond
+       7
+       7️⃣
+       💗
+       ♥
+       heart
+       ♠
+       ♠️
+       ✨
+       star
+  ===================================================== */
+
+  function normalizeSymbol(raw){
+
+    if(raw === null || raw === undefined){
+
+      return "✨";
+
+    }
+
+
+    let value =
+      String(raw)
+        .trim()
+        .toLowerCase();
+
+
+    /* Remove emoji variation selectors */
+    value =
+      value.replace(/\uFE0F/g,"");
+
+
+    /* Remove zero-width joiners */
+    value =
+      value.replace(/\u200D/g,"");
+
+
+    /* K / rose */
+    if(
+      value === "🌹" ||
+      value === "rose" ||
+      value === "k" ||
+      value === "letter k"
+    ){
+
+      return "K";
+
+    }
+
+
+    /* Diamond */
+    if(
+      value === "💎" ||
+      value === "diamond" ||
+      value === "◆" ||
+      value === "◇"
+    ){
+
+      return "DIAMOND";
+
+    }
+
+
+    /* Seven */
+    if(
+      value === "7" ||
+      value === "7️⃣" ||
+      value === "seven"
+    ){
+
+      return "7";
+
+    }
+
+
+    /* Heart */
+    if(
+      value === "💗" ||
+      value === "❤️" ||
+      value === "♥" ||
+      value === "heart"
+    ){
+
+      return "HEART";
+
+    }
+
+
+    /* Spade */
+    if(
+      value === "♠" ||
+      value === "♠️" ||
+      value === "spade"
+    ){
+
+      return "SPADE";
+
+    }
+
+
+    /* Star */
+    if(
+      value === "✨" ||
+      value === "✦" ||
+      value === "star"
+    ){
+
+      return "STAR";
+
+    }
+
+
+    /*
+      Unknown symbols do NOT become diamonds.
+      This prevents an unexpected server value
+      from making the entire board look like diamonds.
+    */
+
+    return "STAR";
+
+  }
+
+
+  /* =====================================================
+     SYMBOL CLASS
   ===================================================== */
 
   function symbolClass(symbol){
 
-    if(symbol === "💎")
+    if(symbol === "DIAMOND")
       return "symbol-diamond";
 
-    if(symbol === "7️⃣")
+    if(symbol === "7")
       return "symbol-seven";
 
-    if(symbol === "💗")
+    if(symbol === "HEART")
       return "symbol-heart";
 
-    if(symbol === "🌹")
+    if(symbol === "K")
       return "symbol-k";
 
-    if(symbol === "♠️")
+    if(symbol === "SPADE")
       return "symbol-spade";
 
-    if(symbol === "✨")
-      return "symbol-star";
-
     return "symbol-star";
+
   }
 
 
-  function symbolMarkup(symbol){
+  /* =====================================================
+     SYMBOL MARKUP
+  ===================================================== */
+
+  function symbolMarkup(rawSymbol){
+
+    const symbol =
+      normalizeSymbol(rawSymbol);
+
 
     let art = "✦";
 
 
-    if(symbol === "💎"){
+    if(symbol === "DIAMOND"){
 
       art = "◆";
 
     }
 
 
-    if(symbol === "7️⃣"){
+    if(symbol === "7"){
 
       art = "7";
 
     }
 
 
-    if(symbol === "💗"){
+    if(symbol === "HEART"){
 
       art = "♥";
 
     }
 
 
-    /*
-      KIMIA PRIVÉ symbol.
-      Server 🌹 is displayed as K.
-    */
-
-    if(symbol === "🌹"){
+    if(symbol === "K"){
 
       art = "K";
 
     }
 
 
-    if(symbol === "♠️"){
+    if(symbol === "SPADE"){
 
       art = "♠";
 
     }
 
 
-    if(symbol === "✨"){
+    if(symbol === "STAR"){
 
       art = "✦";
 
@@ -1295,10 +1386,17 @@ button{
 
 
     return `
+
       <div class="symbol ${symbolClass(symbol)}">
-        <span class="symbol-art">${art}</span>
+
+        <span class="symbol-art">
+          ${art}
+        </span>
+
       </div>
+
     `;
+
   }
 
 
@@ -1306,7 +1404,7 @@ button{
      REELS
   ===================================================== */
 
-  function renderSymbols(symbols){
+  function renderSymbols(symbols,spinningState=false){
 
     reelsEl.innerHTML = "";
 
@@ -1316,41 +1414,35 @@ button{
       symbols.length !== 15
     ){
 
-      for(
-        let i = 0;
-        i < 15;
-        i++
-      ){
+      symbols =
+        Array.from(
+          {length:15},
+          () => "✨"
+        );
 
-        const reel =
-          document.createElement("div");
-
-        reel.className = "reel";
-
-        reel.innerHTML =
-          symbolMarkup("✨");
-
-        reelsEl.appendChild(reel);
-
-      }
-
-      return;
     }
 
 
-    symbols.forEach(symbol => {
+    symbols.forEach(rawSymbol => {
 
       const reel =
         document.createElement("div");
 
-      reel.className = "reel";
+
+      reel.className =
+        spinningState
+          ? "reel spinning"
+          : "reel";
+
 
       reel.innerHTML =
-        symbolMarkup(symbol);
+        symbolMarkup(rawSymbol);
+
 
       reelsEl.appendChild(reel);
 
     });
+
   }
 
 
@@ -1360,23 +1452,23 @@ button{
 
   renderSymbols([
 
-    "💎",
-    "7️⃣",
-    "💗",
-    "🌹",
-    "♠️",
+    "K",
+    "7",
+    "HEART",
+    "STAR",
+    "SPADE",
 
-    "✨",
-    "💎",
-    "💗",
-    "🌹",
-    "♠️",
+    "DIAMOND",
+    "K",
+    "HEART",
+    "7",
+    "SPADE",
 
-    "7️⃣",
-    "💗",
-    "✨",
-    "💎",
-    "🌹"
+    "STAR",
+    "DIAMOND",
+    "K",
+    "HEART",
+    "7"
 
   ]);
 
@@ -1405,9 +1497,7 @@ button{
             );
 
 
-          button.classList.add(
-            "active"
-          );
+          button.classList.add("active");
 
 
           selectedBet =
@@ -1427,6 +1517,10 @@ button{
 
   /* =====================================================
      SPIN
+     
+     IMPORTANT:
+     Animation and API request run together.
+     The final server result is rendered LAST.
   ===================================================== */
 
   async function spin(){
@@ -1440,66 +1534,67 @@ button{
 
 
     spinBtn.disabled = true;
-    spinBtn.textContent =
-      "SPINNING…";
-
+    spinBtn.textContent = "SPINNING…";
     gameMessage.textContent = "";
 
 
-    let animationCount = 0;
+    /* -----------------------------------------------
+       Create animation promise
+    ------------------------------------------------ */
+
+    const animationPromise =
+      new Promise(resolve => {
+
+        let count = 0;
+
+        const timer =
+          setInterval(() => {
+
+            const fakeSymbols = [
+
+              "K",
+              "7",
+              "HEART",
+              "SPADE",
+              "STAR",
+              "DIAMOND"
+
+            ];
 
 
-    const animation =
-      setInterval(
-        () => {
-
-          const fakeSymbols =
-            Array.from(
-              {length:15},
-              () => {
-
-                const choices = [
-
-                  "💎",
-                  "7️⃣",
-                  "💗",
-                  "🌹",
-                  "♠️",
-                  "✨"
-
-                ];
+            const animated =
+              Array.from(
+                {length:15},
+                () =>
+                  fakeSymbols[
+                    Math.floor(
+                      Math.random() *
+                      fakeSymbols.length
+                    )
+                  ]
+              );
 
 
-                return choices[
-                  Math.floor(
-                    Math.random() *
-                    choices.length
-                  )
-                ];
-
-              }
+            renderSymbols(
+              animated,
+              true
             );
 
 
-          renderSymbols(
-            fakeSymbols
-          );
+            count++;
 
 
-          animationCount++;
+            if(count >= 10){
 
+              clearInterval(timer);
 
-          if(animationCount >= 8){
+              resolve();
 
-            clearInterval(
-              animation
-            );
+            }
 
-          }
+          },90);
 
-        },
-        90
-      );
+      });
 
 
     try{
@@ -1508,14 +1603,33 @@ button{
         getInitData();
 
 
-      const data =
-        await apiPost(
+      /*
+        Request the REAL spin result.
+      */
+
+      const apiPromise =
+        apiPost(
           "/api/spin",
           {
             initData:initData,
             bet:selectedBet
           }
         );
+
+
+      /*
+        Wait for BOTH the animation and
+        the real server result.
+      */
+
+      const [
+        ,
+        data
+      ] =
+        await Promise.all([
+          animationPromise,
+          apiPromise
+        ]);
 
 
       if(
@@ -1530,39 +1644,24 @@ button{
       }
 
 
-      clearInterval(
-        animation
-      );
-
-
       /*
-        Real server result.
-        🌹 becomes K visually.
+        FINAL RESULT.
+        
+        This is deliberately rendered AFTER
+        the animation finishes.
       */
 
       renderSymbols(
-        data.symbols
+        data.symbols,
+        false
       );
 
+
+      /* Update balance */
 
       if(
         data.balance !== undefined
       ){
-
-        updatePlayer({
-
-          ...currentPlayer,
-
-          balance:data.balance,
-
-          vipLevel:
-            data.vipLevel,
-
-          username:
-            data.username
-
-        });
-
 
         currentPlayer = {
 
@@ -1571,15 +1670,26 @@ button{
           balance:data.balance,
 
           vipLevel:
-            data.vipLevel,
+            data.vipLevel !== undefined
+              ? data.vipLevel
+              : currentPlayer.vipLevel,
 
           username:
-            data.username
+            data.username !== undefined
+              ? data.username
+              : currentPlayer.username
 
         };
 
+
+        updatePlayer(
+          currentPlayer
+        );
+
       }
 
+
+      /* Result message */
 
       const win =
         Number(
@@ -1592,6 +1702,21 @@ button{
         gameMessage.textContent =
           `WIN · ${win.toLocaleString()} PRIVÉ COINS`;
 
+
+        reelsEl.classList.add(
+          "win-flash"
+        );
+
+
+        setTimeout(() => {
+
+          reelsEl.classList.remove(
+            "win-flash"
+          );
+
+        },600);
+
+
       }else{
 
         gameMessage.textContent =
@@ -1601,9 +1726,7 @@ button{
 
 
       /*
-        Refresh Top Players after
-        every completed spin so the
-        leaderboard stays current.
+        Refresh Top Players after every spin.
       */
 
       loadLeaderboard();
@@ -1617,8 +1740,15 @@ button{
       );
 
 
-      clearInterval(
-        animation
+      /*
+        If the API fails, stop the animation
+        and show stars instead of leaving
+        the machine stuck on diamonds.
+      */
+
+      renderSymbols(
+        Array(15).fill("STAR"),
+        false
       );
 
 
@@ -1644,6 +1774,7 @@ button{
       );
 
     }
+
   }
 
 
