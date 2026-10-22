@@ -9,7 +9,11 @@ const app = express();
 const PORT = process.env.PORT || 3000;
 const BOT_TOKEN = process.env.TELEGRAM_BOT_TOKEN;
 const DATABASE_URL = process.env.DATABASE_URL;
+app.use(express.static(__dirname));
 
+app.get("/", (req, res) => {
+  res.sendFile(path.join(__dirname, "index.html"));
+});
 if (!BOT_TOKEN) {
   console.error("ERROR: TELEGRAM_BOT_TOKEN is not configured.");
 }
