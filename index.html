@@ -875,7 +875,7 @@ SPIN
 </section>
 
 
-<!-- TOP PLAYERS — KEEP AT BOTTOM -->
+<!-- TOP PLAYERS -->
 
 <section class="card leaderboard-card">
 
@@ -910,9 +910,7 @@ LOADING PLAYERS…
 
 <div class="modal-card">
 
-<button class="modal-close" data-close="profileModal">
-×
-</button>
+<button class="modal-close" data-close="profileModal">×</button>
 
 <div class="modal-title">
 PROFILE
@@ -924,9 +922,7 @@ YOUR PRIVÉ ACCOUNT
 
 <div class="profile-head">
 
-<div id="profileAvatar" class="profile-avatar">
-K
-</div>
+<div id="profileAvatar" class="profile-avatar">K</div>
 
 <div id="profileName" class="profile-name">
 PRIVÉ MEMBER
@@ -975,9 +971,7 @@ PRIVÉ MEMBER
 
 <div class="modal-card">
 
-<button class="modal-close" data-close="rewardsModal">
-×
-</button>
+<button class="modal-close" data-close="rewardsModal">×</button>
 
 <div class="modal-title">
 REWARDS
@@ -986,7 +980,6 @@ REWARDS
 <div class="modal-subtitle">
 PRIVÉ REWARD COLLECTION
 </div>
-
 
 <div class="reward-card">
 
@@ -1087,9 +1080,7 @@ LOCKED
 
 <div class="modal-card">
 
-<button class="modal-close" data-close="giftModal">
-×
-</button>
+<button class="modal-close" data-close="giftModal">×</button>
 
 <div class="modal-title">
 DAILY GIFT
@@ -1519,12 +1510,6 @@ giftModal.classList.remove(
 
 }
 
-
-/*
-  For now this is a visual interface only.
-  The actual daily claim will be connected
-  to PostgreSQL in the next backend step.
-*/
 
 giftClaimBtn.addEventListener(
 "click",
@@ -2045,6 +2030,8 @@ spinBtn.textContent = "SPINNING…";
 gameMessage.textContent = "";
 
 
+/* Animation */
+
 const animationPromise =
 new Promise(resolve => {
 
@@ -2100,6 +2087,9 @@ try{
 const initData =
 getInitData();
 
+
+/* REAL SERVER SPIN */
+
 const apiPromise =
 apiPost(
 "/api/spin",
@@ -2108,6 +2098,9 @@ initData:initData,
 bet:selectedBet
 }
 );
+
+
+/* Wait for animation + server */
 
 const [
 ,
@@ -2131,11 +2124,15 @@ throw new Error(
 }
 
 
+/* FINAL SERVER RESULT */
+
 renderSymbols(
 data.symbols,
 false
 );
 
+
+/* UPDATE PLAYER */
 
 if(
 data.balance !== undefined
@@ -2181,6 +2178,8 @@ currentPlayer
 }
 
 
+/* RESULT */
+
 const win =
 Number(data.win || 0);
 
@@ -2209,7 +2208,10 @@ gameMessage.textContent =
 }
 
 
+/* REFRESH LEADERBOARD */
+
 loadLeaderboard();
+
 
 }catch(error){
 
@@ -2247,95 +2249,30 @@ spinBtn.textContent =
 
 
 /* =====================================================
-   LOGIN
-===================================================== */
-
-async function login(){
-
-if(loginBtn.disabled){
-return;
-}
-
-loginBtn.disabled = true;
-loginBtn.textContent = "CONNECTING…";
-loginStatus.textContent = "";
-
-try{
-
-const initData =
-getInitData();
-
-const data =
-await apiPost(
-"/api/me",
-{
-initData:initData
-}
-);
-
-if(
-!data ||
-typeof data !== "object"
-){
-
-throw new Error(
-"The server returned an incomplete account response."
-);
-
-}
-
-if(
-data.id === undefined ||
-data.balance === undefined
-){
-
-throw new Error(
-"The server returned an incomplete account response."
-);
-
-}
-
-currentPlayer = data;
-
-updatePlayer(data);
-
-loginScreen.classList.add("hidden");
-gameScreen.classList.remove("hidden");
-
-loginStatus.textContent = "";
-
-loadLeaderboard();
-
-}catch(error){
-
-console.error(
-"LOGIN ERROR:",
-error
-);
-
-loginStatus.textContent =
-error && error.message
-? error.message
-: "Login failed.";
-
-}finally{
-
-loginBtn.disabled = false;
-loginBtn.textContent =
-"ENTER PRIVÉ";
-
-}
-
-}
-
-
-/* =====================================================
    BUTTONS
 ===================================================== */
 
 loginBtn.addEventListener(
 "click",
 login
+);
+
+
+/*
+=======================================================
+IMPORTANT FIX
+=======================================================
+
+The previous version defined spin()
+but never connected the SPIN button to it.
+
+This listener is required.
+=======================================================
+*/
+
+spinBtn.addEventListener(
+"click",
+spin
 );
 
 
