@@ -44,7 +44,8 @@ body{
   overflow-x:hidden;
 }
 
-button,input{
+button,
+input{
   font:inherit;
 }
 
@@ -202,13 +203,6 @@ button{
   font-size:24px;
 }
 
-.reel.win{
-  border-color:var(--gold);
-  box-shadow:
-    inset 0 0 20px rgba(214,177,105,.12),
-    0 0 14px rgba(214,177,105,.18);
-}
-
 .payline{
   margin:12px 0 4px;
   text-align:center;
@@ -257,17 +251,6 @@ button{
 
 .bet-btn.selected{
   border-color:var(--gold);
-  color:var(--gold2);
-}
-
-/* WIN MESSAGE */
-
-.win-message{
-  min-height:18px;
-  margin-top:10px;
-  text-align:center;
-  font-family:"Cormorant Garamond",serif;
-  font-size:18px;
   color:var(--gold2);
 }
 
@@ -507,7 +490,7 @@ button{
 }
 
 .progress-bar{
-  width:62%;
+  width:0%;
   height:100%;
   background:var(--gold);
 }
@@ -640,8 +623,6 @@ button{
   transform:translate(-50%,0);
 }
 
-/* LOADING */
-
 .loading{
   text-align:center;
   padding:45px 20px;
@@ -664,22 +645,13 @@ button{
   <div class="subtitle">PLAY • WIN • PRIVÉ</div>
 </header>
 
-<!-- BALANCE -->
-
 <div class="balance-card">
-
   <div class="balance-label">PRIVÉ COINS</div>
 
   <div class="balance-row">
-
-    <div class="balance" id="balance">—</div>
-
-    <div class="vip-pill" id="vipStatus">
-      VIP
-    </div>
-
+    <div class="balance" id="balance">LOADING…</div>
+    <div class="vip-pill" id="vipStatus">VIP</div>
   </div>
-
 </div>
 
 <!-- PLAY -->
@@ -691,40 +663,38 @@ button{
     <div class="reels" id="reels">
 
       <div class="reel">
-        <div class="symbol">💎</div>
-        <div class="symbol small">✨</div>
-        <div class="symbol">♠️</div>
+        <div class="symbol">♛</div>
+        <div class="symbol small">✦</div>
+        <div class="symbol">♠</div>
       </div>
 
       <div class="reel">
-        <div class="symbol">7️⃣</div>
-        <div class="symbol small">💗</div>
-        <div class="symbol">✨</div>
+        <div class="symbol">◆</div>
+        <div class="symbol small">♥</div>
+        <div class="symbol">✦</div>
       </div>
 
       <div class="reel">
-        <div class="symbol">💎</div>
-        <div class="symbol small">🌹</div>
-        <div class="symbol">💗</div>
+        <div class="symbol">♛</div>
+        <div class="symbol small">◆</div>
+        <div class="symbol">♥</div>
       </div>
 
       <div class="reel">
-        <div class="symbol">✨</div>
-        <div class="symbol small">♠️</div>
-        <div class="symbol">💎</div>
+        <div class="symbol">✦</div>
+        <div class="symbol small">♠</div>
+        <div class="symbol">◆</div>
       </div>
 
       <div class="reel">
-        <div class="symbol">💗</div>
-        <div class="symbol small">7️⃣</div>
-        <div class="symbol">✨</div>
+        <div class="symbol">♥</div>
+        <div class="symbol small">♛</div>
+        <div class="symbol">✦</div>
       </div>
 
     </div>
 
-    <div class="payline">
-      5 REELS • 3 ROWS • 5 PAYLINES
-    </div>
+    <div class="payline">5 REELS • 3 ROWS • 5 PAYLINES</div>
 
     <div class="bet-row">
 
@@ -750,32 +720,18 @@ button{
       SPIN
     </button>
 
-    <div class="win-message" id="winMessage"></div>
-
   </div>
 
   <div class="action-grid">
 
-    <button class="action-btn"
-      onclick="showScreen('rewards')">
-
+    <button class="action-btn" onclick="showScreen('rewards')">
       <strong>🎁 REWARDS</strong>
-
-      <span>
-        Redeem your coins
-      </span>
-
+      <span>Redeem your coins</span>
     </button>
 
-    <button class="action-btn"
-      onclick="showScreen('gift')">
-
+    <button class="action-btn" onclick="showScreen('gift')">
       <strong>🎀 GIFT COINS</strong>
-
-      <span>
-        Send coins to a player
-      </span>
-
+      <span>Send coins to a player</span>
     </button>
 
   </div>
@@ -786,9 +742,7 @@ button{
 
 <section class="screen" id="screen-wallet">
 
-  <div class="section-title">
-    Your Wallet
-  </div>
+  <div class="section-title">Your Wallet</div>
 
   <div class="section-sub">
     Keep track of your PRIVÉ coins and every movement in your account.
@@ -801,15 +755,14 @@ button{
     </div>
 
     <div class="wallet-number" id="walletBalance">
-      —
+      LOADING…
     </div>
 
   </div>
 
   <div class="history">
 
-    <div class="section-title"
-      style="font-size:22px">
+    <div class="section-title" style="font-size:22px">
       Recent Activity
     </div>
 
@@ -818,15 +771,8 @@ button{
       <div class="history-item">
 
         <div class="history-left">
-
-          <strong>
-            Wallet initialized
-          </strong>
-
-          <span>
-            Your activity will appear here
-          </span>
-
+          <strong>Wallet initialized</strong>
+          <span>Your activity will appear here</span>
         </div>
 
         <div>—</div>
@@ -879,7 +825,8 @@ button{
 
     <button
       class="redeem-btn"
-      onclick="requestRedeem('10% OFF Subscription',5000)">
+      onclick="requestRedeem('10% OFF Subscription',5000)"
+    >
       REDEEM
     </button>
 
@@ -913,7 +860,8 @@ button{
 
     <button
       class="redeem-btn"
-      onclick="requestRedeem('24-Hour Access',10000)">
+      onclick="requestRedeem('24-Hour Access',10000)"
+    >
       REDEEM
     </button>
 
@@ -947,7 +895,8 @@ button{
 
     <button
       class="redeem-btn"
-      onclick="requestRedeem('25% OFF Subscription',25000)">
+      onclick="requestRedeem('25% OFF Subscription',25000)"
+    >
       REDEEM
     </button>
 
@@ -981,7 +930,8 @@ button{
 
     <button
       class="redeem-btn"
-      onclick="requestRedeem('7-Day Privé Access',50000)">
+      onclick="requestRedeem('7-Day Privé Access',50000)"
+    >
       REDEEM
     </button>
 
@@ -1015,7 +965,8 @@ button{
 
     <button
       class="redeem-btn"
-      onclick="requestRedeem('Mystery Privé Reward',75000)">
+      onclick="requestRedeem('Mystery Privé Reward',75000)"
+    >
       REDEEM
     </button>
 
@@ -1050,7 +1001,8 @@ button{
 
     <label
       class="field-label"
-      style="margin-top:18px">
+      style="margin-top:18px"
+    >
       GIFT AMOUNT
     </label>
 
@@ -1093,7 +1045,8 @@ button{
 
     <button
       class="gift-btn"
-      onclick="prepareGift()">
+      onclick="prepareGift()"
+    >
       SEND COINS
     </button>
 
@@ -1119,15 +1072,14 @@ button{
       ♛
     </div>
 
-    <div
-      class="vip-level"
-      id="vipLevel">
+    <div class="vip-level" id="vipLevel">
       PRIVÉ MEMBER
     </div>
 
     <div
       class="section-sub"
-      style="margin:8px 0 0">
+      style="margin:8px 0 0"
+    >
       Your VIP benefits will appear here.
     </div>
 
@@ -1135,16 +1087,18 @@ button{
 
       <div
         class="progress-bar"
-        id="vipProgress">
-      </div>
+        id="vipProgress"
+      ></div>
 
     </div>
 
-    <div style="
-      margin-top:10px;
-      font-size:8px;
-      color:var(--muted);
-    ">
+    <div
+      style="
+        margin-top:10px;
+        font-size:8px;
+        color:var(--muted);
+      "
+    >
       VIP PROGRESS
     </div>
 
@@ -1188,83 +1142,66 @@ button{
 
   <button
     class="nav-btn active"
-    data-screen="play">
-
-    <span class="nav-icon">
-      🎰
-    </span>
-
+    data-screen="play"
+  >
+    <span class="nav-icon">🎰</span>
     PLAY
-
   </button>
 
   <button
     class="nav-btn"
-    data-screen="wallet">
-
-    <span class="nav-icon">
-      💎
-    </span>
-
+    data-screen="wallet"
+  >
+    <span class="nav-icon">💎</span>
     WALLET
-
   </button>
 
   <button
     class="nav-btn"
-    data-screen="rewards">
-
-    <span class="nav-icon">
-      🎁
-    </span>
-
+    data-screen="rewards"
+  >
+    <span class="nav-icon">🎁</span>
     REWARDS
-
   </button>
 
   <button
     class="nav-btn"
-    data-screen="gift">
-
-    <span class="nav-icon">
-      🎀
-    </span>
-
+    data-screen="gift"
+  >
+    <span class="nav-icon">🎀</span>
     GIFT
-
   </button>
 
   <button
     class="nav-btn"
-    data-screen="vip">
-
-    <span class="nav-icon">
-      ♛
-    </span>
-
+    data-screen="vip"
+  >
+    <span class="nav-icon">♛</span>
     VIP
-
   </button>
 
 </nav>
 
-<!-- CONFIRMATION MODAL -->
+<!-- MODAL -->
 
 <div
   class="modal"
-  id="confirmModal">
+  id="confirmModal"
+>
 
   <div class="modal-card">
 
     <div
       class="modal-title"
-      id="modalTitle">
+      id="modalTitle"
+    >
       Confirm
     </div>
 
     <div
       class="modal-text"
-      id="modalText">
+      id="modalText"
+    >
       Are you sure?
     </div>
 
@@ -1272,13 +1209,15 @@ button{
 
       <button
         class="cancel"
-        onclick="closeModal()">
+        onclick="closeModal()"
+      >
         CANCEL
       </button>
 
       <button
         class="confirm"
-        id="confirmBtn">
+        id="confirmBtn"
+      >
         CONFIRM
       </button>
 
@@ -1290,13 +1229,13 @@ button{
 
 <div
   class="toast"
-  id="toast">
-</div>
+  id="toast"
+></div>
 
 <script>
+
 /* =========================================================
-   KIMIA PRIVÉ
-   FRONTEND
+   KIMIA PRIVÉ FRONTEND
    ========================================================= */
 
 const tg =
@@ -1314,24 +1253,18 @@ let balance = 0;
 let selectedBet = 300;
 let selectedGift = 0;
 let spinning = false;
-
 let pendingReward = null;
 let pendingGift = null;
 
-let activity = [];
 
 /* =========================================================
    HELPERS
    ========================================================= */
 
-const $ = id =>
-  document.getElementById(id);
+const $ = id => document.getElementById(id);
 
 function formatCoins(value){
-
-  return Number(value || 0)
-    .toLocaleString();
-
+  return Number(value || 0).toLocaleString();
 }
 
 function showToast(message){
@@ -1348,13 +1281,11 @@ function showToast(message){
     setTimeout(()=>{
       toast.classList.remove("show");
     },2600);
-
 }
 
 function setBalance(value){
 
-  const newBalance =
-    Number(value);
+  const newBalance = Number(value);
 
   if(!Number.isFinite(newBalance)){
     return;
@@ -1368,97 +1299,25 @@ function setBalance(value){
   $("walletBalance").textContent =
     formatCoins(balance);
 
+  /*
+    Keep the current server balance locally as a
+    temporary visual fallback if the page refreshes.
+  */
+
+  localStorage.setItem(
+    "kimia_prive_last_balance",
+    String(balance)
+  );
 }
 
-function addActivity(title,description,amount,type){
 
-  activity.unshift({
-    title,
-    description,
-    amount,
-    type
-  });
-
-  activity =
-    activity.slice(0,20);
-
-  renderHistory();
-
-}
-
-function renderHistory(){
-
-  const list =
-    $("historyList");
-
-  if(!activity.length){
-
-    list.innerHTML = `
-      <div class="history-item">
-        <div class="history-left">
-          <strong>Wallet initialized</strong>
-          <span>Your activity will appear here</span>
-        </div>
-        <div>—</div>
-      </div>
-    `;
-
-    return;
-  }
-
-  list.innerHTML =
-    activity.map(item=>{
-
-      const positive =
-        item.type === "plus";
-
-      const amount =
-        item.amount === null
-          ? "—"
-          : (positive ? "+" : "-") +
-            formatCoins(Math.abs(item.amount));
-
-      return `
-        <div class="history-item">
-
-          <div class="history-left">
-
-            <strong>
-              ${escapeHtml(item.title)}
-            </strong>
-
-            <span>
-              ${escapeHtml(item.description)}
-            </span>
-
-          </div>
-
-          <div class="${positive ? "plus" : "minus"}">
-            ${amount}
-          </div>
-
-        </div>
-      `;
-
-    }).join("");
-
-}
-
-function escapeHtml(value){
-
-  return String(value)
-    .replaceAll("&","&amp;")
-    .replaceAll("<","&lt;")
-    .replaceAll(">","&gt;")
-    .replaceAll('"',"&quot;")
-    .replaceAll("'","&#039;");
-
-}
+/* =========================================================
+   SCREEN NAVIGATION
+   ========================================================= */
 
 function showScreen(name){
 
-  document
-    .querySelectorAll(".screen")
+  document.querySelectorAll(".screen")
     .forEach(screen=>{
       screen.classList.remove("active");
     });
@@ -1470,8 +1329,7 @@ function showScreen(name){
     target.classList.add("active");
   }
 
-  document
-    .querySelectorAll(".nav-btn")
+  document.querySelectorAll(".nav-btn")
     .forEach(btn=>{
       btn.classList.toggle(
         "active",
@@ -1483,15 +1341,9 @@ function showScreen(name){
     top:0,
     behavior:"smooth"
   });
-
 }
 
-/* =========================================================
-   NAVIGATION
-   ========================================================= */
-
-document
-  .querySelectorAll(".nav-btn")
+document.querySelectorAll(".nav-btn")
   .forEach(btn=>{
 
     btn.addEventListener("click",()=>{
@@ -1500,22 +1352,17 @@ document
 
   });
 
+
 /* =========================================================
    BET SELECTION
    ========================================================= */
 
-document
-  .querySelectorAll(".bet-btn")
+document.querySelectorAll(".bet-btn")
   .forEach(btn=>{
 
     btn.addEventListener("click",()=>{
 
-      if(spinning){
-        return;
-      }
-
-      document
-        .querySelectorAll(".bet-btn")
+      document.querySelectorAll(".bet-btn")
         .forEach(x=>{
           x.classList.remove("selected");
         });
@@ -1529,18 +1376,17 @@ document
 
   });
 
+
 /* =========================================================
    GIFT AMOUNTS
    ========================================================= */
 
-document
-  .querySelectorAll(".amount-btn")
+document.querySelectorAll(".amount-btn")
   .forEach(btn=>{
 
     btn.addEventListener("click",()=>{
 
-      document
-        .querySelectorAll(".amount-btn")
+      document.querySelectorAll(".amount-btn")
         .forEach(x=>{
           x.classList.remove("selected");
         });
@@ -1556,73 +1402,64 @@ document
 
   });
 
+
 /* =========================================================
-   SERVER REQUEST
+   SERVER API
    ========================================================= */
 
-async function api(path,options={}){
+async function api(path, options = {}){
+
+  /*
+    IMPORTANT:
+    server.js expects Telegram initData in:
+      req.body.initData
+
+    Therefore every authenticated request now
+    automatically receives it in the JSON body.
+  */
+
+  let body = options.body;
+
+  let parsedBody = {};
+
+  if(body){
+
+    if(typeof body === "string"){
+
+      try{
+        parsedBody = JSON.parse(body);
+      }catch{
+        parsedBody = {};
+      }
+
+    }else{
+
+      parsedBody = body;
+
+    }
+
+  }
+
+  if(tg && tg.initData){
+
+    parsedBody.initData =
+      tg.initData;
+
+  }
 
   const headers = {
     "Content-Type":"application/json"
   };
 
-  /*
-    Telegram authentication is sent BOTH ways:
-    - request body
-    - header
-
-    Your current server.js reads req.body.initData.
-  */
-
-  let body =
-    options.body;
-
-  if(
-    body &&
-    typeof body === "string"
-  ){
-
-    try{
-
-      const parsed =
-        JSON.parse(body);
-
-      if(
-        tg &&
-        tg.initData &&
-        !parsed.initData
-      ){
-
-        parsed.initData =
-          tg.initData;
-
-      }
-
-      body =
-        JSON.stringify(parsed);
-
-    }catch{}
-
-  }
-
-  if(
-    tg &&
-    tg.initData
-  ){
-
-    headers["X-Telegram-Init-Data"] =
-      tg.initData;
-
-  }
-
   const response =
     await fetch(path,{
       ...options,
-      body,
+      method:options.method || "POST",
       headers:{
         ...headers,
         ...(options.headers || {})
-      }
+      },
+      body:JSON.stringify(parsedBody)
     });
 
   const text =
@@ -1631,16 +1468,11 @@ async function api(path,options={}){
   let data;
 
   try{
-
-    data =
-      JSON.parse(text);
-
+    data = JSON.parse(text);
   }catch{
-
     throw new Error(
       "Server returned an invalid response."
     );
-
   }
 
   if(!response.ok){
@@ -1654,143 +1486,113 @@ async function api(path,options={}){
   }
 
   return data;
-
 }
 
+
 /* =========================================================
-   LOAD PLAYER
+   LOAD PLAYER BALANCE
    ========================================================= */
 
 async function loadPlayer(){
 
+  if(!tg || !tg.initData){
+
+    $("balance").textContent = "OPEN IN TELEGRAM";
+    $("walletBalance").textContent = "—";
+
+    return;
+  }
+
   try{
 
     const data =
       await api("/api/me",{
-        method:"POST",
-        body:JSON.stringify({
-          initData:
-            tg ? tg.initData : ""
-        })
+        method:"POST"
       });
 
-    if(!data){
-      throw new Error(
-        "No player data returned."
-      );
-    }
+    console.log(
+      "KIMIA PRIVÉ player data:",
+      data
+    );
 
-    const newBalance =
-      data.balance;
+    if(data){
 
-    if(
-      newBalance !== undefined &&
-      newBalance !== null
-    ){
+      /*
+        Your server.js returns:
 
-      setBalance(newBalance);
+        {
+          id,
+          username,
+          balance,
+          vipLevel
+        }
+      */
 
-    }
+      if(data.balance !== undefined){
 
-    const vip =
-      data.vipLevel;
+        setBalance(
+          Number(data.balance)
+        );
 
-    if(
-      vip !== undefined &&
-      vip !== null
-    ){
+      }
 
-      const vipText =
-        Number(vip) > 0
-          ? "VIP " + vip
-          : "MEMBER";
+      if(data.vipLevel !== undefined){
 
-      $("vipStatus").textContent =
-        vipText;
+        const vipText =
+          Number(data.vipLevel) > 0
+            ? "VIP " + data.vipLevel
+            : "MEMBER";
 
-      $("vipLevel").textContent =
-        vipText;
+        $("vipStatus").textContent =
+          vipText;
+
+        $("vipLevel").textContent =
+          vipText;
+
+        const progress =
+          Math.min(
+            Number(data.vipLevel || 0) * 20,
+            100
+          );
+
+        $("vipProgress").style.width =
+          progress + "%";
+
+      }
 
     }
 
   }catch(error){
 
     console.error(
-      "Player loading failed:",
-      error.message
+      "Player login failed:",
+      error
     );
+
+    /*
+      Do NOT display a fake zero balance.
+      If authentication fails, make the problem
+      visible instead.
+    */
+
+    $("balance").textContent =
+      "LOGIN FAILED";
+
+    $("walletBalance").textContent =
+      "LOGIN FAILED";
 
     showToast(
-      "LOGIN FAILED · REOPEN GAME"
+      error.message ||
+      "Unable to load your PRIVÉ wallet."
     );
 
   }
 
 }
 
-/* =========================================================
-   REFRESH BALANCE
-   ========================================================= */
-
-async function refreshBalance(){
-
-  try{
-
-    const data =
-      await api("/api/me",{
-        method:"POST",
-        body:JSON.stringify({
-          initData:
-            tg ? tg.initData : ""
-        })
-      });
-
-    if(
-      data &&
-      data.balance !== undefined
-    ){
-
-      setBalance(
-        data.balance
-      );
-
-    }
-
-    if(
-      data &&
-      data.vipLevel !== undefined
-    ){
-
-      const vipText =
-        Number(data.vipLevel) > 0
-          ? "VIP " + data.vipLevel
-          : "MEMBER";
-
-      $("vipStatus").textContent =
-        vipText;
-
-      $("vipLevel").textContent =
-        vipText;
-
-    }
-
-    return data;
-
-  }catch(error){
-
-    console.error(
-      "Balance refresh failed:",
-      error.message
-    );
-
-    return null;
-
-  }
-
-}
 
 /* =========================================================
-   SLOT SYMBOLS
+   SLOT REELS
    ========================================================= */
 
 const symbols = [
@@ -1813,18 +1615,12 @@ function randomSymbol(){
 
 }
 
-/* =========================================================
-   REEL ANIMATION
-   ========================================================= */
-
 function animateReels(){
 
   const reels =
     document.querySelectorAll(".reel");
 
   reels.forEach((reel,index)=>{
-
-    reel.classList.remove("win");
 
     let count = 0;
 
@@ -1843,7 +1639,7 @@ function animateReels(){
 
         if(
           count >
-          12 + index * 3
+          10 + index * 3
         ){
 
           clearInterval(timer);
@@ -1856,105 +1652,6 @@ function animateReels(){
 
 }
 
-/* =========================================================
-   DISPLAY SERVER RESULT
-   ========================================================= */
-
-function displaySpinResult(data){
-
-  if(
-    !data ||
-    !Array.isArray(data.symbols)
-  ){
-
-    return;
-
-  }
-
-  const reels =
-    document.querySelectorAll(".reel");
-
-  /*
-    Server layout:
-    0-4   = top row
-    5-9   = middle row
-    10-14 = bottom row
-  */
-
-  reels.forEach((reel,reelIndex)=>{
-
-    const top =
-      data.symbols[reelIndex];
-
-    const middle =
-      data.symbols[5 + reelIndex];
-
-    const bottom =
-      data.symbols[10 + reelIndex];
-
-    const cells =
-      reel.querySelectorAll(".symbol");
-
-    if(cells[0]){
-      cells[0].textContent =
-        top || "✨";
-    }
-
-    if(cells[1]){
-      cells[1].textContent =
-        middle || "✨";
-    }
-
-    if(cells[2]){
-      cells[2].textContent =
-        bottom || "✨";
-    }
-
-  });
-
-  if(
-    Array.isArray(data.winningLines) &&
-    data.winningLines.length
-  ){
-
-    data.winningLines.forEach(lineIndex=>{
-
-      /*
-        Highlight reels involved in winning lines.
-      */
-
-      const line =
-        [
-          [0,1,2,3,4],
-          [5,6,7,8,9],
-          [10,11,12,13,14],
-          [0,6,12,8,4],
-          [10,6,2,8,14]
-        ][lineIndex];
-
-      if(!line){
-        return;
-      }
-
-      line.forEach(index=>{
-
-        const reelIndex =
-          index % 5;
-
-        const reel =
-          reels[reelIndex];
-
-        if(reel){
-          reel.classList.add("win");
-        }
-
-      });
-
-    });
-
-  }
-
-}
 
 /* =========================================================
    SPIN
@@ -1973,7 +1670,6 @@ async function spin(){
     );
 
     return;
-
   }
 
   spinning = true;
@@ -1981,38 +1677,31 @@ async function spin(){
   const button =
     $("spinBtn");
 
-  const winMessage =
-    $("winMessage");
-
   button.disabled = true;
   button.textContent =
     "SPINNING…";
-
-  winMessage.textContent = "";
 
   animateReels();
 
   try{
 
-    /*
-      IMPORTANT:
-      initData is included in the BODY because
-      the current server.js reads req.body.initData.
-    */
-
     const data =
       await api("/api/spin",{
         method:"POST",
-        body:JSON.stringify({
-          initData:
-            tg ? tg.initData : "",
+        body:{
           bet:selectedBet
-        })
+        }
       });
 
+    console.log(
+      "Spin response:",
+      data
+    );
+
     /*
-      The server's balance is authoritative.
-      Never calculate the new balance locally.
+      IMPORTANT:
+      Always use the balance returned by
+      server.js after the transaction.
     */
 
     if(
@@ -2021,62 +1710,98 @@ async function spin(){
     ){
 
       setBalance(
-        data.balance
+        Number(data.balance)
       );
 
     }
 
-    displaySpinResult(data);
+    /*
+      Display the actual server-generated
+      reel result.
+    */
 
-    const win =
-      Number(data?.win || 0);
+    if(
+      data &&
+      Array.isArray(data.symbols) &&
+      data.symbols.length === 15
+    ){
 
-    if(win > 0){
+      const reels =
+        document.querySelectorAll(".reel");
 
-      winMessage.textContent =
-        "✦ YOU WON " +
-        formatCoins(win) +
-        " COINS";
+      for(let i=0;i<5;i++){
 
-      showToast(
-        "✦ +" +
-        formatCoins(win) +
-        " PRIVÉ COINS"
-      );
+        const reel =
+          reels[i];
 
-      addActivity(
-        "Spin win",
-        "Winning spin",
-        win,
-        "plus"
-      );
+        const row1 =
+          data.symbols[i];
 
-    }else{
+        const row2 =
+          data.symbols[5+i];
 
-      winMessage.textContent =
-        "GOOD LUCK NEXT SPIN";
+        const row3 =
+          data.symbols[10+i];
 
-      addActivity(
-        "Spin",
-        "No payout",
-        selectedBet,
-        "minus"
-      );
+        const items =
+          reel.querySelectorAll(".symbol");
+
+        if(items[0]){
+          items[0].textContent =
+            row1;
+        }
+
+        if(items[1]){
+          items[1].textContent =
+            row2;
+        }
+
+        if(items[2]){
+          items[2].textContent =
+            row3;
+        }
+
+      }
+
+    }
+
+    if(
+      data &&
+      data.win !== undefined
+    ){
+
+      const win =
+        Number(data.win);
+
+      if(win > 0){
+
+        showToast(
+          "✦ YOU WON " +
+          formatCoins(win) +
+          " COINS"
+        );
+
+      }else{
+
+        showToast(
+          "GOOD LUCK NEXT SPIN"
+        );
+
+      }
 
     }
 
   }catch(error){
 
-    showToast(
-      error.message
+    console.error(
+      "Spin failed:",
+      error
     );
 
-    /*
-      If anything went wrong, ask the server
-      for the actual current balance.
-    */
-
-    await refreshBalance();
+    showToast(
+      error.message ||
+      "Unable to complete spin."
+    );
 
   }finally{
 
@@ -2085,6 +1810,7 @@ async function spin(){
       spinning = false;
 
       button.disabled = false;
+
       button.textContent =
         "SPIN";
 
@@ -2094,18 +1820,12 @@ async function spin(){
 
 }
 
-/* =========================================================
-   SPIN BUTTON
-   ========================================================= */
-
 $("spinBtn")
-  .addEventListener(
-    "click",
-    spin
-  );
+  .addEventListener("click",spin);
+
 
 /* =========================================================
-   REWARD REDEMPTION
+   REWARDS
    ========================================================= */
 
 function requestRedeem(name,cost){
@@ -2113,13 +1833,10 @@ function requestRedeem(name,cost){
   if(balance < cost){
 
     showToast(
-      "YOU NEED " +
-      formatCoins(cost - balance) +
-      " MORE COINS"
+      "YOU NEED MORE PRIVÉ COINS"
     );
 
     return;
-
   }
 
   pendingReward = {
@@ -2132,13 +1849,13 @@ function requestRedeem(name,cost){
 
   $("modalText").innerHTML =
     "Redeem <strong>" +
-    escapeHtml(name) +
+    name +
     "</strong> for <strong>" +
     formatCoins(cost) +
     " coins</strong>?";
 
   $("confirmBtn").textContent =
-    "REDEEM";
+    "CONFIRM";
 
   $("confirmBtn").onclick =
     confirmRedeem;
@@ -2166,38 +1883,33 @@ async function confirmRedeem(){
         "/api/rewards/redeem",
         {
           method:"POST",
-          body:JSON.stringify({
-            initData:
-              tg ? tg.initData : "",
+          body:{
             reward:reward.name,
             cost:reward.cost
-          })
+          }
         }
       );
 
-    if(
-      data &&
-      data.balance !== undefined
-    ){
+    if(data.balance !== undefined){
 
       setBalance(
-        data.balance
+        Number(data.balance)
       );
 
     }
 
-    if(data?.code){
+    if(data.code){
 
       $("modalTitle").textContent =
         "Reward Unlocked";
 
       $("modalText").innerHTML =
         "<strong>" +
-        escapeHtml(reward.name) +
+        reward.name +
         "</strong><br><br>" +
         "Your reward code:<br><br>" +
         "<strong style='font-size:18px;color:var(--gold2)'>" +
-        escapeHtml(data.code) +
+        data.code +
         "</strong>";
 
       $("confirmBtn").textContent =
@@ -2217,24 +1929,22 @@ async function confirmRedeem(){
 
     }
 
-    addActivity(
-      "Reward redeemed",
-      reward.name,
-      reward.cost,
-      "minus"
-    );
-
   }catch(error){
 
-    showToast(
-      error.message
+    console.error(
+      "Reward redemption:",
+      error
     );
 
-    await refreshBalance();
+    showToast(
+      error.message ||
+      "Unable to redeem reward."
+    );
 
   }
 
 }
+
 
 /* =========================================================
    GIFT COINS
@@ -2264,20 +1974,24 @@ function prepareGift(){
     );
 
     return;
-
   }
 
-  if(
-    !Number.isSafeInteger(amount) ||
-    amount <= 0
-  ){
+  if(!amount || amount <= 0){
 
     showToast(
-      "ENTER A VALID GIFT AMOUNT"
+      "SELECT A GIFT AMOUNT"
     );
 
     return;
+  }
 
+  if(!Number.isSafeInteger(amount)){
+
+    showToast(
+      "ENTER A WHOLE NUMBER OF COINS"
+    );
+
+    return;
   }
 
   if(balance < amount){
@@ -2287,36 +2001,6 @@ function prepareGift(){
     );
 
     return;
-
-  }
-
-  /*
-    Prevent accidentally gifting to yourself
-    when Telegram username is available.
-  */
-
-  const me =
-    tg &&
-    tg.initDataUnsafe &&
-    tg.initDataUnsafe.user
-      ? tg.initDataUnsafe.user.username
-      : "";
-
-  const cleanRecipient =
-    recipient.replace(/^@/,"").toLowerCase();
-
-  if(
-    me &&
-    cleanRecipient ===
-    String(me).toLowerCase()
-  ){
-
-    showToast(
-      "YOU CANNOT GIFT YOURSELF"
-    );
-
-    return;
-
   }
 
   pendingGift = {
@@ -2332,7 +2016,7 @@ function prepareGift(){
     formatCoins(amount) +
     " coins</strong> to<br><br>" +
     "<strong>" +
-    escapeHtml(recipient) +
+    recipient +
     "</strong>?";
 
   $("confirmBtn").textContent =
@@ -2345,6 +2029,7 @@ function prepareGift(){
     .classList.add("show");
 
 }
+
 
 async function confirmGift(){
 
@@ -2364,16 +2049,18 @@ async function confirmGift(){
         "/api/gift",
         {
           method:"POST",
-          body:JSON.stringify({
-            initData:
-              tg ? tg.initData : "",
-            recipient:
-              gift.recipient,
-            amount:
-              gift.amount
-          })
+          body:{
+            recipient:gift.recipient,
+            amount:gift.amount
+          }
         }
       );
+
+    /*
+      IMPORTANT:
+      The server must return the sender's
+      NEW balance after the transfer.
+    */
 
     if(
       data &&
@@ -2381,7 +2068,7 @@ async function confirmGift(){
     ){
 
       setBalance(
-        data.balance
+        Number(data.balance)
       );
 
     }
@@ -2392,35 +2079,32 @@ async function confirmGift(){
       " COINS SENT"
     );
 
-    addActivity(
-      "Coins gifted",
-      "Sent to " + gift.recipient,
-      gift.amount,
-      "minus"
-    );
-
     $("recipient").value = "";
     $("customAmount").value = "";
 
     selectedGift = 0;
 
-    document
-      .querySelectorAll(".amount-btn")
+    document.querySelectorAll(".amount-btn")
       .forEach(x=>{
         x.classList.remove("selected");
       });
 
   }catch(error){
 
-    showToast(
-      error.message
+    console.error(
+      "Gift failed:",
+      error
     );
 
-    await refreshBalance();
+    showToast(
+      error.message ||
+      "Unable to send coins."
+    );
 
   }
 
 }
+
 
 /* =========================================================
    MODAL
@@ -2443,56 +2127,27 @@ function closeModal(){
 }
 
 $("confirmModal")
-  .addEventListener(
-    "click",
-    event=>{
+  .addEventListener("click",event=>{
 
-      if(
-        event.target ===
-        $("confirmModal")
-      ){
+    if(
+      event.target ===
+      $("confirmModal")
+    ){
 
-        closeModal();
-
-      }
+      closeModal();
 
     }
-  );
 
-/* =========================================================
-   AUTO REFRESH
-   =========================================================
+  });
 
-   This periodically asks the server for the real
-   PostgreSQL balance.
-
-   That means if another action changes the balance,
-   the displayed coins can catch up without relying
-   on localStorage or an old frontend value.
-========================================================= */
-
-setInterval(()=>{
-
-  if(
-    !spinning &&
-    document.visibilityState === "visible"
-  ){
-
-    refreshBalance();
-
-  }
-
-},15000);
 
 /* =========================================================
    START
    ========================================================= */
-
-setBalance(0);
 
 loadPlayer();
 
 </script>
 
 </body>
-      </html>
+  </html>
