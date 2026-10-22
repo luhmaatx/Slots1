@@ -41,11 +41,11 @@ button{
   display:flex;
   justify-content:center;
   align-items:flex-start;
-  padding:18px;
+  padding:10px;
 }
 
 .screen{
-  width:min(500px,100%);
+  width:min(620px,100%);
   max-height:96dvh;
   overflow:auto;
   scrollbar-width:none;
@@ -73,6 +73,14 @@ button{
   border:1px solid rgba(206,165,83,.10);
   pointer-events:none;
 }
+
+.hidden{
+  display:none!important;
+}
+
+/* =====================================================
+   LOGIN
+===================================================== */
 
 .login-card{
   padding:48px 30px 32px;
@@ -110,6 +118,7 @@ button{
   align-items:center;
   gap:16px;
   margin:30px 0 28px;
+  color:#cba45b;
 }
 
 .ornament:before,
@@ -149,35 +158,14 @@ button{
   font-weight:600;
   letter-spacing:3px;
   cursor:pointer;
-  box-shadow:
-    0 8px 24px rgba(0,0,0,.35),
-    inset 0 1px rgba(255,255,255,.3);
-}
-
-.primary-btn:active{
-  transform:translateY(1px);
 }
 
 .primary-btn:disabled{
   opacity:.55;
-  cursor:wait;
 }
-
-.status{
-  min-height:20px;
-  margin-top:20px;
-  font-size:12px;
-  line-height:1.6;
-  color:#b88e8e;
-}
-
-.hidden{
-  display:none!important;
-}
-
 
 /* =====================================================
-   GAME
+   GAME HEADER
 ===================================================== */
 
 .game-screen{
@@ -188,7 +176,7 @@ button{
   display:flex;
   justify-content:space-between;
   align-items:center;
-  margin-bottom:14px;
+  margin-bottom:12px;
 }
 
 .logo-small{
@@ -206,12 +194,51 @@ button{
   color:#d3ae63;
 }
 
+/* =====================================================
+   QUICK MENU
+===================================================== */
+
+.quick-menu{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:7px;
+  margin-bottom:12px;
+}
+
+.menu-btn{
+  min-height:47px;
+  border:1px solid rgba(205,164,82,.30);
+  background:rgba(16,12,9,.92);
+  color:#d2b979;
+  cursor:pointer;
+  font-size:9px;
+  letter-spacing:1.5px;
+  transition:.15s;
+}
+
+.menu-btn:active{
+  transform:scale(.98);
+}
+
+.menu-icon{
+  display:block;
+  font-family:"Cormorant Garamond",serif;
+  font-size:20px;
+  line-height:18px;
+  margin-bottom:3px;
+  color:#e3c477;
+}
+
+/* =====================================================
+   BALANCE
+===================================================== */
+
 .balance-card{
   display:flex;
   justify-content:space-between;
   align-items:center;
   padding:16px 18px;
-  margin-bottom:14px;
+  margin-bottom:12px;
 }
 
 .balance-label{
@@ -226,6 +253,10 @@ button{
   font-size:30px;
   color:#e8c979;
 }
+
+/* =====================================================
+   SLOT MACHINE
+===================================================== */
 
 .reel-card{
   padding:18px;
@@ -248,17 +279,6 @@ button{
   background:
     radial-gradient(circle at 50% 40%,rgba(145,104,42,.12),transparent 60%),
     #0c0907;
-  transition:
-    transform .12s ease,
-    border-color .2s ease,
-    box-shadow .2s ease;
-}
-
-.reel.spinning{
-  border-color:rgba(224,189,112,.55);
-  box-shadow:
-    inset 0 0 18px rgba(224,189,112,.08),
-    0 0 8px rgba(224,189,112,.04);
 }
 
 .symbol{
@@ -292,33 +312,12 @@ button{
     0 2px 3px #000;
 }
 
-.symbol-diamond .symbol-art{
-  font-size:32px;
-}
-
-.symbol-seven .symbol-art{
-  font-size:42px;
-  font-style:italic;
-}
-
-.symbol-heart .symbol-art{
-  font-size:38px;
-}
-
-.symbol-k .symbol-art{
-  font-size:43px;
-  font-weight:700;
-  letter-spacing:0;
-}
-
-.symbol-spade .symbol-art{
-  font-size:38px;
-}
-
-.symbol-star .symbol-art{
-  font-size:32px;
-}
-
+.symbol-diamond .symbol-art{font-size:32px}
+.symbol-seven .symbol-art{font-size:42px;font-style:italic}
+.symbol-heart .symbol-art{font-size:38px}
+.symbol-k .symbol-art{font-size:43px;font-weight:700}
+.symbol-spade .symbol-art{font-size:38px}
+.symbol-star .symbol-art{font-size:32px}
 
 /* =====================================================
    CONTROLS
@@ -374,13 +373,12 @@ button{
   font-size:12px;
 }
 
-
 /* =====================================================
    TOP PLAYERS
 ===================================================== */
 
 .leaderboard-card{
-  margin-top:14px;
+  margin-top:12px;
   padding:20px 18px;
 }
 
@@ -449,257 +447,690 @@ button{
   color:#e1c274;
 }
 
-.leaderboard-loading,
-.leaderboard-empty{
-  text-align:center;
-  padding:14px 4px;
-  color:#756a5b;
-  font-size:10px;
-  letter-spacing:1px;
+/* =====================================================
+   MODAL SYSTEM
+===================================================== */
+
+.modal{
+  position:fixed;
+  inset:0;
+  z-index:50;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:18px;
+  background:rgba(0,0,0,.78);
+  backdrop-filter:blur(8px);
 }
 
+.modal-card{
+  width:min(460px,100%);
+  max-height:90dvh;
+  overflow:auto;
+  padding:28px 22px;
+  border:1px solid rgba(205,164,82,.52);
+  background:
+    linear-gradient(145deg,#211710,#0b0806);
+  box-shadow:0 25px 80px rgba(0,0,0,.75);
+  position:relative;
+}
+
+.modal-card:before{
+  content:"";
+  position:absolute;
+  inset:8px;
+  border:1px solid rgba(206,165,83,.10);
+  pointer-events:none;
+}
+
+.modal-close{
+  position:absolute;
+  top:14px;
+  right:16px;
+  border:0;
+  background:none;
+  color:#a98c58;
+  font-size:20px;
+  cursor:pointer;
+}
+
+.modal-title{
+  text-align:center;
+  font-family:"Cormorant Garamond",serif;
+  font-size:31px;
+  letter-spacing:4px;
+  color:#ebd39b;
+  margin-bottom:5px;
+}
+
+.modal-subtitle{
+  text-align:center;
+  color:#776b5a;
+  font-size:8px;
+  letter-spacing:3px;
+  margin-bottom:24px;
+}
 
 /* =====================================================
-   WIN
+   PROFILE
 ===================================================== */
+
+.profile-head{
+  text-align:center;
+  margin-bottom:22px;
+}
+
+.profile-avatar{
+  width:74px;
+  height:74px;
+  margin:0 auto 12px;
+  border:1px solid #c49b51;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  border-radius:50%;
+  background:radial-gradient(circle,#342416,#100b08);
+  color:#e3c477;
+  font-family:"Cormorant Garamond",serif;
+  font-size:34px;
+}
+
+.profile-name{
+  color:#e5d0a4;
+  font-size:13px;
+  letter-spacing:2px;
+}
+
+.profile-username{
+  margin-top:5px;
+  color:#746858;
+  font-size:9px;
+}
+
+.profile-stats{
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:7px;
+}
+
+.stat-box{
+  padding:15px 8px;
+  text-align:center;
+  border:1px solid rgba(205,164,82,.18);
+  background:rgba(10,8,6,.65);
+}
+
+.stat-value{
+  font-family:"Cormorant Garamond",serif;
+  color:#e2c577;
+  font-size:24px;
+}
+
+.stat-label{
+  margin-top:3px;
+  color:#6e6253;
+  font-size:7px;
+  letter-spacing:2px;
+}
+
+/* =====================================================
+   REWARDS
+===================================================== */
+
+.reward-card{
+  border:1px solid rgba(205,164,82,.20);
+  background:rgba(10,8,6,.70);
+  padding:15px;
+  margin-bottom:8px;
+}
+
+.reward-top{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+}
+
+.reward-name{
+  color:#dfca9c;
+  font-family:"Cormorant Garamond",serif;
+  font-size:21px;
+}
+
+.reward-amount{
+  color:#e3c477;
+  font-family:"Cormorant Garamond",serif;
+  font-size:18px;
+}
+
+.reward-description{
+  margin-top:4px;
+  color:#716555;
+  font-size:8px;
+  line-height:1.5;
+}
+
+.reward-progress{
+  height:4px;
+  margin-top:12px;
+  background:#211912;
+  overflow:hidden;
+}
+
+.reward-progress-bar{
+  height:100%;
+  width:35%;
+  background:linear-gradient(90deg,#9b7135,#e2c477);
+}
+
+.reward-button{
+  width:100%;
+  margin-top:11px;
+  padding:10px;
+  border:1px solid rgba(205,164,82,.35);
+  background:#17100b;
+  color:#d8bd82;
+  font-size:9px;
+  letter-spacing:2px;
+  cursor:pointer;
+}
+
+.reward-button.claimable{
+  background:linear-gradient(180deg,#dcb96d,#ae8035);
+  color:#140e08;
+}
+
+/* =====================================================
+   DAILY GIFT
+===================================================== */
+
+.gift-box{
+  text-align:center;
+  padding:25px 15px;
+  border:1px solid rgba(205,164,82,.20);
+  background:
+    radial-gradient(circle at 50% 40%,rgba(192,143,56,.12),transparent 55%),
+    rgba(10,8,6,.65);
+}
+
+.gift-icon{
+  font-family:"Cormorant Garamond",serif;
+  font-size:65px;
+  color:#dcb96d;
+  text-shadow:0 0 25px rgba(220,185,109,.25);
+}
+
+.gift-title{
+  margin-top:8px;
+  font-family:"Cormorant Garamond",serif;
+  font-size:27px;
+  color:#ead39c;
+  letter-spacing:2px;
+}
+
+.gift-copy{
+  margin:8px auto 20px;
+  max-width:290px;
+  color:#786b59;
+  font-size:10px;
+  line-height:1.7;
+}
+
+.gift-amount{
+  color:#e2c477;
+  font-family:"Cormorant Garamond",serif;
+  font-size:30px;
+}
+
+.gift-button{
+  width:100%;
+  min-height:52px;
+  margin-top:18px;
+  border:1px solid #d9b66a;
+  background:linear-gradient(180deg,#dcb96d,#ae8035);
+  color:#140e08;
+  font-weight:600;
+  letter-spacing:3px;
+  cursor:pointer;
+}
+
+.gift-button:disabled{
+  opacity:.45;
+  cursor:default;
+}
+
+.streak{
+  margin-top:18px;
+  text-align:center;
+  color:#766958;
+  font-size:9px;
+  letter-spacing:2px;
+}
+
+/* =====================================================
+   ANIMATION
+===================================================== */
+
+.reel.spinning{
+  animation:reelPulse .09s linear infinite alternate;
+}
+
+@keyframes reelPulse{
+  from{transform:translateY(-2px)}
+  to{transform:translateY(2px)}
+}
 
 .win-flash{
   animation:winFlash .55s ease;
 }
 
 @keyframes winFlash{
-  0%{
-    box-shadow:inset 0 0 0 rgba(224,189,112,0);
-  }
-
-  50%{
-    box-shadow:inset 0 0 30px rgba(224,189,112,.28);
-  }
-
-  100%{
-    box-shadow:inset 0 0 0 rgba(224,189,112,0);
-  }
+  0%{box-shadow:inset 0 0 0 rgba(224,189,112,0)}
+  50%{box-shadow:inset 0 0 30px rgba(224,189,112,.28)}
+  100%{box-shadow:inset 0 0 0 rgba(224,189,112,0)}
 }
-
-
-/* =====================================================
-   MOBILE
-===================================================== */
 
 @media(max-width:430px){
 
-  .app{
-    padding:10px;
-  }
+  .brand{font-size:49px}
+  .brand-sub{font-size:25px}
 
-  .login-card{
-    padding:40px 22px 27px;
-  }
-
-  .brand{
-    font-size:49px;
-  }
-
-  .brand-sub{
-    font-size:25px;
-  }
-
-  .symbol-art{
-    font-size:28px;
-  }
-
-  .symbol-seven .symbol-art{
-    font-size:34px;
-  }
-
-  .symbol-k .symbol-art{
-    font-size:36px;
-  }
+  .symbol-art{font-size:28px}
+  .symbol-seven .symbol-art{font-size:34px}
+  .symbol-k .symbol-art{font-size:36px}
 
   .player-row{
     grid-template-columns:35px 1fr auto;
   }
-
 }
 </style>
 </head>
-
 
 <body>
 
 <div class="app">
 
+<!-- =====================================================
+     LOGIN
+===================================================== -->
 
-  <!-- ===================================================
-       LOGIN
-  ==================================================== -->
+<main id="loginScreen" class="screen">
 
-  <main id="loginScreen" class="screen">
+<section class="card login-card">
 
-    <section class="card login-card">
+<div class="eyebrow">WELCOME TO</div>
 
-      <div class="eyebrow">
-        WELCOME TO
-      </div>
+<div class="brand">KIMIA</div>
+<div class="brand-sub">PRIVÉ</div>
 
-      <div class="brand">
-        KIMIA
-      </div>
+<div class="ornament">
+<span class="diamond"></span>
+</div>
 
-      <div class="brand-sub">
-        PRIVÉ
-      </div>
+<p class="description">
+An exclusive private gaming experience.
+Your Telegram identity connects directly
+to your PRIVÉ account.
+</p>
 
-      <div class="ornament">
-        <span class="diamond"></span>
-      </div>
+<button id="loginBtn" class="primary-btn">
+ENTER PRIVÉ
+</button>
 
-      <p class="description">
-        An exclusive private gaming experience.
-        Your Telegram identity connects directly
-        to your PRIVÉ account.
-      </p>
+<div id="loginStatus" class="status"></div>
 
-      <button id="loginBtn" class="primary-btn">
-        ENTER PRIVÉ
-      </button>
+</section>
 
-      <div id="loginStatus" class="status"></div>
-
-    </section>
-
-  </main>
+</main>
 
 
-  <!-- ===================================================
-       GAME
-  ==================================================== -->
+<!-- =====================================================
+     GAME
+===================================================== -->
 
-  <main id="gameScreen" class="screen game-screen hidden">
+<main id="gameScreen" class="screen game-screen hidden">
 
+<div class="topbar">
 
-    <div class="topbar">
+<div class="logo-small">
+KIMIA PRIVÉ
+</div>
 
-      <div class="logo-small">
-        KIMIA PRIVÉ
-      </div>
+<div id="vipBadge" class="vip">
+PRIVÉ
+</div>
 
-      <div id="vipBadge" class="vip">
-        PRIVÉ
-      </div>
-
-    </div>
-
-
-    <!-- BALANCE -->
-
-    <section class="card balance-card">
-
-      <div>
-
-        <div class="balance-label">
-          PRIVATE BALANCE
-        </div>
-
-        <div id="balance" class="balance">
-          0
-        </div>
-
-      </div>
-
-      <div id="playerName" class="balance-label">
-        MEMBER
-      </div>
-
-    </section>
+</div>
 
 
-    <!-- SLOT MACHINE -->
+<!-- QUICK MENU -->
 
-    <section class="card reel-card">
+<div class="quick-menu">
 
-      <div
-        class="reels"
-        id="reels">
-      </div>
+<button class="menu-btn" id="profileBtn">
+<span class="menu-icon">♙</span>
+PROFILE
+</button>
 
+<button class="menu-btn" id="rewardsBtn">
+<span class="menu-icon">◇</span>
+REWARDS
+</button>
 
-      <div class="controls">
+<button class="menu-btn" id="giftBtn">
+<span class="menu-icon">✦</span>
+DAILY GIFT
+</button>
 
-        <div class="bet-row">
-
-          <button
-            class="bet-btn active"
-            data-bet="300">
-            300
-          </button>
-
-          <button
-            class="bet-btn"
-            data-bet="600">
-            600
-          </button>
-
-          <button
-            class="bet-btn"
-            data-bet="1500">
-            1,500
-          </button>
-
-          <button
-            class="bet-btn"
-            data-bet="3000">
-            3,000
-          </button>
-
-        </div>
+</div>
 
 
-        <button
-          id="spinBtn"
-          class="spin-btn">
-          SPIN
-        </button>
+<!-- BALANCE -->
+
+<section class="card balance-card">
+
+<div>
+
+<div class="balance-label">
+PRIVATE BALANCE
+</div>
+
+<div id="balance" class="balance">
+0
+</div>
+
+</div>
+
+<div id="playerName" class="balance-label">
+MEMBER
+</div>
+
+</section>
 
 
-        <div
-          id="gameMessage"
-          class="message">
-        </div>
+<!-- SLOTS -->
 
-      </div>
+<section class="card reel-card">
 
-    </section>
+<div class="reels" id="reels"></div>
 
+<div class="controls">
 
-    <!-- =================================================
-         TOP PLAYERS — STAYS AT BOTTOM
-    ================================================== -->
+<div class="bet-row">
 
-    <section class="card leaderboard-card">
+<button class="bet-btn active" data-bet="300">300</button>
+<button class="bet-btn" data-bet="600">600</button>
+<button class="bet-btn" data-bet="1500">1,500</button>
+<button class="bet-btn" data-bet="3000">3,000</button>
 
-      <div class="leaderboard-title">
-        TOP PLAYERS
-      </div>
+</div>
 
-      <div class="leaderboard-subtitle">
-        PRIVÉ LEADERBOARD
-      </div>
+<button id="spinBtn" class="spin-btn">
+SPIN
+</button>
 
-      <div
-        id="players"
-        class="players">
+<div id="gameMessage" class="message"></div>
 
-        <div class="leaderboard-loading">
-          LOADING PLAYERS…
-        </div>
+</div>
 
-      </div>
-
-    </section>
+</section>
 
 
-  </main>
+<!-- TOP PLAYERS — KEEP AT BOTTOM -->
+
+<section class="card leaderboard-card">
+
+<div class="leaderboard-title">
+TOP PLAYERS
+</div>
+
+<div class="leaderboard-subtitle">
+PRIVÉ LEADERBOARD
+</div>
+
+<div id="players" class="players">
+
+<div class="leaderboard-loading">
+LOADING PLAYERS…
+</div>
+
+</div>
+
+</section>
+
+</main>
+
+</div>
+
+
+<!-- =====================================================
+     PROFILE MODAL
+===================================================== -->
+
+<div id="profileModal" class="modal hidden">
+
+<div class="modal-card">
+
+<button class="modal-close" data-close="profileModal">
+×
+</button>
+
+<div class="modal-title">
+PROFILE
+</div>
+
+<div class="modal-subtitle">
+YOUR PRIVÉ ACCOUNT
+</div>
+
+<div class="profile-head">
+
+<div id="profileAvatar" class="profile-avatar">
+K
+</div>
+
+<div id="profileName" class="profile-name">
+PRIVÉ MEMBER
+</div>
+
+<div id="profileUsername" class="profile-username">
+@member
+</div>
+
+</div>
+
+<div class="profile-stats">
+
+<div class="stat-box">
+<div id="profileBalance" class="stat-value">0</div>
+<div class="stat-label">BALANCE</div>
+</div>
+
+<div class="stat-box">
+<div id="profileVip" class="stat-value">0</div>
+<div class="stat-label">VIP LEVEL</div>
+</div>
+
+<div class="stat-box">
+<div id="profileSpins" class="stat-value">0</div>
+<div class="stat-label">SPINS</div>
+</div>
+
+<div class="stat-box">
+<div id="profileWins" class="stat-value">0</div>
+<div class="stat-label">WINS</div>
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+
+<!-- =====================================================
+     REWARDS MODAL
+===================================================== -->
+
+<div id="rewardsModal" class="modal hidden">
+
+<div class="modal-card">
+
+<button class="modal-close" data-close="rewardsModal">
+×
+</button>
+
+<div class="modal-title">
+REWARDS
+</div>
+
+<div class="modal-subtitle">
+PRIVÉ REWARD COLLECTION
+</div>
+
+
+<div class="reward-card">
+
+<div class="reward-top">
+
+<div class="reward-name">
+FIRST SPIN
+</div>
+
+<div class="reward-amount">
++500
+</div>
+
+</div>
+
+<div class="reward-description">
+Complete your first spin to unlock this reward.
+</div>
+
+<div class="reward-progress">
+<div class="reward-progress-bar" style="width:100%"></div>
+</div>
+
+<button class="reward-button">
+COMPLETED
+</button>
+
+</div>
+
+
+<div class="reward-card">
+
+<div class="reward-top">
+
+<div class="reward-name">
+HIGH ROLLER
+</div>
+
+<div class="reward-amount">
++2,500
+</div>
+
+</div>
+
+<div class="reward-description">
+Reach 10,000 total coins wagered.
+</div>
+
+<div class="reward-progress">
+<div id="highRollerProgress" class="reward-progress-bar" style="width:0%"></div>
+</div>
+
+<button id="highRollerButton" class="reward-button">
+IN PROGRESS
+</button>
+
+</div>
+
+
+<div class="reward-card">
+
+<div class="reward-top">
+
+<div class="reward-name">
+PRIVÉ ELITE
+</div>
+
+<div class="reward-amount">
++10,000
+</div>
+
+</div>
+
+<div class="reward-description">
+Reach VIP Level 5.
+</div>
+
+<div class="reward-progress">
+<div id="eliteProgress" class="reward-progress-bar" style="width:0%"></div>
+</div>
+
+<button class="reward-button">
+LOCKED
+</button>
+
+</div>
+
+</div>
+
+</div>
+
+
+<!-- =====================================================
+     DAILY GIFT MODAL
+===================================================== -->
+
+<div id="giftModal" class="modal hidden">
+
+<div class="modal-card">
+
+<button class="modal-close" data-close="giftModal">
+×
+</button>
+
+<div class="modal-title">
+DAILY GIFT
+</div>
+
+<div class="modal-subtitle">
+A LITTLE PRIVÉ SURPRISE
+</div>
+
+<div class="gift-box">
+
+<div class="gift-icon">
+✦
+</div>
+
+<div class="gift-title">
+TODAY'S GIFT
+</div>
+
+<div class="gift-copy">
+Return every day to keep your streak alive
+and unlock increasingly valuable gifts.
+</div>
+
+<div class="gift-amount">
++1,000
+</div>
+
+<button id="giftClaimBtn" class="gift-button">
+CLAIM TODAY'S GIFT
+</button>
+
+<div id="giftMessage" class="message"></div>
+
+</div>
+
+<div id="streakText" class="streak">
+CURRENT STREAK · 1 DAY
+</div>
+
+</div>
 
 </div>
 
@@ -707,1210 +1138,1228 @@ button{
 <script>
 (function(){
 
-  "use strict";
+"use strict";
 
 
-  /* =====================================================
-     TELEGRAM
-  ===================================================== */
+/* =====================================================
+   TELEGRAM
+===================================================== */
 
-  const tg =
-    window.Telegram &&
-    window.Telegram.WebApp
-      ? window.Telegram.WebApp
-      : null;
+const tg =
+window.Telegram &&
+window.Telegram.WebApp
+? window.Telegram.WebApp
+: null;
 
+if(tg){
 
-  if(tg){
+try{
 
-    try{
+tg.ready();
+tg.expand();
+tg.enableClosingConfirmation();
 
-      tg.ready();
-      tg.expand();
-      tg.enableClosingConfirmation();
+}catch(e){
 
-    }catch(e){
+console.warn("Telegram setup:",e);
 
-      console.warn(
-        "Telegram WebApp setup:",
-        e
-      );
+}
 
-    }
+}
 
-  }
 
+/* =====================================================
+   DOM
+===================================================== */
 
-  /* =====================================================
-     DOM
-  ===================================================== */
+const loginScreen =
+document.getElementById("loginScreen");
 
-  const loginScreen =
-    document.getElementById("loginScreen");
+const gameScreen =
+document.getElementById("gameScreen");
 
-  const gameScreen =
-    document.getElementById("gameScreen");
+const loginBtn =
+document.getElementById("loginBtn");
 
-  const loginBtn =
-    document.getElementById("loginBtn");
+const loginStatus =
+document.getElementById("loginStatus");
 
-  const loginStatus =
-    document.getElementById("loginStatus");
+const balanceEl =
+document.getElementById("balance");
 
-  const balanceEl =
-    document.getElementById("balance");
+const playerNameEl =
+document.getElementById("playerName");
 
-  const playerNameEl =
-    document.getElementById("playerName");
+const vipBadge =
+document.getElementById("vipBadge");
 
-  const vipBadge =
-    document.getElementById("vipBadge");
+const reelsEl =
+document.getElementById("reels");
 
-  const reelsEl =
-    document.getElementById("reels");
+const spinBtn =
+document.getElementById("spinBtn");
 
-  const spinBtn =
-    document.getElementById("spinBtn");
+const gameMessage =
+document.getElementById("gameMessage");
 
-  const gameMessage =
-    document.getElementById("gameMessage");
+const playersEl =
+document.getElementById("players");
 
-  const playersEl =
-    document.getElementById("players");
+const profileBtn =
+document.getElementById("profileBtn");
 
+const rewardsBtn =
+document.getElementById("rewardsBtn");
 
-  let selectedBet = 300;
-  let currentPlayer = null;
-  let spinning = false;
+const giftBtn =
+document.getElementById("giftBtn");
 
+const profileModal =
+document.getElementById("profileModal");
 
-  /* =====================================================
-     SYMBOL SET
-     
-     IMPORTANT:
-     These are the actual visual symbols.
-     No emoji are used for the spinning animation.
-  ===================================================== */
+const rewardsModal =
+document.getElementById("rewardsModal");
 
-  const SYMBOLS = [
-    "K",
-    "7",
-    "HEART",
-    "SPADE",
-    "STAR",
-    "DIAMOND"
-  ];
+const giftModal =
+document.getElementById("giftModal");
 
+const giftClaimBtn =
+document.getElementById("giftClaimBtn");
 
-  /* =====================================================
-     API
-  ===================================================== */
+const giftMessage =
+document.getElementById("giftMessage");
 
-  async function apiPost(endpoint,body){
+const streakText =
+document.getElementById("streakText");
 
-    const response =
-      await fetch(
-        endpoint,
-        {
-          method:"POST",
 
-          headers:{
-            "Content-Type":"application/json",
-            "Accept":"application/json"
-          },
+let selectedBet = 300;
+let currentPlayer = null;
+let spinning = false;
 
-          body:JSON.stringify(body)
-        }
-      );
 
+/* =====================================================
+   API
+===================================================== */
 
-    const text =
-      await response.text();
+async function apiPost(endpoint,body){
 
+const response =
+await fetch(
+endpoint,
+{
+method:"POST",
+headers:{
+"Content-Type":"application/json",
+"Accept":"application/json"
+},
+body:JSON.stringify(body)
+}
+);
 
-    let data = null;
+const text =
+await response.text();
 
+let data = null;
 
-    if(text){
+if(text){
 
-      try{
+try{
 
-        data = JSON.parse(text);
+data = JSON.parse(text);
 
-      }catch(error){
+}catch(error){
 
-        throw new Error(
-          "Server returned invalid JSON."
-        );
+throw new Error(
+"Server returned invalid JSON."
+);
 
-      }
+}
 
-    }
+}
 
+if(!response.ok){
 
-    if(!response.ok){
+const serverError =
+data && data.error
+? data.error
+: `Server returned HTTP ${response.status}.`;
 
-      const serverError =
-        data && data.error
-          ? data.error
-          : `Server returned HTTP ${response.status}.`;
+throw new Error(serverError);
 
-      throw new Error(serverError);
+}
 
-    }
+if(!data){
 
+throw new Error(
+"Server returned an empty response."
+);
 
-    if(!data){
+}
 
-      throw new Error(
-        "Server returned an empty response."
-      );
+return data;
 
-    }
+}
 
 
-    return data;
+/* =====================================================
+   TELEGRAM DATA
+===================================================== */
 
-  }
+function getInitData(){
 
+if(!tg){
 
-  /* =====================================================
-     LEADERBOARD
-  ===================================================== */
+throw new Error(
+"Telegram WebApp is not available."
+);
 
-  async function loadLeaderboard(){
+}
 
-    try{
+if(!tg.initData){
 
-      const response =
-        await fetch(
-          "/api/leaderboard",
-          {
-            method:"GET",
-            cache:"no-store",
-            headers:{
-              "Accept":"application/json"
-            }
-          }
-        );
+throw new Error(
+"Telegram did not provide login data. Open the game from the Telegram bot."
+);
 
+}
 
-      const text =
-        await response.text();
+return tg.initData;
 
+}
 
-      if(!response.ok){
 
-        throw new Error(
-          `Leaderboard HTTP ${response.status}`
-        );
+/* =====================================================
+   PLAYER
+===================================================== */
 
-      }
+function updatePlayer(player){
 
+const balance =
+Number(player.balance);
 
-      if(!text){
+balanceEl.textContent =
+Number.isFinite(balance)
+? balance.toLocaleString()
+: "0";
 
-        throw new Error(
-          "Empty leaderboard response."
-        );
+let name =
+player.username ||
+player.first_name ||
+"PRIVÉ MEMBER";
 
-      }
+if(
+typeof name === "string" &&
+name.startsWith("@")
+){
 
+name =
+name.substring(1);
 
-      const data =
-        JSON.parse(text);
+}
 
+playerNameEl.textContent =
+String(name).toUpperCase();
 
-      const players =
-        Array.isArray(data.players)
-          ? data.players
-          : [];
+const vip =
+Number(player.vipLevel || 0);
 
+vipBadge.textContent =
+vip > 0
+? `VIP ${vip}`
+: "PRIVÉ";
 
-      renderLeaderboard(players);
+}
 
 
-    }catch(error){
+/* =====================================================
+   PROFILE
+===================================================== */
 
-      console.error(
-        "LEADERBOARD ERROR:",
-        error
-      );
+function openProfile(){
 
+if(!currentPlayer){
+return;
+}
 
-      playersEl.innerHTML = `
-        <div class="leaderboard-empty">
-          LEADERBOARD UNAVAILABLE
-        </div>
-      `;
+const name =
+currentPlayer.first_name ||
+currentPlayer.username ||
+"PRIVÉ MEMBER";
 
-    }
+const username =
+currentPlayer.username
+? "@" + String(currentPlayer.username).replace(/^@/,"")
+: "@member";
 
-  }
+document.getElementById("profileName")
+.textContent =
+String(name).toUpperCase();
 
+document.getElementById("profileUsername")
+.textContent =
+username;
 
-  function renderLeaderboard(players){
+document.getElementById("profileBalance")
+.textContent =
+Number(currentPlayer.balance || 0)
+.toLocaleString();
 
-    playersEl.innerHTML = "";
+document.getElementById("profileVip")
+.textContent =
+Number(currentPlayer.vipLevel || 0);
 
+document.getElementById("profileSpins")
+.textContent =
+Number(currentPlayer.spins || 0)
+.toLocaleString();
 
-    if(
-      !Array.isArray(players) ||
-      players.length === 0
-    ){
+document.getElementById("profileWins")
+.textContent =
+Number(currentPlayer.wins || 0)
+.toLocaleString();
 
-      playersEl.innerHTML = `
-        <div class="leaderboard-empty">
-          NO PLAYERS YET
-        </div>
-      `;
+const initial =
+String(name).trim().charAt(0).toUpperCase() || "K";
 
-      return;
+document.getElementById("profileAvatar")
+.textContent =
+initial;
 
-    }
+profileModal.classList.remove("hidden");
 
+}
 
-    players
-      .slice(0,10)
-      .forEach((player,index) => {
 
-        const row =
-          document.createElement("div");
+/* =====================================================
+   REWARDS
+===================================================== */
 
+function openRewards(){
 
-        row.className =
-          "player-row";
+if(!currentPlayer){
+return;
+}
 
+const wagered =
+Number(
+currentPlayer.totalWagered ||
+currentPlayer.wagered ||
+0
+);
 
-        const rank =
-          Number(player.rank) ||
-          index + 1;
+const vip =
+Number(currentPlayer.vipLevel || 0);
 
+const wagerProgress =
+Math.min(
+100,
+(wagered / 10000) * 100
+);
 
-        const username =
-          player.username ||
-          player.name ||
-          "Anonymous Player";
+const eliteProgress =
+Math.min(
+100,
+(vip / 5) * 100
+);
 
+document.getElementById(
+"highRollerProgress"
+).style.width =
+wagerProgress + "%";
 
-        const balance =
-          Number(player.balance);
+document.getElementById(
+"eliteProgress"
+).style.width =
+eliteProgress + "%";
 
+const highButton =
+document.getElementById(
+"highRollerButton"
+);
 
-        const formattedBalance =
-          Number.isFinite(balance)
-            ? balance.toLocaleString()
-            : "0";
+if(wagered >= 10000){
 
+highButton.textContent =
+"READY TO CLAIM";
 
-        row.innerHTML = `
+highButton.classList.add(
+"claimable"
+);
 
-          <div class="player-rank">
-            #${rank}
-          </div>
+}else{
 
-          <div class="player-info">
+highButton.textContent =
+`${Math.round(wagerProgress)}% COMPLETE`;
 
-            <div class="player-name">
-              ${escapeHtml(
-                String(username)
-              )}
-            </div>
+highButton.classList.remove(
+"claimable"
+);
 
-            <div class="player-label">
-              PRIVÉ MEMBER
-            </div>
+}
 
-          </div>
+rewardsModal.classList.remove(
+"hidden"
+);
 
-          <div class="player-balance">
-            ${formattedBalance}
-          </div>
+}
 
-        `;
 
+/* =====================================================
+   DAILY GIFT
+===================================================== */
 
-        playersEl.appendChild(row);
+function openGift(){
 
-      });
+giftMessage.textContent = "";
 
-  }
+giftModal.classList.remove(
+"hidden"
+);
 
+}
 
-  function escapeHtml(value){
 
-    return value
-      .replace(/&/g,"&amp;")
-      .replace(/</g,"&lt;")
-      .replace(/>/g,"&gt;")
-      .replace(/"/g,"&quot;")
-      .replace(/'/g,"&#039;");
+/*
+  For now this is a visual interface only.
+  The actual daily claim will be connected
+  to PostgreSQL in the next backend step.
+*/
 
-  }
+giftClaimBtn.addEventListener(
+"click",
+() => {
 
+giftClaimBtn.disabled = true;
 
-  /* =====================================================
-     TELEGRAM INIT DATA
-  ===================================================== */
+giftClaimBtn.textContent =
+"CLAIMED ✓";
 
-  function getInitData(){
+giftMessage.textContent =
+"Today's gift has been claimed.";
 
-    if(!tg){
+streakText.textContent =
+"CURRENT STREAK · 1 DAY";
 
-      throw new Error(
-        "Telegram WebApp is not available."
-      );
+}
+);
 
-    }
 
+/* =====================================================
+   MODALS
+===================================================== */
 
-    const initData =
-      tg.initData;
+profileBtn.addEventListener(
+"click",
+openProfile
+);
 
+rewardsBtn.addEventListener(
+"click",
+openRewards
+);
 
-    if(!initData){
+giftBtn.addEventListener(
+"click",
+openGift
+);
 
-      throw new Error(
-        "Telegram did not provide login data. Open the game from the Telegram bot."
-      );
+document
+.querySelectorAll("[data-close]")
+.forEach(button => {
 
-    }
+button.addEventListener(
+"click",
+() => {
 
+const id =
+button.dataset.close;
 
-    return initData;
+document
+.getElementById(id)
+.classList.add("hidden");
 
-  }
+}
+);
 
+});
 
-  /* =====================================================
-     LOGIN
-  ===================================================== */
 
-  async function login(){
+document
+.querySelectorAll(".modal")
+.forEach(modal => {
 
-    if(loginBtn.disabled){
-      return;
-    }
+modal.addEventListener(
+"click",
+event => {
 
+if(event.target === modal){
 
-    loginBtn.disabled = true;
-    loginBtn.textContent = "CONNECTING…";
-    loginStatus.textContent = "";
+modal.classList.add(
+"hidden"
+);
 
+}
 
-    try{
+}
+);
 
-      const initData =
-        getInitData();
+});
 
 
-      const data =
-        await apiPost(
-          "/api/me",
-          {
-            initData:initData
-          }
-        );
+/* =====================================================
+   LEADERBOARD
+===================================================== */
 
+async function loadLeaderboard(){
 
-      if(
-        !data ||
-        typeof data !== "object"
-      ){
+try{
 
-        throw new Error(
-          "The server returned an incomplete account response."
-        );
+const response =
+await fetch(
+"/api/leaderboard",
+{
+method:"GET",
+cache:"no-store",
+headers:{
+"Accept":"application/json"
+}
+}
+);
 
-      }
+const text =
+await response.text();
 
+if(!response.ok){
 
-      if(
-        data.id === undefined ||
-        data.balance === undefined
-      ){
+throw new Error(
+`Leaderboard HTTP ${response.status}`
+);
 
-        throw new Error(
-          "The server returned an incomplete account response."
-        );
+}
 
-      }
+if(!text){
 
+throw new Error(
+"Empty leaderboard response."
+);
 
-      currentPlayer = data;
+}
 
+const data =
+JSON.parse(text);
 
-      updatePlayer(data);
+const players =
+Array.isArray(data.players)
+? data.players
+: [];
 
+renderLeaderboard(players);
 
-      loginScreen.classList.add("hidden");
-      gameScreen.classList.remove("hidden");
+}catch(error){
 
+console.error(
+"LEADERBOARD ERROR:",
+error
+);
 
-      loginStatus.textContent = "";
+playersEl.innerHTML = `
+<div class="leaderboard-empty">
+LEADERBOARD UNAVAILABLE
+</div>
+`;
 
+}
 
-      loadLeaderboard();
+}
 
 
-    }catch(error){
+function renderLeaderboard(players){
 
-      console.error(
-        "LOGIN ERROR:",
-        error
-      );
+playersEl.innerHTML = "";
 
+if(
+!Array.isArray(players) ||
+players.length === 0
+){
 
-      loginStatus.textContent =
-        error && error.message
-          ? error.message
-          : "Login failed.";
+playersEl.innerHTML = `
+<div class="leaderboard-empty">
+NO PLAYERS YET
+</div>
+`;
 
+return;
 
-    }finally{
+}
 
-      loginBtn.disabled = false;
-      loginBtn.textContent = "ENTER PRIVÉ";
+players
+.slice(0,10)
+.forEach((player,index) => {
 
-    }
+const row =
+document.createElement("div");
 
-  }
+row.className =
+"player-row";
 
+const rank =
+Number(player.rank) ||
+index + 1;
 
-  /* =====================================================
-     PLAYER DISPLAY
-  ===================================================== */
+const username =
+player.username ||
+player.name ||
+"Anonymous Player";
 
-  function updatePlayer(player){
+const balance =
+Number(player.balance);
 
-    const balance =
-      Number(player.balance);
+const formattedBalance =
+Number.isFinite(balance)
+? balance.toLocaleString()
+: "0";
 
+row.innerHTML = `
 
-    balanceEl.textContent =
-      Number.isFinite(balance)
-        ? balance.toLocaleString()
-        : "0";
+<div class="player-rank">
+#${rank}
+</div>
 
+<div class="player-info">
 
-    let name =
-      player.username ||
-      player.first_name ||
-      "PRIVÉ MEMBER";
+<div class="player-name">
+${escapeHtml(String(username))}
+</div>
 
+<div class="player-label">
+PRIVÉ MEMBER
+</div>
 
-    if(
-      typeof name === "string" &&
-      name.startsWith("@")
-    ){
+</div>
 
-      name =
-        name.substring(1);
+<div class="player-balance">
+${formattedBalance}
+</div>
 
-    }
+`;
 
+playersEl.appendChild(row);
 
-    playerNameEl.textContent =
-      String(name).toUpperCase();
+});
 
+}
 
-    const vip =
-      Number(player.vipLevel || 0);
 
+function escapeHtml(value){
 
-    if(vip > 0){
+return value
+.replace(/&/g,"&amp;")
+.replace(/</g,"&lt;")
+.replace(/>/g,"&gt;")
+.replace(/"/g,"&quot;")
+.replace(/'/g,"&#039;");
 
-      vipBadge.textContent =
-        `VIP ${vip}`;
+}
 
-    }else{
 
-      vipBadge.textContent =
-        "PRIVÉ";
+/* =====================================================
+   SYMBOL NORMALIZATION
+===================================================== */
 
-    }
+function normalizeSymbol(raw){
 
-  }
+if(raw === null || raw === undefined){
+return "STAR";
+}
 
+let value =
+String(raw)
+.trim()
+.toLowerCase();
 
-  /* =====================================================
-     NORMALIZE SERVER SYMBOLS
-  ===================================================== */
+value =
+value.replace(/\uFE0F/g,"");
 
-  function normalizeSymbol(raw){
+value =
+value.replace(/\u200D/g,"");
 
-    if(
-      raw === null ||
-      raw === undefined
-    ){
 
-      return "STAR";
+if(
+value === "🌹" ||
+value === "rose" ||
+value === "k" ||
+value === "letter k"
+){
 
-    }
+return "K";
 
+}
 
-    let value =
-      String(raw)
-        .trim()
-        .toLowerCase();
 
+if(
+value === "💎" ||
+value === "diamond" ||
+value === "◆" ||
+value === "◇"
+){
 
-    value =
-      value.replace(/\uFE0F/g,"");
+return "DIAMOND";
 
+}
 
-    value =
-      value.replace(/\u200D/g,"");
 
+if(
+value === "7" ||
+value === "7️⃣" ||
+value === "seven"
+){
 
-    if(
-      value === "🌹" ||
-      value === "rose" ||
-      value === "k" ||
-      value === "letter k"
-    ){
+return "7";
 
-      return "K";
+}
 
-    }
 
+if(
+value === "💗" ||
+value === "❤️" ||
+value === "♥" ||
+value === "heart"
+){
 
-    if(
-      value === "💎" ||
-      value === "diamond" ||
-      value === "◆" ||
-      value === "◇"
-    ){
+return "HEART";
 
-      return "DIAMOND";
+}
 
-    }
 
+if(
+value === "♠" ||
+value === "♠️" ||
+value === "spade"
+){
 
-    if(
-      value === "7" ||
-      value === "7️⃣" ||
-      value === "seven"
-    ){
+return "SPADE";
 
-      return "7";
+}
 
-    }
 
+if(
+value === "✨" ||
+value === "✦" ||
+value === "star"
+){
 
-    if(
-      value === "💗" ||
-      value === "❤️" ||
-      value === "♥" ||
-      value === "heart"
-    ){
+return "STAR";
 
-      return "HEART";
+}
 
-    }
+return "STAR";
 
+}
 
-    if(
-      value === "♠" ||
-      value === "♠️" ||
-      value === "spade"
-    ){
 
-      return "SPADE";
+/* =====================================================
+   SYMBOL DISPLAY
+===================================================== */
 
-    }
+function symbolClass(symbol){
 
+if(symbol === "DIAMOND")
+return "symbol-diamond";
 
-    if(
-      value === "✨" ||
-      value === "✦" ||
-      value === "star"
-    ){
+if(symbol === "7")
+return "symbol-seven";
 
-      return "STAR";
+if(symbol === "HEART")
+return "symbol-heart";
 
-    }
+if(symbol === "K")
+return "symbol-k";
 
+if(symbol === "SPADE")
+return "symbol-spade";
 
-    return "STAR";
+return "symbol-star";
 
-  }
+}
 
 
-  /* =====================================================
-     SYMBOL CLASS
-  ===================================================== */
+function symbolMarkup(rawSymbol){
 
-  function symbolClass(symbol){
+const symbol =
+normalizeSymbol(rawSymbol);
 
-    if(symbol === "DIAMOND"){
-      return "symbol-diamond";
-    }
+let art = "✦";
 
-    if(symbol === "7"){
-      return "symbol-seven";
-    }
+if(symbol === "DIAMOND")
+art = "◆";
 
-    if(symbol === "HEART"){
-      return "symbol-heart";
-    }
+if(symbol === "7")
+art = "7";
 
-    if(symbol === "K"){
-      return "symbol-k";
-    }
+if(symbol === "HEART")
+art = "♥";
 
-    if(symbol === "SPADE"){
-      return "symbol-spade";
-    }
+if(symbol === "K")
+art = "K";
 
-    return "symbol-star";
+if(symbol === "SPADE")
+art = "♠";
 
-  }
+return `
 
+<div class="symbol ${symbolClass(symbol)}">
 
-  /* =====================================================
-     SYMBOL MARKUP
-  ===================================================== */
+<span class="symbol-art">
+${art}
+</span>
 
-  function symbolMarkup(rawSymbol){
+</div>
 
-    const symbol =
-      normalizeSymbol(rawSymbol);
+`;
 
+}
 
-    let art = "✦";
 
+/* =====================================================
+   REELS
+===================================================== */
 
-    if(symbol === "DIAMOND"){
-      art = "◆";
-    }
+function renderSymbols(
+symbols,
+spinningState=false
+){
 
-    if(symbol === "7"){
-      art = "7";
-    }
+reelsEl.innerHTML = "";
 
-    if(symbol === "HEART"){
-      art = "♥";
-    }
+if(
+!Array.isArray(symbols) ||
+symbols.length !== 15
+){
 
-    if(symbol === "K"){
-      art = "K";
-    }
+symbols =
+Array.from(
+{length:15},
+() => "STAR"
+);
 
-    if(symbol === "SPADE"){
-      art = "♠";
-    }
+}
 
-    if(symbol === "STAR"){
-      art = "✦";
-    }
+symbols.forEach(rawSymbol => {
 
+const reel =
+document.createElement("div");
 
-    return `
-      <div class="symbol ${symbolClass(symbol)}">
-        <span class="symbol-art">${art}</span>
-      </div>
-    `;
+reel.className =
+spinningState
+? "reel spinning"
+: "reel";
 
-  }
+reel.innerHTML =
+symbolMarkup(rawSymbol);
 
+reelsEl.appendChild(reel);
 
-  /* =====================================================
-     CREATE REELS
-  ===================================================== */
+});
 
-  function createReels(){
+}
 
-    reelsEl.innerHTML = "";
 
+/* =====================================================
+   INITIAL REELS
+===================================================== */
 
-    for(let i=0;i<15;i++){
+renderSymbols([
 
-      const reel =
-        document.createElement("div");
+"K",
+"7",
+"HEART",
+"STAR",
+"SPADE",
 
+"DIAMOND",
+"K",
+"HEART",
+"7",
+"SPADE",
 
-      reel.className =
-        "reel";
+"STAR",
+"DIAMOND",
+"K",
+"HEART",
+"7"
 
+]);
 
-      reel.dataset.index =
-        String(i);
 
+/* =====================================================
+   BETS
+===================================================== */
 
-      reel.innerHTML =
-        symbolMarkup(
-          "STAR"
-        );
+document
+.querySelectorAll(".bet-btn")
+.forEach(button => {
 
+button.addEventListener(
+"click",
+() => {
 
-      reelsEl.appendChild(reel);
+if(spinning){
+return;
+}
 
-    }
+document
+.querySelectorAll(".bet-btn")
+.forEach(btn =>
+btn.classList.remove("active")
+);
 
-  }
+button.classList.add("active");
 
+selectedBet =
+Number(button.dataset.bet);
 
-  /* =====================================================
-     SET ONE REEL
-  ===================================================== */
+gameMessage.textContent =
+`BET ${selectedBet.toLocaleString()}`;
 
-  function setReel(index,symbol,isSpinning){
+}
+);
 
-    const reel =
-      reelsEl.children[index];
+});
 
 
-    if(!reel){
-      return;
-    }
+/* =====================================================
+   SPIN
+===================================================== */
 
+async function spin(){
 
-    reel.className =
-      isSpinning
-        ? "reel spinning"
-        : "reel";
+if(spinning){
+return;
+}
 
+spinning = true;
 
-    reel.innerHTML =
-      symbolMarkup(symbol);
+spinBtn.disabled = true;
+spinBtn.textContent = "SPINNING…";
+gameMessage.textContent = "";
 
-  }
 
+const animationPromise =
+new Promise(resolve => {
 
-  /* =====================================================
-     RENDER FINAL RESULT
-  ===================================================== */
+let count = 0;
 
-  function renderSymbols(symbols){
+const timer =
+setInterval(() => {
 
-    if(
-      !Array.isArray(symbols) ||
-      symbols.length !== 15
-    ){
+const choices = [
 
-      return;
+"K",
+"7",
+"HEART",
+"SPADE",
+"STAR",
+"DIAMOND"
 
-    }
+];
 
+const animated =
+Array.from(
+{length:15},
+() =>
+choices[
+Math.floor(
+Math.random() *
+choices.length
+)
+]
+);
 
-    for(
-      let i=0;
-      i<15;
-      i++
-    ){
+renderSymbols(
+animated,
+true
+);
 
-      setReel(
-        i,
-        symbols[i],
-        false
-      );
+count++;
 
-    }
+if(count >= 10){
 
-  }
+clearInterval(timer);
+resolve();
 
+}
 
-  /* =====================================================
-     INITIAL REELS
-  ===================================================== */
+},90);
 
-  createReels();
+});
 
 
-  renderSymbols([
+try{
 
-    "K",
-    "7",
-    "HEART",
-    "STAR",
-    "SPADE",
+const initData =
+getInitData();
 
-    "DIAMOND",
-    "K",
-    "HEART",
-    "7",
-    "SPADE",
+const apiPromise =
+apiPost(
+"/api/spin",
+{
+initData:initData,
+bet:selectedBet
+}
+);
 
-    "STAR",
-    "DIAMOND",
-    "K",
-    "HEART",
-    "7"
+const [
+,
+data
+] =
+await Promise.all([
+animationPromise,
+apiPromise
+]);
 
-  ]);
 
+if(
+!data ||
+!Array.isArray(data.symbols)
+){
 
-  /* =====================================================
-     BET SELECTION
-  ===================================================== */
+throw new Error(
+"Server returned an incomplete spin response."
+);
 
-  document
-    .querySelectorAll(".bet-btn")
-    .forEach(button => {
+}
 
-      button.addEventListener(
-        "click",
-        () => {
 
-          if(spinning){
-            return;
-          }
+renderSymbols(
+data.symbols,
+false
+);
 
 
-          document
-            .querySelectorAll(".bet-btn")
-            .forEach(btn =>
-              btn.classList.remove("active")
-            );
+if(
+data.balance !== undefined
+){
 
+currentPlayer = {
 
-          button.classList.add("active");
+...currentPlayer,
 
+balance:data.balance,
 
-          selectedBet =
-            Number(
-              button.dataset.bet
-            );
+vipLevel:
+data.vipLevel !== undefined
+? data.vipLevel
+: currentPlayer.vipLevel,
 
+username:
+data.username !== undefined
+? data.username
+: currentPlayer.username,
 
-          gameMessage.textContent =
-            `BET ${selectedBet.toLocaleString()}`;
+spins:
+data.spins !== undefined
+? data.spins
+: currentPlayer.spins,
 
-        }
-      );
+wins:
+data.wins !== undefined
+? data.wins
+: currentPlayer.wins,
 
-    });
+totalWagered:
+data.totalWagered !== undefined
+? data.totalWagered
+: currentPlayer.totalWagered
 
+};
 
-  /* =====================================================
-     REAL SLOT ANIMATION
-     
-     Each reel gets its own timer.
-     This prevents the entire board from being
-     replaced simultaneously and appearing stuck.
-  ===================================================== */
+updatePlayer(
+currentPlayer
+);
 
-  function startSlotAnimation(){
+}
 
-    const timers = [];
 
-    const startTime =
-      Date.now();
+const win =
+Number(data.win || 0);
 
+if(win > 0){
 
-    for(
-      let i=0;
-      i<15;
-      i++
-    ){
+gameMessage.textContent =
+`WIN · ${win.toLocaleString()} PRIVÉ COINS`;
 
-      const delay =
-        i * 35;
+reelsEl.classList.add(
+"win-flash"
+);
 
+setTimeout(() => {
 
-      setTimeout(() => {
+reelsEl.classList.remove(
+"win-flash"
+);
 
-        const timer =
-          setInterval(() => {
+},600);
 
-            const randomSymbol =
-              SYMBOLS[
-                Math.floor(
-                  Math.random() *
-                  SYMBOLS.length
-                )
-              ];
+}else{
 
+gameMessage.textContent =
+"NO WIN · TRY AGAIN";
 
-            setReel(
-              i,
-              randomSymbol,
-              true
-            );
+}
 
 
-          },65);
+loadLeaderboard();
 
+}catch(error){
 
-        timers.push(timer);
+console.error(
+"SPIN ERROR:",
+error
+);
 
-      },delay);
+renderSymbols(
+Array(15).fill("STAR"),
+false
+);
 
-    }
+gameMessage.textContent =
+error && error.message
+? error.message
+: "Spin failed.";
 
+}finally{
 
-    return new Promise(resolve => {
+setTimeout(() => {
 
-      setTimeout(() => {
+spinning = false;
 
-        timers.forEach(timer => {
-          clearInterval(timer);
-        });
+spinBtn.disabled = false;
 
+spinBtn.textContent =
+"SPIN";
 
-        resolve();
+},350);
 
-      },1150);
+}
 
-    });
+}
 
-  }
 
+/* =====================================================
+   LOGIN
+===================================================== */
 
-  /* =====================================================
-     SPIN
-  ===================================================== */
+async function login(){
 
-  async function spin(){
+if(loginBtn.disabled){
+return;
+}
 
-    if(spinning){
-      return;
-    }
+loginBtn.disabled = true;
+loginBtn.textContent = "CONNECTING…";
+loginStatus.textContent = "";
 
+try{
 
-    spinning = true;
+const initData =
+getInitData();
 
+const data =
+await apiPost(
+"/api/me",
+{
+initData:initData
+}
+);
 
-    spinBtn.disabled = true;
-    spinBtn.textContent = "SPINNING…";
-    gameMessage.textContent = "";
+if(
+!data ||
+typeof data !== "object"
+){
 
+throw new Error(
+"The server returned an incomplete account response."
+);
 
-    try{
+}
 
-      const initData =
-        getInitData();
+if(
+data.id === undefined ||
+data.balance === undefined
+){
 
+throw new Error(
+"The server returned an incomplete account response."
+);
 
-      /*
-        Start the real server request immediately.
-      */
+}
 
-      const apiPromise =
-        apiPost(
-          "/api/spin",
-          {
-            initData:initData,
-            bet:selectedBet
-          }
-        );
+currentPlayer = data;
 
+updatePlayer(data);
 
-      /*
-        Run the visual reels while the server
-        determines the actual result.
-      */
+loginScreen.classList.add("hidden");
+gameScreen.classList.remove("hidden");
 
-      await Promise.all([
+loginStatus.textContent = "";
 
-        startSlotAnimation(),
+loadLeaderboard();
 
-        apiPromise
+}catch(error){
 
-      ]);
+console.error(
+"LOGIN ERROR:",
+error
+);
 
+loginStatus.textContent =
+error && error.message
+? error.message
+: "Login failed.";
 
-      /*
-        IMPORTANT:
-        Promise.all above does not give us the
-        API response directly because we need to
-        preserve the animation timing.
+}finally{
 
-        Get the same response here.
-      */
+loginBtn.disabled = false;
+loginBtn.textContent =
+"ENTER PRIVÉ";
 
-      const data =
-        await apiPromise;
+}
 
+}
 
-      if(
-        !data ||
-        !Array.isArray(data.symbols) ||
-        data.symbols.length !== 15
-      ){
 
-        throw new Error(
-          "The server returned an incomplete spin response."
-        );
+/* =====================================================
+   BUTTONS
+===================================================== */
 
-      }
+loginBtn.addEventListener(
+"click",
+login
+);
 
 
-      /*
-        REAL RESULT.
-        The server's symbols are rendered only now.
-      */
+/* =====================================================
+   AUTO LOGIN
+===================================================== */
 
-      renderSymbols(
-        data.symbols
-      );
+window.addEventListener(
+"load",
+() => {
 
+if(
+tg &&
+tg.initData
+){
 
-      /* UPDATE BALANCE */
+setTimeout(
+login,
+150
+);
 
-      if(
-        data.balance !== undefined
-      ){
+}
 
-        currentPlayer = {
-
-          ...currentPlayer,
-
-          balance:data.balance,
-
-          vipLevel:
-            data.vipLevel !== undefined
-              ? data.vipLevel
-              : currentPlayer.vipLevel,
-
-          username:
-            data.username !== undefined
-              ? data.username
-              : currentPlayer.username
-
-        };
-
-
-        updatePlayer(
-          currentPlayer
-        );
-
-      }
-
-
-      /* RESULT MESSAGE */
-
-      const win =
-        Number(
-          data.win || 0
-        );
-
-
-      if(win > 0){
-
-        gameMessage.textContent =
-          `WIN · ${win.toLocaleString()} PRIVÉ COINS`;
-
-
-        reelsEl.classList.add(
-          "win-flash"
-        );
-
-
-        setTimeout(() => {
-
-          reelsEl.classList.remove(
-            "win-flash"
-          );
-
-        },600);
-
-
-      }else{
-
-        gameMessage.textContent =
-          "NO WIN · TRY AGAIN";
-
-      }
-
-
-      /*
-        Refresh leaderboard after spin.
-      */
-
-      loadLeaderboard();
-
-
-    }catch(error){
-
-      console.error(
-        "SPIN ERROR:",
-        error
-      );
-
-
-      /*
-        Never leave the machine showing
-        diamonds if the request fails.
-      */
-
-      for(
-        let i=0;
-        i<15;
-        i++
-      ){
-
-        setReel(
-          i,
-          "STAR",
-          false
-        );
-
-      }
-
-
-      gameMessage.textContent =
-        error && error.message
-          ? error.message
-          : "Spin failed.";
-
-    }finally{
-
-      setTimeout(() => {
-
-        spinning = false;
-
-        spinBtn.disabled = false;
-
-        spinBtn.textContent =
-          "SPIN";
-
-      },350);
-
-    }
-
-  }
-
-
-  /* =====================================================
-     BUTTONS
-  ===================================================== */
-
-  loginBtn.addEventListener(
-    "click",
-    login
-  );
-
-
-  spinBtn.addEventListener(
-    "click",
-    spin
-  );
-
-
-  /* =====================================================
-     AUTO LOGIN
-  ===================================================== */
-
-  window.addEventListener(
-    "load",
-    () => {
-
-      if(
-        tg &&
-        tg.initData
-      ){
-
-        setTimeout(
-          login,
-          150
-        );
-
-      }
-
-    }
-  );
+});
 
 
 })();
