@@ -16,15 +16,15 @@
   --panel:#120e0c;
   --panel2:#18120f;
   --gold:#d6b169;
-  --gold2:#f5dda6;
-  --gold3:#fff0c7;
-  --cream:#f4ead7;
+  --gold2:#f4dca5;
+  --gold3:#8d6732;
+  --cream:#f7eddb;
   --muted:#a99b88;
-  --line:rgba(214,177,105,.28);
-  --green:#9bc995;
   --danger:#d47777;
-  --peach:#f2a17d;
-  --peach2:#ffd0b8;
+  --green:#9bc995;
+  --peach:#ff9e91;
+  --peach2:#ffc4ae;
+  --blue:#72dfff;
 }
 
 *{
@@ -36,9 +36,9 @@ html,body{
   margin:0;
   min-height:100%;
   background:
-    radial-gradient(circle at 50% -5%,rgba(214,177,105,.18),transparent 32%),
-    radial-gradient(circle at 10% 30%,rgba(242,161,125,.055),transparent 25%),
-    linear-gradient(180deg,#0d0908 0%,#050404 100%);
+    radial-gradient(circle at 50% -5%,rgba(214,177,105,.18),transparent 31%),
+    radial-gradient(circle at 15% 35%,rgba(255,158,145,.045),transparent 25%),
+    linear-gradient(180deg,#0c0908 0%,#050404 100%);
   color:var(--cream);
   font-family:Montserrat,sans-serif;
 }
@@ -48,17 +48,12 @@ body{
   overflow-x:hidden;
 }
 
-button,
-input{
+button,input{
   font:inherit;
 }
 
 button{
   cursor:pointer;
-}
-
-button:disabled{
-  cursor:default;
 }
 
 #app{
@@ -70,7 +65,7 @@ button:disabled{
 }
 
 /* =========================================================
-   TOP BAR
+   HEADER
 ========================================================= */
 
 .topbar{
@@ -78,7 +73,7 @@ button:disabled{
   top:0;
   z-index:50;
   padding:15px 16px 12px;
-  background:rgba(9,7,6,.94);
+  background:rgba(9,7,6,.93);
   backdrop-filter:blur(20px);
   border-bottom:1px solid rgba(214,177,105,.14);
 }
@@ -91,8 +86,8 @@ button:disabled{
   color:var(--gold2);
   font-weight:600;
   text-shadow:
-    0 0 12px rgba(242,214,155,.18),
-    0 0 30px rgba(214,177,105,.08);
+    0 0 10px rgba(242,214,155,.14),
+    0 2px 8px rgba(0,0,0,.8);
 }
 
 .subtitle{
@@ -108,52 +103,38 @@ button:disabled{
 ========================================================= */
 
 .balance-card{
-  position:relative;
   margin:14px 16px 8px;
   padding:14px 16px;
-  border:1px solid var(--line);
+  border:1px solid rgba(214,177,105,.32);
   border-radius:17px;
   background:
-    radial-gradient(circle at 85% 10%,rgba(214,177,105,.13),transparent 30%),
-    linear-gradient(145deg,rgba(214,177,105,.095),rgba(255,255,255,.012));
+    radial-gradient(circle at 20% 0%,rgba(214,177,105,.11),transparent 45%),
+    linear-gradient(145deg,rgba(214,177,105,.085),rgba(255,255,255,.012));
   box-shadow:
-    0 15px 40px rgba(0,0,0,.35),
-    inset 0 1px 0 rgba(255,255,255,.04);
-  overflow:hidden;
-}
-
-.balance-card:before{
-  content:"";
-  position:absolute;
-  top:-80px;
-  right:-80px;
-  width:160px;
-  height:160px;
-  border-radius:50%;
-  background:rgba(214,177,105,.045);
-  filter:blur(20px);
+    0 14px 38px rgba(0,0,0,.34),
+    inset 0 1px 0 rgba(255,255,255,.045);
 }
 
 .balance-label{
-  position:relative;
   font-size:9px;
   letter-spacing:2px;
   color:var(--muted);
 }
 
 .balance-row{
-  position:relative;
   display:flex;
   align-items:center;
   justify-content:space-between;
-  margin-top:2px;
+  margin-top:3px;
 }
 
 .balance{
   font-family:"Cormorant Garamond",serif;
-  font-size:33px;
+  font-size:34px;
   color:var(--gold2);
-  text-shadow:0 0 18px rgba(242,214,155,.15);
+  text-shadow:
+    0 0 15px rgba(214,177,105,.13),
+    0 3px 8px rgba(0,0,0,.8);
 }
 
 .vip-pill{
@@ -164,6 +145,73 @@ button:disabled{
   font-size:8px;
   letter-spacing:1.5px;
   background:rgba(214,177,105,.035);
+}
+
+/* =========================================================
+   LOGIN
+========================================================= */
+
+.login-overlay{
+  position:fixed;
+  inset:0;
+  z-index:500;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:22px;
+  background:
+    radial-gradient(circle at 50% 35%,rgba(214,177,105,.12),transparent 35%),
+    rgba(3,2,2,.96);
+  backdrop-filter:blur(16px);
+}
+
+.login-overlay.hidden{
+  display:none;
+}
+
+.login-card{
+  width:100%;
+  max-width:390px;
+  padding:30px 24px;
+  text-align:center;
+  border:1px solid rgba(214,177,105,.42);
+  border-radius:22px;
+  background:
+    radial-gradient(circle at 50% 0%,rgba(214,177,105,.12),transparent 50%),
+    linear-gradient(145deg,#18110d,#0c0807);
+  box-shadow:
+    0 30px 90px rgba(0,0,0,.8),
+    inset 0 1px 0 rgba(255,255,255,.05);
+}
+
+.login-logo{
+  font-family:"Cormorant Garamond",serif;
+  font-size:31px;
+  letter-spacing:5px;
+  color:var(--gold2);
+}
+
+.login-status{
+  margin-top:8px;
+  color:var(--muted);
+  font-size:9px;
+  line-height:1.7;
+}
+
+.login-retry{
+  width:100%;
+  margin-top:20px;
+  padding:14px;
+  border:1px solid var(--gold);
+  border-radius:11px;
+  background:linear-gradient(180deg,#e1c17a,#a77c38);
+  color:#100b07;
+  font-weight:700;
+  letter-spacing:1.5px;
+}
+
+.login-retry:disabled{
+  opacity:.55;
 }
 
 /* =========================================================
@@ -184,7 +232,6 @@ button:disabled{
   font-family:"Cormorant Garamond",serif;
   font-size:28px;
   color:var(--gold2);
-  text-shadow:0 0 16px rgba(242,214,155,.08);
 }
 
 .section-sub{
@@ -199,60 +246,52 @@ button:disabled{
 ========================================================= */
 
 .slot-machine{
-  position:relative;
   margin-top:14px;
   padding:14px;
-  border:1px solid rgba(214,177,105,.38);
-  border-radius:22px;
+  border:1px solid rgba(214,177,105,.35);
+  border-radius:21px;
   background:
-    radial-gradient(circle at 50% 0%,rgba(214,177,105,.12),transparent 42%),
-    linear-gradient(145deg,#1b130f,#090706 75%);
+    radial-gradient(circle at 50% 0%,rgba(214,177,105,.08),transparent 45%),
+    linear-gradient(145deg,#1a130f,#0a0807);
   box-shadow:
-    0 22px 65px rgba(0,0,0,.55),
+    0 22px 60px rgba(0,0,0,.58),
     inset 0 1px 0 rgba(255,255,255,.035),
-    inset 0 0 40px rgba(214,177,105,.025);
-}
-
-.slot-machine:before{
-  content:"";
-  position:absolute;
-  inset:6px;
-  border:1px solid rgba(214,177,105,.075);
-  border-radius:17px;
-  pointer-events:none;
+    inset 0 -20px 30px rgba(0,0,0,.25);
 }
 
 .reels{
-  position:relative;
   display:grid;
   grid-template-columns:repeat(5,1fr);
   gap:6px;
   padding:8px;
   border-radius:15px;
-  background:
-    linear-gradient(180deg,#080606,#030303);
+  background:linear-gradient(145deg,#080706,#020202);
   border:1px solid rgba(214,177,105,.22);
   box-shadow:
     inset 0 0 25px rgba(0,0,0,.95),
-    0 5px 18px rgba(0,0,0,.4);
+    0 3px 15px rgba(0,0,0,.4);
 }
 
 .reel{
   position:relative;
-  height:92px;
+  height:94px;
   display:flex;
   flex-direction:column;
   align-items:center;
   justify-content:space-around;
   overflow:hidden;
   border-radius:10px;
-  background:
-    radial-gradient(circle at 50% 25%,rgba(255,255,255,.04),transparent 35%),
-    linear-gradient(180deg,#241913,#0b0807);
+  background:linear-gradient(180deg,#241a14,#0a0807);
   border:1px solid rgba(214,177,105,.13);
   box-shadow:
     inset 0 0 18px rgba(0,0,0,.9),
-    inset 0 1px 0 rgba(255,255,255,.025);
+    inset 0 1px 0 rgba(255,255,255,.035);
+}
+
+.reel.spinning{
+  box-shadow:
+    inset 0 0 18px rgba(0,0,0,.9),
+    0 0 16px rgba(214,177,105,.18);
 }
 
 .reel:after{
@@ -263,87 +302,285 @@ button:disabled{
   background:
     linear-gradient(
       180deg,
-      rgba(255,255,255,.025),
-      transparent 22%,
+      rgba(255,255,255,.035),
+      transparent 25%,
       transparent 75%,
-      rgba(0,0,0,.18)
+      rgba(0,0,0,.22)
     );
 }
 
 .symbol{
   position:relative;
   z-index:2;
-  width:42px;
-  height:28px;
+  width:38px;
+  height:30px;
   display:flex;
   align-items:center;
   justify-content:center;
-  font-family:"Cormorant Garamond",serif;
-  font-size:28px;
+  font-size:26px;
   line-height:1;
-  color:var(--gold3);
-  text-shadow:
-    0 1px 0 #8d682e,
-    0 -1px 0 #fff4d1,
-    0 0 5px rgba(255,224,151,.9),
-    0 0 13px rgba(214,177,105,.55),
-    0 4px 7px rgba(0,0,0,.9);
+  font-weight:700;
   filter:
-    drop-shadow(0 0 3px rgba(242,214,155,.7))
-    drop-shadow(0 4px 3px rgba(0,0,0,.8));
-  transform:perspective(120px) rotateX(3deg);
+    drop-shadow(0 4px 3px rgba(0,0,0,.9))
+    drop-shadow(0 0 7px rgba(255,215,150,.08));
+  transition:transform .15s,filter .15s;
 }
 
-.symbol.small{
-  font-size:23px;
+.symbol.win{
+  animation:winPulse .7s ease-in-out infinite alternate;
 }
 
-.symbol[data-symbol="peach"]{
-  color:var(--peach2);
-  text-shadow:
-    0 1px 0 #a45f42,
-    0 -1px 0 #ffe4d5,
-    0 0 6px rgba(255,181,145,.95),
-    0 0 15px rgba(242,161,125,.7),
-    0 4px 7px rgba(0,0,0,.9);
-}
-
-.reel.spinning .symbol{
-  filter:
-    blur(1.2px)
-    drop-shadow(0 0 8px rgba(242,214,155,.65));
-}
-
-.reel.win{
-  border-color:rgba(242,214,155,.75);
-  box-shadow:
-    inset 0 0 22px rgba(214,177,105,.13),
-    0 0 16px rgba(214,177,105,.22);
-}
-
-.reel.win .symbol{
-  animation:winGlow .75s ease-in-out infinite alternate;
-}
-
-@keyframes winGlow{
+@keyframes winPulse{
   from{
-    transform:scale(1) perspective(120px) rotateX(3deg);
+    transform:scale(1);
     filter:
-      drop-shadow(0 0 4px rgba(255,225,157,.7))
-      drop-shadow(0 4px 3px rgba(0,0,0,.8));
+      drop-shadow(0 4px 3px rgba(0,0,0,.9))
+      drop-shadow(0 0 6px rgba(255,215,150,.1));
   }
   to{
-    transform:scale(1.1) perspective(120px) rotateX(3deg);
+    transform:scale(1.16);
     filter:
-      drop-shadow(0 0 10px rgba(255,225,157,1))
-      drop-shadow(0 0 20px rgba(214,177,105,.65));
+      drop-shadow(0 4px 3px rgba(0,0,0,.9))
+      drop-shadow(0 0 18px rgba(255,220,150,.8));
   }
 }
+
+/* =========================================================
+   3D SYMBOLS
+========================================================= */
+
+.symbol.kp{
+  width:31px;
+  height:31px;
+  border-radius:50%;
+  background:
+    radial-gradient(circle at 32% 25%,#fff7dc 0 6%,transparent 8%),
+    linear-gradient(145deg,#f4dca5,#bd8d43 52%,#68451e);
+  color:#2b1808;
+  font-family:"Cormorant Garamond",serif;
+  font-size:18px;
+  font-weight:700;
+  border:1px solid rgba(255,238,183,.7);
+  box-shadow:
+    inset 3px 3px 5px rgba(255,255,255,.55),
+    inset -5px -5px 8px rgba(70,35,5,.55),
+    0 4px 8px rgba(0,0,0,.85),
+    0 0 12px rgba(214,177,105,.25);
+}
+
+.symbol.crown{
+  width:34px;
+  height:29px;
+  color:#f5d88f;
+  font-size:29px;
+  text-shadow:
+    1px 2px 0 #785625,
+    2px 4px 5px rgba(0,0,0,.9),
+    0 0 13px rgba(242,214,155,.4);
+}
+
+.symbol.bell{
+  width:29px;
+  height:30px;
+  border-radius:15px 15px 7px 7px;
+  background:
+    linear-gradient(
+      135deg,
+      #fff1ae 0%,
+      #e6b958 35%,
+      #a66d1f 70%,
+      #5b3711 100%
+    );
+  box-shadow:
+    inset 4px 4px 6px rgba(255,255,255,.65),
+    inset -5px -6px 8px rgba(67,34,4,.6),
+    0 5px 8px rgba(0,0,0,.9),
+    0 0 10px rgba(244,204,119,.25);
+}
+
+.symbol.bell:before{
+  content:"";
+  position:absolute;
+  width:35px;
+  height:5px;
+  top:-3px;
+  left:-3px;
+  border-radius:50%;
+  background:linear-gradient(180deg,#ffeab0,#a66d1f);
+  box-shadow:0 2px 3px rgba(0,0,0,.7);
+}
+
+.symbol.bell:after{
+  content:"";
+  position:absolute;
+  width:9px;
+  height:6px;
+  bottom:-4px;
+  left:10px;
+  border-radius:0 0 8px 8px;
+  background:#8b5719;
+}
+
+.symbol.cherry{
+  width:35px;
+  height:30px;
+}
+
+.symbol.cherry:before,
+.symbol.cherry:after{
+  content:"";
+  position:absolute;
+  bottom:1px;
+  width:18px;
+  height:18px;
+  border-radius:50%;
+  background:
+    radial-gradient(circle at 30% 25%,#ffdbd1 0 6%,transparent 8%),
+    linear-gradient(145deg,#ff7778,#c52743 70%,#641322);
+  box-shadow:
+    inset 3px 3px 4px rgba(255,255,255,.3),
+    inset -4px -4px 6px rgba(80,0,15,.5),
+    0 3px 5px rgba(0,0,0,.8);
+}
+
+.symbol.cherry:before{
+  left:1px;
+}
+
+.symbol.cherry:after{
+  right:1px;
+}
+
+.symbol.cherry{
+  border-top:3px solid #7d6332;
+}
+
+.symbol.diamond{
+  width:27px;
+  height:27px;
+  transform:rotate(45deg);
+  border-radius:5px;
+  background:
+    linear-gradient(
+      135deg,
+      #ffffff 0%,
+      #dff7ff 16%,
+      #70dfff 42%,
+      #2374b5 72%,
+      #10253e 100%
+    );
+  box-shadow:
+    inset -5px -5px 8px rgba(0,0,0,.42),
+    inset 4px 4px 5px rgba(255,255,255,.8),
+    0 0 10px rgba(90,210,255,.3);
+}
+
+.symbol.diamond:after{
+  content:"";
+  width:10px;
+  height:10px;
+  border-radius:50%;
+  background:rgba(255,255,255,.55);
+  filter:blur(2px);
+}
+
+.symbol.seven{
+  font-family:"Cormorant Garamond",serif;
+  font-size:35px;
+  color:#f5d88f;
+  text-shadow:
+    1px 2px 0 #79572a,
+    2px 4px 5px rgba(0,0,0,.9),
+    0 0 12px rgba(242,214,155,.4);
+}
+
+.symbol.heart{
+  width:29px;
+  height:26px;
+  background:
+    linear-gradient(145deg,#ff9eae,#bd344d 65%,#641928);
+  transform:rotate(-45deg);
+  border-radius:5px 0 5px 0;
+  box-shadow:
+    inset 4px 4px 5px rgba(255,255,255,.35),
+    inset -5px -5px 8px rgba(65,0,12,.45),
+    0 5px 8px rgba(0,0,0,.8),
+    0 0 10px rgba(255,90,120,.25);
+}
+
+.symbol.heart:before,
+.symbol.heart:after{
+  content:"";
+  position:absolute;
+  width:29px;
+  height:29px;
+  border-radius:50%;
+  background:inherit;
+}
+
+.symbol.heart:before{
+  top:-14px;
+  left:0;
+}
+
+.symbol.heart:after{
+  left:14px;
+  top:0;
+}
+
+.symbol.spade{
+  width:28px;
+  height:28px;
+  background:
+    linear-gradient(145deg,#5e5e5e,#080808);
+  clip-path:
+    polygon(
+      50% 0,
+      100% 60%,
+      75% 75%,
+      65% 75%,
+      65% 100%,
+      35% 100%,
+      35% 75%,
+      25% 75%,
+      0 60%
+    );
+  box-shadow:0 4px 7px rgba(0,0,0,.9);
+}
+
+.symbol.sparkle{
+  color:#f9e6ae;
+  font-size:31px;
+  text-shadow:
+    0 0 4px #fff,
+    0 0 9px rgba(242,214,155,.8),
+    0 0 18px rgba(214,177,105,.4),
+    2px 3px 4px rgba(0,0,0,.9);
+}
+
+/* =========================================================
+   PAYLINE / SPIN
+========================================================= */
 
 .payline{
   margin:12px 0 4px;
   text-align:center;
   font-size:8px;
+  letter-spacing:2px;
+  color:var(--muted);
+}
+
+.jackpot{
+  margin-top:5px;
+  text-align:center;
+  color:var(--gold2);
+  font-family:"Cormorant Garamond",serif;
+  font-size:20px;
+}
+
+.jackpot-label{
+  font-family:Montserrat,sans-serif;
+  font-size:7px;
   letter-spacing:2px;
   color:var(--muted);
 }
@@ -355,18 +592,17 @@ button:disabled{
   border:1px solid var(--gold);
   border-radius:12px;
   background:
-    linear-gradient(180deg,#e3c27b 0%,#c99b4c 48%,#9d7032 100%);
+    linear-gradient(180deg,#e5c47c,#aa7e3b 72%,#805d2c);
   color:#120d08;
   font-weight:700;
   letter-spacing:3px;
   box-shadow:
-    0 8px 28px rgba(214,177,105,.2),
-    inset 0 1px 0 rgba(255,255,255,.45);
-  text-shadow:0 1px 0 rgba(255,255,255,.25);
+    0 9px 25px rgba(214,177,105,.18),
+    inset 0 1px 0 rgba(255,255,255,.35);
 }
 
 .spin-btn:active{
-  transform:scale(.985);
+  transform:scale(.98);
 }
 
 .spin-btn:disabled{
@@ -392,9 +628,8 @@ button:disabled{
 .bet-btn.selected{
   border-color:var(--gold);
   color:var(--gold2);
-  background:
-    linear-gradient(180deg,rgba(214,177,105,.11),rgba(214,177,105,.025));
-  box-shadow:0 0 12px rgba(214,177,105,.08);
+  background:rgba(214,177,105,.06);
+  box-shadow:inset 0 0 12px rgba(214,177,105,.04);
 }
 
 /* =========================================================
@@ -411,20 +646,18 @@ button:disabled{
 .action-btn{
   padding:15px 10px;
   border-radius:13px;
-  border:1px solid var(--line);
-  background:
-    linear-gradient(145deg,#17100d,#0e0908);
+  border:1px solid rgba(214,177,105,.25);
+  background:linear-gradient(145deg,#17100d,#0d0908);
   color:var(--cream);
   text-align:left;
-  box-shadow:
-    0 10px 25px rgba(0,0,0,.2),
-    inset 0 1px 0 rgba(255,255,255,.025);
+  box-shadow:0 8px 20px rgba(0,0,0,.25);
 }
 
 .action-btn strong{
   display:block;
   font-size:11px;
   margin-bottom:4px;
+  color:var(--gold2);
 }
 
 .action-btn span{
@@ -443,11 +676,9 @@ button:disabled{
   border:1px solid rgba(214,177,105,.24);
   border-radius:16px;
   background:
-    radial-gradient(circle at 90% 0%,rgba(214,177,105,.07),transparent 30%),
+    radial-gradient(circle at 100% 0%,rgba(214,177,105,.06),transparent 40%),
     linear-gradient(145deg,#17100d,#0d0908);
-  box-shadow:
-    0 12px 30px rgba(0,0,0,.25),
-    inset 0 1px 0 rgba(255,255,255,.025);
+  box-shadow:0 10px 28px rgba(0,0,0,.25);
 }
 
 .reward-top{
@@ -457,22 +688,17 @@ button:disabled{
 }
 
 .reward-icon{
-  width:42px;
-  height:42px;
-  flex:0 0 42px;
+  width:38px;
+  height:38px;
+  flex:0 0 38px;
   display:flex;
   align-items:center;
   justify-content:center;
-  border-radius:50%;
-  border:1px solid rgba(214,177,105,.3);
-  background:radial-gradient(circle,#322414,#0d0907);
+  border:1px solid rgba(214,177,105,.28);
+  border-radius:12px;
   color:var(--gold2);
-  font-family:"Cormorant Garamond",serif;
-  font-size:25px;
-  text-shadow:0 0 12px rgba(242,214,155,.65);
-  box-shadow:
-    inset 0 0 14px rgba(214,177,105,.08),
-    0 0 15px rgba(214,177,105,.06);
+  background:rgba(214,177,105,.045);
+  box-shadow:inset 0 0 14px rgba(214,177,105,.04);
 }
 
 .reward-name{
@@ -517,24 +743,52 @@ button:disabled{
 .wallet-box{
   padding:20px;
   margin-top:12px;
-  border:1px solid var(--line);
+  border:1px solid rgba(214,177,105,.3);
   border-radius:18px;
   background:
-    radial-gradient(circle at 50% 0%,rgba(214,177,105,.09),transparent 50%),
+    radial-gradient(circle at 50% 0%,rgba(214,177,105,.08),transparent 55%),
     linear-gradient(145deg,#18120e,#0d0908);
   text-align:center;
+  box-shadow:0 15px 35px rgba(0,0,0,.35);
 }
 
 .wallet-number{
   font-family:"Cormorant Garamond",serif;
   font-size:43px;
   color:var(--gold2);
-  text-shadow:0 0 20px rgba(242,214,155,.12);
+  text-shadow:0 3px 9px rgba(0,0,0,.8);
 }
 
 .wallet-label{
   font-size:8px;
   letter-spacing:3px;
+  color:var(--muted);
+}
+
+.wallet-stats{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:8px;
+  margin-top:12px;
+}
+
+.stat{
+  padding:12px 8px;
+  border:1px solid rgba(214,177,105,.15);
+  border-radius:12px;
+  background:#0d0908;
+}
+
+.stat strong{
+  display:block;
+  color:var(--gold2);
+  font-family:"Cormorant Garamond",serif;
+  font-size:21px;
+}
+
+.stat span{
+  font-size:7px;
+  letter-spacing:1px;
   color:var(--muted);
 }
 
@@ -546,6 +800,7 @@ button:disabled{
   display:flex;
   justify-content:space-between;
   align-items:center;
+  gap:10px;
   padding:13px 2px;
   border-bottom:1px solid rgba(214,177,105,.1);
 }
@@ -569,19 +824,55 @@ button:disabled{
 }
 
 /* =========================================================
+   LEADERBOARD
+========================================================= */
+
+.leaderboard{
+  margin-top:18px;
+}
+
+.leader-item{
+  display:flex;
+  align-items:center;
+  gap:11px;
+  padding:12px 4px;
+  border-bottom:1px solid rgba(214,177,105,.1);
+}
+
+.rank{
+  width:28px;
+  height:28px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  border:1px solid rgba(214,177,105,.25);
+  border-radius:50%;
+  color:var(--gold2);
+  font-family:"Cormorant Garamond",serif;
+  font-size:16px;
+}
+
+.leader-name{
+  flex:1;
+  font-size:10px;
+}
+
+.leader-coins{
+  color:var(--gold2);
+  font-size:9px;
+}
+
+/* =========================================================
    GIFT
 ========================================================= */
 
 .form-box{
   margin-top:15px;
   padding:18px;
-  border:1px solid var(--line);
+  border:1px solid rgba(214,177,105,.28);
   border-radius:17px;
-  background:
-    linear-gradient(145deg,#15100d,#0d0908);
-  box-shadow:
-    0 12px 30px rgba(0,0,0,.25),
-    inset 0 1px 0 rgba(255,255,255,.025);
+  background:linear-gradient(145deg,#15100d,#0d0908);
+  box-shadow:0 12px 30px rgba(0,0,0,.28);
 }
 
 .field-label{
@@ -604,7 +895,6 @@ button:disabled{
 
 .text-input:focus{
   border-color:var(--gold);
-  box-shadow:0 0 12px rgba(214,177,105,.07);
 }
 
 .amount-grid{
@@ -626,7 +916,6 @@ button:disabled{
 .amount-btn.selected{
   border-color:var(--gold);
   color:var(--gold2);
-  background:rgba(214,177,105,.06);
 }
 
 .gift-btn{
@@ -651,20 +940,16 @@ button:disabled{
   border-radius:18px;
   border:1px solid var(--gold);
   background:
-    radial-gradient(circle at 50% 0%,rgba(214,177,105,.14),transparent 50%),
+    radial-gradient(circle at 50% 0%,rgba(214,177,105,.13),transparent 50%),
     #100b09;
   text-align:center;
-  box-shadow:
-    0 15px 40px rgba(0,0,0,.3),
-    inset 0 1px 0 rgba(255,255,255,.035);
+  box-shadow:0 18px 45px rgba(0,0,0,.35);
 }
 
 .vip-crown{
   font-size:36px;
   color:var(--gold2);
-  text-shadow:
-    0 0 8px rgba(242,214,155,.75),
-    0 0 20px rgba(214,177,105,.4);
+  text-shadow:0 0 12px rgba(214,177,105,.3);
 }
 
 .vip-level{
@@ -685,8 +970,49 @@ button:disabled{
 .progress-bar{
   width:0%;
   height:100%;
-  background:linear-gradient(90deg,#a77c38,#f2d69b);
-  transition:width .4s ease;
+  background:linear-gradient(90deg,#9d7133,#f0d493);
+  transition:width .5s ease;
+}
+
+/* =========================================================
+   BONUS
+========================================================= */
+
+.bonus-card{
+  margin-top:14px;
+  padding:16px;
+  border:1px solid rgba(214,177,105,.25);
+  border-radius:15px;
+  background:
+    radial-gradient(circle at 100% 0%,rgba(255,158,145,.06),transparent 40%),
+    linear-gradient(145deg,#17100d,#0d0908);
+}
+
+.bonus-card strong{
+  display:block;
+  color:var(--gold2);
+  font-family:"Cormorant Garamond",serif;
+  font-size:22px;
+}
+
+.bonus-card span{
+  display:block;
+  margin-top:4px;
+  color:var(--muted);
+  font-size:8px;
+  line-height:1.6;
+}
+
+.bonus-btn{
+  width:100%;
+  margin-top:12px;
+  padding:11px;
+  border:1px solid var(--gold);
+  border-radius:9px;
+  background:transparent;
+  color:var(--gold2);
+  font-size:9px;
+  letter-spacing:1px;
 }
 
 /* =========================================================
@@ -718,9 +1044,7 @@ button:disabled{
   background:
     radial-gradient(circle at 50% 0%,rgba(214,177,105,.1),transparent 50%),
     #100c0a;
-  box-shadow:
-    0 25px 80px rgba(0,0,0,.7),
-    0 0 35px rgba(214,177,105,.06);
+  box-shadow:0 25px 80px rgba(0,0,0,.7);
   text-align:center;
 }
 
@@ -804,7 +1128,7 @@ button:disabled{
 
 .toast{
   position:fixed;
-  z-index:200;
+  z-index:600;
   left:50%;
   bottom:85px;
   transform:translate(-50%,20px);
@@ -820,7 +1144,7 @@ button:disabled{
   opacity:0;
   pointer-events:none;
   transition:.25s;
-  box-shadow:0 10px 35px rgba(0,0,0,.5);
+  box-shadow:0 10px 30px rgba(0,0,0,.5);
 }
 
 .toast.show{
@@ -828,98 +1152,21 @@ button:disabled{
   transform:translate(-50%,0);
 }
 
-/* =========================================================
-   LOGIN
-========================================================= */
-
-.login-overlay{
-  position:fixed;
-  inset:0;
-  z-index:500;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  padding:25px;
-  background:
-    radial-gradient(circle at 50% 20%,rgba(214,177,105,.13),transparent 35%),
-    #080605;
+.hidden{
+  display:none!important;
 }
 
-.login-card{
-  width:100%;
-  max-width:390px;
-  padding:30px 24px;
-  border:1px solid rgba(214,177,105,.38);
-  border-radius:21px;
-  background:
-    linear-gradient(145deg,#17110e,#0b0807);
-  text-align:center;
-  box-shadow:
-    0 25px 90px rgba(0,0,0,.75),
-    inset 0 1px 0 rgba(255,255,255,.035);
-}
-
-.login-logo{
-  font-family:"Cormorant Garamond",serif;
-  font-size:34px;
-  letter-spacing:5px;
-  color:var(--gold2);
-  text-shadow:0 0 20px rgba(242,214,155,.15);
-}
-
-.login-line{
-  width:70px;
-  height:1px;
-  margin:14px auto;
-  background:linear-gradient(90deg,transparent,var(--gold),transparent);
-}
-
-.login-text{
-  color:var(--muted);
-  font-size:10px;
-  line-height:1.7;
-}
-
-.login-spinner{
-  width:25px;
-  height:25px;
-  margin:20px auto 0;
-  border:2px solid rgba(214,177,105,.2);
-  border-top-color:var(--gold2);
-  border-radius:50%;
-  animation:spinLoader .8s linear infinite;
-}
-
-@keyframes spinLoader{
-  to{transform:rotate(360deg)}
-}
-
-.login-retry{
-  display:none;
-  width:100%;
-  margin-top:18px;
-  padding:12px;
-  border-radius:9px;
-  border:1px solid var(--gold);
-  background:transparent;
-  color:var(--gold2);
-}
-
-/* =========================================================
-   RESPONSIVE
-========================================================= */
-
-@media(max-width:380px){
+@media(max-width:360px){
   .reel{
-    height:82px;
+    height:86px;
   }
 
   .symbol{
-    font-size:24px;
+    transform:scale(.9);
   }
 
-  .symbol.small{
-    font-size:20px;
+  .symbol.diamond{
+    transform:rotate(45deg) scale(.9);
   }
 
   .brand{
@@ -931,23 +1178,28 @@ button:disabled{
 
 <body>
 
-<!-- LOGIN STATUS -->
+<!-- =======================================================
+     LOGIN
+======================================================= -->
 
 <div class="login-overlay" id="loginOverlay">
 
   <div class="login-card">
 
-    <div class="login-logo">KIMIA PRIVÉ</div>
-
-    <div class="login-line"></div>
-
-    <div class="login-text" id="loginText">
-      Authenticating your PRIVÉ account…
+    <div class="login-logo">
+      KIMIA PRIVÉ
     </div>
 
-    <div class="login-spinner" id="loginSpinner"></div>
+    <div class="login-status" id="loginStatus">
+      Connecting to your PRIVÉ account…
+    </div>
 
-    <button class="login-retry" id="loginRetry" onclick="startLogin()">
+    <button
+      class="login-retry"
+      id="loginRetry"
+      type="button"
+      onclick="loginPlayer()"
+    >
       RETRY LOGIN
     </button>
 
@@ -962,13 +1214,19 @@ button:disabled{
   <div class="subtitle">PLAY • WIN • PRIVÉ</div>
 </header>
 
+<!-- BALANCE -->
+
 <div class="balance-card">
 
-  <div class="balance-label">PRIVÉ COINS</div>
+  <div class="balance-label">
+    PRIVÉ COINS
+  </div>
 
   <div class="balance-row">
 
-    <div class="balance" id="balance">—</div>
+    <div class="balance" id="balance">
+      —
+    </div>
 
     <div class="vip-pill" id="vipStatus">
       VIP 0
@@ -989,33 +1247,33 @@ button:disabled{
     <div class="reels" id="reels">
 
       <div class="reel">
-        <div class="symbol">♛</div>
-        <div class="symbol small">✦</div>
-        <div class="symbol">♠</div>
+        <div class="symbol diamond"></div>
+        <div class="symbol crown">♛</div>
+        <div class="symbol cherry"></div>
       </div>
 
       <div class="reel">
-        <div class="symbol">◆</div>
-        <div class="symbol small">♥</div>
-        <div class="symbol">✦</div>
+        <div class="symbol seven">7</div>
+        <div class="symbol heart"></div>
+        <div class="symbol bell"></div>
       </div>
 
       <div class="reel">
-        <div class="symbol">♛</div>
-        <div class="symbol small">◆</div>
-        <div class="symbol">♥</div>
+        <div class="symbol diamond"></div>
+        <div class="symbol cherry"></div>
+        <div class="symbol heart"></div>
       </div>
 
       <div class="reel">
-        <div class="symbol">✦</div>
-        <div class="symbol small">♠</div>
-        <div class="symbol">◆</div>
+        <div class="symbol bell"></div>
+        <div class="symbol spade"></div>
+        <div class="symbol diamond"></div>
       </div>
 
       <div class="reel">
-        <div class="symbol">♥</div>
-        <div class="symbol small">♛</div>
-        <div class="symbol">✦</div>
+        <div class="symbol heart"></div>
+        <div class="symbol seven">7</div>
+        <div class="symbol crown">♛</div>
       </div>
 
     </div>
@@ -1024,7 +1282,14 @@ button:disabled{
       5 REELS • 3 ROWS • 5 PAYLINES
     </div>
 
-    <!-- MATCHES SERVER.JS EXACTLY -->
+    <div class="jackpot">
+      <div class="jackpot-label">
+        PRIVÉ JACKPOT
+      </div>
+      <span id="jackpot">
+        —
+      </span>
+    </div>
 
     <div class="bet-row">
 
@@ -1052,15 +1317,41 @@ button:disabled{
 
   </div>
 
+  <div class="bonus-card">
+
+    <strong>
+      DAILY PRIVÉ
+    </strong>
+
+    <span>
+      Claim your daily coin bonus when available.
+    </span>
+
+    <button
+      class="bonus-btn"
+      id="bonusBtn"
+      onclick="claimBonus()"
+    >
+      CLAIM DAILY BONUS
+    </button>
+
+  </div>
+
   <div class="action-grid">
 
-    <button class="action-btn" onclick="showScreen('rewards')">
-      <strong>🎁 REWARDS</strong>
+    <button
+      class="action-btn"
+      onclick="showScreen('rewards')"
+    >
+      <strong>REWARDS</strong>
       <span>Redeem your PRIVÉ coins</span>
     </button>
 
-    <button class="action-btn" onclick="showScreen('gift')">
-      <strong>🎀 GIFT COINS</strong>
+    <button
+      class="action-btn"
+      onclick="showScreen('gift')"
+    >
+      <strong>GIFT COINS</strong>
       <span>Send coins to another player</span>
     </button>
 
@@ -1079,7 +1370,7 @@ button:disabled{
   </div>
 
   <div class="section-sub">
-    Your balance is synchronized with your PRIVÉ account.
+    Your balance is synchronized directly with your PRIVÉ account.
   </div>
 
   <div class="wallet-box">
@@ -1092,11 +1383,36 @@ button:disabled{
       —
     </div>
 
+    <div class="wallet-stats">
+
+      <div class="stat">
+        <strong id="totalSpins">
+          0
+        </strong>
+        <span>
+          SPINS
+        </span>
+      </div>
+
+      <div class="stat">
+        <strong id="totalWon">
+          0
+        </strong>
+        <span>
+          TOTAL WON
+        </span>
+      </div>
+
+    </div>
+
   </div>
 
   <div class="history">
 
-    <div class="section-title" style="font-size:22px">
+    <div
+      class="section-title"
+      style="font-size:22px"
+    >
       Recent Activity
     </div>
 
@@ -1105,14 +1421,42 @@ button:disabled{
       <div class="history-item">
 
         <div class="history-left">
-          <strong>Wallet connected</strong>
-          <span>Your current server balance is shown above.</span>
+
+          <strong>
+            Account connected
+          </strong>
+
+          <span>
+            Your current server balance is shown above.
+          </span>
+
         </div>
 
-        <div>—</div>
+        <div>
+          —
+        </div>
 
       </div>
 
+    </div>
+
+  </div>
+
+  <div class="leaderboard">
+
+    <div
+      class="section-title"
+      style="font-size:22px"
+    >
+      PRIVÉ Leaderboard
+    </div>
+
+    <div id="leaderboardList">
+      <div class="history-item">
+        <div class="history-left">
+          <strong>Loading leaderboard…</strong>
+        </div>
+      </div>
     </div>
 
   </div>
@@ -1130,7 +1474,7 @@ button:disabled{
   </div>
 
   <div class="section-sub">
-    Turn your coins into exclusive perks, discounts and access.
+    Turn your PRIVÉ coins into exclusive perks, discounts and access.
   </div>
 
   <div class="reward-card">
@@ -1138,7 +1482,6 @@ button:disabled{
     <div class="reward-top">
 
       <div>
-
         <div class="reward-name">
           10% OFF
         </div>
@@ -1146,7 +1489,6 @@ button:disabled{
         <div class="reward-desc">
           Take 10% off an eligible PRIVÉ subscription.
         </div>
-
       </div>
 
       <div class="reward-icon">
@@ -1161,7 +1503,8 @@ button:disabled{
 
     <button
       class="redeem-btn"
-      onclick="requestRedeem('10% OFF Subscription',5000)">
+      onclick="requestRedeem('10% OFF Subscription',5000)"
+    >
       REDEEM
     </button>
 
@@ -1172,7 +1515,6 @@ button:disabled{
     <div class="reward-top">
 
       <div>
-
         <div class="reward-name">
           24-HOUR ACCESS
         </div>
@@ -1180,11 +1522,10 @@ button:disabled{
         <div class="reward-desc">
           Unlock a 24-hour promotional access reward.
         </div>
-
       </div>
 
       <div class="reward-icon">
-        ♛
+        24
       </div>
 
     </div>
@@ -1195,7 +1536,8 @@ button:disabled{
 
     <button
       class="redeem-btn"
-      onclick="requestRedeem('24-Hour Access',10000)">
+      onclick="requestRedeem('24-Hour Access',10000)"
+    >
       REDEEM
     </button>
 
@@ -1206,7 +1548,6 @@ button:disabled{
     <div class="reward-top">
 
       <div>
-
         <div class="reward-name">
           25% OFF
         </div>
@@ -1214,7 +1555,6 @@ button:disabled{
         <div class="reward-desc">
           Receive 25% off an eligible subscription or content purchase.
         </div>
-
       </div>
 
       <div class="reward-icon">
@@ -1229,7 +1569,8 @@ button:disabled{
 
     <button
       class="redeem-btn"
-      onclick="requestRedeem('25% OFF Subscription',25000)">
+      onclick="requestRedeem('25% OFF Subscription',25000)"
+    >
       REDEEM
     </button>
 
@@ -1240,7 +1581,6 @@ button:disabled{
     <div class="reward-top">
 
       <div>
-
         <div class="reward-name">
           7-DAY PRIVÉ
         </div>
@@ -1248,11 +1588,10 @@ button:disabled{
         <div class="reward-desc">
           Unlock a seven-day promotional access reward.
         </div>
-
       </div>
 
       <div class="reward-icon">
-        ♥
+        7
       </div>
 
     </div>
@@ -1263,7 +1602,8 @@ button:disabled{
 
     <button
       class="redeem-btn"
-      onclick="requestRedeem('7-Day Privé Access',50000)">
+      onclick="requestRedeem('7-Day Privé Access',50000)"
+    >
       REDEEM
     </button>
 
@@ -1274,7 +1614,6 @@ button:disabled{
     <div class="reward-top">
 
       <div>
-
         <div class="reward-name">
           MYSTERY PRIVÉ
         </div>
@@ -1282,7 +1621,6 @@ button:disabled{
         <div class="reward-desc">
           A surprise reward selected from the current PRIVÉ collection.
         </div>
-
       </div>
 
       <div class="reward-icon">
@@ -1297,7 +1635,8 @@ button:disabled{
 
     <button
       class="redeem-btn"
-      onclick="requestRedeem('Mystery Privé Reward',75000)">
+      onclick="requestRedeem('Mystery Privé Reward',75000)"
+    >
       REDEEM
     </button>
 
@@ -1330,11 +1669,13 @@ button:disabled{
       id="recipient"
       placeholder="@username"
       autocomplete="off"
+      maxlength="64"
     >
 
     <label
       class="field-label"
-      style="margin-top:18px">
+      style="margin-top:18px"
+    >
       GIFT AMOUNT
     </label>
 
@@ -1378,7 +1719,8 @@ button:disabled{
 
     <button
       class="gift-btn"
-      onclick="prepareGift()">
+      onclick="prepareGift()"
+    >
       SEND COINS
     </button>
 
@@ -1406,21 +1748,25 @@ button:disabled{
       ♛
     </div>
 
-    <div class="vip-level" id="vipLevel">
+    <div
+      class="vip-level"
+      id="vipLevel"
+    >
       PRIVÉ MEMBER
     </div>
 
     <div
       class="section-sub"
-      style="margin:8px 0 0">
+      style="margin:8px 0 0"
+    >
       Your VIP benefits will appear here.
     </div>
 
     <div class="progress">
       <div
         class="progress-bar"
-        id="vipProgress">
-      </div>
+        id="vipProgress"
+      ></div>
     </div>
 
     <div style="
@@ -1438,7 +1784,7 @@ button:disabled{
     <button class="action-btn">
 
       <strong>
-        ✦ COIN BONUS
+        COIN BONUS
       </strong>
 
       <span>
@@ -1450,7 +1796,7 @@ button:disabled{
     <button class="action-btn">
 
       <strong>
-        ♛ VIP REWARDS
+        VIP REWARDS
       </strong>
 
       <span>
@@ -1471,27 +1817,42 @@ button:disabled{
 
 <nav class="bottom-nav">
 
-  <button class="nav-btn active" data-screen="play">
-    <span class="nav-icon">🎰</span>
+  <button
+    class="nav-btn active"
+    data-screen="play"
+  >
+    <span class="nav-icon">♛</span>
     PLAY
   </button>
 
-  <button class="nav-btn" data-screen="wallet">
-    <span class="nav-icon">💎</span>
+  <button
+    class="nav-btn"
+    data-screen="wallet"
+  >
+    <span class="nav-icon">◆</span>
     WALLET
   </button>
 
-  <button class="nav-btn" data-screen="rewards">
-    <span class="nav-icon">🎁</span>
+  <button
+    class="nav-btn"
+    data-screen="rewards"
+  >
+    <span class="nav-icon">✦</span>
     REWARDS
   </button>
 
-  <button class="nav-btn" data-screen="gift">
-    <span class="nav-icon">🎀</span>
+  <button
+    class="nav-btn"
+    data-screen="gift"
+  >
+    <span class="nav-icon">♡</span>
     GIFT
   </button>
 
-  <button class="nav-btn" data-screen="vip">
+  <button
+    class="nav-btn"
+    data-screen="vip"
+  >
     <span class="nav-icon">♛</span>
     VIP
   </button>
@@ -1502,19 +1863,24 @@ button:disabled{
      CONFIRMATION MODAL
 ======================================================= -->
 
-<div class="modal" id="confirmModal">
+<div
+  class="modal"
+  id="confirmModal"
+>
 
   <div class="modal-card">
 
     <div
       class="modal-title"
-      id="modalTitle">
+      id="modalTitle"
+    >
       Confirm
     </div>
 
     <div
       class="modal-text"
-      id="modalText">
+      id="modalText"
+    >
       Are you sure?
     </div>
 
@@ -1522,13 +1888,15 @@ button:disabled{
 
       <button
         class="cancel"
-        onclick="closeModal()">
+        onclick="closeModal()"
+      >
         CANCEL
       </button>
 
       <button
         class="confirm"
-        id="confirmBtn">
+        id="confirmBtn"
+      >
         CONFIRM
       </button>
 
@@ -1538,13 +1906,15 @@ button:disabled{
 
 </div>
 
-<div class="toast" id="toast"></div>
+<div
+  class="toast"
+  id="toast"
+></div>
 
 <script>
 /* =========================================================
    KIMIA PRIVÉ
-   FRONTEND
-   MATCHED TO CURRENT SERVER.JS
+   SERVER-SYNCED FRONTEND
 ========================================================= */
 
 const tg =
@@ -1568,18 +1938,80 @@ if(tg){
 ========================================================= */
 
 let balance = 0;
-
 let selectedBet = 300;
-
 let selectedGift = 0;
-
 let spinning = false;
+let loggedIn = false;
 
-let playerLoaded = false;
+let vipLevel = 0;
+let vipProgress = 0;
+let totalSpins = 0;
+let totalWon = 0;
+let jackpot = 0;
 
 let pendingReward = null;
-
 let pendingGift = null;
+
+const BET_OPTIONS = [
+  300,
+  600,
+  1500,
+  3000
+];
+
+/*
+  IMPORTANT:
+  These IDs exactly match the current server.js.
+*/
+
+const SERVER_SYMBOL_MAP = {
+
+  kp:{
+    className:"kp",
+    text:"KP"
+  },
+
+  crown:{
+    className:"crown",
+    text:"♛"
+  },
+
+  bell:{
+    className:"bell",
+    text:""
+  },
+
+  cherry:{
+    className:"cherry",
+    text:""
+  },
+
+  diamond:{
+    className:"diamond",
+    text:""
+  },
+
+  heart:{
+    className:"heart",
+    text:""
+  },
+
+  seven:{
+    className:"seven",
+    text:"7"
+  }
+
+};
+
+const ANIMATION_SYMBOLS = [
+  "kp",
+  "crown",
+  "bell",
+  "cherry",
+  "diamond",
+  "heart",
+  "seven"
+];
 
 /* =========================================================
    HELPERS
@@ -1590,24 +2022,16 @@ const $ = id =>
 
 function formatCoins(value){
 
-  const number =
-    Number(value);
-
-  if(!Number.isFinite(number)){
-    return "0";
-  }
-
-  return Math.max(0,Math.trunc(number))
+  return Number(value || 0)
     .toLocaleString();
+
 }
 
 function showToast(message){
 
-  const toast =
-    $("toast");
+  const toast = $("toast");
 
-  toast.textContent =
-    message;
+  toast.textContent = message;
 
   toast.classList.add("show");
 
@@ -1617,25 +2041,89 @@ function showToast(message){
     setTimeout(()=>{
       toast.classList.remove("show");
     },2800);
+
 }
 
 function setBalance(value){
 
-  const number =
+  const numeric =
     Number(value);
 
-  if(!Number.isFinite(number)){
+  if(!Number.isFinite(numeric)){
     return;
   }
 
-  balance =
-    Math.max(0,Math.trunc(number));
+  balance = numeric;
 
   $("balance").textContent =
     formatCoins(balance);
 
   $("walletBalance").textContent =
     formatCoins(balance);
+
+}
+
+function setVip(level,progress){
+
+  if(level !== undefined &&
+     level !== null){
+
+    vipLevel =
+      Number(level) || 0;
+
+    $("vipStatus").textContent =
+      "VIP " + vipLevel;
+
+    $("vipLevel").textContent =
+      "VIP " + vipLevel;
+  }
+
+  if(progress !== undefined &&
+     progress !== null){
+
+    vipProgress =
+      Math.max(
+        0,
+        Math.min(
+          100,
+          Number(progress) || 0
+        )
+      );
+
+    $("vipProgress").style.width =
+      vipProgress + "%";
+  }
+
+}
+
+function setStats(user){
+
+  if(!user){
+    return;
+  }
+
+  totalSpins =
+    Number(user.totalSpins || 0);
+
+  totalWon =
+    Number(user.totalWon || 0);
+
+  $("totalSpins").textContent =
+    formatCoins(totalSpins);
+
+  $("totalWon").textContent =
+    formatCoins(totalWon);
+
+}
+
+function setJackpot(value){
+
+  jackpot =
+    Number(value || 0);
+
+  $("jackpot").textContent =
+    formatCoins(jackpot);
+
 }
 
 /* =========================================================
@@ -1644,7 +2132,8 @@ function setBalance(value){
 
 function showScreen(name){
 
-  document.querySelectorAll(".screen")
+  document
+    .querySelectorAll(".screen")
     .forEach(screen=>{
       screen.classList.remove("active");
     });
@@ -1656,7 +2145,8 @@ function showScreen(name){
     target.classList.add("active");
   }
 
-  document.querySelectorAll(".nav-btn")
+  document
+    .querySelectorAll(".nav-btn")
     .forEach(btn=>{
       btn.classList.toggle(
         "active",
@@ -1668,40 +2158,57 @@ function showScreen(name){
     top:0,
     behavior:"smooth"
   });
+
 }
 
-document.querySelectorAll(".nav-btn")
+document
+  .querySelectorAll(".nav-btn")
   .forEach(btn=>{
 
-    btn.addEventListener("click",()=>{
-      showScreen(btn.dataset.screen);
-    });
+    btn.addEventListener(
+      "click",
+      ()=>{
+        showScreen(
+          btn.dataset.screen
+        );
+      }
+    );
 
   });
 
 /* =========================================================
-   BETS
-   EXACT VALUES FROM SERVER.JS
+   BET SELECTION
 ========================================================= */
 
-document.querySelectorAll(".bet-btn")
+document
+  .querySelectorAll(".bet-btn")
   .forEach(btn=>{
 
-    btn.addEventListener("click",()=>{
+    btn.addEventListener(
+      "click",
+      ()=>{
 
-      if(spinning) return;
+        const bet =
+          Number(btn.dataset.bet);
 
-      document.querySelectorAll(".bet-btn")
-        .forEach(x=>{
-          x.classList.remove("selected");
-        });
+        if(!BET_OPTIONS.includes(bet)){
+          return;
+        }
 
-      btn.classList.add("selected");
+        document
+          .querySelectorAll(".bet-btn")
+          .forEach(x=>{
+            x.classList.remove(
+              "selected"
+            );
+          });
 
-      selectedBet =
-        Number(btn.dataset.bet);
+        btn.classList.add("selected");
 
-    });
+        selectedBet = bet;
+
+      }
+    );
 
   });
 
@@ -1709,94 +2216,159 @@ document.querySelectorAll(".bet-btn")
    GIFT AMOUNTS
 ========================================================= */
 
-document.querySelectorAll(".amount-btn")
+document
+  .querySelectorAll(".amount-btn")
   .forEach(btn=>{
 
-    btn.addEventListener("click",()=>{
+    btn.addEventListener(
+      "click",
+      ()=>{
 
-      document.querySelectorAll(".amount-btn")
-        .forEach(x=>{
-          x.classList.remove("selected");
-        });
+        document
+          .querySelectorAll(".amount-btn")
+          .forEach(x=>{
+            x.classList.remove(
+              "selected"
+            );
+          });
 
-      btn.classList.add("selected");
+        btn.classList.add("selected");
 
-      selectedGift =
-        Number(btn.dataset.gift);
+        selectedGift =
+          Number(btn.dataset.gift);
 
-      $("customAmount").value = "";
+        $("customAmount").value = "";
 
-    });
+      }
+    );
 
   });
 
 $("customAmount")
-  .addEventListener("input",()=>{
+  .addEventListener(
+    "input",
+    ()=>{
+      if(
+        Number(
+          $("customAmount").value
+        ) > 0
+      ){
 
-    if($("customAmount").value){
+        selectedGift = 0;
 
-      selectedGift = 0;
+        document
+          .querySelectorAll(".amount-btn")
+          .forEach(x=>{
+            x.classList.remove(
+              "selected"
+            );
+          });
 
-      document.querySelectorAll(".amount-btn")
-        .forEach(x=>{
-          x.classList.remove("selected");
-        });
-
+      }
     }
-
-  });
+  );
 
 /* =========================================================
    API
 ========================================================= */
 
-/*
-  IMPORTANT:
-  server.js verifies:
-  
-  req.body.initData
+async function api(path,options={}){
 
-  Therefore every authenticated request below
-  sends Telegram initData inside the JSON body.
-*/
+  const method =
+    String(
+      options.method || "GET"
+    ).toUpperCase();
 
-async function api(path,options = {}){
+  /*
+    The current server auth middleware accepts:
+      X-Telegram-Init-Data
 
-  if(!tg || !tg.initData){
+    GET /api/state cannot receive JSON body,
+    so we send initData as a header.
+
+    POST endpoints receive it in both the
+    header and JSON body for compatibility.
+  */
+
+  if(!tg){
 
     throw new Error(
-      "Open KIMIA PRIVÉ from Telegram to log in."
+      "Telegram WebApp was not detected."
     );
 
   }
 
-  let body =
-    options.body || {};
+  const initData =
+    tg.initData || "";
 
-  if(typeof body === "string"){
+  if(!initData){
 
-    try{
-      body = JSON.parse(body);
-    }catch{
-      body = {};
-    }
+    throw new Error(
+      "Open KIMIA PRIVÉ from the Telegram bot."
+    );
 
   }
 
-  body.initData =
-    tg.initData;
-
   const headers = {
-    "Content-Type":"application/json",
-    ...(options.headers || {})
+    "X-Telegram-Init-Data":
+      initData
   };
 
+  let body;
+
+  if(method !== "GET"){
+
+    headers["Content-Type"] =
+      "application/json";
+
+    let suppliedBody = {};
+
+    if(options.body){
+
+      if(
+        typeof options.body ===
+        "string"
+      ){
+
+        try{
+          suppliedBody =
+            JSON.parse(
+              options.body
+            );
+        }catch{
+          suppliedBody = {};
+        }
+
+      }else{
+
+        suppliedBody =
+          options.body || {};
+
+      }
+
+    }
+
+    body =
+      JSON.stringify({
+        ...suppliedBody,
+        initData
+      });
+
+  }
+
   const response =
-    await fetch(path,{
-      ...options,
-      headers,
-      body:JSON.stringify(body)
-    });
+    await fetch(
+      path,
+      {
+        ...options,
+        method,
+        headers:{
+          ...headers,
+          ...(options.headers || {})
+        },
+        body
+      }
+    );
 
   const text =
     await response.text();
@@ -1827,208 +2399,188 @@ async function api(path,options = {}){
   }
 
   return data;
+
+}
+
+/* =========================================================
+   LOAD SERVER STATE
+========================================================= */
+
+async function loadState(){
+
+  /*
+    CURRENT SERVER ENDPOINT:
+      GET /api/state
+
+    CURRENT SERVER RESPONSE:
+      {
+        ok:true,
+        user:{...},
+        jackpot,
+        leaderboard:[...]
+      }
+  */
+
+  const data =
+    await api(
+      "/api/state",
+      {
+        method:"GET"
+      }
+    );
+
+  if(
+    !data ||
+    !data.user
+  ){
+
+    throw new Error(
+      "Your PRIVÉ account could not be loaded."
+    );
+
+  }
+
+  setBalance(
+    data.user.balance
+  );
+
+  setVip(
+    data.user.vipLevel,
+    data.user.vipProgress
+  );
+
+  setStats(
+    data.user
+  );
+
+  setJackpot(
+    data.jackpot
+  );
+
+  renderLeaderboard(
+    data.leaderboard
+  );
+
+  return data;
+
 }
 
 /* =========================================================
    LOGIN
 ========================================================= */
 
-async function loadPlayer(){
+async function loginPlayer(){
 
-  if(!tg || !tg.initData){
+  const overlay =
+    $("loginOverlay");
 
-    showLoginError(
-      "This game must be opened inside Telegram."
+  const status =
+    $("loginStatus");
+
+  const retry =
+    $("loginRetry");
+
+  retry.disabled = true;
+
+  retry.textContent =
+    "CONNECTING…";
+
+  status.textContent =
+    "Connecting to your PRIVÉ account…";
+
+  try{
+
+    await loadState();
+
+    loggedIn = true;
+
+    overlay.classList.add(
+      "hidden"
     );
+
+    await loadHistory();
+
+    showToast(
+      "WELCOME TO KIMIA PRIVÉ"
+    );
+
+  }catch(error){
+
+    loggedIn = false;
+
+    status.innerHTML =
+      "<strong style='color:var(--cream)'>" +
+      "LOGIN FAILED" +
+      "</strong><br>" +
+      escapeHtml(
+        error.message
+      );
+
+    retry.disabled = false;
+
+    retry.textContent =
+      "RETRY LOGIN";
+
+  }
+
+}
+
+/* =========================================================
+   HTML ESCAPE
+========================================================= */
+
+function escapeHtml(value){
+
+  return String(value || "")
+    .replace(/&/g,"&amp;")
+    .replace(/</g,"&lt;")
+    .replace(/>/g,"&gt;")
+    .replace(/"/g,"&quot;")
+    .replace(/'/g,"&#039;");
+
+}
+
+/* =========================================================
+   SYMBOL RENDERING
+========================================================= */
+
+function renderServerSymbol(
+  element,
+  value
+){
+
+  const info =
+    SERVER_SYMBOL_MAP[value];
+
+  if(!info){
+
+    element.className =
+      "symbol sparkle";
+
+    element.textContent =
+      "✦";
 
     return;
 
   }
 
-  try{
-
-    const data =
-      await api("/api/me",{
-        method:"POST",
-        body:{}
-      });
-
-    /*
-      CURRENT server.js returns:
-
-      {
-        id,
-        username,
-        balance,
-        vipLevel
-      }
-    */
-
-    if(
-      !data ||
-      data.balance === undefined
-    ){
-
-      throw new Error(
-        "Player account data was not returned."
-      );
-
-    }
-
-    setBalance(data.balance);
-
-    updateVip(
-      data.vipLevel
-    );
-
-    playerLoaded = true;
-
-    hideLogin();
-
-  }catch(error){
-
-    console.error(
-      "KIMIA PRIVÉ login failed:",
-      error
-    );
-
-    showLoginError(
-      error.message ||
-      "Unable to log into your PRIVÉ account."
-    );
-
-  }
-
-}
-
-function startLogin(){
-
-  $("loginRetry").style.display =
-    "none";
-
-  $("loginSpinner").style.display =
-    "block";
-
-  $("loginText").textContent =
-    "Authenticating your PRIVÉ account…";
-
-  loadPlayer();
-
-}
-
-function hideLogin(){
-
-  $("loginOverlay").style.display =
-    "none";
-
-}
-
-function showLoginError(message){
-
-  $("loginSpinner").style.display =
-    "none";
-
-  $("loginText").innerHTML =
-    "<strong style='color:var(--danger)'>" +
-    "LOGIN FAILED" +
-    "</strong><br><br>" +
-    message;
-
-  $("loginRetry").style.display =
-    "block";
-
-}
-
-/* =========================================================
-   VIP
-========================================================= */
-
-function updateVip(level){
-
-  let vip =
-    Number(level);
-
-  if(!Number.isFinite(vip)){
-    vip = 0;
-  }
-
-  vip =
-    Math.max(0,Math.trunc(vip));
-
-  $("vipStatus").textContent =
-    vip > 0
-      ? "VIP " + vip
-      : "MEMBER";
-
-  if(vip > 0){
-
-    $("vipLevel").textContent =
-      "PRIVÉ VIP " + vip;
-
-    $("vipProgress").style.width =
-      Math.min(vip * 20,100) + "%";
-
-  }else{
-
-    $("vipLevel").textContent =
-      "PRIVÉ MEMBER";
-
-    $("vipProgress").style.width =
-      "0%";
-
-  }
-
-}
-
-/* =========================================================
-   SLOT SYMBOLS
-========================================================= */
-
-const symbols = [
-  {
-    value:"7",
-    display:"7"
-  },
-  {
-    value:"diamond",
-    display:"◆"
-  },
-  {
-    value:"heart",
-    display:"♥"
-  },
-  {
-    value:"rose",
-    display:"✦"
-  },
-  {
-    value:"spade",
-    display:"♠"
-  },
-  {
-    value:"sparkle",
-    display:"✧"
-  }
-];
-
-function randomSymbol(){
-
-  return symbols[
-    Math.floor(
-      Math.random() *
-      symbols.length
-    )
-  ];
-
-}
-
-function setSymbol(element,symbol){
+  element.className =
+    "symbol " +
+    info.className;
 
   element.textContent =
-    symbol.display;
+    info.text || "";
 
-  element.dataset.symbol =
-    symbol.value;
+}
+
+function randomServerSymbol(){
+
+  return ANIMATION_SYMBOLS[
+    Math.floor(
+      Math.random() *
+      ANIMATION_SYMBOLS.length
+    )
+  ];
 
 }
 
@@ -2039,186 +2591,261 @@ function setSymbol(element,symbol){
 function animateReels(){
 
   const reels =
-    document.querySelectorAll(".reel");
+    document.querySelectorAll(
+      ".reel"
+    );
 
-  reels.forEach((reel,index)=>{
+  reels.forEach(
+    (reel,index)=>{
 
-    reel.classList.add("spinning");
-    reel.classList.remove("win");
-
-    let count = 0;
-
-    const timer =
-      setInterval(()=>{
-
-        const children =
-          reel.querySelectorAll(".symbol");
-
-        children.forEach(element=>{
-          setSymbol(
-            element,
-            randomSymbol()
-          );
-        });
-
-        count++;
-
-        if(
-          count >
-          10 + index * 3
-        ){
-
-          clearInterval(timer);
-
-          setTimeout(()=>{
-            reel.classList.remove(
-              "spinning"
-            );
-          },100);
-
-        }
-
-      },55);
-
-  });
-
-}
-
-function displayServerSymbols(output){
-
-  if(
-    !Array.isArray(output) ||
-    output.length !== 15
-  ){
-    return;
-  }
-
-  const reels =
-    document.querySelectorAll(".reel");
-
-  for(let reelIndex=0;reelIndex<5;reelIndex++){
-
-    const reel =
-      reels[reelIndex];
-
-    const top =
-      output[reelIndex];
-
-    const middle =
-      output[5 + reelIndex];
-
-    const bottom =
-      output[10 + reelIndex];
-
-    const values =
-      [top,middle,bottom];
-
-    const children =
-      reel.querySelectorAll(".symbol");
-
-    children.forEach((element,row)=>{
-
-      const serverValue =
-        values[row];
-
-      /*
-        server.js currently returns emoji
-        symbols. Convert them into the
-        luxury visual treatment here.
-      */
-
-      let converted;
-
-      if(serverValue === "💎"){
-        converted = {
-          value:"diamond",
-          display:"◆"
-        };
-      }
-      else if(serverValue === "7️⃣"){
-        converted = {
-          value:"7",
-          display:"7"
-        };
-      }
-      else if(serverValue === "💗"){
-        converted = {
-          value:"heart",
-          display:"♥"
-        };
-      }
-      else if(serverValue === "🌹"){
-        converted = {
-          value:"rose",
-          display:"✦"
-        };
-      }
-      else if(serverValue === "♠️"){
-        converted = {
-          value:"spade",
-          display:"♠"
-        };
-      }
-      else if(serverValue === "✨"){
-        converted = {
-          value:"sparkle",
-          display:"✧"
-        };
-      }
-      else{
-
-        converted = {
-          value:"sparkle",
-          display:"✧"
-        };
-
-      }
-
-      setSymbol(
-        element,
-        converted
+      reel.classList.add(
+        "spinning"
       );
 
-    });
+      let count = 0;
 
-  }
+      const timer =
+        setInterval(
+          ()=>{
+
+            const children =
+              reel.querySelectorAll(
+                ".symbol"
+              );
+
+            children.forEach(
+              symbol=>{
+
+                renderServerSymbol(
+                  symbol,
+                  randomServerSymbol()
+                );
+
+                symbol.classList.remove(
+                  "win"
+                );
+
+              }
+            );
+
+            count++;
+
+            if(
+              count >
+              13 + index * 5
+            ){
+
+              clearInterval(timer);
+
+              setTimeout(
+                ()=>{
+                  reel.classList.remove(
+                    "spinning"
+                  );
+                },
+                150
+              );
+
+            }
+
+          },
+          55
+        );
+
+    }
+  );
 
 }
 
 /* =========================================================
-   WIN HIGHLIGHT
+   RENDER ACTUAL SERVER REELS
 ========================================================= */
 
-function highlightWinningLines(
-  winningLines
-){
+function renderReels(reels){
 
   if(
-    !Array.isArray(winningLines) ||
-    winningLines.length === 0
+    !Array.isArray(reels) ||
+    reels.length !== 5
+  ){
+    return;
+  }
+
+  const reelElements =
+    document.querySelectorAll(
+      ".reel"
+    );
+
+  reelElements.forEach(
+    (reel,column)=>{
+
+      const symbols =
+        reel.querySelectorAll(
+          ".symbol"
+        );
+
+      const columnData =
+        reels[column];
+
+      if(
+        !Array.isArray(columnData)
+      ){
+        return;
+      }
+
+      columnData.forEach(
+        (serverSymbol,row)=>{
+
+          if(symbols[row]){
+
+            renderServerSymbol(
+              symbols[row],
+              serverSymbol
+            );
+
+          }
+
+        }
+      );
+
+    }
+  );
+
+}
+
+/* =========================================================
+   HIGHLIGHT WINNING SYMBOLS
+========================================================= */
+
+function highlightWins(
+  reels,
+  wins
+){
+
+  document
+    .querySelectorAll(
+      ".symbol"
+    )
+    .forEach(
+      symbol=>{
+        symbol.classList.remove(
+          "win"
+        );
+      }
+    );
+
+  if(
+    !Array.isArray(wins) ||
+    !Array.isArray(reels)
   ){
     return;
   }
 
   /*
-    The server returns payline indexes.
-    Highlight the reels involved in those lines.
+    wins contains:
+      line
+      symbol
+      count
+      amount
+
+    We highlight matching winning
+    symbols on the relevant paylines.
   */
 
-  const reels =
-    document.querySelectorAll(".reel");
+  wins.forEach(
+    win=>{
 
-  reels.forEach(reel=>{
-    reel.classList.add("win");
-  });
+      if(win.scatter){
 
-  setTimeout(()=>{
+        reels.forEach(
+          (columnData,column)=>{
 
-    reels.forEach(reel=>{
-      reel.classList.remove("win");
-    });
+            columnData.forEach(
+              (symbolValue,row)=>{
 
-  },2500);
+                if(
+                  symbolValue ===
+                  win.symbol
+                ){
+
+                  const reel =
+                    document.querySelectorAll(
+                      ".reel"
+                    )[column];
+
+                  const element =
+                    reel.querySelectorAll(
+                      ".symbol"
+                    )[row];
+
+                  if(element){
+                    element.classList.add(
+                      "win"
+                    );
+                  }
+
+                }
+
+              }
+            );
+
+          }
+        );
+
+        return;
+
+      }
+
+      const lineIndex =
+        Number(win.line) - 1;
+
+      const paylines = [
+        [0,0,0,0,0],
+        [1,1,1,1,1],
+        [2,2,2,2,2],
+        [0,1,2,1,0],
+        [2,1,0,1,2]
+      ];
+
+      const line =
+        paylines[lineIndex];
+
+      if(!line){
+        return;
+      }
+
+      for(
+        let column = 0;
+        column < win.count;
+        column++
+      ){
+
+        const row =
+          line[column];
+
+        const reel =
+          document.querySelectorAll(
+            ".reel"
+          )[column];
+
+        if(!reel){
+          continue;
+        }
+
+        const element =
+          reel.querySelectorAll(
+            ".symbol"
+          )[row];
+
+        if(element){
+          element.classList.add(
+            "win"
+          );
+        }
+
+      }
+
+    }
+  );
 
 }
 
@@ -2228,24 +2855,14 @@ function highlightWinningLines(
 
 async function spin(){
 
-  if(spinning) return;
+  if(spinning){
+    return;
+  }
 
-  if(!playerLoaded){
+  if(!loggedIn){
 
     showToast(
       "PLEASE LOG IN FIRST"
-    );
-
-    return;
-
-  }
-
-  if(
-    !Number.isSafeInteger(selectedBet)
-  ){
-
-    showToast(
-      "INVALID BET"
     );
 
     return;
@@ -2277,98 +2894,137 @@ async function spin(){
   try{
 
     /*
-      server.js accepts:
-      
-      300
-      600
-      1500
-      3000
+      CURRENT SERVER:
+        POST /api/spin
+
+      BODY:
+        bet
+
+      RESPONSE:
+        reels
+        totalWin
+        winningLines
+        wins
+        jackpot
+        balance
+        vipLevel
+        vipProgress
     */
 
     const data =
-      await api("/api/spin",{
-        method:"POST",
-        body:{
-          bet:selectedBet
+      await api(
+        "/api/spin",
+        {
+          method:"POST",
+          body:JSON.stringify({
+            bet:selectedBet
+          })
         }
-      });
-
-    if(data){
-
-      /*
-        This is the authoritative
-        PostgreSQL balance returned
-        by server.js.
-      */
-
-      if(data.balance !== undefined){
-
-        setBalance(
-          data.balance
-        );
-
-      }
-
-      displayServerSymbols(
-        data.symbols
       );
 
-      highlightWinningLines(
-        data.winningLines
+    if(
+      data.balance !== undefined
+    ){
+
+      setBalance(
+        data.balance
       );
-
-      if(
-        data.win !== undefined
-      ){
-
-        const win =
-          Number(data.win);
-
-        if(win > 0){
-
-          showToast(
-            "✦ YOU WON " +
-            formatCoins(win) +
-            " COINS"
-          );
-
-        }else{
-
-          showToast(
-            "GOOD LUCK NEXT SPIN"
-          );
-
-        }
-
-      }
 
     }
 
-  }catch(error){
+    if(
+      data.jackpot !== undefined
+    ){
 
-    console.error(
-      "Spin failed:",
-      error
+      setJackpot(
+        data.jackpot
+      );
+
+    }
+
+    if(
+      data.vipLevel !== undefined
+    ){
+
+      setVip(
+        data.vipLevel,
+        data.vipProgress
+      );
+
+    }
+
+    if(
+      Array.isArray(data.reels)
+    ){
+
+      renderReels(
+        data.reels
+      );
+
+      highlightWins(
+        data.reels,
+        data.wins
+      );
+
+    }
+
+    const win =
+      Number(
+        data.totalWin || 0
+      );
+
+    if(win > 0){
+
+      showToast(
+        "✦ YOU WON " +
+        formatCoins(win) +
+        " COINS"
+      );
+
+    }else{
+
+      showToast(
+        "GOOD LUCK NEXT SPIN"
+      );
+
+    }
+
+    /*
+      Refresh state after the spin so the
+      wallet, VIP and leaderboard stay synced.
+    */
+
+    setTimeout(
+      ()=>{
+        loadState()
+          .catch(()=>{});
+        loadHistory()
+          .catch(()=>{});
+      },
+      300
     );
 
+  }catch(error){
+
     showToast(
-      error.message ||
-      "Unable to complete spin."
+      error.message
     );
 
   }finally{
 
-    setTimeout(()=>{
+    setTimeout(
+      ()=>{
 
-      spinning = false;
+        spinning = false;
 
-      button.disabled =
-        false;
+        button.disabled = false;
 
-      button.textContent =
-        "SPIN";
+        button.textContent =
+          "SPIN";
 
-    },900);
+      },
+      900
+    );
 
   }
 
@@ -2381,6 +3037,271 @@ $("spinBtn")
   );
 
 /* =========================================================
+   DAILY BONUS
+========================================================= */
+
+async function claimBonus(){
+
+  if(!loggedIn){
+
+    showToast(
+      "PLEASE LOG IN FIRST"
+    );
+
+    return;
+
+  }
+
+  const button =
+    $("bonusBtn");
+
+  button.disabled = true;
+
+  button.textContent =
+    "CHECKING…";
+
+  try{
+
+    const data =
+      await api(
+        "/api/bonus",
+        {
+          method:"POST",
+          body:JSON.stringify({})
+        }
+      );
+
+    if(data.user){
+
+      setBalance(
+        data.user.balance
+      );
+
+      setVip(
+        data.user.vipLevel,
+        data.user.vipProgress
+      );
+
+    }
+
+    if(
+      data.amount &&
+      data.claimed
+    ){
+
+      showToast(
+        "✦ DAILY BONUS +" +
+        formatCoins(data.amount) +
+        " COINS"
+      );
+
+    }else{
+
+      showToast(
+        "DAILY BONUS ALREADY CLAIMED"
+      );
+
+    }
+
+    if(data.jackpot !== undefined){
+      setJackpot(data.jackpot);
+    }
+
+  }catch(error){
+
+    showToast(
+      error.message
+    );
+
+  }finally{
+
+    button.disabled = false;
+
+    button.textContent =
+      "CLAIM DAILY BONUS";
+
+  }
+
+}
+
+/* =========================================================
+   HISTORY
+========================================================= */
+
+async function loadHistory(){
+
+  if(!loggedIn){
+    return;
+  }
+
+  try{
+
+    const data =
+      await api(
+        "/api/history",
+        {
+          method:"GET"
+        }
+      );
+
+    renderHistory(
+      data.spins || []
+    );
+
+  }catch(error){
+
+    console.log(
+      "History unavailable:",
+      error.message
+    );
+
+  }
+
+}
+
+function renderHistory(spins){
+
+  const list =
+    $("historyList");
+
+  if(
+    !Array.isArray(spins) ||
+    spins.length === 0
+  ){
+
+    list.innerHTML = `
+      <div class="history-item">
+        <div class="history-left">
+          <strong>No spins yet</strong>
+          <span>Your recent game activity will appear here.</span>
+        </div>
+        <div>—</div>
+      </div>
+    `;
+
+    return;
+
+  }
+
+  list.innerHTML =
+    spins
+      .slice(0,10)
+      .map(
+        spin=>{
+
+          const win =
+            Number(spin.win || 0);
+
+          const bet =
+            Number(spin.bet || 0);
+
+          const created =
+            spin.created_at
+              ? new Date(
+                  spin.created_at
+                ).toLocaleString()
+              : "Recent spin";
+
+          return `
+            <div class="history-item">
+
+              <div class="history-left">
+
+                <strong>
+                  Spin
+                </strong>
+
+                <span>
+                  Bet ${formatCoins(bet)}
+                  · ${escapeHtml(created)}
+                </span>
+
+              </div>
+
+              <div class="${
+                win > 0
+                  ? "plus"
+                  : "minus"
+              }">
+
+                ${
+                  win > 0
+                    ? "+" + formatCoins(win)
+                    : "−" + formatCoins(bet)
+                }
+
+              </div>
+
+            </div>
+          `;
+
+        }
+      )
+      .join("");
+
+}
+
+/* =========================================================
+   LEADERBOARD
+========================================================= */
+
+function renderLeaderboard(players){
+
+  const list =
+    $("leaderboardList");
+
+  if(
+    !Array.isArray(players) ||
+    players.length === 0
+  ){
+
+    list.innerHTML = `
+      <div class="history-item">
+        <div class="history-left">
+          <strong>No leaderboard data</strong>
+          <span>Play to begin building the board.</span>
+        </div>
+      </div>
+    `;
+
+    return;
+
+  }
+
+  list.innerHTML =
+    players
+      .map(
+        player=>{
+
+          return `
+            <div class="leader-item">
+
+              <div class="rank">
+                ${Number(player.rank || 0)}
+              </div>
+
+              <div class="leader-name">
+                ${escapeHtml(
+                  player.name || "Player"
+                )}
+              </div>
+
+              <div class="leader-coins">
+                ${formatCoins(
+                  player.balance
+                )}
+              </div>
+
+            </div>
+          `;
+
+        }
+      )
+      .join("");
+
+}
+
+/* =========================================================
    REWARDS
 ========================================================= */
 
@@ -2389,7 +3310,7 @@ function requestRedeem(
   cost
 ){
 
-  if(!playerLoaded){
+  if(!loggedIn){
 
     showToast(
       "PLEASE LOG IN FIRST"
@@ -2402,9 +3323,7 @@ function requestRedeem(
   if(balance < cost){
 
     showToast(
-      "YOU NEED " +
-      formatCoins(cost - balance) +
-      " MORE COINS"
+      "YOU NEED MORE PRIVÉ COINS"
     );
 
     return;
@@ -2421,13 +3340,13 @@ function requestRedeem(
 
   $("modalText").innerHTML =
     "Redeem <strong>" +
-    name +
+    escapeHtml(name) +
     "</strong> for <strong>" +
     formatCoins(cost) +
     " coins</strong>?";
 
   $("confirmBtn").textContent =
-    "REDEEM";
+    "CONFIRM";
 
   $("confirmBtn").onclick =
     confirmRedeem;
@@ -2443,22 +3362,16 @@ async function confirmRedeem(){
     return;
   }
 
-  const reward =
-    pendingReward;
-
   closeModal();
 
   /*
-    IMPORTANT:
-    The server.js you supplied does not
-    currently contain /api/rewards/redeem.
-
-    Therefore we do NOT subtract coins
-    locally or fake a successful reward.
+    The current server.js does not expose a
+    reward redemption endpoint, so we intentionally
+    do not fake a transaction or deduct coins.
   */
 
   showToast(
-    "Reward redemption is not connected to the server yet."
+    "REWARDS ARE READY FOR SERVER CONNECTION"
   );
 
 }
@@ -2469,7 +3382,7 @@ async function confirmRedeem(){
 
 function prepareGift(){
 
-  if(!playerLoaded){
+  if(!loggedIn){
 
     showToast(
       "PLEASE LOG IN FIRST"
@@ -2504,13 +3417,20 @@ function prepareGift(){
 
   }
 
-  if(
-    !Number.isSafeInteger(amount) ||
-    amount <= 0
-  ){
+  if(!amount || amount <= 0){
 
     showToast(
-      "ENTER A VALID COIN AMOUNT"
+      "SELECT A GIFT AMOUNT"
+    );
+
+    return;
+
+  }
+
+  if(!Number.isSafeInteger(amount)){
+
+    showToast(
+      "ENTER A WHOLE NUMBER OF COINS"
     );
 
     return;
@@ -2540,7 +3460,7 @@ function prepareGift(){
     formatCoins(amount) +
     " coins</strong> to<br><br>" +
     "<strong>" +
-    recipient +
+    escapeHtml(recipient) +
     "</strong>?";
 
   $("confirmBtn").textContent =
@@ -2566,17 +3486,14 @@ async function confirmGift(){
   closeModal();
 
   /*
-    IMPORTANT:
-    The server.js supplied in this
-    conversation does not currently
-    implement POST /api/gift.
+    The current server.js does not expose
+    /api/gift yet.
 
-    We therefore don't pretend the
-    coins were transferred.
+    Do NOT deduct coins locally.
   */
 
   showToast(
-    "Coin gifting is not connected to the server yet."
+    "COIN GIFTING IS READY FOR SERVER CONNECTION"
   );
 
 }
@@ -2591,7 +3508,6 @@ function closeModal(){
     .classList.remove("show");
 
   pendingReward = null;
-
   pendingGift = null;
 
   $("confirmBtn").textContent =
@@ -2617,10 +3533,27 @@ $("confirmModal")
   );
 
 /* =========================================================
-   START
+   APP START
 ========================================================= */
 
-startLogin();
+window.addEventListener(
+  "load",
+  ()=>{
+
+    /*
+      Give Telegram a moment to populate
+      WebApp/initData before attempting auth.
+    */
+
+    setTimeout(
+      ()=>{
+        loginPlayer();
+      },
+      250
+    );
+
+  }
+);
 
 </script>
 
