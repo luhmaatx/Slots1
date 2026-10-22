@@ -60,8 +60,6 @@ button{
   padding-bottom:90px;
 }
 
-/* HEADER */
-
 .topbar{
   position:sticky;
   top:0;
@@ -89,15 +87,12 @@ button{
   margin-top:-2px;
 }
 
-/* BALANCE */
-
 .balance-card{
   margin:14px 16px 8px;
   padding:14px 16px;
   border:1px solid var(--line);
   border-radius:16px;
-  background:
-    linear-gradient(145deg,rgba(214,177,105,.09),rgba(255,255,255,.015));
+  background:linear-gradient(145deg,rgba(214,177,105,.09),rgba(255,255,255,.015));
   box-shadow:0 12px 35px rgba(0,0,0,.25);
 }
 
@@ -129,8 +124,6 @@ button{
   letter-spacing:1.5px;
 }
 
-/* SCREENS */
-
 .screen{
   display:none;
   padding:0 16px;
@@ -154,17 +147,13 @@ button{
   margin-bottom:17px;
 }
 
-/* SLOT */
-
 .slot-machine{
   margin-top:14px;
   padding:14px;
   border:1px solid var(--line);
   border-radius:20px;
   background:linear-gradient(145deg,#19120e,#0c0908);
-  box-shadow:
-    0 18px 50px rgba(0,0,0,.45),
-    inset 0 0 30px rgba(214,177,105,.025);
+  box-shadow:0 18px 50px rgba(0,0,0,.45),inset 0 0 30px rgba(214,177,105,.025);
 }
 
 .reels{
@@ -250,8 +239,6 @@ button{
   color:var(--gold2);
 }
 
-/* BUTTONS */
-
 .action-grid{
   display:grid;
   grid-template-columns:1fr 1fr;
@@ -278,8 +265,6 @@ button{
   font-size:8px;
   color:var(--muted);
 }
-
-/* REWARDS */
 
 .reward-card{
   position:relative;
@@ -331,12 +316,6 @@ button{
   letter-spacing:1px;
 }
 
-.redeem-btn:disabled{
-  opacity:.35;
-}
-
-/* WALLET */
-
 .wallet-box{
   padding:20px;
   margin-top:12px;
@@ -387,8 +366,6 @@ button{
 .minus{
   color:var(--danger);
 }
-
-/* GIFT */
 
 .form-box{
   margin-top:15px;
@@ -453,16 +430,12 @@ button{
   letter-spacing:1.5px;
 }
 
-/* VIP */
-
 .vip-card{
   margin-top:15px;
   padding:22px;
   border-radius:18px;
   border:1px solid var(--gold);
-  background:
-    radial-gradient(circle at 50% 0%,rgba(214,177,105,.13),transparent 50%),
-    #100b09;
+  background:radial-gradient(circle at 50% 0%,rgba(214,177,105,.13),transparent 50%),#100b09;
   text-align:center;
 }
 
@@ -486,12 +459,10 @@ button{
 }
 
 .progress-bar{
-  width:0%;
+  width:62%;
   height:100%;
   background:var(--gold);
 }
-
-/* MODAL */
 
 .modal{
   position:fixed;
@@ -556,8 +527,6 @@ button{
   color:#100b08;
 }
 
-/* NAV */
-
 .bottom-nav{
   position:fixed;
   z-index:60;
@@ -592,8 +561,6 @@ button{
   color:var(--gold2);
 }
 
-/* TOAST */
-
 .toast{
   position:fixed;
   z-index:200;
@@ -625,10 +592,6 @@ button{
   color:var(--muted);
   font-size:10px;
 }
-
-.hidden{
-  display:none!important;
-}
 </style>
 </head>
 
@@ -643,14 +606,11 @@ button{
 
 <div class="balance-card">
   <div class="balance-label">PRIVÉ COINS</div>
-
   <div class="balance-row">
     <div class="balance" id="balance">LOADING…</div>
     <div class="vip-pill" id="vipStatus">VIP 0</div>
   </div>
 </div>
-
-<!-- PLAY -->
 
 <section class="screen active" id="screen-play">
 
@@ -734,8 +694,6 @@ button{
 
 </section>
 
-<!-- WALLET -->
-
 <section class="screen" id="screen-wallet">
 
   <div class="section-title">Your Wallet</div>
@@ -746,7 +704,9 @@ button{
 
   <div class="wallet-box">
 
-    <div class="wallet-label">AVAILABLE COINS</div>
+    <div class="wallet-label">
+      AVAILABLE COINS
+    </div>
 
     <div class="wallet-number" id="walletBalance">
       LOADING…
@@ -766,7 +726,7 @@ button{
 
         <div class="history-left">
           <strong>Wallet connected</strong>
-          <span>Your activity will appear here</span>
+          <span>Your current balance is synced with the game.</span>
         </div>
 
         <div>—</div>
@@ -778,8 +738,6 @@ button{
   </div>
 
 </section>
-
-<!-- REWARDS -->
 
 <section class="screen" id="screen-rewards">
 
@@ -796,14 +754,20 @@ button{
     <div class="reward-top">
 
       <div>
-        <div class="reward-name">10% OFF</div>
+
+        <div class="reward-name">
+          10% OFF
+        </div>
 
         <div class="reward-desc">
           Take 10% off an eligible PRIVÉ subscription.
         </div>
+
       </div>
 
-      <div class="reward-icon">✦</div>
+      <div class="reward-icon">
+        ✦
+      </div>
 
     </div>
 
@@ -813,8 +777,7 @@ button{
 
     <button
       class="redeem-btn"
-      onclick="requestRedeem('10% OFF Subscription',5000)"
-    >
+      onclick="requestRedeem('10% OFF Subscription',5000)">
       REDEEM
     </button>
 
@@ -825,14 +788,20 @@ button{
     <div class="reward-top">
 
       <div>
-        <div class="reward-name">24-HOUR ACCESS</div>
+
+        <div class="reward-name">
+          24-HOUR ACCESS
+        </div>
 
         <div class="reward-desc">
-          Unlock a 24-hour promotional access reward.
+          Unlock a 24-hour access reward.
         </div>
+
       </div>
 
-      <div class="reward-icon">♛</div>
+      <div class="reward-icon">
+        ♛
+      </div>
 
     </div>
 
@@ -842,8 +811,7 @@ button{
 
     <button
       class="redeem-btn"
-      onclick="requestRedeem('24-Hour Access',10000)"
-    >
+      onclick="requestRedeem('24-Hour Access',10000)">
       REDEEM
     </button>
 
@@ -854,14 +822,20 @@ button{
     <div class="reward-top">
 
       <div>
-        <div class="reward-name">25% OFF</div>
+
+        <div class="reward-name">
+          25% OFF
+        </div>
 
         <div class="reward-desc">
           Receive 25% off an eligible subscription or content purchase.
         </div>
+
       </div>
 
-      <div class="reward-icon">◆</div>
+      <div class="reward-icon">
+        ◆
+      </div>
 
     </div>
 
@@ -871,8 +845,7 @@ button{
 
     <button
       class="redeem-btn"
-      onclick="requestRedeem('25% OFF Subscription',25000)"
-    >
+      onclick="requestRedeem('25% OFF Subscription',25000)">
       REDEEM
     </button>
 
@@ -883,14 +856,20 @@ button{
     <div class="reward-top">
 
       <div>
-        <div class="reward-name">7-DAY PRIVÉ</div>
+
+        <div class="reward-name">
+          7-DAY PRIVÉ
+        </div>
 
         <div class="reward-desc">
-          Unlock seven-day promotional access.
+          Unlock a seven-day promotional access reward.
         </div>
+
       </div>
 
-      <div class="reward-icon">♥</div>
+      <div class="reward-icon">
+        ♥
+      </div>
 
     </div>
 
@@ -900,8 +879,7 @@ button{
 
     <button
       class="redeem-btn"
-      onclick="requestRedeem('7-Day Privé Access',50000)"
-    >
+      onclick="requestRedeem('7-Day Privé Access',50000)">
       REDEEM
     </button>
 
@@ -912,14 +890,20 @@ button{
     <div class="reward-top">
 
       <div>
-        <div class="reward-name">MYSTERY PRIVÉ</div>
+
+        <div class="reward-name">
+          MYSTERY PRIVÉ
+        </div>
 
         <div class="reward-desc">
           A surprise reward selected from the current PRIVÉ collection.
         </div>
+
       </div>
 
-      <div class="reward-icon">?</div>
+      <div class="reward-icon">
+        ?
+      </div>
 
     </div>
 
@@ -929,16 +913,13 @@ button{
 
     <button
       class="redeem-btn"
-      onclick="requestRedeem('Mystery Privé Reward',75000)"
-    >
+      onclick="requestRedeem('Mystery Privé Reward',75000)">
       REDEEM
     </button>
 
   </div>
 
 </section>
-
-<!-- GIFT -->
 
 <section class="screen" id="screen-gift">
 
@@ -963,7 +944,9 @@ button{
       autocomplete="off"
     >
 
-    <label class="field-label" style="margin-top:18px">
+    <label
+      class="field-label"
+      style="margin-top:18px">
       GIFT AMOUNT
     </label>
 
@@ -1000,23 +983,19 @@ button{
       id="customAmount"
       type="number"
       min="1"
-      step="1"
       placeholder="Or enter custom amount"
       style="margin-top:9px"
     >
 
     <button
       class="gift-btn"
-      onclick="prepareGift()"
-    >
+      onclick="prepareGift()">
       SEND COINS
     </button>
 
   </div>
 
 </section>
-
-<!-- VIP -->
 
 <section class="screen" id="screen-vip">
 
@@ -1038,19 +1017,25 @@ button{
       PRIVÉ MEMBER
     </div>
 
-    <div class="section-sub" style="margin:8px 0 0">
+    <div
+      class="section-sub"
+      style="margin:8px 0 0">
       Your VIP benefits will appear here.
     </div>
 
     <div class="progress">
-      <div class="progress-bar" id="vipProgress"></div>
+      <div
+        class="progress-bar"
+        id="vipProgress">
+      </div>
     </div>
 
-    <div style="
-      margin-top:10px;
-      font-size:8px;
-      color:var(--muted);
-    ">
+    <div
+      style="
+        margin-top:10px;
+        font-size:8px;
+        color:var(--muted);
+      ">
       VIP PROGRESS
     </div>
 
@@ -1060,12 +1045,16 @@ button{
 
     <button class="action-btn">
       <strong>✦ COIN BONUS</strong>
-      <span>Higher VIP levels can receive boosted rewards.</span>
+      <span>
+        Higher VIP levels can receive boosted rewards.
+      </span>
     </button>
 
     <button class="action-btn">
       <strong>♛ VIP REWARDS</strong>
-      <span>Special rewards can be limited to VIP players.</span>
+      <span>
+        Special rewards can be limited to VIP players.
+      </span>
     </button>
 
   </div>
@@ -1073,8 +1062,6 @@ button{
 </section>
 
 </div>
-
-<!-- BOTTOM NAV -->
 
 <nav class="bottom-nav">
 
@@ -1105,8 +1092,6 @@ button{
 
 </nav>
 
-<!-- CONFIRMATION MODAL -->
-
 <div class="modal" id="confirmModal">
 
   <div class="modal-card">
@@ -1121,11 +1106,15 @@ button{
 
     <div class="modal-buttons">
 
-      <button class="cancel" onclick="closeModal()">
+      <button
+        class="cancel"
+        onclick="closeModal()">
         CANCEL
       </button>
 
-      <button class="confirm" id="confirmBtn">
+      <button
+        class="confirm"
+        id="confirmBtn">
         CONFIRM
       </button>
 
@@ -1138,41 +1127,36 @@ button{
 <div class="toast" id="toast"></div>
 
 <script>
-/* =========================================================
-   KIMIA PRIVÉ
-   FRONTEND
-   ========================================================= */
 
-const tg = window.Telegram && window.Telegram.WebApp
-  ? window.Telegram.WebApp
-  : null;
+const tg =
+  window.Telegram &&
+  window.Telegram.WebApp
+    ? window.Telegram.WebApp
+    : null;
 
 if(tg){
+
   tg.ready();
   tg.expand();
 
-  try{
-    tg.setHeaderColor("#090706");
-    tg.setBackgroundColor("#090706");
-  }catch(e){}
 }
 
 let balance = 0;
 let selectedBet = 300;
 let selectedGift = 0;
 let spinning = false;
-let player = null;
+
 let pendingReward = null;
 let pendingGift = null;
 
-/* ---------------------------------------------------------
-   HELPERS
---------------------------------------------------------- */
-
-const $ = id => document.getElementById(id);
+const $ = id =>
+  document.getElementById(id);
 
 function formatCoins(value){
-  return Number(value || 0).toLocaleString();
+
+  return Number(value || 0)
+    .toLocaleString();
+
 }
 
 function showToast(message){
@@ -1180,24 +1164,21 @@ function showToast(message){
   const toast = $("toast");
 
   toast.textContent = message;
+
   toast.classList.add("show");
 
   clearTimeout(window.toastTimer);
 
-  window.toastTimer = setTimeout(()=>{
-    toast.classList.remove("show");
-  },2600);
+  window.toastTimer =
+    setTimeout(()=>{
+      toast.classList.remove("show");
+    },2600);
+
 }
 
 function setBalance(value){
 
-  const number = Number(value);
-
-  if(!Number.isFinite(number)){
-    return;
-  }
-
-  balance = number;
+  balance = Number(value || 0);
 
   $("balance").textContent =
     formatCoins(balance);
@@ -1205,52 +1186,6 @@ function setBalance(value){
   $("walletBalance").textContent =
     formatCoins(balance);
 
-  updateRewardButtons();
-}
-
-function updateRewardButtons(){
-
-  document.querySelectorAll(".redeem-btn")
-    .forEach(button=>{
-
-      const onclick = button.getAttribute("onclick") || "";
-
-      const match = onclick.match(/,\s*(\d+)\)/);
-
-      if(match){
-        const cost = Number(match[1]);
-
-        button.disabled =
-          balance < cost;
-      }
-
-    });
-}
-
-function updateVip(vipLevel){
-
-  const level =
-    Number(vipLevel || 0);
-
-  $("vipStatus").textContent =
-    "VIP " + level;
-
-  const names = [
-    "PRIVÉ MEMBER",
-    "PRIVÉ INSIDER",
-    "PRIVÉ ELITE",
-    "PRIVÉ ROYALE",
-    "PRIVÉ BLACK"
-  ];
-
-  $("vipLevel").textContent =
-    names[Math.min(level,names.length - 1)];
-
-  const progress =
-    Math.min(level * 25,100);
-
-  $("vipProgress").style.width =
-    progress + "%";
 }
 
 function showScreen(name){
@@ -1279,11 +1214,8 @@ function showScreen(name){
     top:0,
     behavior:"smooth"
   });
-}
 
-/* ---------------------------------------------------------
-   NAVIGATION
---------------------------------------------------------- */
+}
 
 document.querySelectorAll(".nav-btn")
   .forEach(btn=>{
@@ -1294,19 +1226,15 @@ document.querySelectorAll(".nav-btn")
 
   });
 
-/* ---------------------------------------------------------
-   BET
---------------------------------------------------------- */
-
 document.querySelectorAll(".bet-btn")
   .forEach(btn=>{
 
     btn.addEventListener("click",()=>{
 
       document.querySelectorAll(".bet-btn")
-        .forEach(x=>{
-          x.classList.remove("selected");
-        });
+        .forEach(x=>
+          x.classList.remove("selected")
+        );
 
       btn.classList.add("selected");
 
@@ -1317,19 +1245,15 @@ document.querySelectorAll(".bet-btn")
 
   });
 
-/* ---------------------------------------------------------
-   GIFT AMOUNTS
---------------------------------------------------------- */
-
 document.querySelectorAll(".amount-btn")
   .forEach(btn=>{
 
     btn.addEventListener("click",()=>{
 
       document.querySelectorAll(".amount-btn")
-        .forEach(x=>{
-          x.classList.remove("selected");
-        });
+        .forEach(x=>
+          x.classList.remove("selected")
+        );
 
       btn.classList.add("selected");
 
@@ -1342,83 +1266,45 @@ document.querySelectorAll(".amount-btn")
 
   });
 
-$("customAmount").addEventListener("input",()=>{
-
-  if($("customAmount").value){
-    selectedGift = 0;
-
-    document.querySelectorAll(".amount-btn")
-      .forEach(x=>{
-        x.classList.remove("selected");
-      });
-  }
-
-});
-
-/* ---------------------------------------------------------
-   TELEGRAM AUTHENTICATION
---------------------------------------------------------- */
-
 /*
-   IMPORTANT:
-   server.js expects:
+=========================================================
+TELEGRAM API
+=========================================================
 
-   {
-     initData: tg.initData
-   }
+IMPORTANT:
+server.js expects initData inside req.body.initData.
 
-   We therefore send Telegram initData in the JSON body.
+The previous index.html only placed it in a header.
+This version sends it correctly in the JSON body.
 */
-
-function getInitData(){
-
-  if(tg && tg.initData){
-    return tg.initData;
-  }
-
-  return "";
-}
-
-/* ---------------------------------------------------------
-   SERVER REQUEST
---------------------------------------------------------- */
 
 async function api(path, options = {}){
 
-  const initData =
-    getInitData();
+  const bodyData =
+    options.body
+      ? JSON.parse(options.body)
+      : {};
 
-  const requestOptions = {
-    ...options,
-    headers:{
-      "Content-Type":"application/json",
-      ...(options.headers || {})
-    }
-  };
+  if(tg && tg.initData){
 
-  let body = {};
-
-  if(options.body){
-
-    try{
-      body = JSON.parse(options.body);
-    }catch{
-      body = {};
-    }
+    bodyData.initData =
+      tg.initData;
 
   }
 
-  /*
-    Always include Telegram initData.
-  */
-
-  body.initData = initData;
-
-  requestOptions.body =
-    JSON.stringify(body);
+  const headers = {
+    "Content-Type":"application/json"
+  };
 
   const response =
-    await fetch(path,requestOptions);
+    await fetch(path,{
+      ...options,
+      body:JSON.stringify(bodyData),
+      headers:{
+        ...headers,
+        ...(options.headers || {})
+      }
+    });
 
   const text =
     await response.text();
@@ -1426,11 +1312,16 @@ async function api(path, options = {}){
   let data;
 
   try{
-    data = JSON.parse(text);
+
+    data =
+      JSON.parse(text);
+
   }catch{
+
     throw new Error(
       "Server returned an invalid response."
     );
+
   }
 
   if(!response.ok){
@@ -1444,11 +1335,14 @@ async function api(path, options = {}){
   }
 
   return data;
+
 }
 
-/* ---------------------------------------------------------
-   LOAD PLAYER
---------------------------------------------------------- */
+/*
+=========================================================
+LOAD PLAYER
+=========================================================
+*/
 
 async function loadPlayer(){
 
@@ -1460,8 +1354,6 @@ async function loadPlayer(){
     $("walletBalance").textContent =
       "OPEN IN TELEGRAM";
 
-    $("spinBtn").disabled = true;
-
     showToast(
       "Open KIMIA PRIVÉ from Telegram."
     );
@@ -1472,35 +1364,27 @@ async function loadPlayer(){
 
   try{
 
-    $("balance").textContent =
-      "LOADING…";
-
     const data =
       await api("/api/me",{
         method:"POST",
-        body:JSON.stringify({})
+        body:JSON.stringify({
+          initData:tg.initData
+        })
       });
 
     if(!data){
+
       throw new Error(
-        "No player data received."
+        "No player data returned."
       );
+
     }
 
-    player = data;
+    const newBalance =
+      data.balance ??
+      data.coins;
 
-    /*
-      This is the authoritative balance
-      coming from PostgreSQL.
-    */
-
-    if(data.balance !== undefined){
-
-      setBalance(
-        Number(data.balance)
-      );
-
-    }else{
+    if(newBalance === undefined){
 
       throw new Error(
         "Player balance was not returned."
@@ -1508,20 +1392,32 @@ async function loadPlayer(){
 
     }
 
-    if(data.vipLevel !== undefined){
+    setBalance(newBalance);
 
-      updateVip(
-        data.vipLevel
-      );
+    const vip =
+      data.vipLevel ??
+      data.vip ??
+      0;
+
+    $("vipStatus").textContent =
+      "VIP " + vip;
+
+    if(Number(vip) > 0){
+
+      $("vipLevel").textContent =
+        "PRIVÉ VIP " + vip;
+
+    }else{
+
+      $("vipLevel").textContent =
+        "PRIVÉ MEMBER";
 
     }
-
-    $("spinBtn").disabled = false;
 
   }catch(error){
 
     console.error(
-      "LOGIN FAILED:",
+      "PLAYER LOGIN ERROR:",
       error
     );
 
@@ -1531,20 +1427,20 @@ async function loadPlayer(){
     $("walletBalance").textContent =
       "LOGIN FAILED";
 
-    $("spinBtn").disabled = true;
-
     showToast(
-      error.message ||
-      "LOGIN FAILED · REOPEN GAME"
+      "LOGIN FAILED · " +
+      error.message
     );
 
   }
 
 }
 
-/* ---------------------------------------------------------
-   SPIN SYMBOLS
---------------------------------------------------------- */
+/*
+=========================================================
+SPIN
+=========================================================
+*/
 
 const symbols = [
   "💎",
@@ -1587,8 +1483,13 @@ function animateReels(){
 
         count++;
 
-        if(count > 12 + index * 3){
+        if(
+          count >
+          10 + index * 3
+        ){
+
           clearInterval(timer);
+
         }
 
       },55);
@@ -1597,62 +1498,9 @@ function animateReels(){
 
 }
 
-/* ---------------------------------------------------------
-   APPLY SERVER REELS
---------------------------------------------------------- */
-
-function displayServerSymbols(output){
-
-  if(!Array.isArray(output) ||
-     output.length !== 15){
-
-    return;
-
-  }
-
-  const reels =
-    document.querySelectorAll(".reel");
-
-  for(let reelIndex=0;reelIndex<5;reelIndex++){
-
-    const reel =
-      reels[reelIndex];
-
-    const symbolsInReel =
-      reel.querySelectorAll(".symbol");
-
-    symbolsInReel[0].textContent =
-      output[reelIndex];
-
-    symbolsInReel[1].textContent =
-      output[5 + reelIndex];
-
-    symbolsInReel[2].textContent =
-      output[10 + reelIndex];
-
-  }
-
-}
-
-/* ---------------------------------------------------------
-   SPIN
---------------------------------------------------------- */
-
 async function spin(){
 
-  if(spinning){
-    return;
-  }
-
-  if(!player){
-
-    showToast(
-      "LOGIN REQUIRED"
-    );
-
-    return;
-
-  }
+  if(spinning) return;
 
   if(balance < selectedBet){
 
@@ -1681,6 +1529,9 @@ async function spin(){
       await api("/api/spin",{
         method:"POST",
         body:JSON.stringify({
+          initData:tg
+            ? tg.initData
+            : "",
           bet:selectedBet
         })
       });
@@ -1688,7 +1539,9 @@ async function spin(){
     if(data){
 
       /*
-        Server balance is authoritative.
+        The SERVER is authoritative.
+        Always replace the displayed balance
+        with the balance returned by PostgreSQL.
       */
 
       if(data.balance !== undefined){
@@ -1700,16 +1553,31 @@ async function spin(){
       }
 
       /*
-        Show the actual server result.
+        Display the actual server result.
       */
 
-      if(Array.isArray(data.symbols)){
+      if(
+        Array.isArray(data.symbols) &&
+        data.symbols.length === 15
+      ){
 
-        setTimeout(()=>{
-          displayServerSymbols(
-            data.symbols
-          );
-        },700);
+        const reels =
+          document.querySelectorAll(".reel");
+
+        reels.forEach((reel,index)=>{
+
+          reel.querySelectorAll(".symbol")
+            .forEach((symbol,row)=>{
+
+              const position =
+                row * 5 + index;
+
+              symbol.textContent =
+                data.symbols[position];
+
+            });
+
+        });
 
       }
 
@@ -1745,18 +1613,8 @@ async function spin(){
       error
     );
 
-    /*
-      Reload the authoritative balance if
-      the request fails.
-    */
-
-    try{
-      await loadPlayer();
-    }catch(e){}
-
     showToast(
-      error.message ||
-      "Unable to complete spin."
+      error.message
     );
 
   }finally{
@@ -1765,8 +1623,7 @@ async function spin(){
 
       spinning = false;
 
-      button.disabled =
-        !player;
+      button.disabled = false;
 
       button.textContent =
         "SPIN";
@@ -1778,11 +1635,16 @@ async function spin(){
 }
 
 $("spinBtn")
-  .addEventListener("click",spin);
+  .addEventListener(
+    "click",
+    spin
+  );
 
-/* ---------------------------------------------------------
-   REWARDS
---------------------------------------------------------- */
+/*
+=========================================================
+REWARDS
+=========================================================
+*/
 
 function requestRedeem(name,cost){
 
@@ -1824,9 +1686,7 @@ function requestRedeem(name,cost){
 
 async function confirmRedeem(){
 
-  if(!pendingReward){
-    return;
-  }
+  if(!pendingReward) return;
 
   const reward =
     pendingReward;
@@ -1836,84 +1696,86 @@ async function confirmRedeem(){
   try{
 
     const data =
-      await api("/api/rewards/redeem",{
-        method:"POST",
-        body:JSON.stringify({
-          reward:reward.name,
-          cost:reward.cost
-        })
-      });
+      await api(
+        "/api/rewards/redeem",
+        {
+          method:"POST",
+          body:JSON.stringify({
+            initData:tg
+              ? tg.initData
+              : "",
+            reward:reward.name,
+            cost:reward.cost
+          })
+        }
+      );
 
-    if(data){
+    if(data.balance !== undefined){
 
-      if(data.balance !== undefined){
+      setBalance(
+        data.balance
+      );
 
-        setBalance(
-          Number(data.balance)
-        );
+    }
 
-      }
+    if(data.code){
 
-      if(data.code){
+      $("modalTitle").textContent =
+        "Reward Unlocked";
 
-        $("modalTitle").textContent =
-          "Reward Unlocked";
+      $("modalText").innerHTML =
+        "<strong>" +
+        reward.name +
+        "</strong><br><br>" +
+        "Your reward code:<br><br>" +
+        "<strong style='font-size:18px;color:var(--gold2)'>" +
+        data.code +
+        "</strong>";
 
-        $("modalText").innerHTML =
-          "<strong>" +
-          reward.name +
-          "</strong><br><br>" +
-          "Your reward code:<br><br>" +
-          "<strong style='font-size:18px;color:var(--gold2)'>" +
-          data.code +
-          "</strong>";
+      $("confirmBtn").textContent =
+        "DONE";
 
-        $("confirmBtn").textContent =
-          "DONE";
+      $("confirmBtn").onclick =
+        closeModal;
 
-        $("confirmBtn").onclick =
-          closeModal;
+      $("confirmModal")
+        .classList.add("show");
 
-        $("confirmModal")
-          .classList.add("show");
+    }else{
 
-      }else{
-
-        showToast(
-          "REWARD UNLOCKED ✦"
-        );
-
-      }
+      showToast(
+        "REWARD UNLOCKED ✦"
+      );
 
     }
 
   }catch(error){
 
-    console.error(
-      "REWARD ERROR:",
-      error
-    );
-
     showToast(
-      error.message ||
-      "Reward redemption failed."
+      error.message
     );
 
   }
 
 }
 
-/* ---------------------------------------------------------
-   GIFT COINS
---------------------------------------------------------- */
+/*
+=========================================================
+GIFT COINS
+=========================================================
+*/
 
 function prepareGift(){
 
   const recipient =
-    $("recipient").value.trim();
+    $("recipient")
+      .value
+      .trim();
 
   const custom =
-    Number($("customAmount").value);
+    Number(
+      $("customAmount").value
+    );
 
   const amount =
     custom > 0
@@ -1930,11 +1792,20 @@ function prepareGift(){
 
   }
 
-  if(!Number.isSafeInteger(amount) ||
-     amount <= 0){
+  if(!amount || amount <= 0){
 
     showToast(
-      "ENTER A VALID COIN AMOUNT"
+      "SELECT A GIFT AMOUNT"
+    );
+
+    return;
+
+  }
+
+  if(!Number.isSafeInteger(amount)){
+
+    showToast(
+      "ENTER A WHOLE NUMBER OF COINS"
     );
 
     return;
@@ -1980,9 +1851,7 @@ function prepareGift(){
 
 async function confirmGift(){
 
-  if(!pendingGift){
-    return;
-  }
+  if(!pendingGift) return;
 
   const gift =
     pendingGift;
@@ -1992,61 +1861,61 @@ async function confirmGift(){
   try{
 
     const data =
-      await api("/api/gift",{
-        method:"POST",
-        body:JSON.stringify({
-          recipient:gift.recipient,
-          amount:gift.amount
-        })
-      });
-
-    if(data){
-
-      if(data.balance !== undefined){
-
-        setBalance(
-          Number(data.balance)
-        );
-
-      }
-
-      showToast(
-        "🎀 " +
-        formatCoins(gift.amount) +
-        " COINS SENT"
+      await api(
+        "/api/gift",
+        {
+          method:"POST",
+          body:JSON.stringify({
+            initData:tg
+              ? tg.initData
+              : "",
+            recipient:gift.recipient,
+            amount:gift.amount
+          })
+        }
       );
 
-      $("recipient").value = "";
-      $("customAmount").value = "";
+    if(data.balance !== undefined){
 
-      selectedGift = 0;
-
-      document.querySelectorAll(".amount-btn")
-        .forEach(x=>{
-          x.classList.remove("selected");
-        });
+      setBalance(
+        data.balance
+      );
 
     }
 
-  }catch(error){
-
-    console.error(
-      "GIFT ERROR:",
-      error
+    showToast(
+      "🎀 " +
+      formatCoins(
+        gift.amount
+      ) +
+      " COINS SENT"
     );
 
+    $("recipient").value = "";
+    $("customAmount").value = "";
+
+    selectedGift = 0;
+
+    document.querySelectorAll(".amount-btn")
+      .forEach(x=>
+        x.classList.remove("selected")
+      );
+
+  }catch(error){
+
     showToast(
-      error.message ||
-      "Coin gifting failed."
+      error.message
     );
 
   }
 
 }
 
-/* ---------------------------------------------------------
-   MODAL
---------------------------------------------------------- */
+/*
+=========================================================
+MODAL
+=========================================================
+*/
 
 function closeModal(){
 
@@ -2062,22 +1931,27 @@ function closeModal(){
 }
 
 $("confirmModal")
-  .addEventListener("click",event=>{
+  .addEventListener(
+    "click",
+    event=>{
 
-    if(
-      event.target ===
-      $("confirmModal")
-    ){
+      if(
+        event.target ===
+        $("confirmModal")
+      ){
 
-      closeModal();
+        closeModal();
+
+      }
 
     }
+  );
 
-  });
-
-/* ---------------------------------------------------------
-   START
---------------------------------------------------------- */
+/*
+=========================================================
+START
+=========================================================
+*/
 
 loadPlayer();
 
