@@ -11,29 +11,16 @@ const BOT_TOKEN = process.env.TELEGRAM_BOT_TOKEN;
 const DATABASE_URL = process.env.DATABASE_URL;
 
 /* =========================================================
-   BASIC MIDDLEWARE
+   MIDDLEWARE
 ========================================================= */
 
-app.use(cors({
-  origin: "*",
-  methods: ["GET", "POST", "OPTIONS"],
-  allowedHeaders: ["Content-Type", "Accept"]
-}));
+app.use(cors());
 
-app.use(express.json({
-  limit: "1mb"
-}));
-
-app.use(express.urlencoded({
-  extended: true,
-  limit: "1mb"
-}));
-
-/* =========================================================
-   STATIC FILES
-========================================================= */
-
-app.use(express.static(__dirname));
+app.use(
+  express.json({
+    limit: "1mb"
+  })
+);
 
 /* =========================================================
    POSTGRESQL
@@ -55,24 +42,7 @@ const pool = new Pool({
 });
 
 pool.on("error", (error) => {
-  console.error(
-    "POSTGRES POOL ERROR:",
-    error
-  );
-});
-
-/* =========================================================
-   REQUEST LOGGER
-========================================================= */
-
-app.use((req, res, next) => {
-
-  console.log(
-    `[REQUEST] ${req.method} ${req.originalUrl}`
-  );
-
-  next();
-
+  console.error("Unexpected PostgreSQL pool error:", error);
 });
 
 /* =========================================================
@@ -80,12 +50,13 @@ app.use((req, res, next) => {
 ========================================================= */
 
 async function initializeDatabase() {
+  if (!DATABASE_URL) {
+    throw new Error("DATABASE_URL is not configured.");
+  }
 
-  const client =
-    await pool.connect();
+  const client = await pool.connect();
 
   try {
-
     await client.query(`
       CREATE TABLE IF NOT EXISTS players (
         telegram_id BIGINT PRIMARY KEY,
@@ -97,185 +68,148 @@ async function initializeDatabase() {
       )
     `);
 
-    console.log(
-      "PostgreSQL database initialized."
-    );
+    /* Make older versions of the table compatible */
+    await client.query(`
+      ALTER TABLE players
+      ADD COLUMN IF NOT EXISTS username TEXT
+    `);
 
+    await client.query(`
+      ALTER TABLE players
+      ADD COLUMN IF NOT EXISTS balance BIGINT NOT NULL DEFAULT 1000
+    `);
+
+    await client.query(`
+      ALTER TABLE players
+      ADD COLUMN IF NOT EXISTS vip_level INTEGER NOT NULL DEFAULT 0
+    `);
+
+    await client.query(`
+      ALTER TABLE players
+      ADD COLUMN IF NOT EXISTS created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+    `);
+
+    await client.query(`
+      ALTER TABLE players
+      ADD COLUMN IF NOT EXISTS updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+    `);
+
+    console.log("PostgreSQL database initialized.");
   } finally {
-
     client.release();
-
   }
-
 }
 
 /* =========================================================
-   TELEGRAM INIT DATA VERIFICATION
+   TELEGRAM WEB APP VERIFICATION
 ========================================================= */
 
 function verifyTelegramInitData(initData) {
-
-  if (
-    !initData ||
-    typeof initData !== "string"
-  ) {
-
+  if (!initData || typeof initData !== "string") {
     throw new Error(
       "Telegram login data is missing."
     );
-
   }
 
   if (!BOT_TOKEN) {
-
     throw new Error(
       "TELEGRAM_BOT_TOKEN is not configured on Render."
     );
-
   }
 
-  const params =
-    new URLSearchParams(initData);
+  const params = new URLSearchParams(initData);
 
-  const receivedHash =
-    params.get("hash");
+  const receivedHash = params.get("hash");
 
   if (!receivedHash) {
-
     throw new Error(
       "Telegram login hash is missing."
     );
-
   }
 
   params.delete("hash");
 
-  const dataCheckString =
-    [...params.entries()]
-      .sort(([a], [b]) =>
-        a.localeCompare(b)
-      )
-      .map(
-        ([key, value]) =>
-          `${key}=${value}`
-      )
-      .join("\n");
+  const dataCheckString = [...params.entries()]
+    .sort(([a], [b]) => a.localeCompare(b))
+    .map(([key, value]) => `${key}=${value}`)
+    .join("\n");
 
-  const secretKey =
-    crypto
-      .createHmac(
-        "sha256",
-        "WebAppData"
-      )
-      .update(BOT_TOKEN)
-      .digest();
+  const secretKey = crypto
+    .createHmac("sha256", "WebAppData")
+    .update(BOT_TOKEN)
+    .digest();
 
-  const calculatedHash =
-    crypto
-      .createHmac(
-        "sha256",
-        secretKey
-      )
-      .update(dataCheckString)
-      .digest("hex");
+  const calculatedHash = crypto
+    .createHmac("sha256", secretKey)
+    .update(dataCheckString)
+    .digest("hex");
 
   const receivedBuffer =
-    Buffer.from(
-      receivedHash,
-      "hex"
-    );
+    Buffer.from(receivedHash, "hex");
 
   const calculatedBuffer =
-    Buffer.from(
-      calculatedHash,
-      "hex"
-    );
+    Buffer.from(calculatedHash, "hex");
 
   if (
-    receivedBuffer.length !==
-      calculatedBuffer.length ||
+    receivedBuffer.length !== calculatedBuffer.length ||
     !crypto.timingSafeEqual(
       receivedBuffer,
       calculatedBuffer
     )
   ) {
-
     throw new Error(
       "Telegram login verification failed."
     );
-
   }
 
   const authDate =
-    Number(
-      params.get("auth_date")
-    );
+    Number(params.get("auth_date"));
 
-  if (
-    !Number.isFinite(authDate)
-  ) {
-
+  if (!Number.isFinite(authDate)) {
     throw new Error(
       "Telegram authentication timestamp is missing."
     );
-
   }
 
   const age =
-    Math.floor(
-      Date.now() / 1000
-    ) - authDate;
+    Math.floor(Date.now() / 1000) - authDate;
 
-  if (
-    age < -60 ||
-    age > 86400
-  ) {
-
+  if (age < -60 || age > 86400) {
     throw new Error(
       "Telegram login session has expired."
     );
-
   }
 
   const userRaw =
     params.get("user");
 
   if (!userRaw) {
-
     throw new Error(
       "Telegram user information is missing."
     );
-
   }
 
   let user;
 
   try {
-
-    user =
-      JSON.parse(userRaw);
-
-  } catch {
-
+    user = JSON.parse(userRaw);
+  } catch (error) {
     throw new Error(
       "Telegram user information is invalid."
     );
-
   }
 
   if (
     !user ||
-    !user.id
+    user.id === undefined ||
+    user.id === null
   ) {
-
     throw new Error(
       "Telegram user ID is missing."
     );
-
   }
 
   return user;
-
 }
 
 /* =========================================================
@@ -283,9 +217,13 @@ function verifyTelegramInitData(initData) {
 ========================================================= */
 
 async function getOrCreatePlayer(user) {
+  if (!user || user.id === undefined) {
+    throw new Error(
+      "Cannot create account without Telegram user ID."
+    );
+  }
 
-  const telegramId =
-    String(user.id);
+  const telegramId = String(user.id);
 
   const username =
     user.username ||
@@ -294,53 +232,45 @@ async function getOrCreatePlayer(user) {
       .join(" ") ||
     `player_${telegramId}`;
 
-  console.log(
-    `[PLAYER] Loading account ${telegramId}`
-  );
-
-  const result =
-    await pool.query(
-      `
-        INSERT INTO players (
-          telegram_id,
-          username
-        )
-        VALUES ($1, $2)
-
-        ON CONFLICT (telegram_id)
-        DO UPDATE SET
-          username = EXCLUDED.username,
-          updated_at = NOW()
-
-        RETURNING
-          telegram_id,
-          username,
-          balance,
-          vip_level
-      `,
-      [
-        telegramId,
+  const result = await pool.query(
+    `
+      INSERT INTO players (
+        telegram_id,
         username
-      ]
-    );
+      )
+      VALUES ($1, $2)
+
+      ON CONFLICT (telegram_id)
+      DO UPDATE SET
+        username = EXCLUDED.username,
+        updated_at = NOW()
+
+      RETURNING
+        telegram_id,
+        username,
+        balance,
+        vip_level
+    `,
+    [
+      telegramId,
+      username
+    ]
+  );
 
   if (
     !result.rows ||
     result.rows.length === 0
   ) {
-
     throw new Error(
-      "Database did not return the player account."
+      "Player account was not returned by PostgreSQL."
     );
-
   }
 
   return result.rows[0];
-
 }
 
 /* =========================================================
-   AUTH MIDDLEWARE
+   AUTHENTICATION
 ========================================================= */
 
 async function authenticatedUser(
@@ -348,49 +278,30 @@ async function authenticatedUser(
   res,
   next
 ) {
-
   try {
-
     const initData =
-      req.body &&
-      req.body.initData;
-
-    console.log(
-      `[AUTH] initData received: ${
-        typeof initData === "string"
-          ? initData.length + " characters"
-          : "NO"
-      }`
-    );
+      req.body?.initData;
 
     const user =
-      verifyTelegramInitData(
-        initData
-      );
+      verifyTelegramInitData(initData);
 
-    req.telegramUser =
-      user;
+    req.telegramUser = user;
 
     next();
 
   } catch (error) {
-
     console.error(
-      "[AUTH ERROR]",
-      error.message
+      "Authentication error:",
+      error
     );
 
-    return res
-      .status(401)
-      .type("application/json")
-      .json({
-        error:
-          error.message ||
-          "Login failed."
-      });
-
+    return res.status(401).json({
+      success: false,
+      error:
+        error.message ||
+        "Telegram authentication failed."
+    });
   }
-
 }
 
 /* =========================================================
@@ -398,129 +309,118 @@ async function authenticatedUser(
 ========================================================= */
 
 app.get("/", (req, res) => {
-
   res.sendFile(
-    path.join(
-      __dirname,
-      "index.html"
-    )
+    path.join(__dirname, "index.html")
   );
-
 });
 
 /* =========================================================
    HEALTH
 ========================================================= */
 
-app.get(
-  "/api/health",
-  async (req, res) => {
-
-    try {
-
+app.get("/api/health", async (req, res) => {
+  try {
+    const result =
       await pool.query(
-        "SELECT 1"
+        "SELECT NOW() AS time"
       );
 
-      return res
-        .status(200)
-        .json({
-          status: "ok",
-          database: "connected",
-          game: "KIMIA PRIVÉ",
-          version: "2.3"
-        });
+    return res.status(200).json({
+      status: "ok",
+      database: "connected",
+      game: "KIMIA PRIVÉ",
+      version: "3.0",
+      time: result.rows[0].time
+    });
 
-    } catch (error) {
+  } catch (error) {
+    console.error(
+      "Health check failed:",
+      error
+    );
 
-      console.error(
-        "[HEALTH ERROR]",
-        error
-      );
-
-      return res
-        .status(500)
-        .json({
-          status: "error",
-          database: "disconnected",
-          error: error.message
-        });
-
-    }
-
+    return res.status(500).json({
+      status: "error",
+      database: "disconnected",
+      error: error.message
+    });
   }
-);
+});
 
 /* =========================================================
-   LOGIN
+   LOGIN / ACCOUNT
 ========================================================= */
 
 app.post(
   "/api/me",
   authenticatedUser,
   async (req, res) => {
-
-    console.log(
-      "[API/ME] Request authenticated."
-    );
-
     try {
+      console.log(
+        "LOGIN REQUEST FROM TELEGRAM USER:",
+        req.telegramUser.id
+      );
 
       const player =
         await getOrCreatePlayer(
           req.telegramUser
         );
 
-      const response = {
+      const account = {
+        success: true,
+
         id:
-          String(
-            player.telegram_id
-          ),
+          String(player.telegram_id),
 
         username:
           player.username ||
           "PRIVÉ MEMBER",
 
         balance:
-          Number(
-            player.balance
-          ),
+          Number(player.balance),
 
         vipLevel:
-          Number(
-            player.vip_level
-          )
+          Number(player.vip_level)
       };
 
       console.log(
-        "[API/ME] Sending account response:",
-        response
+        "LOGIN SUCCESS:",
+        account.id,
+        account.username,
+        account.balance
       );
 
-      return res
-        .status(200)
-        .type("application/json")
-        .json(response);
+      return res.status(200).json(
+        account
+      );
 
     } catch (error) {
+      console.error(
+        "================================"
+      );
 
       console.error(
-        "[API/ME ERROR]",
+        "/api/me FAILED"
+      );
+
+      console.error(
         error
       );
 
-      return res
-        .status(500)
-        .type("application/json")
-        .json({
-          error:
-            "Unable to load your PRIVÉ account.",
-          details:
-            error.message
-        });
+      console.error(
+        "================================"
+      );
 
+      return res.status(500).json({
+        success: false,
+        error:
+          "Unable to load your PRIVÉ account.",
+        details:
+          process.env.NODE_ENV === "production"
+            ? undefined
+            : error.message
+      });
     }
-
   }
 );
 
@@ -531,9 +431,7 @@ app.post(
 app.get(
   "/api/leaderboard",
   async (req, res) => {
-
     try {
-
       const result =
         await pool.query(`
           SELECT
@@ -548,42 +446,32 @@ app.get(
       const players =
         result.rows.map(
           (player, index) => ({
-            rank:
-              index + 1,
+            rank: index + 1,
 
             username:
               player.username ||
               "PRIVÉ Player",
 
             balance:
-              Number(
-                player.balance
-              )
+              Number(player.balance)
           })
         );
 
-      return res
-        .status(200)
-        .json({
-          players
-        });
+      return res.status(200).json({
+        players
+      });
 
     } catch (error) {
-
       console.error(
-        "[LEADERBOARD ERROR]",
+        "/api/leaderboard error:",
         error
       );
 
-      return res
-        .status(500)
-        .json({
-          error:
-            "Unable to load leaderboard."
-        });
-
+      return res.status(500).json({
+        error:
+          "Unable to load leaderboard."
+      });
     }
-
   }
 );
 
@@ -591,35 +479,49 @@ app.get(
    SLOT SYMBOLS
 ========================================================= */
 
+/*
+  IMPORTANT:
+  These are INTERNAL SERVER SYMBOL IDs.
+
+  The frontend converts them into
+  luxury CSS artwork.
+
+  They are NOT displayed as emoji.
+*/
+
 const SYMBOL_WEIGHTS = [
   {
-    symbol: "💎",
+    symbol: "diamond",
     weight: 20
   },
+
   {
-    symbol: "7️⃣",
+    symbol: "seven",
     weight: 8
   },
+
   {
-    symbol: "💗",
+    symbol: "heart",
     weight: 22
   },
+
   {
-    symbol: "🌹",
+    symbol: "rose",
     weight: 18
   },
+
   {
-    symbol: "♠️",
+    symbol: "spade",
     weight: 22
   },
+
   {
-    symbol: "✨",
+    symbol: "star",
     weight: 10
   }
 ];
 
 function randomSymbol() {
-
   const totalWeight =
     SYMBOL_WEIGHTS.reduce(
       (sum, item) =>
@@ -634,35 +536,23 @@ function randomSymbol() {
   for (
     const item of SYMBOL_WEIGHTS
   ) {
+    random -= item.weight;
 
-    random -=
-      item.weight;
-
-    if (
-      random <= 0
-    ) {
-
+    if (random <= 0) {
       return item.symbol;
-
     }
-
   }
 
-  return SYMBOL_WEIGHTS[
-    SYMBOL_WEIGHTS.length - 1
-  ].symbol;
-
+  return "star";
 }
 
 function generateSpin() {
-
   return Array.from(
     {
       length: 15
     },
     () => randomSymbol()
   );
-
 }
 
 /* =========================================================
@@ -681,7 +571,6 @@ function evaluatePayline(
   symbols,
   line
 ) {
-
   const first =
     symbols[line[0]];
 
@@ -692,26 +581,19 @@ function evaluatePayline(
     i < line.length;
     i++
   ) {
-
     if (
       symbols[line[i]] === first
     ) {
-
       matches++;
-
     } else {
-
       break;
-
     }
-
   }
 
   return {
     symbol: first,
     matches
   };
-
 }
 
 /* =========================================================
@@ -722,59 +604,44 @@ function calculateWin(
   symbols,
   bet
 ) {
-
   let totalWin = 0;
 
   const winningLines = [];
 
   PAYLINES.forEach(
     (line, lineIndex) => {
-
       const result =
         evaluatePayline(
           symbols,
           line
         );
 
-      if (
-        result.matches >= 3
-      ) {
-
+      if (result.matches >= 3) {
         let multiplier = 0;
 
-        if (
-          result.matches === 3
-        ) {
-
+        if (result.matches === 3) {
           multiplier = 2;
+        }
 
-        } else if (
-          result.matches === 4
-        ) {
-
+        if (result.matches === 4) {
           multiplier = 5;
+        }
 
-        } else if (
-          result.matches === 5
-        ) {
-
+        if (result.matches === 5) {
           multiplier = 12;
-
         }
 
         if (
-          result.symbol === "7️⃣"
+          result.symbol === "seven" &&
+          result.matches >= 3
         ) {
-
           multiplier *= 2;
-
         }
 
         const lineWin =
           bet * multiplier;
 
-        totalWin +=
-          lineWin;
+        totalWin += lineWin;
 
         winningLines.push({
           line:
@@ -789,9 +656,7 @@ function calculateWin(
           win:
             lineWin
         });
-
       }
-
     }
   );
 
@@ -799,7 +664,6 @@ function calculateWin(
     win: totalWin,
     winningLines
   };
-
 }
 
 /* =========================================================
@@ -810,12 +674,8 @@ app.post(
   "/api/spin",
   authenticatedUser,
   async (req, res) => {
-
     const bet =
-      Number(
-        req.body &&
-        req.body.bet
-      );
+      Number(req.body?.bet);
 
     const allowedBets = [
       300,
@@ -825,33 +685,21 @@ app.post(
     ];
 
     if (
-      !Number.isSafeInteger(
-        bet
-      )
+      !Number.isSafeInteger(bet)
     ) {
-
-      return res
-        .status(400)
-        .json({
-          error:
-            "Invalid bet."
-        });
-
+      return res.status(400).json({
+        error:
+          "Invalid bet."
+      });
     }
 
     if (
-      !allowedBets.includes(
-        bet
-      )
+      !allowedBets.includes(bet)
     ) {
-
-      return res
-        .status(400)
-        .json({
-          error:
-            "Invalid bet. Allowed bets are 300, 600, 1500 and 3000."
-        });
-
+      return res.status(400).json({
+        error:
+          "Invalid bet. Allowed bets are 300, 600, 1500 and 3000."
+      });
     }
 
     const telegramId =
@@ -863,7 +711,6 @@ app.post(
       await pool.connect();
 
     try {
-
       await client.query(
         "BEGIN"
       );
@@ -880,49 +727,51 @@ app.post(
             WHERE telegram_id = $1
             FOR UPDATE
           `,
-          [telegramId]
+          [
+            telegramId
+          ]
         );
 
       if (
         playerResult.rowCount === 0
       ) {
-
         await client.query(
           "ROLLBACK"
         );
 
-        return res
-          .status(404)
-          .json({
-            error:
-              "PRIVÉ account not found."
-          });
-
+        return res.status(404).json({
+          error:
+            "PRIVÉ account not found."
+        });
       }
 
       const player =
         playerResult.rows[0];
 
       const currentBalance =
-        Number(
-          player.balance
+        Number(player.balance);
+
+      if (
+        !Number.isFinite(
+          currentBalance
+        )
+      ) {
+        throw new Error(
+          "Player balance is invalid."
         );
+      }
 
       if (
         currentBalance < bet
       ) {
-
         await client.query(
           "ROLLBACK"
         );
 
-        return res
-          .status(400)
-          .json({
-            error:
-              "Not enough PRIVÉ coins."
-          });
-
+        return res.status(400).json({
+          error:
+            "Not enough PRIVÉ coins."
+        });
       }
 
       const symbols =
@@ -957,114 +806,77 @@ app.post(
         "COMMIT"
       );
 
-      return res
-        .status(200)
-        .json({
+      return res.status(200).json({
+        success: true,
 
-          symbols,
+        symbols,
 
-          win:
-            payout.win,
+        win:
+          payout.win,
 
-          winningLines:
-            payout.winningLines,
+        winningLines:
+          payout.winningLines,
 
-          bet,
+        bet,
 
-          balance:
-            newBalance,
+        balance:
+          newBalance,
 
-          vipLevel:
-            Number(
-              player.vip_level
-            ),
+        vipLevel:
+          Number(
+            player.vip_level
+          ),
 
-          username:
-            player.username
-
-        });
+        username:
+          player.username ||
+          "PRIVÉ MEMBER"
+      });
 
     } catch (error) {
-
       try {
-
         await client.query(
           "ROLLBACK"
         );
-
       } catch {}
 
       console.error(
-        "[SPIN ERROR]",
+        "/api/spin error:",
         error
       );
 
-      return res
-        .status(500)
-        .json({
-          error:
-            "Spin failed. Your coins were not changed."
-        });
+      return res.status(500).json({
+        error:
+          "Spin failed. Your coins were not changed."
+      });
 
     } finally {
-
       client.release();
-
     }
-
   }
 );
 
 /* =========================================================
-   API 404
+   UNKNOWN API ROUTES
 ========================================================= */
 
 app.use(
   "/api",
   (req, res) => {
-
-    console.log(
-      `[API 404] ${req.method} ${req.originalUrl}`
-    );
-
-    return res
-      .status(404)
-      .json({
-        error:
-          "API endpoint not found.",
-        path:
-          req.originalUrl
-      });
-
+    return res.status(404).json({
+      error:
+        "API endpoint not found.",
+      path:
+        req.originalUrl
+    });
   }
 );
 
 /* =========================================================
-   GENERAL ERROR HANDLER
+   FRONTEND
 ========================================================= */
 
 app.use(
-  (error, req, res, next) => {
-
-    console.error(
-      "[UNHANDLED ERROR]",
-      error
-    );
-
-    if(res.headersSent){
-      return next(error);
-    }
-
-    return res
-      .status(500)
-      .json({
-        error:
-          "Internal server error.",
-        details:
-          error.message
-      });
-
-  }
+  express.static(__dirname)
 );
 
 /* =========================================================
@@ -1072,36 +884,29 @@ app.use(
 ========================================================= */
 
 async function startServer() {
-
   try {
+    console.log(
+      "Starting KIMIA PRIVÉ..."
+    );
 
-    if(!BOT_TOKEN){
+    console.log(
+      "PORT:",
+      PORT
+    );
 
-      console.error(
-        "WARNING: TELEGRAM_BOT_TOKEN is missing."
-      );
+    console.log(
+      "DATABASE_URL:",
+      DATABASE_URL
+        ? "configured"
+        : "MISSING"
+    );
 
-    } else {
-
-      console.log(
-        "TELEGRAM_BOT_TOKEN is configured."
-      );
-
-    }
-
-    if(!DATABASE_URL){
-
-      console.error(
-        "WARNING: DATABASE_URL is missing."
-      );
-
-    } else {
-
-      console.log(
-        "DATABASE_URL is configured."
-      );
-
-    }
+    console.log(
+      "TELEGRAM_BOT_TOKEN:",
+      BOT_TOKEN
+        ? "configured"
+        : "MISSING"
+    );
 
     await initializeDatabase();
 
@@ -1109,29 +914,43 @@ async function startServer() {
       PORT,
       "0.0.0.0",
       () => {
-
         console.log(
           `KIMIA PRIVÉ server running on port ${PORT}`
         );
 
         console.log(
-          `Health endpoint: /api/health`
+          "Health endpoint: /api/health"
         );
 
+        console.log(
+          "Login endpoint: /api/me"
+        );
+
+        console.log(
+          "Spin endpoint: /api/spin"
+        );
       }
     );
 
   } catch (error) {
+    console.error(
+      "================================"
+    );
 
     console.error(
-      "UNABLE TO START KIMIA PRIVÉ:",
+      "SERVER STARTUP FAILED"
+    );
+
+    console.error(
       error
     );
 
+    console.error(
+      "================================"
+    );
+
     process.exit(1);
-
   }
-
 }
 
 startServer();
