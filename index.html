@@ -9,7 +9,7 @@
 <script src="https://telegram.org/js/telegram-web-app.js"></script>
 
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600&family=Montserrat:wght@400;500;600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Montserrat:wght@400;500;600;700&display=swap');
 
 *{
   box-sizing:border-box;
@@ -22,8 +22,9 @@ html,body{
   height:100%;
   overflow:hidden;
   background:
-    radial-gradient(circle at 50% 25%,rgba(145,104,42,.16),transparent 38%),
-    linear-gradient(145deg,#080605,#120d09 48%,#070605);
+    radial-gradient(circle at 50% 18%,rgba(174,127,48,.18),transparent 34%),
+    radial-gradient(circle at 50% 100%,rgba(100,66,25,.12),transparent 42%),
+    linear-gradient(145deg,#050403,#120d08 48%,#060504);
   color:#ead9b5;
   font-family:Montserrat,Arial,sans-serif;
 }
@@ -34,6 +35,8 @@ body{
 
 button{
   font:inherit;
+  -webkit-user-select:none;
+  user-select:none;
 }
 
 .app{
@@ -42,7 +45,7 @@ button{
   display:flex;
   justify-content:center;
   align-items:center;
-  padding:18px;
+  padding:14px;
 }
 
 .screen{
@@ -60,7 +63,7 @@ button{
   position:relative;
   border:1px solid rgba(205,164,82,.48);
   background:
-    linear-gradient(145deg,rgba(31,22,16,.97),rgba(10,8,6,.98));
+    linear-gradient(145deg,rgba(31,22,16,.97),rgba(10,8,6,.99));
   box-shadow:
     0 0 0 1px rgba(255,255,255,.025) inset,
     0 25px 70px rgba(0,0,0,.6),
@@ -74,6 +77,8 @@ button{
   border:1px solid rgba(206,165,83,.10);
   pointer-events:none;
 }
+
+/* LOGIN */
 
 .login-card{
   padding:48px 30px 32px;
@@ -172,23 +177,7 @@ button{
   font-size:12px;
   line-height:1.6;
   color:#b88e8e;
-}
-
-.debug{
-  display:none;
-  margin-top:12px;
-  padding:10px;
-  border:1px solid rgba(205,164,82,.18);
-  background:rgba(0,0,0,.25);
-  color:#8e8272;
-  font-size:9px;
-  line-height:1.5;
-  text-align:left;
   word-break:break-word;
-}
-
-.hidden{
-  display:none!important;
 }
 
 /* GAME */
@@ -201,7 +190,7 @@ button{
   display:flex;
   justify-content:space-between;
   align-items:center;
-  margin-bottom:14px;
+  margin-bottom:12px;
 }
 
 .logo-small{
@@ -223,8 +212,8 @@ button{
   display:flex;
   justify-content:space-between;
   align-items:center;
-  padding:16px 18px;
-  margin-bottom:14px;
+  padding:14px 18px;
+  margin-bottom:12px;
 }
 
 .balance-label{
@@ -234,33 +223,75 @@ button{
 }
 
 .balance{
-  margin-top:5px;
+  margin-top:4px;
   font-family:"Cormorant Garamond",serif;
   font-size:30px;
   color:#e8c979;
+  transition:transform .25s ease;
 }
+
+.balance.bump{
+  animation:balanceBump .5s ease;
+}
+
+@keyframes balanceBump{
+  0%{transform:scale(1)}
+  45%{transform:scale(1.16)}
+  100%{transform:scale(1)}
+}
+
+/* SLOT MACHINE */
 
 .reel-card{
   padding:18px;
 }
 
+.machine-title{
+  text-align:center;
+  margin:0 0 14px;
+  font-size:9px;
+  letter-spacing:5px;
+  color:#8f7b5b;
+}
+
+.reels-window{
+  position:relative;
+  overflow:hidden;
+  border:1px solid rgba(207,165,82,.42);
+  padding:8px;
+  background:
+    radial-gradient(circle at 50% 50%,rgba(186,139,50,.07),transparent 58%),
+    #080604;
+  box-shadow:
+    inset 0 0 30px rgba(0,0,0,.8),
+    0 0 25px rgba(0,0,0,.45);
+}
+
 .reels{
   display:grid;
   grid-template-columns:repeat(5,1fr);
-  gap:7px;
+  gap:6px;
 }
 
 .reel{
-  aspect-ratio:1/1.22;
+  position:relative;
+  aspect-ratio:1/1.18;
   min-width:0;
-  display:flex;
-  align-items:center;
-  justify-content:center;
   overflow:hidden;
-  border:1px solid rgba(204,163,80,.3);
+  border:1px solid rgba(204,163,80,.28);
   background:
-    radial-gradient(circle at 50% 40%,rgba(145,104,42,.12),transparent 60%),
-    #0c0907;
+    linear-gradient(180deg,#100c08,#080604 50%,#100c08);
+}
+
+.reel:after{
+  content:"";
+  position:absolute;
+  left:0;
+  right:0;
+  top:50%;
+  height:1px;
+  background:rgba(222,183,99,.12);
+  pointer-events:none;
 }
 
 .symbol{
@@ -274,9 +305,9 @@ button{
 
 .symbol:before{
   content:"";
-  width:68%;
-  height:68%;
-  border:1px solid rgba(202,164,87,.22);
+  width:62%;
+  height:62%;
+  border:1px solid rgba(202,164,87,.18);
   transform:rotate(45deg);
   position:absolute;
 }
@@ -286,7 +317,7 @@ button{
   z-index:2;
   font-family:"Cormorant Garamond",serif;
   font-weight:600;
-  font-size:35px;
+  font-size:31px;
   line-height:1;
   color:#e7c77b;
   text-shadow:
@@ -294,15 +325,101 @@ button{
     0 2px 3px #000;
 }
 
-.symbol-diamond .symbol-art{font-size:32px}
-.symbol-seven .symbol-art{font-size:42px;font-style:italic}
-.symbol-heart .symbol-art{font-size:36px}
-.symbol-rose .symbol-art{font-size:32px}
-.symbol-spade .symbol-art{font-size:38px}
-.symbol-star .symbol-art{font-size:32px}
+.symbol-diamond .symbol-art{
+  font-size:31px;
+}
+
+.symbol-seven .symbol-art{
+  font-size:39px;
+  font-style:italic;
+  font-weight:700;
+}
+
+.symbol-heart .symbol-art{
+  font-size:34px;
+}
+
+.symbol-rose .symbol-art{
+  font-size:31px;
+}
+
+.symbol-spade .symbol-art{
+  font-size:36px;
+}
+
+.symbol-star .symbol-art{
+  font-size:30px;
+}
+
+/* WINNING SYMBOL */
+
+.reel.winner{
+  border-color:#e4bf6c;
+  box-shadow:
+    0 0 10px rgba(226,187,96,.55),
+    inset 0 0 18px rgba(226,187,96,.16);
+  animation:winnerPulse .75s ease-in-out infinite alternate;
+  z-index:4;
+}
+
+.reel.winner .symbol-art{
+  color:#ffe7a2;
+  text-shadow:
+    0 0 8px rgba(255,222,143,.8),
+    0 0 22px rgba(232,190,94,.6);
+}
+
+@keyframes winnerPulse{
+  from{
+    transform:scale(1);
+  }
+  to{
+    transform:scale(1.035);
+  }
+}
+
+/* REEL SPIN */
+
+.reel.spinning{
+  animation:reelFlash .11s linear infinite alternate;
+}
+
+@keyframes reelFlash{
+  from{
+    filter:brightness(.75);
+  }
+  to{
+    filter:brightness(1.3);
+  }
+}
+
+/* PAYLINE */
+
+.payline{
+  position:absolute;
+  left:8px;
+  right:8px;
+  height:3px;
+  top:50%;
+  transform:translateY(-50%);
+  background:#e8c66f;
+  box-shadow:
+    0 0 7px #e8c66f,
+    0 0 18px rgba(232,198,111,.7);
+  z-index:8;
+  pointer-events:none;
+  animation:lineFlash .5s ease-in-out infinite alternate;
+}
+
+@keyframes lineFlash{
+  from{opacity:.55}
+  to{opacity:1}
+}
+
+/* CONTROLS */
 
 .controls{
-  margin-top:16px;
+  margin-top:15px;
 }
 
 .bet-row{
@@ -319,15 +436,22 @@ button{
   padding:11px 4px;
   font-size:10px;
   letter-spacing:1px;
+  cursor:pointer;
 }
 
 .bet-btn.active{
   border-color:#d4ad5f;
   color:#ebd18e;
   background:rgba(181,139,61,.14);
+  box-shadow:inset 0 0 12px rgba(193,148,59,.08);
+}
+
+.bet-btn:active{
+  transform:scale(.98);
 }
 
 .spin-btn{
+  position:relative;
   width:100%;
   height:58px;
   border:1px solid #d9b66a;
@@ -335,11 +459,93 @@ button{
   color:#140e08;
   font-weight:600;
   letter-spacing:4px;
+  cursor:pointer;
+  box-shadow:
+    0 8px 20px rgba(0,0,0,.32),
+    inset 0 1px rgba(255,255,255,.35);
+}
+
+.spin-btn:active{
+  transform:translateY(1px);
 }
 
 .spin-btn:disabled{
   opacity:.55;
+  cursor:wait;
 }
+
+/* WIN OVERLAY */
+
+.win-overlay{
+  position:fixed;
+  inset:0;
+  z-index:50;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  background:rgba(4,3,2,.72);
+  backdrop-filter:blur(4px);
+  opacity:0;
+  pointer-events:none;
+  transition:opacity .2s ease;
+}
+
+.win-overlay.show{
+  opacity:1;
+}
+
+.win-box{
+  width:min(390px,88%);
+  padding:34px 24px;
+  text-align:center;
+  border:1px solid #d6ad5c;
+  background:
+    radial-gradient(circle at 50% 30%,rgba(214,170,83,.17),transparent 48%),
+    #100b07;
+  box-shadow:
+    0 0 50px rgba(217,175,87,.18),
+    0 25px 80px rgba(0,0,0,.75);
+  transform:scale(.85);
+  transition:transform .3s cubic-bezier(.2,.9,.3,1.2);
+}
+
+.win-overlay.show .win-box{
+  transform:scale(1);
+}
+
+.win-small{
+  font-size:9px;
+  letter-spacing:5px;
+  color:#b99759;
+}
+
+.win-title{
+  margin-top:8px;
+  font-family:"Cormorant Garamond",serif;
+  font-size:45px;
+  letter-spacing:5px;
+  color:#f3dfae;
+}
+
+.win-amount{
+  margin-top:5px;
+  font-family:"Cormorant Garamond",serif;
+  font-size:34px;
+  color:#e8c36f;
+}
+
+.win-close{
+  margin-top:22px;
+  min-width:150px;
+  padding:11px 20px;
+  border:1px solid #cda85e;
+  background:transparent;
+  color:#d9bc7e;
+  font-size:10px;
+  letter-spacing:3px;
+}
+
+/* MESSAGE */
 
 .message{
   min-height:25px;
@@ -347,9 +553,32 @@ button{
   margin-top:13px;
   color:#c9aa70;
   font-size:12px;
+  letter-spacing:.5px;
+}
+
+.message.win{
+  color:#f0ce7c;
+  text-shadow:0 0 12px rgba(232,194,105,.45);
+}
+
+.small-error{
+  color:#bc8f8f;
+  font-size:11px;
+  line-height:1.5;
+  text-align:center;
+  margin-top:8px;
+}
+
+.hidden{
+  display:none!important;
 }
 
 @media(max-width:430px){
+
+  .app{
+    padding:9px;
+  }
+
   .login-card{
     padding:40px 22px 27px;
   }
@@ -362,12 +591,32 @@ button{
     font-size:25px;
   }
 
+  .reel-card{
+    padding:13px;
+  }
+
+  .reels-window{
+    padding:6px;
+  }
+
+  .reels{
+    gap:4px;
+  }
+
   .symbol-art{
-    font-size:28px;
+    font-size:26px;
   }
 
   .symbol-seven .symbol-art{
-    font-size:34px;
+    font-size:33px;
+  }
+
+  .symbol-heart .symbol-art{
+    font-size:29px;
+  }
+
+  .symbol-spade .symbol-art{
+    font-size:31px;
   }
 }
 </style>
@@ -377,84 +626,124 @@ button{
 
 <div class="app">
 
-<main id="loginScreen" class="screen">
+  <!-- LOGIN -->
+  <main id="loginScreen" class="screen">
+    <section class="card login-card">
 
-<section class="card login-card">
+      <div class="eyebrow">WELCOME TO</div>
 
-<div class="eyebrow">WELCOME TO</div>
+      <div class="brand">KIMIA</div>
+      <div class="brand-sub">PRIVÉ</div>
 
-<div class="brand">KIMIA</div>
-<div class="brand-sub">PRIVÉ</div>
+      <div class="ornament">
+        <span class="diamond"></span>
+      </div>
 
-<div class="ornament">
-<span class="diamond"></span>
+      <p class="description">
+        An exclusive private gaming experience.
+        Your Telegram identity connects directly
+        to your PRIVÉ account.
+      </p>
+
+      <button id="loginBtn" class="primary-btn">
+        ENTER PRIVÉ
+      </button>
+
+      <div id="loginStatus" class="status"></div>
+
+    </section>
+  </main>
+
+
+  <!-- GAME -->
+  <main id="gameScreen" class="screen game-screen hidden">
+
+    <div class="topbar">
+      <div class="logo-small">KIMIA PRIVÉ</div>
+      <div id="vipBadge" class="vip">PRIVÉ</div>
+    </div>
+
+    <section class="card balance-card">
+      <div>
+        <div class="balance-label">PRIVATE BALANCE</div>
+        <div id="balance" class="balance">0</div>
+      </div>
+
+      <div id="playerName" class="balance-label">
+        MEMBER
+      </div>
+    </section>
+
+    <section class="card reel-card">
+
+      <div class="machine-title">
+        PRIVÉ COLLECTION
+      </div>
+
+      <div id="reelsWindow" class="reels-window">
+        <div id="reels" class="reels"></div>
+      </div>
+
+      <div class="controls">
+
+        <div class="bet-row">
+
+          <button class="bet-btn active" data-bet="300">
+            300
+          </button>
+
+          <button class="bet-btn" data-bet="600">
+            600
+          </button>
+
+          <button class="bet-btn" data-bet="1500">
+            1,500
+          </button>
+
+          <button class="bet-btn" data-bet="3000">
+            3,000
+          </button>
+
+        </div>
+
+        <button id="spinBtn" class="spin-btn">
+          SPIN
+        </button>
+
+        <div id="gameMessage" class="message"></div>
+
+      </div>
+
+    </section>
+
+  </main>
+
 </div>
 
-<p class="description">
-An exclusive private gaming experience.
-Your Telegram identity connects directly
-to your PRIVÉ account.
-</p>
 
-<button id="loginBtn" class="primary-btn">
-ENTER PRIVÉ
-</button>
+<!-- WIN OVERLAY -->
 
-<div id="loginStatus" class="status"></div>
+<div id="winOverlay" class="win-overlay">
 
-<div id="debugBox" class="debug"></div>
+  <div class="win-box">
 
-</section>
+    <div class="win-small">
+      KIMIA PRIVÉ
+    </div>
 
-</main>
+    <div class="win-title">
+      YOU WON
+    </div>
 
+    <div id="winAmount" class="win-amount">
+      0 PRIVÉ COINS
+    </div>
 
-<main id="gameScreen" class="screen game-screen hidden">
+    <button id="winClose" class="win-close">
+      CONTINUE
+    </button>
 
-<div class="topbar">
-<div class="logo-small">KIMIA PRIVÉ</div>
-<div id="vipBadge" class="vip">PRIVÉ</div>
-</div>
-
-<section class="card balance-card">
-
-<div>
-<div class="balance-label">PRIVATE BALANCE</div>
-<div id="balance" class="balance">0</div>
-</div>
-
-<div id="playerName" class="balance-label">
-MEMBER
-</div>
-
-</section>
-
-<section class="card reel-card">
-
-<div id="reels" class="reels"></div>
-
-<div class="controls">
-
-<div class="bet-row">
-
-<button class="bet-btn active" data-bet="300">300</button>
-<button class="bet-btn" data-bet="600">600</button>
-<button class="bet-btn" data-bet="1500">1,500</button>
-<button class="bet-btn" data-bet="3000">3,000</button>
-
-</div>
-
-<button id="spinBtn" class="spin-btn">
-SPIN
-</button>
-
-<div id="gameMessage" class="message"></div>
-
-</div>
-
-</section>
-
-</main>
+  </div>
 
 </div>
 
@@ -474,28 +763,6 @@ const tg =
     ? window.Telegram.WebApp
     : null;
 
-
-/* =====================================================
-   API BASE
-===================================================== */
-
-/*
-  The game is hosted by the same Render service,
-  so relative API paths are preferred.
-
-  The absolute Render URL is retained as a fallback
-  if Telegram's WebView has a problem resolving the
-  relative request.
-*/
-
-const API_URL =
-  "https://kimia-prive-api.onrender.com";
-
-
-/* =====================================================
-   TELEGRAM SETUP
-===================================================== */
-
 if(tg){
 
   try{
@@ -503,14 +770,10 @@ if(tg){
     tg.ready();
     tg.expand();
 
-    if(typeof tg.enableClosingConfirmation === "function"){
-      tg.enableClosingConfirmation();
-    }
-
   }catch(error){
 
     console.warn(
-      "Telegram setup:",
+      "Telegram WebApp setup:",
       error
     );
 
@@ -535,9 +798,6 @@ const loginBtn =
 const loginStatus =
   document.getElementById("loginStatus");
 
-const debugBox =
-  document.getElementById("debugBox");
-
 const balanceEl =
   document.getElementById("balance");
 
@@ -556,143 +816,83 @@ const spinBtn =
 const gameMessage =
   document.getElementById("gameMessage");
 
+const winOverlay =
+  document.getElementById("winOverlay");
+
+const winAmount =
+  document.getElementById("winAmount");
+
+const winClose =
+  document.getElementById("winClose");
+
 
 let selectedBet = 300;
 let currentPlayer = null;
 let spinning = false;
+let animationTimer = null;
 
 
 /* =====================================================
-   DEBUG
+   API
 ===================================================== */
 
-function showDebug(text){
+async function apiPost(endpoint,body){
 
-  if(!debugBox){
-    return;
-  }
+  const response =
+    await fetch(endpoint,{
+      method:"POST",
+      headers:{
+        "Content-Type":"application/json",
+        "Accept":"application/json"
+      },
+      body:JSON.stringify(body)
+    });
 
-  debugBox.style.display = "block";
-  debugBox.textContent = text;
+  const text =
+    await response.text();
 
-}
+  let data = null;
 
-
-/* =====================================================
-   API POST
-===================================================== */
-
-async function apiPost(endpoint, body){
-
-  const urls = [
-    endpoint,
-    API_URL + endpoint
-  ];
-
-  let lastError = null;
-
-  for(const url of urls){
+  if(text){
 
     try{
 
-      const response =
-        await fetch(
-          url,
-          {
-            method:"POST",
-            headers:{
-              "Content-Type":"application/json",
-              "Accept":"application/json"
-            },
-            body:JSON.stringify(body),
-            cache:"no-store"
-          }
-        );
-
-      const text =
-        await response.text();
-
-      console.log(
-        "API RESPONSE",
-        url,
-        response.status,
-        text
-      );
-
-      if(!text){
-
-        lastError =
-          new Error(
-            `Empty server response · HTTP ${response.status}`
-          );
-
-        continue;
-      }
-
-
-      let data;
-
-      try{
-
-        data =
-          JSON.parse(text);
-
-      }catch(error){
-
-        lastError =
-          new Error(
-            `Invalid JSON · HTTP ${response.status} · ${text.substring(0,200)}`
-          );
-
-        continue;
-      }
-
-
-      if(!response.ok){
-
-        throw new Error(
-          data && data.error
-            ? data.error
-            : `Server returned HTTP ${response.status}.`
-        );
-
-      }
-
-
-      return data;
+      data = JSON.parse(text);
 
     }catch(error){
 
-      lastError = error;
-
-      console.error(
-        "API REQUEST FAILED:",
-        url,
-        error
+      throw new Error(
+        "Server returned invalid JSON."
       );
-
-      /*
-        If the first request failed before receiving
-        a response, try the absolute Render URL.
-      */
-
-      continue;
 
     }
 
   }
 
+  if(!response.ok){
 
-  throw lastError ||
-    new Error(
-      "Unable to contact the KIMIA PRIVÉ server."
+    const serverError =
+      data && data.error
+        ? data.error
+        : `Server returned HTTP ${response.status}.`;
+
+    throw new Error(serverError);
+  }
+
+  if(!data){
+
+    throw new Error(
+      "Server returned an empty response."
     );
 
+  }
+
+  return data;
 }
 
 
 /* =====================================================
-   INIT DATA
+   TELEGRAM INIT DATA
 ===================================================== */
 
 function getInitData(){
@@ -705,25 +905,18 @@ function getInitData(){
 
   }
 
-
   const initData =
     tg.initData;
 
-
-  if(
-    !initData ||
-    typeof initData !== "string"
-  ){
+  if(!initData){
 
     throw new Error(
-      "Telegram did not provide login data. Close the game and reopen it from the KIMIA PRIVÉ Telegram bot."
+      "Telegram did not provide login data. Open the game from the Telegram bot."
     );
 
   }
 
-
   return initData;
-
 }
 
 
@@ -739,23 +932,12 @@ async function login(){
 
   loginBtn.disabled = true;
   loginBtn.textContent = "CONNECTING…";
-
   loginStatus.textContent = "";
-  debugBox.style.display = "none";
-
 
   try{
 
     const initData =
       getInitData();
-
-
-    console.log(
-      "Telegram initData received:",
-      initData.length,
-      "characters"
-    );
-
 
     const data =
       await apiPost(
@@ -764,7 +946,6 @@ async function login(){
           initData:initData
         }
       );
-
 
     if(
       !data ||
@@ -777,7 +958,6 @@ async function login(){
 
     }
 
-
     if(
       data.id === undefined ||
       data.balance === undefined
@@ -789,24 +969,15 @@ async function login(){
 
     }
 
-
-    currentPlayer =
-      data;
-
+    currentPlayer = data;
 
     updatePlayer(data);
 
+    loginScreen.classList.add("hidden");
 
-    loginScreen.classList.add(
-      "hidden"
-    );
-
-    gameScreen.classList.remove(
-      "hidden"
-    );
+    gameScreen.classList.remove("hidden");
 
     loginStatus.textContent = "";
-
 
   }catch(error){
 
@@ -815,29 +986,10 @@ async function login(){
       error
     );
 
-
-    const message =
-      error &&
-      error.message
+    loginStatus.textContent =
+      error && error.message
         ? error.message
         : "Login failed.";
-
-
-    loginStatus.textContent =
-      message;
-
-
-    showDebug(
-      "LOGIN DEBUG\n" +
-      "Page: " +
-      window.location.href +
-      "\n\n" +
-      "API: " +
-      API_URL +
-      "/api/me\n\n" +
-      message
-    );
-
 
   }finally{
 
@@ -858,17 +1010,14 @@ function updatePlayer(player){
   const balance =
     Number(player.balance);
 
-
   balanceEl.textContent =
     Number.isFinite(balance)
       ? balance.toLocaleString()
       : "0";
 
-
   let name =
     player.username ||
     "PRIVÉ MEMBER";
-
 
   if(
     typeof name === "string" &&
@@ -880,28 +1029,31 @@ function updatePlayer(player){
 
   }
 
-
   playerNameEl.textContent =
-    String(name).toUpperCase();
-
+    name.toUpperCase();
 
   const vip =
-    Number(
-      player.vipLevel || 0
-    );
-
+    Number(player.vipLevel || 0);
 
   vipBadge.textContent =
     vip > 0
       ? `VIP ${vip}`
       : "PRIVÉ";
-
 }
 
 
 /* =====================================================
-   LUXURY SYMBOL ART
+   SYMBOLS
 ===================================================== */
+
+const SYMBOLS = [
+  "💎",
+  "7️⃣",
+  "💗",
+  "🌹",
+  "♠️",
+  "✨"
+];
 
 function symbolClass(symbol){
 
@@ -920,11 +1072,7 @@ function symbolClass(symbol){
   if(symbol === "♠️")
     return "symbol-spade";
 
-  if(symbol === "✨")
-    return "symbol-star";
-
   return "symbol-star";
-
 }
 
 
@@ -932,86 +1080,72 @@ function symbolMarkup(symbol){
 
   let art = "✦";
 
-
   if(symbol === "💎")
     art = "◆";
-
 
   if(symbol === "7️⃣")
     art = "7";
 
-
   if(symbol === "💗")
     art = "♥";
-
 
   if(symbol === "🌹")
     art = "✿";
 
-
   if(symbol === "♠️")
     art = "♠";
 
-
   if(symbol === "✨")
     art = "✦";
-
 
   return `
     <div class="symbol ${symbolClass(symbol)}">
       <span class="symbol-art">${art}</span>
     </div>
   `;
+}
+
+
+/* =====================================================
+   RANDOM SYMBOL
+===================================================== */
+
+function randomSymbol(){
+
+  return SYMBOLS[
+    Math.floor(
+      Math.random() * SYMBOLS.length
+    )
+  ];
 
 }
 
 
 /* =====================================================
-   REELS
+   RENDER
 ===================================================== */
 
 function renderSymbols(symbols){
 
   reelsEl.innerHTML = "";
 
+  const safeSymbols =
+    Array.isArray(symbols) &&
+    symbols.length === 15
+      ? symbols
+      : Array.from(
+          {length:15},
+          randomSymbol
+        );
 
-  if(
-    !Array.isArray(symbols) ||
-    symbols.length !== 15
-  ){
-
-    for(
-      let i = 0;
-      i < 15;
-      i++
-    ){
-
-      const reel =
-        document.createElement("div");
-
-      reel.className =
-        "reel";
-
-      reel.innerHTML =
-        symbolMarkup("✨");
-
-      reelsEl.appendChild(reel);
-
-    }
-
-    return;
-
-  }
-
-
-  symbols.forEach(
-    symbol => {
+  safeSymbols.forEach(
+    (symbol,index) => {
 
       const reel =
         document.createElement("div");
 
-      reel.className =
-        "reel";
+      reel.className = "reel";
+      reel.dataset.index = index;
 
       reel.innerHTML =
         symbolMarkup(symbol);
@@ -1029,26 +1163,195 @@ function renderSymbols(symbols){
 ===================================================== */
 
 renderSymbols([
-  "💎",
-  "7️⃣",
-  "💗",
-  "🌹",
-  "♠️",
-  "✨",
-  "💎",
-  "💗",
-  "🌹",
-  "♠️",
-  "7️⃣",
-  "💗",
-  "✨",
-  "💎",
-  "🌹"
+  "💎","7️⃣","💗","🌹","♠️",
+  "✨","💎","♥","🌹","♠️",
+  "7️⃣","💗","✨","💎","🌹"
 ]);
 
 
 /* =====================================================
-   BET BUTTONS
+   REEL ANIMATION
+===================================================== */
+
+function startReelAnimation(){
+
+  stopReelAnimation();
+
+  document
+    .querySelectorAll(".reel")
+    .forEach(reel => {
+
+      reel.classList.add("spinning");
+
+    });
+
+  let ticks = 0;
+
+  animationTimer =
+    setInterval(() => {
+
+      const fakeSymbols =
+        Array.from(
+          {length:15},
+          randomSymbol
+        );
+
+      renderSymbols(fakeSymbols);
+
+      document
+        .querySelectorAll(".reel")
+        .forEach(reel => {
+
+          reel.classList.add("spinning");
+
+        });
+
+      ticks++;
+
+    },75);
+
+}
+
+
+function stopReelAnimation(){
+
+  if(animationTimer){
+
+    clearInterval(animationTimer);
+    animationTimer = null;
+
+  }
+
+  document
+    .querySelectorAll(".reel")
+    .forEach(reel => {
+
+      reel.classList.remove("spinning");
+
+    });
+
+}
+
+
+/* =====================================================
+   HIGHLIGHT WINNING LINES
+===================================================== */
+
+const PAYLINE_INDEXES = [
+  [0,3,6,9,12],
+  [1,4,7,10,13],
+  [2,5,8,11,14],
+  [0,4,8,10,12],
+  [2,4,6,10,14]
+];
+
+
+function highlightWinningLines(winningLines){
+
+  document
+    .querySelectorAll(".reel")
+    .forEach(reel =>
+      reel.classList.remove("winner")
+    );
+
+  if(
+    !Array.isArray(winningLines) ||
+    winningLines.length === 0
+  ){
+
+    return;
+
+  }
+
+  winningLines.forEach(
+    winLine => {
+
+      const lineNumber =
+        Number(winLine.line);
+
+      const indexes =
+        PAYLINE_INDEXES[
+          lineNumber - 1
+        ];
+
+      if(!indexes){
+        return;
+      }
+
+      indexes.forEach(index => {
+
+        const reel =
+          document.querySelector(
+            `.reel[data-index="${index}"]`
+          );
+
+        if(reel){
+          reel.classList.add("winner");
+        }
+
+      });
+
+    }
+  );
+
+}
+
+
+/* =====================================================
+   BALANCE EFFECT
+===================================================== */
+
+function animateBalance(){
+
+  balanceEl.classList.remove("bump");
+
+  void balanceEl.offsetWidth;
+
+  balanceEl.classList.add("bump");
+
+}
+
+
+/* =====================================================
+   WIN POPUP
+===================================================== */
+
+function showWin(win){
+
+  winAmount.textContent =
+    `${Number(win).toLocaleString()} PRIVÉ COINS`;
+
+  winOverlay.classList.add("show");
+
+}
+
+
+function hideWin(){
+
+  winOverlay.classList.remove("show");
+
+}
+
+
+winClose.addEventListener(
+  "click",
+  hideWin
+);
+
+winOverlay.addEventListener(
+  "click",
+  event => {
+
+    if(event.target === winOverlay){
+      hideWin();
+    }
+
+  }
+);
+
+
+/* =====================================================
+   BET SELECTION
 ===================================================== */
 
 document
@@ -1063,27 +1366,19 @@ document
           return;
         }
 
-
         document
           .querySelectorAll(".bet-btn")
-          .forEach(
-            btn =>
-              btn.classList.remove(
-                "active"
-              )
+          .forEach(btn =>
+            btn.classList.remove("active")
           );
 
-
-        button.classList.add(
-          "active"
-        );
-
+        button.classList.add("active");
 
         selectedBet =
-          Number(
-            button.dataset.bet
-          );
+          Number(button.dataset.bet);
 
+        gameMessage.className =
+          "message";
 
         gameMessage.textContent =
           `BET ${selectedBet.toLocaleString()}`;
@@ -1104,78 +1399,32 @@ async function spin(){
     return;
   }
 
-
   spinning = true;
 
   spinBtn.disabled = true;
   spinBtn.textContent = "SPINNING…";
-  gameMessage.textContent = "";
 
+  gameMessage.className =
+    "message";
 
-  let animation = null;
+  gameMessage.textContent =
+    "GOOD LUCK";
 
+  startReelAnimation();
 
   try{
 
     const initData =
       getInitData();
 
+    /*
+      Keep the visual animation running
+      briefly before revealing the server
+      result.
+    */
 
-    let animationCount = 0;
-
-
-    animation =
-      setInterval(
-        () => {
-
-          const choices = [
-            "💎",
-            "7️⃣",
-            "💗",
-            "🌹",
-            "♠️",
-            "✨"
-          ];
-
-
-          const fakeSymbols =
-            Array.from(
-              {length:15},
-              () =>
-                choices[
-                  Math.floor(
-                    Math.random() *
-                    choices.length
-                  )
-                ]
-            );
-
-
-          renderSymbols(
-            fakeSymbols
-          );
-
-
-          animationCount++;
-
-
-          if(
-            animationCount >= 8
-          ){
-
-            clearInterval(
-              animation
-            );
-
-          }
-
-        },
-        90
-      );
-
-
-    const data =
-      await apiPost(
+    const request =
+      apiPost(
         "/api/spin",
         {
           initData:initData,
@@ -1183,12 +1432,25 @@ async function spin(){
         }
       );
 
+    const data =
+      await request;
+
+    /*
+      Give the reels enough time to feel
+      like an actual machine.
+    */
+
+    await new Promise(
+      resolve =>
+        setTimeout(resolve,650)
+    );
+
+    stopReelAnimation();
 
     if(
       !data ||
-      !Array.isArray(
-        data.symbols
-      )
+      !Array.isArray(data.symbols) ||
+      data.symbols.length !== 15
     ){
 
       throw new Error(
@@ -1197,71 +1459,79 @@ async function spin(){
 
     }
 
+    renderSymbols(data.symbols);
 
-    if(animation){
-      clearInterval(animation);
-    }
-
-
-    renderSymbols(
-      data.symbols
-    );
-
+    const win =
+      Number(data.win || 0);
 
     if(
       data.balance !== undefined
     ){
 
-      currentPlayer = {
+      const updatedPlayer = {
+
         ...currentPlayer,
+
         balance:data.balance,
+
         vipLevel:data.vipLevel,
+
         username:data.username
+
       };
 
+      currentPlayer =
+        updatedPlayer;
 
       updatePlayer(
-        currentPlayer
+        updatedPlayer
       );
+
+      animateBalance();
 
     }
 
-
-    const win =
-      Number(
-        data.win || 0
-      );
-
+    highlightWinningLines(
+      data.winningLines
+    );
 
     if(win > 0){
+
+      gameMessage.className =
+        "message win";
 
       gameMessage.textContent =
         `WIN · ${win.toLocaleString()} PRIVÉ COINS`;
 
+      setTimeout(
+        () => showWin(win),
+        450
+      );
+
     }else{
+
+      gameMessage.className =
+        "message";
 
       gameMessage.textContent =
         "NO WIN · TRY AGAIN";
 
     }
 
-
   }catch(error){
-
-    if(animation){
-      clearInterval(animation);
-    }
-
 
     console.error(
       "SPIN ERROR:",
       error
     );
 
+    stopReelAnimation();
+
+    gameMessage.className =
+      "message";
 
     gameMessage.textContent =
-      error &&
-      error.message
+      error && error.message
         ? error.message
         : "Spin failed.";
 
@@ -1274,11 +1544,10 @@ async function spin(){
 
         spinBtn.disabled = false;
 
-        spinBtn.textContent =
-          "SPIN";
+        spinBtn.textContent = "SPIN";
 
       },
-      350
+      500
     );
 
   }
@@ -1294,7 +1563,6 @@ loginBtn.addEventListener(
   "click",
   login
 );
-
 
 spinBtn.addEventListener(
   "click",
@@ -1317,7 +1585,7 @@ window.addEventListener(
 
       setTimeout(
         login,
-        300
+        150
       );
 
     }
