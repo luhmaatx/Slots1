@@ -1,3 +1,4 @@
+
 <!doctype html>
 <html lang="en">
 <head>
@@ -5,74 +6,67 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#090706">
 <title>KIMIA PRIVÉ</title>
-
 <script src="https://telegram.org/js/telegram-web-app.js"></script>
 
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600&family=Montserrat:wght@400;500;600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Montserrat:wght@400;500;600&display=swap');
 
-*{
+:root {
+  --gold:#d7b66e;
+  --gold-light:#f0dfb9;
+  --gold-dark:#99702f;
+  --muted:#a99b87;
+  --panel:#100c09;
+  --red:#bc8f8f;
+}
+
+* {
   box-sizing:border-box;
   -webkit-tap-highlight-color:transparent;
 }
 
-html,body{
+html,body {
   margin:0;
   width:100%;
-  height:100%;
-  overflow:hidden;
+  min-height:100%;
   background:
-    radial-gradient(circle at 50% 25%,rgba(145,104,42,.16),transparent 38%),
+    radial-gradient(ellipse at 50% 15%,rgba(145,104,42,.16),transparent 48%),
     linear-gradient(145deg,#080605,#120d09 48%,#070605);
   color:#ead9b5;
   font-family:Montserrat,Arial,sans-serif;
 }
 
-body{
+body { min-height:100dvh; }
+button { font:inherit; cursor:pointer; }
+button:disabled { opacity:.55; cursor:wait; }
+
+.app {
   min-height:100dvh;
-}
-
-button{
-  font:inherit;
-}
-
-.app{
-  width:100%;
-  height:100dvh;
   display:flex;
   justify-content:center;
   align-items:center;
   padding:18px;
 }
 
-.screen{
+.screen {
   width:min(500px,100%);
   max-height:96dvh;
   overflow:auto;
   scrollbar-width:none;
 }
+.screen::-webkit-scrollbar { display:none; }
+.hidden { display:none!important; }
 
-.screen::-webkit-scrollbar{
-  display:none;
-}
-
-.card{
+.card {
   position:relative;
   border:1px solid rgba(205,164,82,.48);
-  background:
-    linear-gradient(145deg,rgba(31,22,16,.97),rgba(10,8,6,.98));
-  box-shadow:
-    0 0 0 1px rgba(255,255,255,.025) inset,
-    0 25px 70px rgba(0,0,0,.6),
-    0 0 45px rgba(158,113,42,.08);
+  background:linear-gradient(145deg,rgba(31,22,16,.97),rgba(10,8,6,.99));
+  box-shadow:0 0 0 1px rgba(255,255,255,.025) inset,
+             0 25px 70px rgba(0,0,0,.6),
+             0 0 45px rgba(158,113,42,.08);
 }
 
-.login-card{
-  padding:48px 30px 32px;
-  text-align:center;
-}
-
-.card:before{
+.card:before {
   content:"";
   position:absolute;
   inset:8px;
@@ -80,165 +74,145 @@ button{
   pointer-events:none;
 }
 
-.eyebrow{
-  font-size:10px;
-  letter-spacing:8px;
-  color:#c9a65d;
-  margin-bottom:14px;
+.login-card {
+  padding:45px 28px 30px;
+  text-align:center;
 }
 
-.brand{
+.eyebrow {
+  font-size:10px;
+  letter-spacing:7px;
+  color:#c9a65d;
+  margin-bottom:15px;
+}
+
+.brand {
   font-family:"Cormorant Garamond",serif;
-  font-size:58px;
-  line-height:.9;
+  font-size:clamp(46px,13vw,60px);
+  line-height:.95;
   letter-spacing:7px;
   color:#f0e1c3;
   margin-left:7px;
 }
 
-.brand-sub{
-  margin-top:15px;
+.brand-sub {
+  margin:14px 0 0 10px;
   font-family:"Cormorant Garamond",serif;
-  font-size:28px;
-  letter-spacing:11px;
+  font-size:27px;
+  letter-spacing:10px;
   color:#d5b56d;
-  margin-left:11px;
 }
 
-.ornament{
+.ornament {
   display:flex;
   justify-content:center;
   align-items:center;
   gap:16px;
-  margin:30px 0 28px;
-  color:#cba45b;
+  margin:29px 0 26px;
 }
-
-.ornament:before,
-.ornament:after{
+.ornament:before,.ornament:after {
   content:"";
-  width:35px;
+  width:40px;
   height:1px;
   background:linear-gradient(90deg,transparent,#b9934e);
 }
-
-.ornament:after{
+.ornament:after {
   background:linear-gradient(90deg,#b9934e,transparent);
 }
-
-.diamond{
-  transform:rotate(45deg);
+.diamond {
   width:9px;
   height:9px;
+  transform:rotate(45deg);
   background:#c9a45a;
   box-shadow:0 0 14px rgba(215,175,91,.45);
 }
 
-.description{
+.description {
   max-width:360px;
-  margin:0 auto 31px;
-  color:#a99b87;
-  font-size:13px;
-  line-height:1.8;
+  margin:0 auto 28px;
+  color:var(--muted);
+  font-size:12px;
+  line-height:1.9;
 }
 
-.primary-btn{
-  position:relative;
+.primary-btn,.spin-btn {
   width:100%;
-  min-height:58px;
+  min-height:56px;
   border:1px solid #e0bc6c;
-  background:
-    linear-gradient(180deg,#e0bd70,#b9893b);
+  background:linear-gradient(180deg,#e0bd70,#b9893b);
   color:#160f09;
   font-weight:600;
   letter-spacing:3px;
-  cursor:pointer;
-  box-shadow:
-    0 8px 24px rgba(0,0,0,.35),
-    inset 0 1px rgba(255,255,255,.3);
+  box-shadow:0 8px 24px rgba(0,0,0,.35),inset 0 1px rgba(255,255,255,.3);
 }
+.primary-btn:active,.spin-btn:active { transform:translateY(1px); }
 
-.primary-btn:active{
-  transform:translateY(1px);
-}
-
-.primary-btn:disabled{
-  opacity:.55;
-  cursor:wait;
-}
-
-.status{
+.status {
   min-height:20px;
-  margin-top:20px;
-  font-size:12px;
-  line-height:1.6;
-  color:#b88e8e;
+  margin-top:18px;
+  font-size:11px;
+  line-height:1.8;
+  color:var(--red);
+  overflow-wrap:anywhere;
 }
+.status.ok { color:#c9aa70; }
 
-.hidden{
-  display:none!important;
-}
+.game-screen { width:min(620px,100%); }
 
-/* GAME */
-
-.game-screen{
-  width:min(620px,100%);
-}
-
-.topbar{
+.topbar {
   display:flex;
   justify-content:space-between;
   align-items:center;
+  gap:10px;
   margin-bottom:14px;
 }
-
-.logo-small{
+.logo-small {
   font-family:"Cormorant Garamond",serif;
-  font-size:25px;
-  letter-spacing:4px;
+  font-size:clamp(19px,5vw,25px);
+  letter-spacing:3px;
   color:#e8d4aa;
 }
-
-.vip{
+.vip {
   border:1px solid rgba(205,164,82,.4);
-  padding:7px 12px;
+  padding:7px 10px;
   font-size:9px;
   letter-spacing:2px;
   color:#d3ae63;
 }
 
-.balance-card{
+.balance-card {
   display:flex;
   justify-content:space-between;
   align-items:center;
-  padding:16px 18px;
+  gap:12px;
+  padding:15px 18px;
   margin-bottom:14px;
 }
-
-.balance-label{
+.balance-label {
   font-size:9px;
-  letter-spacing:3px;
-  color:#887b69;
+  letter-spacing:2px;
+  color:#a89982;
 }
-
-.balance{
+.balance {
   margin-top:5px;
   font-family:"Cormorant Garamond",serif;
   font-size:30px;
   color:#e8c979;
 }
-
-.reel-card{
-  padding:18px;
+#playerName {
+  max-width:45%;
+  overflow-wrap:anywhere;
+  text-align:right;
 }
 
-.reels{
+.reel-card { padding:16px; }
+
+.reels {
   display:grid;
-  grid-template-columns:repeat(5,1fr);
-  gap:7px;
+  grid-template-columns:repeat(5,minmax(0,1fr));
+  gap:6px;
 }
-
-.reel{
+.reel {
   aspect-ratio:1/1.22;
   min-width:0;
   display:flex;
@@ -246,12 +220,9 @@ button{
   justify-content:center;
   overflow:hidden;
   border:1px solid rgba(204,163,80,.3);
-  background:
-    radial-gradient(circle at 50% 40%,rgba(145,104,42,.12),transparent 60%),
-    #0c0907;
+  background:radial-gradient(circle at 50% 40%,rgba(145,104,42,.12),transparent 60%),#0c0907;
 }
-
-.symbol{
+.symbol {
   width:100%;
   height:100%;
   display:flex;
@@ -259,170 +230,92 @@ button{
   justify-content:center;
   position:relative;
 }
-
-.symbol:before{
+.symbol:before {
   content:"";
-  width:68%;
-  height:68%;
+  width:65%;
+  height:65%;
   border:1px solid rgba(202,164,87,.22);
   transform:rotate(45deg);
   position:absolute;
 }
-
-.symbol-art{
+.symbol-art {
   position:relative;
   z-index:2;
   font-family:"Cormorant Garamond",serif;
   font-weight:600;
-  font-size:35px;
+  font-size:clamp(22px,6vw,36px);
   line-height:1;
   color:#e7c77b;
-  text-shadow:
-    0 0 9px rgba(219,183,102,.35),
-    0 2px 3px #000;
+  text-shadow:0 0 9px rgba(219,183,102,.35),0 2px 3px #000;
 }
+.symbol-diamond .symbol-art { font-size:clamp(21px,5.5vw,32px); }
+.symbol-seven .symbol-art { font-size:clamp(30px,7vw,43px); font-style:italic; }
+.symbol-heart .symbol-art { color:#c68d8b; }
+.symbol-rose .symbol-art { color:#d6b276; }
+.symbol-spade .symbol-art { font-size:clamp(26px,6vw,38px); }
+.symbol-star .symbol-art { color:#ead7a4; }
 
-.symbol-diamond .symbol-art{
-  font-size:32px;
-}
-
-.symbol-seven .symbol-art{
-  font-size:42px;
-  font-style:italic;
-}
-
-.symbol-heart .symbol-art{
-  font-size:36px;
-}
-
-.symbol-rose .symbol-art{
-  font-size:32px;
-}
-
-.symbol-spade .symbol-art{
-  font-size:38px;
-}
-
-.symbol-star .symbol-art{
-  font-size:32px;
-}
-
-.controls{
-  margin-top:16px;
-}
-
-.bet-row{
+.controls { margin-top:16px; }
+.bet-row {
   display:grid;
-  grid-template-columns:repeat(4,1fr);
+  grid-template-columns:repeat(4,minmax(0,1fr));
   gap:7px;
   margin-bottom:10px;
 }
-
-.bet-btn{
+.bet-btn {
+  min-height:40px;
   border:1px solid rgba(205,164,82,.32);
   background:#100c09;
   color:#c7b28e;
-  padding:11px 4px;
-  font-size:10px;
-  letter-spacing:1px;
+  padding:8px 3px;
+  font-size:clamp(9px,2.6vw,11px);
+  letter-spacing:.5px;
 }
-
-.bet-btn.active{
+.bet-btn.active {
   border-color:#d4ad5f;
   color:#ebd18e;
   background:rgba(181,139,61,.14);
 }
-
-.spin-btn{
-  width:100%;
-  height:58px;
-  border:1px solid #d9b66a;
-  background:linear-gradient(180deg,#dcb96d,#ae8035);
-  color:#140e08;
-  font-weight:600;
-  letter-spacing:4px;
-}
-
-.spin-btn:disabled{
-  opacity:.55;
-}
-
-.message{
-  min-height:25px;
+.message {
+  min-height:26px;
   text-align:center;
   margin-top:13px;
   color:#c9aa70;
-  font-size:12px;
-}
-
-.small-error{
-  color:#bc8f8f;
   font-size:11px;
-  line-height:1.5;
-  text-align:center;
-  margin-top:8px;
+  line-height:1.7;
+  overflow-wrap:anywhere;
 }
+.message.error { color:var(--red); }
 
-@media(max-width:430px){
-  .login-card{
-    padding:40px 22px 27px;
-  }
-
-  .brand{
-    font-size:49px;
-  }
-
-  .brand-sub{
-    font-size:25px;
-  }
-
-  .symbol-art{
-    font-size:28px;
-  }
-
-  .symbol-seven .symbol-art{
-    font-size:34px;
-  }
+@media(max-width:360px) {
+  .app { padding:10px; }
+  .login-card { padding:36px 18px 25px; }
+  .reel-card { padding:11px; }
+  .reels { gap:4px; }
 }
 </style>
 </head>
 
 <body>
-
 <div class="app">
 
-  <!-- LOGIN -->
   <main id="loginScreen" class="screen">
     <section class="card login-card">
-
       <div class="eyebrow">WELCOME TO</div>
-
       <div class="brand">KIMIA</div>
       <div class="brand-sub">PRIVÉ</div>
-
-      <div class="ornament">
-        <span class="diamond"></span>
-      </div>
-
+      <div class="ornament"><span class="diamond"></span></div>
       <p class="description">
         An exclusive private gaming experience.
         Your Telegram identity connects directly
         to your PRIVÉ account.
       </p>
-
-      <button id="loginBtn" class="primary-btn">
-        ENTER PRIVÉ
-      </button>
-
-      <div id="loginStatus" class="status"></div>
-
+      <button id="loginBtn" class="primary-btn">ENTER PRIVÉ</button>
+      <div id="loginStatus" class="status" role="status" aria-live="polite"></div>
     </section>
   </main>
 
-
-  <!-- GAME -->
   <main id="gameScreen" class="screen game-screen hidden">
-
     <div class="topbar">
       <div class="logo-small">KIMIA PRIVÉ</div>
       <div id="vipBadge" class="vip">PRIVÉ</div>
@@ -433,584 +326,342 @@ button{
         <div class="balance-label">PRIVATE BALANCE</div>
         <div id="balance" class="balance">0</div>
       </div>
-
-      <div id="playerName" class="balance-label">
-        MEMBER
-      </div>
+      <div id="playerName" class="balance-label">MEMBER</div>
     </section>
 
     <section class="card reel-card">
-
       <div id="reels" class="reels"></div>
-
       <div class="controls">
-
         <div class="bet-row">
           <button class="bet-btn active" data-bet="300">300</button>
           <button class="bet-btn" data-bet="600">600</button>
           <button class="bet-btn" data-bet="1500">1,500</button>
           <button class="bet-btn" data-bet="3000">3,000</button>
         </div>
-
-        <button id="spinBtn" class="spin-btn">
-          SPIN
-        </button>
-
-        <div id="gameMessage" class="message"></div>
-
+        <button id="spinBtn" class="spin-btn">SPIN</button>
+        <div id="gameMessage" class="message" role="status" aria-live="polite"></div>
       </div>
     </section>
-
   </main>
 
 </div>
 
-
 <script>
-(function(){
-
+(function () {
   "use strict";
 
-  /* =====================================================
-     TELEGRAM
-  ===================================================== */
-
+  const API_BASE = ""; // Same Render service serves index.html and /api.
   const tg = window.Telegram && window.Telegram.WebApp
     ? window.Telegram.WebApp
     : null;
 
-  if(tg){
-    try{
+  if (tg) {
+    try {
       tg.ready();
       tg.expand();
-      tg.enableClosingConfirmation();
-    }catch(e){
-      console.warn("Telegram WebApp setup:",e);
+    } catch (error) {
+      console.warn("Telegram initialization:", error);
     }
   }
 
-  /* =====================================================
-     DOM
-  ===================================================== */
+  const $ = id => document.getElementById(id);
+  const loginScreen = $("loginScreen");
+  const gameScreen = $("gameScreen");
+  const loginBtn = $("loginBtn");
+  const loginStatus = $("loginStatus");
+  const balanceEl = $("balance");
+  const playerNameEl = $("playerName");
+  const vipBadge = $("vipBadge");
+  const reelsEl = $("reels");
+  const spinBtn = $("spinBtn");
+  const gameMessage = $("gameMessage");
 
-  const loginScreen = document.getElementById("loginScreen");
-  const gameScreen = document.getElementById("gameScreen");
-  const loginBtn = document.getElementById("loginBtn");
-  const loginStatus = document.getElementById("loginStatus");
-  const balanceEl = document.getElementById("balance");
-  const playerNameEl = document.getElementById("playerName");
-  const vipBadge = document.getElementById("vipBadge");
-  const reelsEl = document.getElementById("reels");
-  const spinBtn = document.getElementById("spinBtn");
-  const gameMessage = document.getElementById("gameMessage");
-
+  const SYMBOLS = ["💎", "7️⃣", "💗", "🌹", "♠️", "✨"];
   let selectedBet = 300;
   let currentPlayer = null;
+  let loggingIn = false;
   let spinning = false;
 
-  /* =====================================================
-     API
-  ===================================================== */
+  function setStatus(message, ok) {
+    loginStatus.textContent = message || "";
+    loginStatus.classList.toggle("ok", Boolean(ok));
+  }
 
-  async function apiPost(endpoint, body){
+  function setGameMessage(message, error) {
+    gameMessage.textContent = message || "";
+    gameMessage.classList.toggle("error", Boolean(error));
+  }
 
-    const response = await fetch(endpoint,{
-      method:"POST",
-      headers:{
-        "Content-Type":"application/json",
-        "Accept":"application/json"
-      },
-      body:JSON.stringify(body)
-    });
+  function getInitData() {
+    if (!tg) {
+      throw new Error(
+        "Telegram Web App is unavailable. Open KIMIA PRIVÉ from your Telegram bot's menu button."
+      );
+    }
 
-    const text = await response.text();
+    if (!tg.initData || !tg.initData.trim()) {
+      throw new Error(
+        "Telegram login data is missing. Open the game inside Telegram, not in a regular browser."
+      );
+    }
 
+    return tg.initData;
+  }
+
+  async function apiPost(endpoint, body) {
+    let response;
+
+    try {
+      response = await fetch(API_BASE + endpoint, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Accept": "application/json"
+        },
+        body: JSON.stringify(body),
+        cache: "no-store"
+      });
+    } catch (error) {
+      throw new Error(
+        "Could not reach the game server. Check your connection and try again."
+      );
+    }
+
+    const responseText = await response.text();
     let data = null;
 
-    if(text){
-      try{
-        data = JSON.parse(text);
-      }catch(error){
+    if (responseText.trim()) {
+      try {
+        data = JSON.parse(responseText);
+      } catch {
+        if (response.status === 404) {
+          throw new Error(
+            "API route not found (404). Confirm this page is served by the same Render service as server.js."
+          );
+        }
+
         throw new Error(
-          "Server returned invalid JSON."
+          `Server returned non-JSON content (HTTP ${response.status}). Check the Render service and deployment logs.`
         );
       }
     }
 
-    if(!response.ok){
+    if (!response.ok) {
+      const message = data && typeof data.error === "string"
+        ? data.error
+        : `Server request failed (HTTP ${response.status}).`;
 
-      const serverError =
-        data && data.error
-          ? data.error
-          : `Server returned HTTP ${response.status}.`;
-
-      throw new Error(serverError);
+      throw new Error(message);
     }
 
-    if(!data){
+    if (!data || typeof data !== "object" || Array.isArray(data)) {
       throw new Error(
-        "Server returned an empty response."
+        "Server returned an empty or invalid response. Check Render logs for the /api request."
       );
     }
 
     return data;
   }
 
+  function updatePlayer(player) {
+    const balance = Number(player.balance);
 
-  /* =====================================================
-     TELEGRAM INIT DATA
-  ===================================================== */
-
-  function getInitData(){
-
-    if(!tg){
-      throw new Error(
-        "Telegram WebApp is not available."
-      );
+    if (!Number.isFinite(balance)) {
+      throw new Error("The server returned an invalid account balance.");
     }
 
-    const initData = tg.initData;
+    balanceEl.textContent = balance.toLocaleString("en-US");
 
-    if(!initData){
-      throw new Error(
-        "Telegram did not provide login data. Open the game from the Telegram bot."
-      );
-    }
+    let name = typeof player.username === "string" && player.username.trim()
+      ? player.username.trim()
+      : "PRIVÉ MEMBER";
 
-    return initData;
+    if (name.startsWith("@")) name = name.slice(1);
+    playerNameEl.textContent = name.toUpperCase();
+
+    const vip = Number(player.vipLevel || 0);
+    vipBadge.textContent = vip > 0 ? `VIP ${vip}` : "PRIVÉ";
   }
 
+  async function login() {
+    if (loggingIn) return;
 
-  /* =====================================================
-     LOGIN
-  ===================================================== */
-
-  async function login(){
-
-    if(loginBtn.disabled){
-      return;
-    }
-
+    loggingIn = true;
     loginBtn.disabled = true;
     loginBtn.textContent = "CONNECTING…";
-    loginStatus.textContent = "";
+    setStatus("SECURELY CONNECTING TO PRIVÉ…", true);
 
-    try{
-
+    try {
       const initData = getInitData();
+      const data = await apiPost("/api/me", { initData });
 
-      const data = await apiPost(
-        "/api/me",
-        {
-          initData:initData
-        }
-      );
-
-      /*
-        Validate the account response before
-        switching screens.
-      */
-
-      if(!data || typeof data !== "object"){
+      if (data.id === undefined || data.id === null || data.balance === undefined) {
+        console.error("Unexpected /api/me response:", data);
         throw new Error(
-          "The server returned an incomplete account response."
+          "Account response is missing id or balance. Check the deployed server.js version."
         );
       }
-
-      if(
-        data.id === undefined ||
-        data.balance === undefined
-      ){
-        throw new Error(
-          "The server returned an incomplete account response."
-        );
-      }
-
-      currentPlayer = data;
 
       updatePlayer(data);
+      currentPlayer = data;
 
       loginScreen.classList.add("hidden");
       gameScreen.classList.remove("hidden");
 
-      loginStatus.textContent = "";
-
-    }catch(error){
-
-      console.error("LOGIN ERROR:",error);
-
-      loginStatus.textContent =
-        error && error.message
-          ? error.message
-          : "Login failed.";
-
-    }finally{
-
+      setGameMessage("WELCOME TO PRIVÉ");
+      renderSymbols([
+        "💎", "7️⃣", "💗", "🌹", "♠️",
+        "✨", "💎", "♥", "🌹", "♠",
+        "7️⃣", "💗", "✨", "💎", "🌹"
+      ]);
+    } catch (error) {
+      console.error("KIMIA PRIVÉ login failed:", error);
+      setStatus(error && error.message ? error.message : "Login failed.", false);
+    } finally {
+      loggingIn = false;
       loginBtn.disabled = false;
       loginBtn.textContent = "ENTER PRIVÉ";
     }
   }
 
-
-  /* =====================================================
-     PLAYER DISPLAY
-  ===================================================== */
-
-  function updatePlayer(player){
-
-    const balance =
-      Number(player.balance);
-
-    balanceEl.textContent =
-      Number.isFinite(balance)
-        ? balance.toLocaleString()
-        : "0";
-
-    let name =
-      player.username ||
-      "PRIVÉ MEMBER";
-
-    if(
-      typeof name === "string" &&
-      name.startsWith("@")
-    ){
-      name = name.substring(1);
-    }
-
-    playerNameEl.textContent =
-      name.toUpperCase();
-
-    const vip =
-      Number(player.vipLevel || 0);
-
-    if(vip > 0){
-      vipBadge.textContent =
-        `VIP ${vip}`;
-    }else{
-      vipBadge.textContent =
-        "PRIVÉ";
-    }
-  }
-
-
-  /* =====================================================
-     LUXURY SYMBOL ART
-     
-     Server still sends the actual symbols.
-     We DO NOT display emoji characters.
-  ===================================================== */
-
-  function symbolClass(symbol){
-
-    if(symbol === "💎") return "symbol-diamond";
-    if(symbol === "7️⃣") return "symbol-seven";
-    if(symbol === "💗") return "symbol-heart";
-    if(symbol === "🌹") return "symbol-rose";
-    if(symbol === "♠️") return "symbol-spade";
-    if(symbol === "✨") return "symbol-star";
-
+  function symbolClass(symbol) {
+    if (symbol === "💎") return "symbol-diamond";
+    if (symbol === "7️⃣") return "symbol-seven";
+    if (symbol === "💗") return "symbol-heart";
+    if (symbol === "🌹") return "symbol-rose";
+    if (symbol === "♠️" || symbol === "♠") return "symbol-spade";
     return "symbol-star";
   }
 
+  function symbolMarkup(symbol) {
+    const artwork = {
+      "💎": "◆",
+      "7️⃣": "7",
+      "💗": "♥",
+      "🌹": "✿",
+      "♠️": "♠",
+      "♠": "♠",
+      "✨": "✦",
+      "♥": "♥"
+    };
 
-  function symbolMarkup(symbol){
-
-    let art = "✦";
-
-    if(symbol === "💎"){
-      art = "◆";
-    }
-
-    if(symbol === "7️⃣"){
-      art = "7";
-    }
-
-    if(symbol === "💗"){
-      art = "♥";
-    }
-
-    if(symbol === "🌹"){
-      art = "✿";
-    }
-
-    if(symbol === "♠️"){
-      art = "♠";
-    }
-
-    if(symbol === "✨"){
-      art = "✦";
-    }
-
-    return `
-      <div class="symbol ${symbolClass(symbol)}">
-        <span class="symbol-art">${art}</span>
-      </div>
-    `;
+    const art = artwork[symbol] || "✦";
+    return `<div class="symbol ${symbolClass(symbol)}"><span class="symbol-art">${art}</span></div>`;
   }
 
+  function renderSymbols(symbols) {
+    const valid = Array.isArray(symbols) && symbols.length === 15;
+    const values = valid ? symbols : Array(15).fill("✨");
+    reelsEl.replaceChildren();
 
-  /* =====================================================
-     REELS
-  ===================================================== */
-
-  function renderSymbols(symbols){
-
-    reelsEl.innerHTML = "";
-
-    if(!Array.isArray(symbols) || symbols.length !== 15){
-
-      for(let i=0;i<15;i++){
-
-        const reel =
-          document.createElement("div");
-
-        reel.className = "reel";
-
-        reel.innerHTML = symbolMarkup("✨");
-
-        reelsEl.appendChild(reel);
-      }
-
-      return;
-    }
-
-    symbols.forEach(symbol => {
-
-      const reel =
-        document.createElement("div");
-
+    values.forEach(symbol => {
+      const reel = document.createElement("div");
       reel.className = "reel";
-
-      reel.innerHTML =
-        symbolMarkup(symbol);
-
+      reel.innerHTML = symbolMarkup(symbol);
       reelsEl.appendChild(reel);
     });
   }
 
+  function selectBet(button) {
+    if (spinning) return;
 
-  /* =====================================================
-     INITIAL REELS
-  ===================================================== */
-
-  renderSymbols([
-    "💎","7️⃣","💗","🌹","♠️",
-    "✨","💎","♥","🌹","♠️",
-    "7️⃣","💗","✨","💎","🌹"
-  ]);
-
-
-  /* =====================================================
-     BET SELECTION
-  ===================================================== */
-
-  document.querySelectorAll(".bet-btn")
-    .forEach(button => {
-
-      button.addEventListener("click",() => {
-
-        if(spinning){
-          return;
-        }
-
-        document.querySelectorAll(".bet-btn")
-          .forEach(btn =>
-            btn.classList.remove("active")
-          );
-
-        button.classList.add("active");
-
-        selectedBet =
-          Number(button.dataset.bet);
-
-        gameMessage.textContent =
-          `BET ${selectedBet.toLocaleString()}`;
-      });
-
+    document.querySelectorAll(".bet-btn").forEach(item => {
+      item.classList.toggle("active", item === button);
     });
 
+    selectedBet = Number(button.dataset.bet);
+    setGameMessage(`BET ${selectedBet.toLocaleString("en-US")}`);
+  }
 
-  /* =====================================================
-     SPIN
-  ===================================================== */
+  document.querySelectorAll(".bet-btn").forEach(button => {
+    button.addEventListener("click", () => selectBet(button));
+  });
 
-  async function spin(){
-
-    if(spinning){
-      return;
-    }
+  async function spin() {
+    if (spinning || !currentPlayer) return;
 
     spinning = true;
     spinBtn.disabled = true;
     spinBtn.textContent = "SPINNING…";
-    gameMessage.textContent = "";
+    setGameMessage("");
 
-    try{
+    let animation;
+    try {
+      const initData = getInitData();
 
-      const initData =
-        getInitData();
+      animation = setInterval(() => {
+        renderSymbols(Array.from(
+          { length: 15 },
+          () => SYMBOLS[Math.floor(Math.random() * SYMBOLS.length)]
+        ));
+      }, 100);
 
-      /*
-        Small visual spin animation.
-        The final result always comes
-        from the server.
-      */
+      const data = await apiPost("/api/spin", {
+        initData,
+        bet: selectedBet
+      });
 
-      let animationCount = 0;
+      if (!Array.isArray(data.symbols) || data.symbols.length !== 15) {
+        throw new Error("Spin response is missing the 15 reel symbols.");
+      }
 
-      const animation =
-        setInterval(() => {
-
-          const fakeSymbols =
-            Array.from(
-              {length:15},
-              () => {
-                const choices = [
-                  "💎",
-                  "7️⃣",
-                  "💗",
-                  "🌹",
-                  "♠️",
-                  "✨"
-                ];
-
-                return choices[
-                  Math.floor(
-                    Math.random() * choices.length
-                  )
-                ];
-              }
-            );
-
-          renderSymbols(fakeSymbols);
-
-          animationCount++;
-
-          if(animationCount >= 8){
-            clearInterval(animation);
-          }
-
-        },90);
-
-
-      const data =
-        await apiPost(
-          "/api/spin",
-          {
-            initData:initData,
-            bet:selectedBet
-          }
-        );
-
-
-      if(
-        !data ||
-        !Array.isArray(data.symbols)
-      ){
-        throw new Error(
-          "The server returned an incomplete spin response."
-        );
+      if (data.balance === undefined || !Number.isFinite(Number(data.balance))) {
+        throw new Error("Spin response is missing a valid balance.");
       }
 
       clearInterval(animation);
-
+      animation = null;
       renderSymbols(data.symbols);
 
-      if(data.balance !== undefined){
-        updatePlayer({
-          ...currentPlayer,
-          balance:data.balance,
-          vipLevel:data.vipLevel,
-          username:data.username
-        });
+      currentPlayer = {
+        ...currentPlayer,
+        balance: Number(data.balance),
+        vipLevel: data.vipLevel ?? currentPlayer.vipLevel,
+        username: data.username ?? currentPlayer.username
+      };
 
-        currentPlayer = {
-          ...currentPlayer,
-          balance:data.balance,
-          vipLevel:data.vipLevel,
-          username:data.username
-        };
+      updatePlayer(currentPlayer);
+
+      const win = Number(data.win || 0);
+      setGameMessage(
+        win > 0
+          ? `WIN · ${win.toLocaleString("en-US")} PRIVÉ COINS`
+          : "NO WIN · TRY AGAIN"
+      );
+
+      if (tg && win > 0) {
+        try { tg.HapticFeedback.notificationOccurred("success"); } catch {}
       }
-
-      const win =
-        Number(data.win || 0);
-
-      if(win > 0){
-
-        gameMessage.textContent =
-          `WIN · ${win.toLocaleString()} PRIVÉ COINS`;
-
-      }else{
-
-        gameMessage.textContent =
-          "NO WIN · TRY AGAIN";
-      }
-
-    }catch(error){
-
-      console.error("SPIN ERROR:",error);
-
-      gameMessage.textContent =
-        error && error.message
-          ? error.message
-          : "Spin failed.";
-
-    }finally{
-
-      setTimeout(() => {
-
-        spinning = false;
-        spinBtn.disabled = false;
-        spinBtn.textContent = "SPIN";
-
-      },350);
+    } catch (error) {
+      if (animation) clearInterval(animation);
+      console.error("KIMIA PRIVÉ spin failed:", error);
+      setGameMessage(error && error.message ? error.message : "Spin failed.", true);
+    } finally {
+      spinning = false;
+      spinBtn.disabled = false;
+      spinBtn.textContent = "SPIN";
     }
   }
 
+  loginBtn.addEventListener("click", login);
+  spinBtn.addEventListener("click", spin);
 
-  /* =====================================================
-     BUTTONS
-  ===================================================== */
+  renderSymbols([
+    "💎", "7️⃣", "💗", "🌹", "♠️",
+    "✨", "💎", "♥", "🌹", "♠",
+    "7️⃣", "💗", "✨", "💎", "🌹"
+  ]);
 
-  loginBtn.addEventListener(
-    "click",
-    login
-  );
-
-  spinBtn.addEventListener(
-    "click",
-    spin
-  );
-
-
-  /* =====================================================
-     AUTO LOGIN
-     
-     Only attempt automatically when
-     Telegram actually supplied initData.
-  ===================================================== */
-
-  window.addEventListener(
-    "load",
-    () => {
-
-      if(
-        tg &&
-        tg.initData
-      ){
-
-        setTimeout(
-          login,
-          150
-        );
-      }
-
-    }
-  );
-
-
+  // Only auto-login when Telegram has supplied real Web App initData.
+  if (tg && tg.initData && tg.initData.trim()) {
+    setTimeout(login, 150);
+  } else {
+    setStatus(
+      "Open this game from your Telegram bot to sign in securely.",
+      false
+    );
+  }
 })();
 </script>
-
 </body>
 </html>
