@@ -1812,7 +1812,75 @@ async function pick(choice){if(busy||!session||session.done)return;busy=true;con
 #bonusAdventure .badv-rider{font-size:68px}
 @keyframes kmVaultFloat{to{transform:translateY(-9px) scale(1.07);filter:drop-shadow(0 0 23px #ffe17b)}}
 #reels.fortune-reel-motion .symbol, #reels.fortune-reel-motion .jewel-art{animation:none!important}
-</style><script>
+/* KILLAMANI CASINO — 2026 MOBILE SIZE UPGRADE
+   Add this as the last stylesheet, after your existing styles. */
+@media (max-width: 600px) {
+  .screen { width:100%; padding:8px 5px 112px; }
+  .game-header { gap:7px; }
+  .casino-name { font-size:clamp(40px,10vw,64px); }
+  .game-brand { font-size:clamp(41px,10.4vw,66px); }
+  .profile-chip-name { font-size:19px; }
+  .vip-line { font-size:10px; }
+  .header-label { font-size:9px; }
+  .header-value { font-size:20px; }
+  .menu-btn,.menu-strip button { min-height:48px; }
+  .menu-strip button { font-size:11px; }
+  .balance-label { font-size:11px; }
+  .balance { font-size:38px; }
+  .machine { padding:13px 6px 19px; }
+  .reels { gap:2px; padding:3px; }
+  .reel { aspect-ratio:1 / 1.13; }
+  .symbol-art { font-size:clamp(28px,7.8vw,48px); }
+  .machine-control { min-height:64px; }
+  .control-small { font-size:10px; }
+  .control-number { font-size:28px; }
+  .bet-option { min-height:45px; font-size:12px; font-weight:700; }
+  .spin-area { grid-template-columns:64px minmax(0,1fr) 64px; }
+  .spin-btn { height:80px; font-size:clamp(33px,8.7vw,45px); }
+  .side-action { min-height:75px; }
+  .side-icon { font-size:28px; }
+  .side-label { font-size:10px; }
+  .feature-card { min-height:100px; }
+  .feature-icon { font-size:28px; }
+  .feature-title { font-size:22px; }
+  .feature-copy { font-size:9px; }
+  .bottom-nav { min-height:82px; }
+  .nav-icon { font-size:27px; }
+  .nav-label { font-size:9px; }
+  .sr-lobby-heading { font-size:clamp(34px,9vw,48px); }
+  .sr-lobby-tile { min-height:232px; }
+  .sr-lobby-art { font-size:80px; }
+  .sr-lobby-name { font-size:22px; }
+  .sr-lobby-caption { font-size:10px; }
+  .sr-lobby-play { min-height:42px; font-size:12px; }
+  .mini-game-btn { min-height:48px; font-size:12px; }
+  .mini-game-card h2 { font-size:32px; }
+  .mini-action { min-height:48px; font-size:14px; }
+  .sc-screen { padding:10px 5px 30px; }
+  .sc-machine { padding:19px 8px 24px; }
+  .sc-logo { font-size:clamp(34px,8.8vw,56px); }
+  .sc-tag { font-size:19px; }
+  .sc-hud span { font-size:10px; }
+  .sc-hud strong { font-size:22px; }
+  .sc-reels { gap:2px; }
+  .sc-cell { height:clamp(65px,17.6vw,102px); font-size:clamp(28px,8.8vw,49px); }
+  .sc-bet { min-height:48px; font-size:14px; }
+  .sc-spin { min-height:66px; font-size:20px; }
+  .modal-card { padding:29px 15px; }
+  .modal-title { font-size:39px; }
+  .modal-subtitle { font-size:11px; }
+  .reward-name { font-size:26px; }
+  .reward-description { font-size:11px; }
+  .reward-button { min-height:47px; font-size:12px; }
+  .sr-gift-input { font-size:16px; }
+  .sr-gift-amounts button { min-height:47px; font-size:14px; }
+}
+@media (max-width: 360px) {
+  .game-header { grid-template-columns:minmax(0,1fr) 124px; }
+  .header-value { font-size:17px; }
+  .spin-area { grid-template-columns:56px minmax(0,1fr) 56px; }
+  .sr-lobby-tile { min-height:200px; }
+}</style><script>
 (function(){
  // Reels make a mechanical clack at regular intervals; sound is user-gesture unlocked.
  let timer=null;document.addEventListener('click',e=>{if(!e.target.closest('#spinBtn'))return;if(timer)clearInterval(timer);let n=0;timer=setInterval(()=>{n++;try{if(typeof fortuneSound==='function')fortuneSound('tick')}catch{}if(n>=12){clearInterval(timer);timer=null}},90)},true);
