@@ -366,7 +366,11 @@ function sync() {
   $("free").textContent = fmt(
     Number(player.freeSpins || 0) + Number(player.squirtFreeSpins || 0),
   );
-  $("roomBalance").textContent = fmt(player.balance) + " KILLACOINS";
+  $("roomBalance").textContent = fmt(player.balance);
+  $("roomPlayer").textContent = player.username || "GUEST PLAYER";
+  $("roomVip").textContent = player.guest ? "BROWSER GUEST · KILLAMANI CLUB" : "VIP LEVEL " + (player.vipLevel || 0) + " · KILLAMANI CLUB";
+  $("roomDailyState").textContent = player.dailyAvailable ? "READY TO CLAIM ›" : "CLAIMED TODAY";
+  $("roomDaily").classList.toggle("ready", !!player.dailyAvailable);
   $("rewardMoney").textContent = fmt(player.killaMoney);
   $("name").textContent = player.username || "Guest";
   $("avatar").textContent = (player.username || "G").charAt(0).toUpperCase();
@@ -681,34 +685,52 @@ function renderReels(symbols, winning = []) {
     }
 }
 function duckArt(i) {
-  return `<svg class="duck-art" viewBox="0 0 120 112" aria-hidden="true"><defs><linearGradient id="duck-${i}" x2="0.8" y2="1"><stop stop-color="#fff6b0"/><stop offset=".55" stop-color="#ffd166"/><stop offset="1" stop-color="#d98627"/></linearGradient></defs><ellipse cx="60" cy="96" rx="42" ry="7" fill="#76f8ed" opacity=".35"/><path d="M20 62Q7 52 14 38Q24 53 38 51C47 39 60 40 77 49L99 60C112 96 39 109 22 80Z" fill="url(#duck-${i})" stroke="#ffdba0" stroke-width="2"/><circle cx="76" cy="35" r="25" fill="url(#duck-${i})" stroke="#ffe3a5" stroke-width="2"/><path d="M95 34L115 41L94 48Z" fill="#f78050"/><ellipse cx="82" cy="29" rx="4" ry="5" fill="#38182a"/><circle cx="83" cy="27" r="1.3" fill="white"/><path d="M38 65Q53 50 69 64Q59 87 39 75" fill="#ffe8a0" stroke="#f3b246" stroke-width="2"/><ellipse cx="84" cy="44" rx="6" ry="3" fill="#f78e8a" opacity=".7"/><path d="M62 13L60 2L71 7L78 0L84 9L95 5L91 18Z" fill="#f7d78b" stroke="#a65f38" stroke-width="2"/><path d="M26 60Q25 67 31 73" stroke="#fff8ce" stroke-width="4" stroke-linecap="round" fill="none"/></svg>`;
+  return '<img class="duck-art" src="/assets/neon-duck-v4.png" width="1024" height="1024" alt="" draggable="false" decoding="async">';
 }
 function clawArt() {
   return `<svg viewBox="0 0 100 130" aria-hidden="true"><defs><linearGradient id="claw-metal"><stop stop-color="#7c664d"/><stop offset=".3" stop-color="#fff2ca"/><stop offset=".55" stop-color="#c7a87d"/><stop offset=".8" stop-color="#fff6db"/><stop offset="1" stop-color="#786049"/></linearGradient></defs><path d="M50 0V54" stroke="#e6c997" stroke-width="5"/><path d="M37 54H63L70 75H30Z" fill="url(#claw-metal)" stroke="#fff2c6"/><path d="M34 72L16 98L28 120L40 111M66 72L84 98L72 120L60 111M50 78V109L44 120" fill="none" stroke="url(#claw-metal)" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/><circle cx="50" cy="67" r="5" fill="#ee75ae" stroke="#fff1cf"/></svg>`;
 }
 function updateCabinet() {
-  let marquee = document.getElementById("cabinetMarquee");
-  if (!marquee) {
-    marquee = document.createElement("div");
-    marquee.id = "cabinetMarquee";
-    marquee.className = "cabinet-marquee";
-    $("gameStage").before(marquee);
-  }
-  marquee.replaceChildren();
-  const crest = document.createElement("span");
-  crest.className = "cabinet-crest";
-  const featured = {spoiled:"diamond",squirt:"bolt",brat:"bag",first:"plane",cash:"cash",red:"rose",vip:"crown",double:"heart",vault:"key",duck:"crown",obsession:"heart",claw:"gift"};
-  crest.append(sprite(featured[selected.id]));
-  const copy = document.createElement("div");
-  const label = document.createElement("small");
-  label.textContent = "KILLAMANI · PRIVATE FORTUNE CLUB";
-  const title = document.createElement("strong");
-  title.textContent = selected.name;
-  copy.append(label, title);
-  const mode = document.createElement("span");
-  mode.className = "cabinet-mode";
-  mode.textContent = selected.arcade ? "ARCADE" : "SLOTS";
-  marquee.append(crest, copy, mode);
+  const slot = !selected.arcade;
+  $("gameRoom").classList.toggle("is-arcade", !slot);
+  $("lineLabel").textContent = slot ? (selected.id === "vault" ? "WAYS" : "LINES") : "MODE";
+  $("lineValue").textContent = slot ? (selected.id === "vault" ? "243" : "5") : selected.id === "duck" ? "PICK 3" : "GRIP";
+  $("roomSlogan").textContent = selected.id === "squirt" ? "Let the Fortune Flow." : selected.arcade ? "A little play. A lot of possibility." : "Your private world of fortune.";
+  $("roomBonusLabel").textContent = selected.id === "squirt" ? "AFTER HOURS" : selected.arcade ? "EXPLORE" : "BONUS GAME";
+  $("roomBonusHint").textContent = selected.arcade ? "MORE ARCADE GAMES" : "TRIGGERS & FREE SPINS";
+  document.querySelectorAll("[data-room-nav]").forEach(el => el.classList.toggle("active", el.dataset.roomNav === (slot ? "slots" : "arcade")));
+  refreshRoomLeaders();
+}
+async function refreshRoomLeaders() {
+  const list = $("roomLeadersList");
+  list.textContent = "Loading players…";
+  try {
+    const response = await fetch("/api/leaderboard");
+    if (!response.ok) throw Error("unavailable");
+    const data = await response.json();
+    list.replaceChildren();
+    if (!data.players.length) { list.textContent = "Your name could be here. Play through Telegram to join the leaderboard."; return; }
+    for (const player of data.players.slice(0, 5)) {
+      const item = document.createElement("div");
+      item.className = "room-leader";
+      const avatar = document.createElement("span");
+      avatar.className = "leader-medallion";
+      avatar.textContent = String(player.username || "K").charAt(0).toUpperCase();
+      const copy = document.createElement("span"), name = document.createElement("strong"), balance = document.createElement("small");
+      name.textContent = player.rank + ". " + (player.username || "Player");
+      balance.textContent = fmt(player.balance) + " ◉";
+      copy.append(name, balance);
+      item.append(avatar, copy); list.append(item);
+    }
+  } catch { list.textContent = "Player rankings will be back soon."; }
+}
+function leaveRoom(page) {
+  if (busy || tapSending) return;
+  if (page === "profile") { $("account").click(); return; }
+  stopAuto(); stopTap();
+  $("gameRoom").hidden = true;
+  document.body.style.overflow = "";
+  nav(page);
 }
 function wheelMarkup() {
   return (
@@ -827,6 +849,7 @@ async function openGame(id) {
       : selected.id === "claw"
         ? "DROP"
         : "SPIN";
+  $("play").dataset.caption = selected.id === "squirt" ? "TO SQUIRT" : selected.id === "duck" ? "YOUR PICKS" : selected.id === "claw" ? "THE CLAW" : "YOUR FORTUNE";
   if (selected.arcade) {
     arcadeStage();
     if (id === "obsession")
@@ -1241,7 +1264,7 @@ $("account").onclick = () =>
       player.vipLevel;
     $("seeLeaders").onclick = () => {
       $("info").close();
-      nav("leaderboard");
+      leaveRoom("leaderboard");
     };
   })();
 $("loyalty").onclick = async () => {
@@ -1290,6 +1313,19 @@ window.addEventListener("keydown", (e) => {
     stopAuto();
   }
 });
+document.querySelectorAll("[data-room-symbol]").forEach(el => el.append(sprite(el.dataset.roomSymbol)));
+document.querySelectorAll("[data-room-nav]").forEach(el => el.onclick = () => leaveRoom(el.dataset.roomNav));
+$("roomProfile").onclick = () => leaveRoom("profile");
+$("roomWallet").onclick = () => leaveRoom("wallet");
+$("roomDaily").onclick = $("roomDailyCard").onclick = () => leaveRoom("daily");
+$("roomRulesCard").onclick = rules;
+$("roomLeadersLink").onclick = () => leaveRoom("leaderboard");
+$("roomBonusCard").onclick = () => {
+  if (busy) return;
+  if (selected.arcade) return leaveRoom("arcade");
+  if (!$("bonusPanel").hidden) $("bonusPanel").scrollIntoView({behavior: matchMedia("(prefers-reduced-motion: reduce)").matches ? "instant" : "smooth", block: "start"});
+  else rules();
+};
 buildCards();
 syncSound();
 try {
@@ -1298,5 +1334,5 @@ try {
 } catch {}
 
 const atlasPreload = new Image();
-atlasPreload.src = "/assets/symbols-v2.png?v=cabinet3";
+atlasPreload.src = "/assets/neon-symbols-v4.png";
 

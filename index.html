@@ -12,9 +12,9 @@
       content="Killamani Casino by LUHMAATX. A private fortune club with virtual coin games."
     />
     <title>Killamani Casino × LUHMAATX</title>
-    <link rel="stylesheet" href="/style.css?v=cabinet3" />
+    <link rel="stylesheet" href="/style.css?v=neon4" />
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
-    <script src="/app.js?v=cabinet3" defer></script>
+    <script src="/app.js?v=neon4" defer></script>
   </head>
   <body>
     <main id="app">
@@ -209,33 +209,45 @@
       <section id="gameRoom" class="game-room" hidden>
         <div class="room-wrap">
           <header class="room-header">
-            <button id="back" class="outline">‹ THE PALACE</button
-            ><span id="roomBalance"></span
-            ><button id="paytable" class="icon" aria-label="Game rules">
-              i
+            <button id="roomProfile" class="room-member" aria-label="Open your profile">
+              <span class="member-medallion" data-room-symbol="crown"></span>
+              <span class="member-copy"><strong id="roomPlayer">PLAYER</strong><small id="roomVip">KILLAMANI CLUB</small><span class="member-light"></span></span>
             </button>
+            <div class="room-header-right">
+              <button id="roomWallet" class="room-wallet" aria-label="Open wallet">
+                <span class="wallet-medallion" data-room-symbol="gold"></span>
+                <span><small>BALANCE</small><strong id="roomBalance"></strong></span><span class="wallet-plus" aria-hidden="true">+</span>
+              </button>
+              <button id="roomDaily" class="room-daily"><span data-room-symbol="gift"></span><span><strong>DAILY BONUS</strong><small id="roomDailyState">COINS & REWARDS</small></span><b aria-hidden="true">›</b></button>
+            </div>
           </header>
-          <div id="roomArt" class="room-art"></div>
           <div class="room-title">
-            <span id="gameTag" class="eyebrow"></span>
+            <button id="back" class="room-menu" aria-label="Return to the palace"><span aria-hidden="true">☰</span></button>
+            <div id="roomLogo" class="room-logo" aria-hidden="true"><svg viewBox="0 0 1254 695" role="presentation"><image href="/assets/neon-controls-v4.png" width="1254" height="1254"/></svg></div>
             <h1 id="gameName"></h1>
+            <span id="gameTag" class="eyebrow"></span>
+            <p id="roomSlogan" class="room-slogan">Let the Fortune Flow.</p>
+            <button id="paytable" class="room-info" aria-label="Game rules">i</button>
           </div>
+          <div id="roomArt" class="room-art" hidden></div>
           <div class="machine">
             <div id="gameStage"></div>
             <div id="betControls" class="bet-controls">
+              <div class="bet-line-count"><small id="lineLabel">LINES</small><strong id="lineValue">5</strong></div>
               <button id="less" class="outline" aria-label="Lower bet">
                 −
               </button>
-              <div><small>TOTAL BET</small><strong id="betValue"></strong></div>
+              <div class="live-bet"><small>TOTAL BET</small><strong id="betValue"></strong></div>
               <button id="more" class="outline" aria-label="Raise bet">+</button
               ><button id="max" class="outline">MAX</button>
             </div>
             <div class="play-controls">
+              <svg class="spin-artwork" viewBox="245 712 765 542" aria-hidden="true"><image href="/assets/neon-controls-v4.png" width="1254" height="1254"/></svg>
               <button id="auto" class="outline" aria-pressed="false">
-                AUTO</button
+                <span class="control-glyph" aria-hidden="true">⟲</span><small>AUTO</small></button
               ><button id="play" class="primary spin">SPIN</button
               ><button id="turbo" class="outline" aria-pressed="false">
-                ϟ TURBO
+                <span class="control-glyph" aria-hidden="true">ϟ</span><small>TURBO</small>
               </button>
             </div>
             <p id="gameStatus" class="status" role="status"></p>
@@ -246,7 +258,20 @@
             <div id="bonusChoices" class="choices"></div>
             <p id="bonusStatus" role="status" class="status"></p>
           </div>
-          <p class="fine">KILLACOINS ONLY · NO CASH VALUE</p>
+          <div class="room-shortcuts">
+            <button id="roomDailyCard"><span data-room-symbol="gift"></span><span><strong>DAILY BONUS</strong><small>FREE COINS & REWARDS</small></span><b aria-hidden="true">›</b></button>
+            <button id="roomBonusCard"><span data-room-symbol="red"></span><span><strong id="roomBonusLabel">AFTER HOURS</strong><small id="roomBonusHint">BONUS GAME</small></span><b aria-hidden="true">›</b></button>
+            <button id="roomRulesCard"><span data-room-symbol="diamond"></span><span><strong>PAYTABLE</strong><small>SYMBOLS & GAME RULES</small></span><b aria-hidden="true">›</b></button>
+          </div>
+          <section class="room-leaders" aria-label="Top players"><header><span>♛ &nbsp; TOP PLAYERS</span><button id="roomLeadersLink">VIEW ALL ›</button></header><div id="roomLeadersList">Loading players…</div></section>
+          <p class="fine room-legal">VIRTUAL KILLACOINS · NO CASH VALUE</p>
+          <nav class="room-nav" aria-label="Game navigation">
+            <button data-room-nav="home"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 11 12 3l9 8M5 10v11h5v-7h4v7h5V10"/></svg><small>HOME</small></button>
+            <button data-room-nav="slots"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="6" width="18" height="15" rx="2"/><path d="M5 3h14M9 8v11M15 8v11M4 12h16"/></svg><small>SLOTS</small></button>
+            <button data-room-nav="arcade"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 6h8c4 0 7 13 4 14-2 1-4-4-5-4H9c-1 0-3 5-5 4C1 19 4 6 8 6ZM8 9v6M5 12h6M16 10h.1M18 13h.1"/></svg><small>ARCADE</small></button>
+            <button data-room-nav="wallet"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 8V5l15-3v5M3 7h18v14H3ZM21 12h-7v5h7"/></svg><small>WALLET</small></button>
+            <button data-room-nav="profile"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="7" r="4"/><path d="M4 22v-4c0-6 16-6 16 0v4"/></svg><small>PROFILE</small></button>
+          </nav>
         </div>
       </section>
       <dialog id="info">
