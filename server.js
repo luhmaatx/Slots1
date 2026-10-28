@@ -1,40 +1,135 @@
-// SQUIRT CITY, BITCH! AFTER HOURS rarity adjustment: reduced symbol weight from 6 to 3.
-// All other games, payouts, balances, and database operations are unchanged.
 // SPOILED ROTTEN — server-authoritative KillaCoins gameplay
 // Existing players table and balances are preserved.
 "use strict";
-const express=require("express"),cors=require("cors"),crypto=require("crypto"),path=require("path");
-const {Pool}=require("pg");
-const app=express(),PORT=process.env.PORT||3000;
-const BOT_TOKEN=process.env.TELEGRAM_BOT_TOKEN,DATABASE_URL=process.env.DATABASE_URL;
-app.use(cors());app.use(express.json({limit:"20kb"}));
-const pool=new Pool({connectionString:DATABASE_URL,ssl:process.env.NODE_ENV==="production"?{rejectUnauthorized:false}:false,max:10,connectionTimeoutMillis:10000});
-pool.on("error",e=>console.error("Postgres pool error",e));
-async function initializeDatabase(){
- if(!DATABASE_URL)throw Error("DATABASE_URL missing");
- const c=await pool.connect();
- try{
-  await c.query(`CREATE TABLE IF NOT EXISTS players (
+const express = require("express"),
+  crypto = require("crypto"),
+  path = require("path");
+const { Pool } = require("pg");
+const app = express(),
+  PORT = process.env.PORT || 3000;
+const BOT_TOKEN = process.env.TELEGRAM_BOT_TOKEN,
+  DATABASE_URL = process.env.DATABASE_URL;
+app.disable("x-powered-by");
+app.use(express.json({ limit: "20kb" }));
+app.use((req, res, next) => {
+  res.set("X-Content-Type-Options", "nosniff");
+  res.set("Referrer-Policy", "same-origin");
+  if (req.path.startsWith("/api")) res.set("Cache-Control", "no-store");
+  next();
+});
+const GUEST_SECRET = process.env.GUEST_SECRET;
+const READ_PATHS = new Set([
+  "/api/me",
+  "/api/arcade/state",
+  "/api/bonus/session",
+  "/api/themed/bonus/state",
+  "/api/gift/lookup",
+  "/api/gift/history",
+  "/api/history",
+]);
+function requestMeta(req) {
+  const mutation = !READ_PATHS.has(req.path);
+  const requestId = req.body?.requestId;
+  if (mutation && !arcadeUuid(requestId))
+    throw Error("A UUID requestId is required.");
+  const { initData, guestToken, ...fields } = req.body || {};
+  return {
+    mutation,
+    requestId,
+    fingerprint: crypto
+      .createHash("sha256")
+      .update(JSON.stringify([req.path, fields]))
+      .digest("hex"),
+    path: req.path,
+  };
+}
+function guestToken(id) {
+  const data = Buffer.from(
+    JSON.stringify({ id, expires: Date.now() + 30 * 86400000 }),
+  ).toString("base64url");
+  return (
+    data +
+    "." +
+    crypto.createHmac("sha256", GUEST_SECRET).update(data).digest("hex")
+  );
+}
+function verifyGuest(token) {
+  if (!GUEST_SECRET || typeof token !== "string")
+    throw Error("Choose browser guest access or open in Telegram.");
+  const [data, sig, ...rest] = token.split(".");
+  const expected = crypto
+    .createHmac("sha256", GUEST_SECRET)
+    .update(data || "")
+    .digest();
+  if (
+    rest.length ||
+    !sig ||
+    !/^[a-f0-9]{64}$/.test(sig) ||
+    !crypto.timingSafeEqual(Buffer.from(sig, "hex"), expected)
+  )
+    throw Error("Guest session invalid.");
+  const value = JSON.parse(Buffer.from(data, "base64url").toString());
+  if (
+    !Number.isSafeInteger(value.id) ||
+    value.id >= 0 ||
+    !Number.isFinite(value.expires) ||
+    value.expires < Date.now()
+  )
+    throw Error("Guest session expired.");
+  return { id: value.id, first_name: "Guest", guest: true };
+}
+const pool = new Pool({
+  connectionString: DATABASE_URL,
+  ssl:
+    process.env.PGSSLMODE === "disable"
+      ? false
+      : process.env.NODE_ENV === "production"
+        ? {
+            rejectUnauthorized:
+              process.env.PGSSL_REJECT_UNAUTHORIZED !== "false",
+          }
+        : false,
+  max: 10,
+  connectionTimeoutMillis: 10000,
+});
+pool.on("error", (e) => console.error("Postgres pool error", e));
+async function initializeDatabase() {
+  if (!DATABASE_URL) throw Error("DATABASE_URL missing");
+  const c = await pool.connect();
+  try {
+    await c.query("BEGIN");
+    await c.query("SELECT pg_advisory_xact_lock(42672801)");
+    await c.query(`CREATE TABLE IF NOT EXISTS players (
     telegram_id BIGINT PRIMARY KEY,username TEXT,balance BIGINT NOT NULL DEFAULT 1000,
     vip_level INTEGER NOT NULL DEFAULT 0,created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
     updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW())`);
-  for(const sql of [
-   "ALTER TABLE players ADD COLUMN IF NOT EXISTS username TEXT",
-   "ALTER TABLE players ADD COLUMN IF NOT EXISTS balance BIGINT NOT NULL DEFAULT 1000",
-   "ALTER TABLE players ADD COLUMN IF NOT EXISTS vip_level INTEGER NOT NULL DEFAULT 0",
-   "ALTER TABLE players ADD COLUMN IF NOT EXISTS created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()",
-   "ALTER TABLE players ADD COLUMN IF NOT EXISTS updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()",
-   "ALTER TABLE players ADD COLUMN IF NOT EXISTS free_spins INTEGER NOT NULL DEFAULT 0",
-   "ALTER TABLE players ADD COLUMN IF NOT EXISTS squirt_free_spins INTEGER NOT NULL DEFAULT 0",
-   "ALTER TABLE players ADD COLUMN IF NOT EXISTS last_wheel_at TIMESTAMPTZ",
-   "ALTER TABLE players ADD COLUMN IF NOT EXISTS last_scratch_at TIMESTAMPTZ",
-   "ALTER TABLE players ADD COLUMN IF NOT EXISTS last_velvet_at TIMESTAMPTZ",
-   "ALTER TABLE players ADD COLUMN IF NOT EXISTS slide_bonus JSONB",
-   "ALTER TABLE players ADD COLUMN IF NOT EXISTS vault_bonus JSONB",
-   "ALTER TABLE players ADD COLUMN IF NOT EXISTS last_vault_at TIMESTAMPTZ",
-    "ALTER TABLE players ADD COLUMN IF NOT EXISTS last_daily_at TIMESTAMPTZ"
-  ])await c.query(sql);
-  await c.query(`CREATE TABLE IF NOT EXISTS fortune_coin_gifts (
+    for (const sql of [
+      "ALTER TABLE players ADD COLUMN IF NOT EXISTS username TEXT",
+      "ALTER TABLE players ADD COLUMN IF NOT EXISTS balance BIGINT NOT NULL DEFAULT 1000",
+      "ALTER TABLE players ADD COLUMN IF NOT EXISTS vip_level INTEGER NOT NULL DEFAULT 0",
+      "ALTER TABLE players ADD COLUMN IF NOT EXISTS created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()",
+      "ALTER TABLE players ADD COLUMN IF NOT EXISTS updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()",
+      "ALTER TABLE players ADD COLUMN IF NOT EXISTS free_spins INTEGER NOT NULL DEFAULT 0",
+      "ALTER TABLE players ADD COLUMN IF NOT EXISTS squirt_free_spins INTEGER NOT NULL DEFAULT 0",
+      "ALTER TABLE players ADD COLUMN IF NOT EXISTS last_wheel_at TIMESTAMPTZ",
+      "ALTER TABLE players ADD COLUMN IF NOT EXISTS last_scratch_at TIMESTAMPTZ",
+      "ALTER TABLE players ADD COLUMN IF NOT EXISTS last_velvet_at TIMESTAMPTZ",
+      "ALTER TABLE players ADD COLUMN IF NOT EXISTS slide_bonus JSONB",
+      "ALTER TABLE players ADD COLUMN IF NOT EXISTS vault_bonus JSONB",
+      "ALTER TABLE players ADD COLUMN IF NOT EXISTS last_vault_at TIMESTAMPTZ",
+      "ALTER TABLE players ADD COLUMN IF NOT EXISTS last_daily_at TIMESTAMPTZ",
+      "ALTER TABLE players ADD COLUMN IF NOT EXISTS killa_money BIGINT NOT NULL DEFAULT 0",
+      "ALTER TABLE players ADD COLUMN IF NOT EXISTS last_loyalty_at TIMESTAMPTZ",
+      "ALTER TABLE players ADD COLUMN IF NOT EXISTS free_spin_bet INTEGER NOT NULL DEFAULT 300",
+      "ALTER TABLE players ADD COLUMN IF NOT EXISTS squirt_free_spin_bet INTEGER NOT NULL DEFAULT 100",
+    ])
+      await c.query(sql);
+    await c.query(`CREATE TABLE IF NOT EXISTS casino_requests (
+    player_id BIGINT NOT NULL REFERENCES players(telegram_id),request_id UUID NOT NULL,
+    fingerprint TEXT NOT NULL,path TEXT NOT NULL,result JSONB NOT NULL,created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+    PRIMARY KEY(player_id,request_id))`);
+
+    await c.query(`CREATE TABLE IF NOT EXISTS fortune_coin_gifts (
     id BIGSERIAL PRIMARY KEY,
     sender_id BIGINT NOT NULL REFERENCES players(telegram_id),
     recipient_id BIGINT NOT NULL REFERENCES players(telegram_id),
@@ -43,526 +138,1814 @@ async function initializeDatabase(){
     created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
     UNIQUE(sender_id,request_id)
   )`);
-  await c.query("CREATE INDEX IF NOT EXISTS fortune_gifts_sender_date ON fortune_coin_gifts(sender_id,created_at DESC)");
-  await c.query("CREATE INDEX IF NOT EXISTS fortune_gifts_recipient_date ON fortune_coin_gifts(recipient_id,created_at DESC)");
-   await c.query(`CREATE TABLE IF NOT EXISTS themed_slot_rounds (id BIGSERIAL PRIMARY KEY, player_id BIGINT NOT NULL REFERENCES players(telegram_id), request_id UUID NOT NULL, game TEXT NOT NULL, bet INTEGER NOT NULL, win BIGINT NOT NULL, reels JSONB NOT NULL, bonus_id UUID, created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(), UNIQUE(player_id,request_id))`);
-   await c.query(`CREATE TABLE IF NOT EXISTS themed_bonus_sessions (id UUID PRIMARY KEY, player_id BIGINT NOT NULL REFERENCES players(telegram_id), game TEXT NOT NULL, bet INTEGER NOT NULL, choices JSONB NOT NULL, selections JSONB NOT NULL DEFAULT '[]'::jsonb, total BIGINT NOT NULL DEFAULT 0, completed BOOLEAN NOT NULL DEFAULT FALSE, created_at TIMESTAMPTZ NOT NULL DEFAULT NOW())`);
-   await c.query('CREATE INDEX IF NOT EXISTS themed_bonus_owner ON themed_bonus_sessions(player_id,completed)');
-   await c.query(`CREATE TABLE IF NOT EXISTS arcade_progress (player_id BIGINT PRIMARY KEY REFERENCES players(telegram_id), qualifying_rounds INTEGER NOT NULL DEFAULT 0, wheel_tickets INTEGER NOT NULL DEFAULT 0)`);
-   await c.query(`CREATE TABLE IF NOT EXISTS arcade_rounds (id BIGSERIAL PRIMARY KEY,player_id BIGINT NOT NULL REFERENCES players(telegram_id),request_id UUID NOT NULL,game TEXT NOT NULL,bet INTEGER NOT NULL DEFAULT 0,win INTEGER NOT NULL DEFAULT 0,result JSONB NOT NULL,created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),UNIQUE(player_id,request_id))`);
- }finally{c.release()}
+    await c.query(
+      "CREATE INDEX IF NOT EXISTS fortune_gifts_sender_date ON fortune_coin_gifts(sender_id,created_at DESC)",
+    );
+    await c.query(
+      "CREATE INDEX IF NOT EXISTS fortune_gifts_recipient_date ON fortune_coin_gifts(recipient_id,created_at DESC)",
+    );
+    await c.query(
+      `CREATE TABLE IF NOT EXISTS themed_slot_rounds (id BIGSERIAL PRIMARY KEY, player_id BIGINT NOT NULL REFERENCES players(telegram_id), request_id UUID NOT NULL, game TEXT NOT NULL, bet INTEGER NOT NULL, win BIGINT NOT NULL, reels JSONB NOT NULL, bonus_id UUID, created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(), UNIQUE(player_id,request_id))`,
+    );
+    await c.query(
+      `CREATE TABLE IF NOT EXISTS themed_bonus_sessions (id UUID PRIMARY KEY, player_id BIGINT NOT NULL REFERENCES players(telegram_id), game TEXT NOT NULL, bet INTEGER NOT NULL, choices JSONB NOT NULL, selections JSONB NOT NULL DEFAULT '[]'::jsonb, total BIGINT NOT NULL DEFAULT 0, completed BOOLEAN NOT NULL DEFAULT FALSE, created_at TIMESTAMPTZ NOT NULL DEFAULT NOW())`,
+    );
+    await c.query(
+      "CREATE INDEX IF NOT EXISTS themed_bonus_owner ON themed_bonus_sessions(player_id,completed)",
+    );
+    await c.query(
+      "ALTER TABLE themed_bonus_sessions ADD COLUMN IF NOT EXISTS picks INTEGER",
+    );
+    await c.query(
+      "UPDATE themed_bonus_sessions SET picks=CASE WHEN game IN ('brat','cash') THEN 3 ELSE 1 END WHERE picks IS NULL",
+    );
+    await c.query(
+      "ALTER TABLE themed_bonus_sessions ALTER COLUMN picks SET DEFAULT 1, ALTER COLUMN picks SET NOT NULL",
+    );
+    await c.query(
+      `CREATE TABLE IF NOT EXISTS arcade_progress (player_id BIGINT PRIMARY KEY REFERENCES players(telegram_id), qualifying_rounds INTEGER NOT NULL DEFAULT 0, wheel_tickets INTEGER NOT NULL DEFAULT 0)`,
+    );
+    await c.query(
+      `CREATE TABLE IF NOT EXISTS arcade_rounds (id BIGSERIAL PRIMARY KEY,player_id BIGINT NOT NULL REFERENCES players(telegram_id),request_id UUID NOT NULL,game TEXT NOT NULL,bet INTEGER NOT NULL DEFAULT 0,win INTEGER NOT NULL DEFAULT 0,result JSONB NOT NULL,created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),UNIQUE(player_id,request_id))`,
+    );
+    await c.query("COMMIT");
+  } catch (e) {
+    await c.query("ROLLBACK");
+    throw e;
+  } finally {
+    c.release();
+  }
 }
-function verifyTelegramInitData(initData){
- if(typeof initData!=="string"||!initData||!BOT_TOKEN)throw Error("Telegram login data missing");
- const params=new URLSearchParams(initData),hash=params.get("hash");
- if(!hash||!/^[0-9a-f]{64}$/i.test(hash))throw Error("Invalid Telegram signature");
- params.delete("hash");
- const check=[...params.entries()].sort(([a],[b])=>a.localeCompare(b)).map(([k,v])=>`${k}=${v}`).join("\n");
- const secret=crypto.createHmac("sha256","WebAppData").update(BOT_TOKEN).digest();
- const expected=crypto.createHmac("sha256",secret).update(check).digest();
- if(!crypto.timingSafeEqual(Buffer.from(hash,"hex"),expected))throw Error("Telegram verification failed");
- const date=Number(params.get("auth_date")),age=Math.floor(Date.now()/1000)-date;
- if(!Number.isFinite(date)||age < -60||age>86400)throw Error("Telegram session expired");
- const user=JSON.parse(params.get("user")||"null");
- if(!user||!Number.isSafeInteger(Number(user.id)))throw Error("Invalid Telegram user");
- return user;
+function verifyTelegramInitData(initData) {
+  if (typeof initData !== "string" || !initData || !BOT_TOKEN)
+    throw Error("Telegram login data missing");
+  const params = new URLSearchParams(initData),
+    hash = params.get("hash");
+  if (!hash || !/^[0-9a-f]{64}$/i.test(hash))
+    throw Error("Invalid Telegram signature");
+  if (new Set([...params.keys()]).size !== [...params.keys()].length)
+    throw Error("Duplicate Telegram fields");
+  params.delete("hash");
+  const check = [...params.entries()]
+    .sort(([a], [b]) => (a < b ? -1 : a > b ? 1 : 0))
+    .map(([k, v]) => `${k}=${v}`)
+    .join("\n");
+  const secret = crypto
+    .createHmac("sha256", "WebAppData")
+    .update(BOT_TOKEN)
+    .digest();
+  const expected = crypto.createHmac("sha256", secret).update(check).digest();
+  if (!crypto.timingSafeEqual(Buffer.from(hash, "hex"), expected))
+    throw Error("Telegram verification failed");
+  const date = Number(params.get("auth_date")),
+    age = Math.floor(Date.now() / 1000) - date;
+  if (!Number.isFinite(date) || age < -60 || age > 86400)
+    throw Error("Telegram session expired");
+  const user = JSON.parse(params.get("user") || "null");
+  if (!user || !Number.isSafeInteger(Number(user.id)) || Number(user.id) <= 0)
+    throw Error("Invalid Telegram user");
+  return user;
 }
-function auth(req,res,next){
- try{req.telegramUser=verifyTelegramInitData(req.body?.initData);next()}
- catch(e){res.status(401).json({error:e.message})}
+function auth(req, res, next) {
+  try {
+    req.telegramUser = req.body?.initData
+      ? verifyTelegramInitData(req.body.initData)
+      : verifyGuest(req.body?.guestToken);
+    req.telegramUser._request = requestMeta(req);
+    next();
+  } catch (e) {
+    res.status(401).json({ error: e.message });
+  }
 }
-function nameOf(u){return String(u.username||[u.first_name,u.last_name].filter(Boolean).join(" ")||`player_${u.id}`).slice(0,100)}
-async function playerFor(u){
- const r=await pool.query(`INSERT INTO players(telegram_id,username) VALUES($1,$2)
+function nameOf(u) {
+  return String(
+    u.username ||
+      [u.first_name, u.last_name].filter(Boolean).join(" ") ||
+      `player_${u.id}`,
+  ).slice(0, 100);
+}
+async function playerFor(u) {
+  const r = await pool.query(
+    `INSERT INTO players(telegram_id,username) VALUES($1,$2)
  ON CONFLICT(telegram_id) DO UPDATE SET username=EXCLUDED.username,updated_at=NOW()
- RETURNING telegram_id,username,balance,vip_level,free_spins,squirt_free_spins,last_wheel_at,last_scratch_at,last_velvet_at,slide_bonus,vault_bonus,last_daily_at`,[String(u.id),nameOf(u)]);
- return r.rows[0];
+ RETURNING telegram_id,username,balance,vip_level,free_spins,squirt_free_spins,last_wheel_at,last_scratch_at,last_velvet_at,slide_bonus,vault_bonus,last_daily_at,killa_money,last_loyalty_at,free_spin_bet,squirt_free_spin_bet`,
+    [String(u.id), nameOf(u)],
+  );
+  return r.rows[0];
 }
-function isAvailable(ts){return !ts||new Date(ts).toISOString().slice(0,10)!==new Date().toISOString().slice(0,10)}
-function state(p){return {id:String(p.telegram_id),username:p.username,balance:Number(p.balance),vipLevel:Number(p.vip_level),freeSpins:Number(p.free_spins||0),dailyAvailable:isAvailable(p.last_daily_at),wheelAvailable:isAvailable(p.last_wheel_at),scratchAvailable:isAvailable(p.last_scratch_at),velvetAvailable:isAvailable(p.last_velvet_at),squirtFreeSpins:Number(p.squirt_free_spins||0),slideBonus:visibleBonus(p.slide_bonus),vaultBonus:visibleBonus(p.vault_bonus)}}
-app.get("/",(req,res)=>res.sendFile(path.join(__dirname,"index.html")));
-app.get("/api/health",async(req,res)=>{try{await pool.query("SELECT 1");res.json({status:"ok",database:"connected",game:"KILLAMANI CASINO",version:"4.0"})}catch(e){res.status(503).json({status:"error",database:"disconnected"})}});
-app.post("/api/me",auth,async(req,res)=>{try{res.json({success:true,...state(await playerFor(req.telegramUser))})}catch(e){console.error("/api/me",e);res.status(500).json({error:"Unable to load account"})}});
-app.get("/api/leaderboard",async(req,res)=>{try{const r=await pool.query("SELECT username,balance FROM players ORDER BY balance DESC LIMIT 100");res.json({players:r.rows.map((p,i)=>({rank:i+1,username:p.username,balance:Number(p.balance)}))})}catch(e){res.status(500).json({error:"Leaderboard unavailable"})}});
-const BETS=[300,600,1500,3000];
-const WEIGHTS=[["diamond",9],["seven",8],["heart",20],["rose",18],["spade",18],["star",10],["wild",5],["scatter",3]];
-const LINES=[[0,3,6,9,12],[1,4,7,10,13],[2,5,8,11,14],[0,4,8,10,12],[2,4,6,10,14]];
-function rand(n){return crypto.randomInt(n)}
+function isAvailable(ts) {
+  return (
+    !ts ||
+    new Date(ts).toISOString().slice(0, 10) !==
+      new Date().toISOString().slice(0, 10)
+  );
+}
+function state(p) {
+  return {
+    id: String(p.telegram_id),
+    guest: Number(p.telegram_id) < 0,
+    killaMoney: Number(p.killa_money || 0),
+    loyaltyAvailable: isAvailable(p.last_loyalty_at),
+    username: p.username,
+    balance: Number(p.balance),
+    vipLevel: Number(p.vip_level),
+    freeSpins: Number(p.free_spins || 0),
+    freeSpinBet: Number(p.free_spin_bet || 300),
+    squirtFreeSpinBet: Number(p.squirt_free_spin_bet || 100),
+    dailyAvailable: isAvailable(p.last_daily_at),
+    wheelAvailable: isAvailable(p.last_wheel_at),
+    scratchAvailable: isAvailable(p.last_scratch_at),
+    velvetAvailable: isAvailable(p.last_velvet_at),
+    squirtFreeSpins: Number(p.squirt_free_spins || 0),
+    slideBonus: visibleBonus(p.slide_bonus),
+    vaultBonus: visibleBonus(p.vault_bonus),
+  };
+}
+app.post("/api/guest", async (req, res) => {
+  if (!GUEST_SECRET)
+    return res
+      .status(503)
+      .json({
+        error: "Browser guest access needs GUEST_SECRET on the server.",
+      });
+  try {
+    const id = -Number(crypto.randomBytes(6).readUIntBE(0, 6)) - 1;
+    const p = await playerFor({ id, first_name: "Guest" });
+    res.json({ guestToken: guestToken(id), ...state(p) });
+  } catch (e) {
+    res.status(500).json({ error: "Unable to create guest account" });
+  }
+});
+app.get("/", (req, res) => res.sendFile(path.join(__dirname, "index.html")));
+app.get("/api/health", async (req, res) => {
+  try {
+    await pool.query("SELECT 1");
+    res.json({
+      status: "ok",
+      database: "connected",
+      game: "KILLAMANI CASINO",
+      version: "4.0",
+    });
+  } catch (e) {
+    res.status(503).json({ status: "error", database: "disconnected" });
+  }
+});
+app.post("/api/me", auth, async (req, res) => {
+  try {
+    res.json({ success: true, ...state(await playerFor(req.telegramUser)) });
+  } catch (e) {
+    console.error("/api/me", e);
+    res.status(500).json({ error: "Unable to load account" });
+  }
+});
+app.get("/api/leaderboard", async (req, res) => {
+  try {
+    const r = await pool.query(
+      "SELECT username,balance FROM players WHERE telegram_id>0 ORDER BY balance DESC,telegram_id LIMIT 100",
+    );
+    res.json({
+      players: r.rows.map((p, i) => ({
+        rank: i + 1,
+        username: p.username,
+        balance: Number(p.balance),
+      })),
+    });
+  } catch (e) {
+    res.status(500).json({ error: "Leaderboard unavailable" });
+  }
+});
+const BETS = [300, 600, 1500, 3000];
+const WEIGHTS = [
+  ["diamond", 9],
+  ["seven", 8],
+  ["heart", 20],
+  ["rose", 18],
+  ["spade", 18],
+  ["star", 10],
+  ["wild", 5],
+  ["scatter", 3],
+];
+const LINES = [
+  [0, 3, 6, 9, 12],
+  [1, 4, 7, 10, 13],
+  [2, 5, 8, 11, 14],
+  [0, 4, 8, 10, 12],
+  [2, 4, 6, 10, 14],
+];
+function rand(n) {
+  return crypto.randomInt(n);
+}
 
 // Killamani Casino: illustrated, server-authoritative bonus sessions.
 // These fields are stored in the existing vault_bonus and slide_bonus JSONB columns.
-const PICK_AWARDS=[40,60,100,150,200,300,400,500];
-const MAX_VERIFIED_TAPS_PER_SECOND=16;
-function makePickBonus(bet,diamonds){
- const picks=Math.max(3,Math.min(5,diamonds));
- const awards=Array.from({length:12},()=>PICK_AWARDS[rand(PICK_AWARDS.length)]);
- return {kind:'vault',version:2,picks,bet,awards,opened:[],history:[],stage:0,total:0,done:false,createdAt:new Date().toISOString()};
+const PICK_AWARDS = [40, 60, 100, 150, 200, 300, 400, 500];
+const MAX_VERIFIED_TAPS_PER_SECOND = 16;
+function makePickBonus(bet, diamonds) {
+  const picks = Math.max(3, Math.min(5, diamonds));
+  const awards = Array.from(
+    { length: 12 },
+    () => PICK_AWARDS[rand(PICK_AWARDS.length)],
+  );
+  return {
+    kind: "vault",
+    version: 2,
+    picks,
+    bet,
+    awards,
+    opened: [],
+    history: [],
+    stage: 0,
+    total: 0,
+    done: false,
+    createdAt: new Date().toISOString(),
+  };
 }
-function makeTapBonus(bet,diamonds){
- return {kind:'slide',version:2,bet,diamonds,duration:10+rand(21),startedAt:null,expiresAt:null,taps:0,total:0,done:false,createdAt:new Date().toISOString()};
+function makeTapBonus(bet, diamonds) {
+  return {
+    kind: "slide",
+    version: 2,
+    bet,
+    diamonds,
+    duration: 10 + rand(21),
+    startedAt: null,
+    expiresAt: null,
+    taps: 0,
+    total: 0,
+    done: false,
+    createdAt: new Date().toISOString(),
+  };
 }
-function visibleBonus(s){
- if(!s)return null;
- if(s.kind==='vault')return {kind:'vault',version:s.version||1,stage:Number(s.stage||0),picks:Number(s.picks||0),opened:Array.isArray(s.history)?s.history:[],total:Number(s.total||0),bet:Number(s.bet||0),done:!!s.done};
- const remainingMs=s.expiresAt?Math.max(0,Date.parse(s.expiresAt)-Date.now()):null;
- return {kind:'slide',version:s.version||1,bet:Number(s.bet||0),duration:Number(s.duration||0),started:!!s.startedAt,startedAt:s.startedAt||null,expiresAt:s.expiresAt||null,remainingMs,taps:Number(s.taps||0),total:Number(s.total||0),done:!!s.done};
+function visibleBonus(s) {
+  if (!s) return null;
+  if (s.kind === "vault")
+    return {
+      kind: "vault",
+      version: s.version || 1,
+      stage: Number(s.stage || 0),
+      picks: Number(s.picks || 0),
+      opened: Array.isArray(s.history) ? s.history : [],
+      total: Number(s.total || 0),
+      bet: Number(s.bet || 0),
+      done: !!s.done,
+    };
+  const remainingMs = s.expiresAt
+    ? Math.max(0, Date.parse(s.expiresAt) - Date.now())
+    : null;
+  return {
+    kind: "slide",
+    version: s.version || 1,
+    bet: Number(s.bet || 0),
+    duration: Number(s.duration || 0),
+    started: !!s.startedAt,
+    startedAt: s.startedAt || null,
+    expiresAt: s.expiresAt || null,
+    remainingMs,
+    taps: Number(s.taps || 0),
+    total: Number(s.total || 0),
+    done: !!s.done,
+  };
 }
 
-function symbol(){const sum=WEIGHTS.reduce((a,x)=>a+x[1],0);let r=rand(sum);for(const [name,w] of WEIGHTS){r-=w;if(r<0)return name}return "star"}
-function generate(){return Array.from({length:15},symbol)}
-function evaluate(symbols,bet){
- let win=0;const winningLines=[];
- LINES.forEach((line,i)=>{
-  const seq=line.map(n=>symbols[n]);
-  const first=seq.find(x=>x!=="wild");
-  if(!first||first==="scatter")return;
-  let matches=0,wilds=0;
-  for(const s of seq){if(s===first||s==="wild"){matches++;if(s==="wild")wilds++}else break}
-  if(matches<3)return;
-  const base=[0,0,0,2,5,12][matches]*(first==="seven"?2:1);
-  const multiplier=wilds>=3?5:wilds===2?3:wilds===1?2:1;
-  const lineWin=bet*base*multiplier;
-  win+=lineWin;winningLines.push({line:i+1,matches,symbol:first,wilds,multiplier,win:lineWin,indexes:line.slice(0,matches)});
- });
- return {win,winningLines};
+function symbol() {
+  const sum = WEIGHTS.reduce((a, x) => a + x[1], 0);
+  let r = rand(sum);
+  for (const [name, w] of WEIGHTS) {
+    r -= w;
+    if (r < 0) return name;
+  }
+  return "star";
 }
-async function withLockedPlayer(u,handler){
- const c=await pool.connect();
- try{
-  await c.query("BEGIN");
-  const r=await c.query("SELECT * FROM players WHERE telegram_id=$1 FOR UPDATE",[String(u.id)]);
-  if(!r.rowCount){await c.query("ROLLBACK");return {status:404,data:{error:"Account not found. Reopen the game."}}}
-  const out=await handler(c,r.rows[0]);
-  if(out.status>=400){await c.query("ROLLBACK");return out}
-  await c.query("COMMIT");return out;
- }catch(e){try{await c.query("ROLLBACK")}catch{}throw e}finally{c.release()}
+function generate() {
+  return Array.from({ length: 15 }, symbol);
 }
-app.post("/api/spin",auth,async(req,res)=>{
- const bet=Number(req.body?.bet);
- if(!Number.isSafeInteger(bet)||!BETS.includes(bet))return res.status(400).json({error:"Invalid bet"});
- try{
-  const out=await withLockedPlayer(req.telegramUser,async(c,p)=>{
-   const free=Number(p.free_spins)>0;
-   const balance=Number(p.balance);
-   if(!free&&balance<bet)return {status:400,data:{error:"Not enough KillaCoins"}};
-   const symbols=generate(),payout=evaluate(symbols,bet);
-   const scatterCount=symbols.filter(x=>x==="scatter").length;
-   const awardedFreeSpins=0;
-   const diamondCount=symbols.filter(x=>x==="diamond").length;
-   const startsVault=diamondCount>=3&&(!p.vault_bonus||p.vault_bonus.done);
-   const remaining=Math.max(0,Number(p.free_spins)-(free?1:0))+awardedFreeSpins;
-   const next=balance-(free?0:bet)+payout.win;
-   if(!Number.isSafeInteger(next)||next<0)return {status:500,data:{error:"Balance limit exceeded"}};
-   await c.query("UPDATE players SET balance=$1,free_spins=$2,vault_bonus=CASE WHEN $4 THEN $5::jsonb ELSE vault_bonus END,updated_at=NOW() WHERE telegram_id=$3",[next,remaining,String(p.telegram_id),startsVault,JSON.stringify(makePickBonus(bet,diamondCount))]);
-   if(!free)await arcadeQualify(c,p.telegram_id);
-   return {status:200,data:{success:true,symbols,win:payout.win,winningLines:payout.winningLines,bet,balance:next,vipLevel:Number(p.vip_level),username:p.username,freeSpinUsed:free,freeSpins:remaining,awardedFreeSpins,scatterCount,vaultBonusTriggered:startsVault,vaultBonusPending:!!(p.vault_bonus&&!p.vault_bonus.done),bonusDiamonds:diamondCount}};
+function evaluate(symbols, bet) {
+  let win = 0;
+  const winningLines = [];
+  LINES.forEach((line, i) => {
+    const seq = line.map((n) => symbols[n]);
+    const first = seq.find((x) => x !== "wild");
+    if (!first || first === "scatter") return;
+    let matches = 0,
+      wilds = 0;
+    for (const s of seq) {
+      if (s === first || s === "wild") {
+        matches++;
+        if (s === "wild") wilds++;
+      } else break;
+    }
+    if (matches < 3) return;
+    const base = [0, 0, 0, 2, 5, 12][matches] * (first === "seven" ? 2 : 1);
+    const multiplier = wilds >= 3 ? 5 : wilds === 2 ? 3 : wilds === 1 ? 2 : 1;
+    const lineWin = bet * base * multiplier;
+    win += lineWin;
+    winningLines.push({
+      line: i + 1,
+      matches,
+      symbol: first,
+      wilds,
+      multiplier,
+      win: lineWin,
+      indexes: line.slice(0, matches),
+    });
   });
-  res.status(out.status).json(out.data);
- }catch(e){console.error("/api/spin",e);res.status(500).json({error:"Spin failed. Transaction rolled back."})}
+  return { win, winningLines };
+}
+async function withLockedPlayer(u, handler) {
+  const c = await pool.connect();
+  try {
+    await c.query("BEGIN");
+    const r = await c.query(
+      "SELECT * FROM players WHERE telegram_id=$1 FOR UPDATE",
+      [String(u.id)],
+    );
+    if (!r.rowCount) {
+      await c.query("ROLLBACK");
+      return {
+        status: 404,
+        data: { error: "Account not found. Reopen the game." },
+      };
+    }
+    const meta = u._request;
+    if (meta?.mutation) {
+      const previous = await c.query(
+        "SELECT fingerprint,result FROM casino_requests WHERE player_id=$1 AND request_id=$2",
+        [String(u.id), meta.requestId],
+      );
+      if (previous.rowCount) {
+        if (previous.rows[0].fingerprint !== meta.fingerprint) {
+          await c.query("ROLLBACK");
+          return {
+            status: 409,
+            data: { error: "Request ID already used for another action" },
+          };
+        }
+        await c.query("COMMIT");
+        return {
+          status: 200,
+          data: {
+            ...previous.rows[0].result,
+            balance: Number(r.rows[0].balance),
+            duplicate: true,
+          },
+        };
+      }
+    }
+    const out = await handler(c, r.rows[0]);
+    if (out.status >= 400) {
+      await c.query("ROLLBACK");
+      return out;
+    }
+    if (meta?.mutation)
+      await c.query(
+        "INSERT INTO casino_requests(player_id,request_id,fingerprint,path,result) VALUES($1,$2,$3,$4,$5::jsonb)",
+        [
+          String(u.id),
+          meta.requestId,
+          meta.fingerprint,
+          meta.path,
+          JSON.stringify(out.data),
+        ],
+      );
+    await c.query("COMMIT");
+    return out;
+  } catch (e) {
+    try {
+      await c.query("ROLLBACK");
+    } catch {}
+    throw e;
+  } finally {
+    c.release();
+  }
+}
+app.post("/api/spin", auth, async (req, res) => {
+  const requestedBet = Number(req.body?.bet);
+  if (!Number.isSafeInteger(requestedBet) || !BETS.includes(requestedBet))
+    return res.status(400).json({ error: "Invalid bet" });
+  try {
+    const out = await withLockedPlayer(req.telegramUser, async (c, p) => {
+      const free = Number(p.free_spins) > 0;
+      const bet = free ? Number(p.free_spin_bet) : requestedBet;
+      const balance = Number(p.balance);
+      if (!free && balance < bet)
+        return { status: 400, data: { error: "Not enough KillaCoins" } };
+      const symbols = generate(),
+        payout = evaluate(symbols, bet);
+      const scatterCount = symbols.filter((x) => x === "scatter").length;
+      const awardedFreeSpins =
+        scatterCount >= 3 ? Math.min(20, 5 * (scatterCount - 2)) : 0;
+      const diamondCount = symbols.filter((x) => x === "diamond").length;
+      const startsVault =
+        diamondCount >= 3 &&
+        (!p.vault_bonus || p.vault_bonus.done || p.vault_bonus.version !== 2);
+      const remaining =
+        Math.max(0, Number(p.free_spins) - (free ? 1 : 0)) + awardedFreeSpins;
+      const next = balance - (free ? 0 : bet) + payout.win;
+      if (!Number.isSafeInteger(next) || next < 0)
+        return { status: 500, data: { error: "Balance limit exceeded" } };
+      await c.query(
+        "UPDATE players SET balance=$1,free_spins=$2,free_spin_bet=$6,vault_bonus=CASE WHEN $4 THEN $5::jsonb ELSE vault_bonus END,updated_at=NOW() WHERE telegram_id=$3",
+        [
+          next,
+          remaining,
+          String(p.telegram_id),
+          startsVault,
+          JSON.stringify(makePickBonus(bet, diamondCount)),
+          bet,
+        ],
+      );
+      if (!free) await arcadeQualify(c, p.telegram_id);
+      return {
+        status: 200,
+        data: {
+          success: true,
+          symbols,
+          win: payout.win,
+          winningLines: payout.winningLines,
+          bet,
+          balance: next,
+          vipLevel: Number(p.vip_level),
+          username: p.username,
+          freeSpinUsed: free,
+          freeSpins: remaining,
+          awardedFreeSpins,
+          scatterCount,
+          vaultBonusTriggered: startsVault,
+          vaultBonusPending: !!(p.vault_bonus && !p.vault_bonus.done),
+          bonusDiamonds: diamondCount,
+        },
+      };
+    });
+    res.status(out.status).json(out.data);
+  } catch (e) {
+    console.error("/api/spin", e);
+    res.status(500).json({ error: "Spin failed. Transaction rolled back." });
+  }
 });
 
 // Once-per-UTC-day daily lobby bonus. Server-authoritative and transactional.
-app.post('/api/daily/claim',auth,async(req,res)=>{
- try{
-  const out=await withLockedPlayer(req.telegramUser,async(c,p)=>{
-   if(!isAvailable(p.last_daily_at))return {status:429,data:{error:'Daily bonus already claimed. Return tomorrow (UTC).',dailyAvailable:false}};
-   const next=Number(p.balance)+1000;
-   if(!Number.isSafeInteger(next))return {status:500,data:{error:'Balance limit exceeded'}};
-   await c.query('UPDATE players SET balance=$1,last_daily_at=NOW(),updated_at=NOW() WHERE telegram_id=$2',[next,String(p.telegram_id)]);
-   return {status:200,data:{success:true,prize:1000,balance:next,dailyAvailable:false}};
-  });res.status(out.status).json(out.data);
- }catch(e){console.error('/api/daily/claim',e);res.status(500).json({error:'Daily bonus failed. No coins were awarded.'})}
+app.post("/api/daily/claim", auth, async (req, res) => {
+  try {
+    const out = await withLockedPlayer(req.telegramUser, async (c, p) => {
+      if (!isAvailable(p.last_daily_at))
+        return {
+          status: 429,
+          data: {
+            error: "Daily bonus already claimed. Return tomorrow (UTC).",
+            dailyAvailable: false,
+          },
+        };
+      const next = Number(p.balance) + 1000;
+      if (!Number.isSafeInteger(next))
+        return { status: 500, data: { error: "Balance limit exceeded" } };
+      await c.query(
+        "UPDATE players SET balance=$1,last_daily_at=NOW(),updated_at=NOW() WHERE telegram_id=$2",
+        [next, String(p.telegram_id)],
+      );
+      return {
+        status: 200,
+        data: {
+          success: true,
+          prize: 1000,
+          balance: next,
+          dailyAvailable: false,
+        },
+      };
+    });
+    res.status(out.status).json(out.data);
+  } catch (e) {
+    console.error("/api/daily/claim", e);
+    res
+      .status(500)
+      .json({ error: "Daily bonus failed. No coins were awarded." });
+  }
 });
-app.post("/api/wheel",auth,async(req,res)=>{
- try{
-  const out=await withLockedPlayer(req.telegramUser,async(c,p)=>{
-   const today=new Date().toISOString().slice(0,10);
-   if(p.last_wheel_at&&new Date(p.last_wheel_at).toISOString().slice(0,10)===today)return {status:429,data:{error:"Today's wheel spin has already been used",wheelAvailable:false}};
-   const prizes=[100,200,300,500,750,1000,1500,2500],weights=[24,22,18,14,10,7,4,1];
-   let r=rand(weights.reduce((a,b)=>a+b,0)),prize=prizes[0];
-   for(let i=0;i<prizes.length;i++){r-=weights[i];if(r<0){prize=prizes[i];break}}
-   const balance=Number(p.balance)+prize;
-   if(!Number.isSafeInteger(balance))return {status:500,data:{error:"Balance limit exceeded"}};
-   await c.query("UPDATE players SET balance=$1,last_wheel_at=NOW(),updated_at=NOW() WHERE telegram_id=$2",[balance,String(p.telegram_id)]);
-   return {status:200,data:{success:true,prize,balance,wheelAvailable:false}};
-  });
-  res.status(out.status).json(out.data);
- }catch(e){console.error("/api/wheel",e);res.status(500).json({error:"Wheel failed. Transaction rolled back."})}
+app.post("/api/wheel", auth, async (req, res) => {
+  try {
+    const out = await withLockedPlayer(req.telegramUser, async (c, p) => {
+      const today = new Date().toISOString().slice(0, 10);
+      if (
+        p.last_wheel_at &&
+        new Date(p.last_wheel_at).toISOString().slice(0, 10) === today
+      )
+        return {
+          status: 429,
+          data: {
+            error: "Today's wheel spin has already been used",
+            wheelAvailable: false,
+          },
+        };
+      const prizes = [100, 200, 300, 500, 750, 1000, 1500, 2500],
+        weights = [24, 22, 18, 14, 10, 7, 4, 1];
+      let r = rand(weights.reduce((a, b) => a + b, 0)),
+        prize = prizes[0];
+      for (let i = 0; i < prizes.length; i++) {
+        r -= weights[i];
+        if (r < 0) {
+          prize = prizes[i];
+          break;
+        }
+      }
+      const balance = Number(p.balance) + prize;
+      if (!Number.isSafeInteger(balance))
+        return { status: 500, data: { error: "Balance limit exceeded" } };
+      await c.query(
+        "UPDATE players SET balance=$1,last_wheel_at=NOW(),updated_at=NOW() WHERE telegram_id=$2",
+        [balance, String(p.telegram_id)],
+      );
+      return {
+        status: 200,
+        data: { success: true, prize, balance, wheelAvailable: false },
+      };
+    });
+    res.status(out.status).json(out.data);
+  } catch (e) {
+    console.error("/api/wheel", e);
+    res.status(500).json({ error: "Wheel failed. Transaction rolled back." });
+  }
 });
 
 // Two daily Fortune Coin mini-games. Both are authenticated, rate-limited by
 // the persisted UTC-day claim timestamp and transactionally update balances.
-async function claimDailyGame(req,res,kind){
- const scratch=kind==="scratch";
- const field=scratch?"last_scratch_at":"last_velvet_at";
- if(!scratch&&(!Number.isSafeInteger(req.body?.door)||req.body.door<1||req.body.door>5)){
-  return res.status(400).json({error:"Choose one of the five doors."});
- }
- try{
-  const result=await withLockedPlayer(req.telegramUser,async(c,p)=>{
-   if(!isAvailable(p[field]))return {status:429,data:{error:"You have already played today. Come back tomorrow (UTC).",[scratch?"scratchAvailable":"velvetAvailable"]:false}};
-   // Weighted Fortune Coin prizes; client never selects or calculates prizes.
-   const prizes=scratch?[50,100,150,250,500,1000]:[75,125,200,350,600,1200];
-   const weights=[30,27,20,13,8,2];
-   let ticket=rand(weights.reduce((a,b)=>a+b,0)),prize=prizes[0];
-   for(let i=0;i<weights.length;i++){ticket-=weights[i];if(ticket<0){prize=prizes[i];break}}
-   const balance=Number(p.balance)+prize;
-   if(!Number.isSafeInteger(balance))return {status:500,data:{error:"Balance limit exceeded."}};
-   // Field is chosen from a fixed allowlist above, never user-supplied SQL.
-   await c.query(`UPDATE players SET balance=$1,${field}=NOW(),updated_at=NOW() WHERE telegram_id=$2`,[balance,String(p.telegram_id)]);
-   return {status:200,data:{success:true,game:kind,prize,balance,[scratch?"scratchAvailable":"velvetAvailable"]:false,...(!scratch?{door:req.body.door}:{})}};
-  });
-  return res.status(result.status).json(result.data);
- }catch(e){console.error(`/api/${kind}`,e);return res.status(500).json({error:"Prize could not be claimed. Transaction rolled back."})}
+async function claimDailyGame(req, res, kind) {
+  const scratch = kind === "scratch";
+  const field = scratch ? "last_scratch_at" : "last_velvet_at";
+  if (
+    !scratch &&
+    (!Number.isSafeInteger(req.body?.door) ||
+      req.body.door < 1 ||
+      req.body.door > 5)
+  ) {
+    return res.status(400).json({ error: "Choose one of the five doors." });
+  }
+  try {
+    const result = await withLockedPlayer(req.telegramUser, async (c, p) => {
+      if (!isAvailable(p[field]))
+        return {
+          status: 429,
+          data: {
+            error: "You have already played today. Come back tomorrow (UTC).",
+            [scratch ? "scratchAvailable" : "velvetAvailable"]: false,
+          },
+        };
+      // Weighted Fortune Coin prizes; client never selects or calculates prizes.
+      const prizes = scratch
+        ? [50, 100, 150, 250, 500, 1000]
+        : [75, 125, 200, 350, 600, 1200];
+      const weights = [30, 27, 20, 13, 8, 2];
+      let ticket = rand(weights.reduce((a, b) => a + b, 0)),
+        prize = prizes[0];
+      for (let i = 0; i < weights.length; i++) {
+        ticket -= weights[i];
+        if (ticket < 0) {
+          prize = prizes[i];
+          break;
+        }
+      }
+      const balance = Number(p.balance) + prize;
+      if (!Number.isSafeInteger(balance))
+        return { status: 500, data: { error: "Balance limit exceeded." } };
+      // Field is chosen from a fixed allowlist above, never user-supplied SQL.
+      await c.query(
+        `UPDATE players SET balance=$1,${field}=NOW(),updated_at=NOW() WHERE telegram_id=$2`,
+        [balance, String(p.telegram_id)],
+      );
+      return {
+        status: 200,
+        data: {
+          success: true,
+          game: kind,
+          prize,
+          balance,
+          [scratch ? "scratchAvailable" : "velvetAvailable"]: false,
+          ...(!scratch ? { door: req.body.door } : {}),
+        },
+      };
+    });
+    return res.status(result.status).json(result.data);
+  } catch (e) {
+    console.error(`/api/${kind}`, e);
+    return res
+      .status(500)
+      .json({ error: "Prize could not be claimed. Transaction rolled back." });
+  }
 }
-app.post("/api/scratch",auth,(req,res)=>claimDailyGame(req,res,"scratch"));
-app.post("/api/velvet",auth,(req,res)=>claimDailyGame(req,res,"velvet"));
-
+app.post("/api/scratch", auth, (req, res) =>
+  claimDailyGame(req, res, "scratch"),
+);
+app.post("/api/velvet", auth, (req, res) => claimDailyGame(req, res, "velvet"));
 
 /* Fortune Coin gifts: recipient must be an existing player with a unique
    Telegram username. Never accept sender ID or balances from the client. */
-const GIFT_AMOUNTS=[100,250,500,1000,2500,5000];
-const GIFT_DAILY_LIMIT=10000, GIFT_DAILY_COUNT=10;
-const GIFT_DAY_SQL="(date_trunc('day', NOW() AT TIME ZONE 'UTC') AT TIME ZONE 'UTC')";
-function giftUsername(value){
- const name=String(value||'').trim().replace(/^@/,'');
- if(!/^[A-Za-z][A-Za-z0-9_]{4,31}$/.test(name))throw Error('Enter a valid Telegram username (5–32 characters).');
- return name;
+const GIFT_AMOUNTS = [100, 250, 500, 1000, 2500, 5000];
+const GIFT_DAILY_LIMIT = 10000,
+  GIFT_DAILY_COUNT = 10;
+const GIFT_DAY_SQL =
+  "(date_trunc('day', NOW() AT TIME ZONE 'UTC') AT TIME ZONE 'UTC')";
+function giftUsername(value) {
+  const name = String(value || "")
+    .trim()
+    .replace(/^@/, "");
+  if (!/^[A-Za-z][A-Za-z0-9_]{4,31}$/.test(name))
+    throw Error("Enter a valid Telegram username (5–32 characters).");
+  return name;
 }
-async function giftRecipient(db,username){
- const r=await db.query('SELECT telegram_id,username FROM players WHERE lower(username)=lower($1) LIMIT 2',[username]);
- if(r.rowCount===0)throw Error('Player not found. They must open SPOILED ROTTEN in Telegram first.');
- if(r.rowCount!==1)throw Error('Username is ambiguous. Ask the player to update their Telegram username.');
- return r.rows[0];
+async function giftRecipient(db, username) {
+  const r = await db.query(
+    "SELECT telegram_id,username FROM players WHERE lower(username)=lower($1) LIMIT 2",
+    [username],
+  );
+  if (r.rowCount === 0)
+    throw Error(
+      "Player not found. They must open SPOILED ROTTEN in Telegram first.",
+    );
+  if (r.rowCount !== 1)
+    throw Error(
+      "Username is ambiguous. Ask the player to update their Telegram username.",
+    );
+  return r.rows[0];
 }
-app.post('/api/gift/lookup',auth,async(req,res)=>{
- try{
-  const username=giftUsername(req.body?.username);
-  const p=await giftRecipient(pool,username);
-  if(String(p.telegram_id)===String(req.telegramUser.id))return res.status(400).json({error:'You cannot gift yourself.'});
-  res.json({success:true,recipient:{username:p.username}});
- }catch(e){res.status(400).json({error:e.message||'Unable to find player'})}
+app.post("/api/gift/lookup", auth, async (req, res) => {
+  try {
+    const username = giftUsername(req.body?.username);
+    const p = await giftRecipient(pool, username);
+    if (String(p.telegram_id) === String(req.telegramUser.id))
+      return res.status(400).json({ error: "You cannot gift yourself." });
+    res.json({ success: true, recipient: { username: p.username } });
+  } catch (e) {
+    res.status(400).json({ error: e.message || "Unable to find player" });
+  }
 });
-app.post('/api/gift/history',auth,async(req,res)=>{
- try{
-  const r=await pool.query(`SELECT g.amount,g.created_at,g.sender_id,g.recipient_id,
+app.post("/api/gift/history", auth, async (req, res) => {
+  try {
+    const r = await pool.query(
+      `SELECT g.amount,g.created_at,g.sender_id,g.recipient_id,
    s.username AS sender_username,t.username AS recipient_username
    FROM fortune_coin_gifts g JOIN players s ON s.telegram_id=g.sender_id
    JOIN players t ON t.telegram_id=g.recipient_id
    WHERE g.sender_id=$1 OR g.recipient_id=$1
-   ORDER BY g.created_at DESC,g.id DESC LIMIT 15`,[String(req.telegramUser.id)]);
-  res.json({success:true,gifts:r.rows.map(x=>({amount:Number(x.amount),date:x.created_at,
-   direction:String(x.sender_id)===String(req.telegramUser.id)?'sent':'received',
-   username:String(x.sender_id)===String(req.telegramUser.id)?x.recipient_username:x.sender_username}))});
- }catch(e){console.error('/api/gift/history',e);res.status(500).json({error:'Gift history unavailable'})}
-});
-app.post('/api/gift',auth,async(req,res)=>{
- const amount=Number(req.body?.amount);
- if(!Number.isSafeInteger(amount)||!GIFT_AMOUNTS.includes(amount))return res.status(400).json({error:'Choose 100, 250, 500, 1000, 2500, or 5000 coins.'});
- const requestId=String(req.body?.requestId||'');
- if(!/^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(requestId))return res.status(400).json({error:'Invalid gift request. Reopen the gift form.'});
- let username;
- try{username=giftUsername(req.body?.username)}catch(e){return res.status(400).json({error:e.message})}
- const c=await pool.connect();
- try{
-  await c.query('BEGIN');
-  const recipient=await giftRecipient(c,username);
-  const senderId=String(req.telegramUser.id),recipientId=String(recipient.telegram_id);
-  if(senderId===recipientId){await c.query('ROLLBACK');return res.status(400).json({error:'You cannot gift yourself.'})}
-  // Deterministic row locking prevents opposing transfers from deadlocking.
-  const ids=[senderId,recipientId].sort((a,b)=>BigInt(a)<BigInt(b)?-1:BigInt(a)>BigInt(b)?1:0);
-  const locked=[];
-  for(const id of ids){const r=await c.query('SELECT telegram_id,balance FROM players WHERE telegram_id=$1 FOR UPDATE',[id]);if(!r.rowCount)throw Error('Player account not found');locked.push(r.rows[0])}
-  const previous=await c.query('SELECT g.amount,g.recipient_id,p.username FROM fortune_coin_gifts g JOIN players p ON p.telegram_id=g.recipient_id WHERE g.sender_id=$1 AND g.request_id=$2',[senderId,requestId]);
-  if(previous.rowCount){
-   const prev=previous.rows[0];
-   if(Number(prev.amount)!==amount||String(prev.recipient_id)!==recipientId){await c.query('ROLLBACK');return res.status(409).json({error:'This request was already used for another gift.'})}
-   const sender=locked.find(p=>String(p.telegram_id)===senderId);
-   await c.query('COMMIT');return res.json({success:true,duplicate:true,amount,recipient:prev.username,balance:Number(sender.balance)});
+   ORDER BY g.created_at DESC,g.id DESC LIMIT 15`,
+      [String(req.telegramUser.id)],
+    );
+    res.json({
+      success: true,
+      gifts: r.rows.map((x) => ({
+        amount: Number(x.amount),
+        date: x.created_at,
+        direction:
+          String(x.sender_id) === String(req.telegramUser.id)
+            ? "sent"
+            : "received",
+        username:
+          String(x.sender_id) === String(req.telegramUser.id)
+            ? x.recipient_username
+            : x.sender_username,
+      })),
+    });
+  } catch (e) {
+    console.error("/api/gift/history", e);
+    res.status(500).json({ error: "Gift history unavailable" });
   }
-  const sender=locked.find(p=>String(p.telegram_id)===senderId),receiver=locked.find(p=>String(p.telegram_id)===recipientId);
-  const senderBalance=Number(sender.balance),receiverBalance=Number(receiver.balance);
-  if(!Number.isSafeInteger(senderBalance)||!Number.isSafeInteger(receiverBalance)||!Number.isSafeInteger(receiverBalance+amount))throw Error('Balance is out of range');
-  if(senderBalance<amount){await c.query('ROLLBACK');return res.status(400).json({error:'Not enough KillaCoins to send this gift.'})}
-  const daily=await c.query(`SELECT COUNT(*)::int AS count,COALESCE(SUM(amount),0)::bigint AS total FROM fortune_coin_gifts WHERE sender_id=$1 AND created_at>=${GIFT_DAY_SQL}`,[senderId]);
-  if(Number(daily.rows[0].count)>=GIFT_DAILY_COUNT||Number(daily.rows[0].total)+amount>GIFT_DAILY_LIMIT){await c.query('ROLLBACK');return res.status(429).json({error:'Daily gifting limit reached. Try again tomorrow (UTC).'})}
-  await c.query('UPDATE players SET balance=balance-$1,updated_at=NOW() WHERE telegram_id=$2',[amount,senderId]);
-  await c.query('UPDATE players SET balance=balance+$1,updated_at=NOW() WHERE telegram_id=$2',[amount,recipientId]);
-  await c.query('INSERT INTO fortune_coin_gifts(sender_id,recipient_id,amount,request_id) VALUES($1,$2,$3,$4)',[senderId,recipientId,amount,requestId]);
-  await c.query('COMMIT');
-  return res.json({success:true,amount,recipient:recipient.username,balance:senderBalance-amount});
- }catch(e){try{await c.query('ROLLBACK')}catch{}console.error('/api/gift',e);return res.status(500).json({error:'Gift could not be sent. No transfer was committed.'})}
- finally{c.release()}
 });
-
+app.post("/api/gift", auth, async (req, res) => {
+  if (req.telegramUser.guest)
+    return res.status(403).json({ error: "Gifting requires Telegram." });
+  const amount = Number(req.body?.amount);
+  if (!Number.isSafeInteger(amount) || !GIFT_AMOUNTS.includes(amount))
+    return res
+      .status(400)
+      .json({ error: "Choose 100, 250, 500, 1000, 2500, or 5000 coins." });
+  const requestId = String(req.body?.requestId || "");
+  if (
+    !/^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(
+      requestId,
+    )
+  )
+    return res
+      .status(400)
+      .json({ error: "Invalid gift request. Reopen the gift form." });
+  let username;
+  try {
+    username = giftUsername(req.body?.username);
+  } catch (e) {
+    return res.status(400).json({ error: e.message });
+  }
+  const c = await pool.connect();
+  try {
+    await c.query("BEGIN");
+    const recipient = await giftRecipient(c, username);
+    const senderId = String(req.telegramUser.id),
+      recipientId = String(recipient.telegram_id);
+    if (BigInt(recipientId) <= 0) {
+      await c.query("ROLLBACK");
+      return res.status(400).json({ error: "Choose a Telegram recipient." });
+    }
+    if (senderId === recipientId) {
+      await c.query("ROLLBACK");
+      return res.status(400).json({ error: "You cannot gift yourself." });
+    }
+    // Deterministic row locking prevents opposing transfers from deadlocking.
+    const ids = [senderId, recipientId].sort((a, b) =>
+      BigInt(a) < BigInt(b) ? -1 : BigInt(a) > BigInt(b) ? 1 : 0,
+    );
+    const locked = [];
+    for (const id of ids) {
+      const r = await c.query(
+        "SELECT telegram_id,balance FROM players WHERE telegram_id=$1 FOR UPDATE",
+        [id],
+      );
+      if (!r.rowCount) throw Error("Player account not found");
+      locked.push(r.rows[0]);
+    }
+    const previous = await c.query(
+      "SELECT g.amount,g.recipient_id,p.username FROM fortune_coin_gifts g JOIN players p ON p.telegram_id=g.recipient_id WHERE g.sender_id=$1 AND g.request_id=$2",
+      [senderId, requestId],
+    );
+    if (previous.rowCount) {
+      const prev = previous.rows[0];
+      if (
+        Number(prev.amount) !== amount ||
+        String(prev.recipient_id) !== recipientId
+      ) {
+        await c.query("ROLLBACK");
+        return res
+          .status(409)
+          .json({ error: "This request was already used for another gift." });
+      }
+      const sender = locked.find((p) => String(p.telegram_id) === senderId);
+      await c.query("COMMIT");
+      return res.json({
+        success: true,
+        duplicate: true,
+        amount,
+        recipient: prev.username,
+        balance: Number(sender.balance),
+      });
+    }
+    const sender = locked.find((p) => String(p.telegram_id) === senderId),
+      receiver = locked.find((p) => String(p.telegram_id) === recipientId);
+    const senderBalance = Number(sender.balance),
+      receiverBalance = Number(receiver.balance);
+    if (
+      !Number.isSafeInteger(senderBalance) ||
+      !Number.isSafeInteger(receiverBalance) ||
+      !Number.isSafeInteger(receiverBalance + amount)
+    )
+      throw Error("Balance is out of range");
+    if (senderBalance < amount) {
+      await c.query("ROLLBACK");
+      return res
+        .status(400)
+        .json({ error: "Not enough KillaCoins to send this gift." });
+    }
+    const daily = await c.query(
+      `SELECT COUNT(*)::int AS count,COALESCE(SUM(amount),0)::bigint AS total FROM fortune_coin_gifts WHERE sender_id=$1 AND created_at>=${GIFT_DAY_SQL}`,
+      [senderId],
+    );
+    if (
+      Number(daily.rows[0].count) >= GIFT_DAILY_COUNT ||
+      Number(daily.rows[0].total) + amount > GIFT_DAILY_LIMIT
+    ) {
+      await c.query("ROLLBACK");
+      return res
+        .status(429)
+        .json({
+          error: "Daily gifting limit reached. Try again tomorrow (UTC).",
+        });
+    }
+    await c.query(
+      "UPDATE players SET balance=balance-$1,updated_at=NOW() WHERE telegram_id=$2",
+      [amount, senderId],
+    );
+    await c.query(
+      "UPDATE players SET balance=balance+$1,updated_at=NOW() WHERE telegram_id=$2",
+      [amount, recipientId],
+    );
+    await c.query(
+      "INSERT INTO fortune_coin_gifts(sender_id,recipient_id,amount,request_id) VALUES($1,$2,$3,$4)",
+      [senderId, recipientId, amount, requestId],
+    );
+    await c.query("COMMIT");
+    return res.json({
+      success: true,
+      amount,
+      recipient: recipient.username,
+      balance: senderBalance - amount,
+    });
+  } catch (e) {
+    try {
+      await c.query("ROLLBACK");
+    } catch {}
+    console.error("/api/gift", e);
+    return res
+      .status(500)
+      .json({ error: "Gift could not be sent. No transfer was committed." });
+  } finally {
+    c.release();
+  }
+});
 
 // SQUIRT CITY, BITCH! — separate server-authoritative slot machine.
 // Same Fortune Coin wallet; separate free-spin balance and payout engine.
-const SC_BETS=[100,250,500,1000];
-const SC_WEIGHTS=[["splash",7],["diamond",5],["neon7",9],["heart",17],["bolt",17],["moon",17],["bubble",14],["afterhours",3]];
-const SC_LINES=[[0,3,6,9,12],[1,4,7,10,13],[2,5,8,11,14],[0,4,8,10,12],[2,4,6,10,14]];
-function scSymbol(){let n=rand(SC_WEIGHTS.reduce((a,x)=>a+x[1],0));for(const [s,w] of SC_WEIGHTS){n-=w;if(n<0)return s}return "bubble"}
+const SC_BETS = [100, 250, 500, 1000];
+const SC_WEIGHTS = [
+  ["splash", 7],
+  ["diamond", 5],
+  ["neon7", 9],
+  ["heart", 17],
+  ["bolt", 17],
+  ["moon", 17],
+  ["bubble", 14],
+  ["afterhours", 3],
+];
+const SC_LINES = [
+  [0, 3, 6, 9, 12],
+  [1, 4, 7, 10, 13],
+  [2, 5, 8, 11, 14],
+  [0, 4, 8, 10, 12],
+  [2, 4, 6, 10, 14],
+];
+function scSymbol() {
+  let n = rand(SC_WEIGHTS.reduce((a, x) => a + x[1], 0));
+  for (const [s, w] of SC_WEIGHTS) {
+    n -= w;
+    if (n < 0) return s;
+  }
+  return "bubble";
+}
 // Every Fortune Coin payout is tied to a visible, left-to-right payline.
 // Wilds substitute for ordinary symbols; AFTER HOURS scatters award free spins.
 // Multipliers are percentages of the total stake, not unearned random refunds.
-const SC_PAYTABLE={
-  bubble:[0,15,65,180,900],moon:[0,20,75,250,1200],
-  bolt:[0,20,85,300,1600],heart:[0,25,95,350,2000],
-  diamond:[0,30,140,600,4500],neon7:[0,40,180,900,8000]
+const SC_PAYTABLE = {
+  bubble: [0, 0, 15, 65, 180, 900],
+  moon: [0, 0, 20, 75, 250, 1200],
+  bolt: [0, 0, 20, 85, 300, 1600],
+  heart: [0, 0, 25, 95, 350, 2000],
+  diamond: [0, 0, 30, 140, 600, 4500],
+  neon7: [0, 0, 40, 180, 900, 8000],
 };
-function scPayout(reels,bet){
- const wins=[];let total=0;
- for(let i=0;i<SC_LINES.length;i++){
-  const indexes=SC_LINES[i],sequence=indexes.map(x=>reels[x]);
-  // The first non-WILD symbol defines the matching combination.
-  // Three or more WILDs on their own also form a visible win.
-  const target=sequence.find(x=>x!=="splash");
-  if(target==="afterhours")continue;
-  const paySymbol=target||"neon7";
-  if(!SC_PAYTABLE[paySymbol])continue;
-  let count=0,wilds=0;
-  for(const symbol of sequence){
-   if(symbol===paySymbol||symbol==="splash"){
-    count++;if(symbol==="splash")wilds++;
-   }else break;
+function scPayout(reels, bet) {
+  const wins = [];
+  let total = 0;
+  for (let i = 0; i < SC_LINES.length; i++) {
+    const indexes = SC_LINES[i],
+      sequence = indexes.map((x) => reels[x]);
+    // The first non-WILD symbol defines the matching combination.
+    // Three or more WILDs on their own also form a visible win.
+    const target = sequence.find((x) => x !== "splash");
+    if (target === "afterhours") continue;
+    const paySymbol = target || "neon7";
+    if (!SC_PAYTABLE[paySymbol]) continue;
+    let count = 0,
+      wilds = 0;
+    for (const symbol of sequence) {
+      if (symbol === paySymbol || symbol === "splash") {
+        count++;
+        if (symbol === "splash") wilds++;
+      } else break;
+    }
+    if (count < 2) continue;
+    // One wild doubles 3+ symbol wins; 2+ wilds triple them.
+    // Two-symbol payouts stay small, always less than a full stake.
+    const flow = count >= 3 ? (wilds >= 2 ? 3 : wilds === 1 ? 2 : 1) : 1;
+    const percent = SC_PAYTABLE[paySymbol][count];
+    const amount = Math.floor((bet * percent * flow) / 100);
+    if (amount <= 0) continue;
+    total += amount;
+    wins.push({
+      line: i + 1,
+      indexes: indexes.slice(0, count),
+      symbol: paySymbol,
+      matches: count,
+      multiplier: flow,
+      win: amount,
+    });
   }
-  if(count<2)continue;
-  // One wild doubles 3+ symbol wins; 2+ wilds triple them.
-  // Two-symbol payouts stay small, always less than a full stake.
-  const flow=count>=3?(wilds>=2?3:wilds===1?2:1):1;
-  const percent=SC_PAYTABLE[paySymbol][count];
-  const amount=Math.floor(bet*percent*flow/100);
-  if(amount<=0)continue;
-  total+=amount;
-  wins.push({line:i+1,indexes:indexes.slice(0,count),symbol:paySymbol,
-    matches:count,multiplier:flow,win:amount});
- }
- return {total,wins};
+  return { total, wins };
 }
-app.post("/api/squirt/spin",auth,async(req,res)=>{
- const bet=Number(req.body?.bet);
- if(!Number.isSafeInteger(bet)||!SC_BETS.includes(bet))return res.status(400).json({error:"Choose a valid Squirt City bet."});
- try{
-  const out=await withLockedPlayer(req.telegramUser,async(c,p)=>{
-   const free=Number(p.squirt_free_spins||0)>0,balance=Number(p.balance);
-   if(!free&&balance<bet)return {status:400,data:{error:"Not enough KillaCoins."}};
-   const symbols=Array.from({length:15},scSymbol),payout=scPayout(symbols,bet);
-   const scatterCount=symbols.filter(x=>x==="afterhours").length;
-   const awardedFreeSpins=0;
-   const diamondCount=symbols.filter(x=>x==="diamond").length;
-   const startsSlide=diamondCount>=3&&(!p.slide_bonus||p.slide_bonus.done);
-   const freeSpins=Math.max(0,Number(p.squirt_free_spins||0)-(free?1:0))+awardedFreeSpins;
-   // No arbitrary partial returns: payouts come only from matching reels.
-   const totalAward=payout.total;
-   const next=balance-(free?0:bet)+totalAward;
-   if(!Number.isSafeInteger(next)||next<0)return {status:500,data:{error:"Balance limit exceeded."}};
-   await c.query("UPDATE players SET balance=$1,squirt_free_spins=$2,slide_bonus=CASE WHEN $4 THEN $5::jsonb ELSE slide_bonus END,updated_at=NOW() WHERE telegram_id=$3",[next,freeSpins,String(p.telegram_id),startsSlide,JSON.stringify(makeTapBonus(bet,diamondCount))]);
-   if(!free)await arcadeQualify(c,p.telegram_id);
-   return {status:200,data:{success:true,symbols,bet,win:totalAward,smallReturn:0,winningLines:payout.wins,balance:next,freeSpinUsed:free,freeSpins,awardedFreeSpins,scatterCount,slideBonusTriggered:startsSlide,slideBonusPending:!!(p.slide_bonus&&!p.slide_bonus.done),bonusDiamonds:diamondCount}};
-  });
-  return res.status(out.status).json(out.data);
- }catch(e){console.error("/api/squirt/spin",e);return res.status(500).json({error:"Squirt City spin failed. No coins were charged."})}
+app.post("/api/squirt/spin", auth, async (req, res) => {
+  const requestedBet = Number(req.body?.bet);
+  if (!Number.isSafeInteger(requestedBet) || !SC_BETS.includes(requestedBet))
+    return res.status(400).json({ error: "Choose a valid Squirt City bet." });
+  try {
+    const out = await withLockedPlayer(req.telegramUser, async (c, p) => {
+      const free = Number(p.squirt_free_spins || 0) > 0,
+        balance = Number(p.balance);
+      const bet = free ? Number(p.squirt_free_spin_bet) : requestedBet;
+      if (!free && balance < bet)
+        return { status: 400, data: { error: "Not enough KillaCoins." } };
+      const symbols = Array.from({ length: 15 }, scSymbol),
+        payout = scPayout(symbols, bet);
+      const scatterCount = symbols.filter((x) => x === "afterhours").length;
+      const awardedFreeSpins =
+        scatterCount >= 3 ? Math.min(20, 5 * (scatterCount - 2)) : 0;
+      const diamondCount = symbols.filter((x) => x === "diamond").length;
+      const startsSlide =
+        diamondCount >= 3 &&
+        (!p.slide_bonus || p.slide_bonus.done || p.slide_bonus.version !== 2);
+      const freeSpins =
+        Math.max(0, Number(p.squirt_free_spins || 0) - (free ? 1 : 0)) +
+        awardedFreeSpins;
+      // No arbitrary partial returns: payouts come only from matching reels.
+      const totalAward = payout.total;
+      const next = balance - (free ? 0 : bet) + totalAward;
+      if (!Number.isSafeInteger(next) || next < 0)
+        return { status: 500, data: { error: "Balance limit exceeded." } };
+      await c.query(
+        "UPDATE players SET balance=$1,squirt_free_spins=$2,squirt_free_spin_bet=$6,slide_bonus=CASE WHEN $4 THEN $5::jsonb ELSE slide_bonus END,updated_at=NOW() WHERE telegram_id=$3",
+        [
+          next,
+          freeSpins,
+          String(p.telegram_id),
+          startsSlide,
+          JSON.stringify(makeTapBonus(bet, diamondCount)),
+          bet,
+        ],
+      );
+      if (!free) await arcadeQualify(c, p.telegram_id);
+      return {
+        status: 200,
+        data: {
+          success: true,
+          symbols,
+          bet,
+          win: totalAward,
+          smallReturn: 0,
+          winningLines: payout.wins,
+          balance: next,
+          freeSpinUsed: free,
+          freeSpins,
+          awardedFreeSpins,
+          scatterCount,
+          slideBonusTriggered: startsSlide,
+          slideBonusPending: !!(p.slide_bonus && !p.slide_bonus.done),
+          bonusDiamonds: diamondCount,
+        },
+      };
+    });
+    return res.status(out.status).json(out.data);
+  } catch (e) {
+    console.error("/api/squirt/spin", e);
+    return res
+      .status(500)
+      .json({ error: "Squirt City spin failed. No coins were charged." });
+  }
 });
-
 
 /* ILLUSTRATED BONUS BOARD API: authenticated, server-authoritative, row-locked. */
-app.post('/api/bonus/session',auth,async(req,res)=>{
- const kind=req.body?.kind;
- if(kind!=='vault'&&kind!=='slide')return res.status(400).json({error:'Unknown bonus'});
- try{
-  const out=await withLockedPlayer(req.telegramUser,async(c,p)=>{
-   const sess=kind==='vault'?p.vault_bonus:p.slide_bonus;
-   if(!sess)return {status:404,data:{error:'Land at least 3 diamonds to unlock this bonus.'}};
-   if(sess.version!==2)return {status:409,data:{error:'An older bonus session was found. Your previous winnings are safe; a new 3-diamond trigger unlocks this illustrated board.'}};
-   return {status:200,data:{success:true,session:visibleBonus(sess),balance:Number(p.balance)}};
-  });res.status(out.status).json(out.data);
- }catch(e){console.error('/api/bonus/session',e);res.status(500).json({error:'Bonus unavailable'})}
+app.post("/api/bonus/session", auth, async (req, res) => {
+  const kind = req.body?.kind;
+  if (kind !== "vault" && kind !== "slide")
+    return res.status(400).json({ error: "Unknown bonus" });
+  try {
+    const out = await withLockedPlayer(req.telegramUser, async (c, p) => {
+      const sess = kind === "vault" ? p.vault_bonus : p.slide_bonus;
+      if (!sess)
+        return {
+          status: 404,
+          data: { error: "Land at least 3 diamonds to unlock this bonus." },
+        };
+      if (sess.version !== 2)
+        return {
+          status: 409,
+          data: {
+            error:
+              "An older bonus session was found. Your previous winnings are safe; a new 3-diamond trigger unlocks this illustrated board.",
+          },
+        };
+      return {
+        status: 200,
+        data: {
+          success: true,
+          session: visibleBonus(sess),
+          balance: Number(p.balance),
+        },
+      };
+    });
+    res.status(out.status).json(out.data);
+  } catch (e) {
+    console.error("/api/bonus/session", e);
+    res.status(500).json({ error: "Bonus unavailable" });
+  }
 });
 
-app.post('/api/bonus/pick',auth,async(req,res)=>{
- const choice=req.body?.choice;
- if(req.body?.kind!=='vault'||!Number.isInteger(choice)||choice<0||choice>=12)return res.status(400).json({error:'Choose one of the 12 presents.'});
- try{
-  const out=await withLockedPlayer(req.telegramUser,async(c,p)=>{
-   const sess=p.vault_bonus;
-   if(!sess||sess.version!==2)return {status:404,data:{error:'No illustrated gift bonus is active.'}};
-   if(sess.done)return {status:409,data:{error:'Bonus already completed',session:visibleBonus(sess)}};
-   if(sess.history.some(h=>h.choice===choice))return {status:409,data:{error:'Present already opened',session:visibleBonus(sess)}};
-   if(sess.stage>=sess.picks)return {status:409,data:{error:'No picks remaining',session:visibleBonus(sess)}};
-   const award=sess.awards[choice];
-   if(!Number.isSafeInteger(award)||award<0)return {status:500,data:{error:'Invalid stored prize'}};
-   const balance=Number(p.balance)+award;
-   if(!Number.isSafeInteger(balance))return {status:500,data:{error:'Balance limit exceeded'}};
-   sess.stage++;sess.total+=award;
-   sess.history.push({choice,award,stage:sess.stage});sess.opened.push(choice);
-   sess.done=sess.stage>=sess.picks;
-   await c.query('UPDATE players SET vault_bonus=$1::jsonb,balance=$2,updated_at=NOW() WHERE telegram_id=$3',[JSON.stringify(sess),balance,String(p.telegram_id)]);
-   return {status:200,data:{success:true,award,balance,session:visibleBonus(sess)}};
-  });res.status(out.status).json(out.data);
- }catch(e){console.error('/api/bonus/pick',e);res.status(500).json({error:'Prize reveal failed. No payout was committed.'})}
+app.post("/api/bonus/pick", auth, async (req, res) => {
+  const choice = req.body?.choice;
+  if (
+    req.body?.kind !== "vault" ||
+    !Number.isInteger(choice) ||
+    choice < 0 ||
+    choice >= 12
+  )
+    return res.status(400).json({ error: "Choose one of the 12 presents." });
+  try {
+    const out = await withLockedPlayer(req.telegramUser, async (c, p) => {
+      const sess = p.vault_bonus;
+      if (!sess || sess.version !== 2)
+        return {
+          status: 404,
+          data: { error: "No illustrated gift bonus is active." },
+        };
+      if (sess.done)
+        return {
+          status: 409,
+          data: {
+            error: "Bonus already completed",
+            session: visibleBonus(sess),
+          },
+        };
+      if (sess.history.some((h) => h.choice === choice))
+        return {
+          status: 409,
+          data: {
+            error: "Present already opened",
+            session: visibleBonus(sess),
+          },
+        };
+      if (sess.stage >= sess.picks)
+        return {
+          status: 409,
+          data: { error: "No picks remaining", session: visibleBonus(sess) },
+        };
+      const award = sess.awards[choice];
+      if (!Number.isSafeInteger(award) || award < 0)
+        return { status: 500, data: { error: "Invalid stored prize" } };
+      const balance = Number(p.balance) + award;
+      if (!Number.isSafeInteger(balance))
+        return { status: 500, data: { error: "Balance limit exceeded" } };
+      sess.stage++;
+      sess.total += award;
+      sess.history.push({ choice, award, stage: sess.stage });
+      sess.opened.push(choice);
+      sess.done = sess.stage >= sess.picks;
+      await c.query(
+        "UPDATE players SET vault_bonus=$1::jsonb,balance=$2,updated_at=NOW() WHERE telegram_id=$3",
+        [JSON.stringify(sess), balance, String(p.telegram_id)],
+      );
+      return {
+        status: 200,
+        data: { success: true, award, balance, session: visibleBonus(sess) },
+      };
+    });
+    res.status(out.status).json(out.data);
+  } catch (e) {
+    console.error("/api/bonus/pick", e);
+    res
+      .status(500)
+      .json({ error: "Prize reveal failed. No payout was committed." });
+  }
 });
 
-app.post('/api/bonus/start',auth,async(req,res)=>{
- if(req.body?.kind!=='slide')return res.status(400).json({error:'Invalid bonus'});
- try{
-  const out=await withLockedPlayer(req.telegramUser,async(c,p)=>{
-   const sess=p.slide_bonus;
-   if(!sess||sess.version!==2)return {status:404,data:{error:'No tap bonus is active.'}};
-   if(sess.done)return {status:409,data:{error:'This tap round is complete.',session:visibleBonus(sess)}};
-   if(!sess.startedAt){
-    const started=Date.now();sess.startedAt=new Date(started).toISOString();sess.expiresAt=new Date(started+sess.duration*1000).toISOString();
-    await c.query('UPDATE players SET slide_bonus=$1::jsonb,updated_at=NOW() WHERE telegram_id=$2',[JSON.stringify(sess),String(p.telegram_id)]);
-   }
-   return {status:200,data:{success:true,session:visibleBonus(sess),balance:Number(p.balance)}};
-  });res.status(out.status).json(out.data);
- }catch(e){console.error('/api/bonus/start',e);res.status(500).json({error:'Could not start the timer'})}
+app.post("/api/bonus/start", auth, async (req, res) => {
+  if (req.body?.kind !== "slide")
+    return res.status(400).json({ error: "Invalid bonus" });
+  try {
+    const out = await withLockedPlayer(req.telegramUser, async (c, p) => {
+      const sess = p.slide_bonus;
+      if (!sess || sess.version !== 2)
+        return { status: 404, data: { error: "No tap bonus is active." } };
+      if (sess.done)
+        return {
+          status: 409,
+          data: {
+            error: "This tap round is complete.",
+            session: visibleBonus(sess),
+          },
+        };
+      if (!sess.startedAt) {
+        const started = Date.now();
+        sess.startedAt = new Date(started).toISOString();
+        sess.expiresAt = new Date(started + sess.duration * 1000).toISOString();
+        await c.query(
+          "UPDATE players SET slide_bonus=$1::jsonb,updated_at=NOW() WHERE telegram_id=$2",
+          [JSON.stringify(sess), String(p.telegram_id)],
+        );
+      }
+      return {
+        status: 200,
+        data: {
+          success: true,
+          session: visibleBonus(sess),
+          balance: Number(p.balance),
+        },
+      };
+    });
+    res.status(out.status).json(out.data);
+  } catch (e) {
+    console.error("/api/bonus/start", e);
+    res.status(500).json({ error: "Could not start the timer" });
+  }
 });
 
 // Cumulative tap requests prevent duplicate credits from network retries.
 // 16 verified taps/second rewards fast tapping while limiting automated abuse.
-async function settleTap(req,res,finish){
- const requested=req.body?.taps;
- if(req.body?.kind!=='slide'||!Number.isSafeInteger(requested)||requested<0||requested>100000)return res.status(400).json({error:'Invalid tap count'});
- try{
-  const out=await withLockedPlayer(req.telegramUser,async(c,p)=>{
-   const sess=p.slide_bonus;
-   if(!sess||sess.version!==2)return {status:404,data:{error:'No tap bonus is active.'}};
-   if(!sess.startedAt)return {status:409,data:{error:'Start the countdown first.',session:visibleBonus(sess)}};
-   if(sess.done)return {status:200,data:{success:true,session:visibleBonus(sess),balance:Number(p.balance)}};
-   const now=Date.now(),start=Date.parse(sess.startedAt),end=Date.parse(sess.expiresAt);
-   const late=now>end+2000;
-   const elapsed=Math.min(sess.duration,Math.max(0,(Math.min(now,end)-start)/1000));
-   const cap=Math.min(sess.duration*MAX_VERIFIED_TAPS_PER_SECOND,Math.floor(elapsed*MAX_VERIFIED_TAPS_PER_SECOND)+2);
-   const accepted=Math.max(Number(sess.taps||0),Math.min(requested,cap));
-   const delta=late?0:accepted-Number(sess.taps||0);
-   const newBalance=Number(p.balance)+delta*sess.bet;
-   if(!Number.isSafeInteger(newBalance))return {status:500,data:{error:'Balance limit exceeded'}};
-   if(delta>0){sess.taps+=delta;sess.total+=delta*sess.bet;}
-   if(finish||late)sess.done=true;
-   if(delta>0||sess.done){await c.query('UPDATE players SET slide_bonus=$1::jsonb,balance=$2,updated_at=NOW() WHERE telegram_id=$3',[JSON.stringify(sess),newBalance,String(p.telegram_id)]);}
-   return {status:200,data:{success:true,credited:delta,session:visibleBonus(sess),balance:newBalance}};
-  });res.status(out.status).json(out.data);
- }catch(e){console.error('/api/bonus/tap',e);res.status(500).json({error:'Tap update failed. Wallet unchanged.'})}
+async function settleTap(req, res, finish) {
+  const requested = req.body?.taps;
+  if (
+    req.body?.kind !== "slide" ||
+    !Number.isSafeInteger(requested) ||
+    requested < 0 ||
+    requested > 100000
+  )
+    return res.status(400).json({ error: "Invalid tap count" });
+  try {
+    const out = await withLockedPlayer(req.telegramUser, async (c, p) => {
+      const sess = p.slide_bonus;
+      if (!sess || sess.version !== 2)
+        return { status: 404, data: { error: "No tap bonus is active." } };
+      if (!sess.startedAt)
+        return {
+          status: 409,
+          data: {
+            error: "Start the countdown first.",
+            session: visibleBonus(sess),
+          },
+        };
+      if (sess.done)
+        return {
+          status: 200,
+          data: {
+            success: true,
+            session: visibleBonus(sess),
+            balance: Number(p.balance),
+          },
+        };
+      const now = Date.now(),
+        start = Date.parse(sess.startedAt),
+        end = Date.parse(sess.expiresAt);
+      const late = now > end + 2000;
+      const elapsed = Math.min(
+        sess.duration,
+        Math.max(0, (Math.min(now, end) - start) / 1000),
+      );
+      const cap = Math.min(
+        sess.duration * MAX_VERIFIED_TAPS_PER_SECOND,
+        Math.floor(elapsed * MAX_VERIFIED_TAPS_PER_SECOND) + 2,
+      );
+      const accepted = Math.max(
+        Number(sess.taps || 0),
+        Math.min(requested, cap),
+      );
+      const delta = late ? 0 : accepted - Number(sess.taps || 0);
+      const newBalance = Number(p.balance) + delta * sess.bet;
+      if (!Number.isSafeInteger(newBalance))
+        return { status: 500, data: { error: "Balance limit exceeded" } };
+      if (delta > 0) {
+        sess.taps += delta;
+        sess.total += delta * sess.bet;
+      }
+      if (finish || late) sess.done = true;
+      if (delta > 0 || sess.done) {
+        await c.query(
+          "UPDATE players SET slide_bonus=$1::jsonb,balance=$2,updated_at=NOW() WHERE telegram_id=$3",
+          [JSON.stringify(sess), newBalance, String(p.telegram_id)],
+        );
+      }
+      return {
+        status: 200,
+        data: {
+          success: true,
+          credited: delta,
+          session: visibleBonus(sess),
+          balance: newBalance,
+        },
+      };
+    });
+    res.status(out.status).json(out.data);
+  } catch (e) {
+    console.error("/api/bonus/tap", e);
+    res.status(500).json({ error: "Tap update failed. Wallet unchanged." });
+  }
 }
-app.post('/api/bonus/tap',auth,(req,res)=>settleTap(req,res,false));
-app.post('/api/bonus/finish',auth,(req,res)=>settleTap(req,res,true));
-
+app.post("/api/bonus/tap", auth, (req, res) => settleTap(req, res, false));
+app.post("/api/bonus/finish", auth, (req, res) => settleTap(req, res, true));
 
 // Arcade expansion: additive tables and server-authoritative prizes.
-async function arcadeQualify(c,id){
- await c.query(`INSERT INTO arcade_progress(player_id,qualifying_rounds,wheel_tickets) VALUES($1,1,0)
+async function arcadeQualify(c, id) {
+  await c.query(
+    `INSERT INTO arcade_progress(player_id,qualifying_rounds,wheel_tickets) VALUES($1,1,0)
  ON CONFLICT(player_id) DO UPDATE SET qualifying_rounds=arcade_progress.qualifying_rounds+1,
- wheel_tickets=arcade_progress.wheel_tickets+CASE WHEN (arcade_progress.qualifying_rounds+1)%10=0 THEN 1 ELSE 0 END`,[String(id)]);
+ wheel_tickets=arcade_progress.wheel_tickets+CASE WHEN (arcade_progress.qualifying_rounds+1)%10=0 THEN 1 ELSE 0 END`,
+    [String(id)],
+  );
 }
-const ARCADE_BETS=[100,250,500];
-const arcadeUuid=x=>typeof x==='string'&&/^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(x);
-function arcadePrize(options){let total=options.reduce((a,b)=>a+b[1],0),r=rand(total);for(const [value,weight] of options){r-=weight;if(r<0)return value}return options[0][0]}
-app.post('/api/arcade/state',auth,async(req,res)=>{try{
- await playerFor(req.telegramUser);
- const r=await pool.query('SELECT qualifying_rounds,wheel_tickets FROM arcade_progress WHERE player_id=$1',[String(req.telegramUser.id)]);
- res.json({success:true,qualifyingRounds:Number(r.rows[0]?.qualifying_rounds||0),wheelTickets:Number(r.rows[0]?.wheel_tickets||0)});
- }catch(e){console.error(e);res.status(500).json({error:'Arcade state unavailable'})}});
-app.post('/api/arcade/play',auth,async(req,res)=>{
- const game=req.body?.game,requestId=req.body?.requestId,bet=Number(req.body?.bet||0);
- if(!['duck','claw','obsession'].includes(game)||!arcadeUuid(requestId))return res.status(400).json({error:'Invalid arcade round'});
- if(game!=='obsession'&&!ARCADE_BETS.includes(bet))return res.status(400).json({error:'Choose 100, 250, or 500 KillaCoins'});
- if(game==='obsession'&&bet!==0)return res.status(400).json({error:'Wheel spins use earned tickets only'});
- try{
- const out=await withLockedPlayer(req.telegramUser,async(c,p)=>{
-  const previous=await c.query('SELECT result FROM arcade_rounds WHERE player_id=$1 AND request_id=$2',[String(p.telegram_id),requestId]);
-  if(previous.rowCount)return {status:200,data:{...previous.rows[0].result,duplicate:true}};
-  const oldBalance=Number(p.balance);
-  if(game!=='obsession'&&oldBalance<bet)return {status:400,data:{error:'Not enough KillaCoins'}};
-  let win=0,detail={};
-  if(game==='duck'){
-   // Three independently randomized reveals, then a rare 3-gold bonus.
-   const ducks=Array.from({length:3},()=>arcadePrize([['blank',32],['small',30],['medium',21],['large',12],['gold',5]]));
-   const amounts={blank:0,small:Math.floor(bet*.25),medium:Math.floor(bet*.75),large:bet*2,gold:bet};
-   win=ducks.reduce((a,x)=>a+amounts[x],0);
-   const bonus=ducks.every(x=>x==='gold');if(bonus)win+=bet*10;
-   detail={ducks,bonus};
-  }else if(game==='claw'){
-   const x=Number(req.body?.x),y=Number(req.body?.y);
-   if(!Number.isFinite(x)||!Number.isFinite(y)||x<0||x>1||y<0||y>1)return {status:400,data:{error:'Move the joystick to choose a valid claw position'}};
-   // Positions map to five visible prize shelves; each has independent grip randomness.
-   const shelf=Math.min(4,Math.floor(x*5)),prizes=['heart','bag','diamond','crown','mystery'];
-   const caught=rand(100)<[42,35,27,19,30][shelf];
-   win=caught?Math.floor(bet*[.5,1.5,2.5,4,1][shelf]):0;
-   const royal=caught&&shelf===3&&rand(100)<15;if(royal)win+=bet*5;
-   detail={x,y,shelf,item:prizes[shelf],caught,royal};
-  }else{
-   const t=await c.query('SELECT wheel_tickets,qualifying_rounds FROM arcade_progress WHERE player_id=$1 FOR UPDATE',[String(p.telegram_id)]);
-   if(!t.rowCount||Number(t.rows[0].wheel_tickets)<1)return {status:400,data:{error:'Earn a Wheel Ticket by completing 10 paid slot rounds'}};
-   win=arcadePrize([[100,35],[250,27],[500,18],[750,10],[1000,6],[2000,3],[5000,1]]);
-   detail={segment:win,obsessed:win===5000};
-   await c.query('UPDATE arcade_progress SET wheel_tickets=wheel_tickets-1 WHERE player_id=$1',[String(p.telegram_id)]);
+const ARCADE_BETS = [100, 250, 500];
+const arcadeUuid = (x) =>
+  typeof x === "string" &&
+  /^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(
+    x,
+  );
+function arcadePrize(options) {
+  let total = options.reduce((a, b) => a + b[1], 0),
+    r = rand(total);
+  for (const [value, weight] of options) {
+    r -= weight;
+    if (r < 0) return value;
   }
-  const balance=oldBalance-bet+win;
-  if(!Number.isSafeInteger(balance)||balance<0)return {status:500,data:{error:'Balance limit exceeded'}};
-  await c.query('UPDATE players SET balance=$1,updated_at=NOW() WHERE telegram_id=$2',[balance,String(p.telegram_id)]);
-  const result={success:true,game,bet,win,balance,...detail};
-  await c.query('INSERT INTO arcade_rounds(player_id,request_id,game,bet,win,result) VALUES($1,$2,$3,$4,$5,$6::jsonb)',[String(p.telegram_id),requestId,game,bet,win,JSON.stringify(result)]);
-  return {status:200,data:result};
- });res.status(out.status).json(out.data);
- }catch(e){console.error('/api/arcade/play',e);res.status(500).json({error:'Arcade round failed; no coins were charged'})}
+  return options[0][0];
+}
+app.post("/api/arcade/state", auth, async (req, res) => {
+  try {
+    await playerFor(req.telegramUser);
+    const r = await pool.query(
+      "SELECT qualifying_rounds,wheel_tickets FROM arcade_progress WHERE player_id=$1",
+      [String(req.telegramUser.id)],
+    );
+    res.json({
+      success: true,
+      qualifyingRounds: Number(r.rows[0]?.qualifying_rounds || 0),
+      wheelTickets: Number(r.rows[0]?.wheel_tickets || 0),
+    });
+  } catch (e) {
+    console.error(e);
+    res.status(500).json({ error: "Arcade state unavailable" });
+  }
 });
-
+app.post("/api/arcade/play", auth, async (req, res) => {
+  const game = req.body?.game,
+    requestId = req.body?.requestId,
+    bet = Number(req.body?.bet || 0);
+  if (!["duck", "claw", "obsession"].includes(game) || !arcadeUuid(requestId))
+    return res.status(400).json({ error: "Invalid arcade round" });
+  if (game !== "obsession" && !ARCADE_BETS.includes(bet))
+    return res
+      .status(400)
+      .json({ error: "Choose 100, 250, or 500 KillaCoins" });
+  if (game === "obsession" && bet !== 0)
+    return res
+      .status(400)
+      .json({ error: "Wheel spins use earned tickets only" });
+  try {
+    const out = await withLockedPlayer(req.telegramUser, async (c, p) => {
+      const previous = await c.query(
+        "SELECT result FROM arcade_rounds WHERE player_id=$1 AND request_id=$2",
+        [String(p.telegram_id), requestId],
+      );
+      if (previous.rowCount) {
+        const old = previous.rows[0].result;
+        if (old.game !== game || Number(old.bet) !== bet)
+          return {
+            status: 409,
+            data: { error: "Request ID already used for another arcade round" },
+          };
+        return {
+          status: 200,
+          data: { ...old, balance: Number(p.balance), duplicate: true },
+        };
+      }
+      const oldBalance = Number(p.balance);
+      if (game !== "obsession" && oldBalance < bet)
+        return { status: 400, data: { error: "Not enough KillaCoins" } };
+      let win = 0,
+        detail = {};
+      if (game === "duck") {
+        const picks = req.body?.picks;
+        if (
+          !Array.isArray(picks) ||
+          picks.length !== 3 ||
+          new Set(picks).size !== 3 ||
+          picks.some((n) => !Number.isInteger(n) || n < 0 || n > 11)
+        )
+          return {
+            status: 400,
+            data: { error: "Choose three distinct ducks." },
+          };
+        // Three independently randomized reveals, then a rare 3-gold bonus.
+        const ducks = Array.from({ length: 3 }, () =>
+          arcadePrize([
+            ["blank", 32],
+            ["small", 30],
+            ["medium", 21],
+            ["large", 12],
+            ["gold", 5],
+          ]),
+        );
+        const amounts = {
+          blank: 0,
+          small: Math.floor(bet * 0.25),
+          medium: Math.floor(bet * 0.75),
+          large: bet * 2,
+          gold: bet,
+        };
+        win = ducks.reduce((a, x) => a + amounts[x], 0);
+        const bonus = ducks.every((x) => x === "gold");
+        if (bonus) win += bet * 10;
+        detail = { ducks, bonus, picks };
+      } else if (game === "claw") {
+        const x = Number(req.body?.x),
+          y = Number(req.body?.y);
+        if (
+          !Number.isFinite(x) ||
+          !Number.isFinite(y) ||
+          x < 0 ||
+          x > 1 ||
+          y < 0 ||
+          y > 1
+        )
+          return {
+            status: 400,
+            data: {
+              error: "Move the joystick to choose a valid claw position",
+            },
+          };
+        // Positions map to five visible prize shelves; each has independent grip randomness.
+        const shelf = Math.min(4, Math.floor(x * 5)),
+          prizes = ["heart", "bag", "diamond", "crown", "mystery"];
+        const alignment = Math.max(0, 1 - Math.abs(y - 0.85));
+        const caught = rand(100) < [42, 35, 27, 19, 30][shelf] * alignment;
+        win = caught ? Math.floor(bet * [0.5, 1.5, 2.5, 4, 1][shelf]) : 0;
+        const royal = caught && shelf === 3 && rand(100) < 15;
+        if (royal) win += bet * 5;
+        detail = { x, y, shelf, item: prizes[shelf], caught, royal };
+      } else {
+        const t = await c.query(
+          "SELECT wheel_tickets,qualifying_rounds FROM arcade_progress WHERE player_id=$1 FOR UPDATE",
+          [String(p.telegram_id)],
+        );
+        if (!t.rowCount || Number(t.rows[0].wheel_tickets) < 1)
+          return {
+            status: 400,
+            data: {
+              error: "Earn a Wheel Ticket by completing 10 paid slot rounds",
+            },
+          };
+        win = arcadePrize([
+          [100, 35],
+          [250, 27],
+          [500, 18],
+          [750, 10],
+          [1000, 6],
+          [2000, 3],
+          [5000, 1],
+        ]);
+        detail = { segment: win, obsessed: win === 5000 };
+        await c.query(
+          "UPDATE arcade_progress SET wheel_tickets=wheel_tickets-1 WHERE player_id=$1",
+          [String(p.telegram_id)],
+        );
+      }
+      const balance = oldBalance - bet + win;
+      if (!Number.isSafeInteger(balance) || balance < 0)
+        return { status: 500, data: { error: "Balance limit exceeded" } };
+      await c.query(
+        "UPDATE players SET balance=$1,updated_at=NOW() WHERE telegram_id=$2",
+        [balance, String(p.telegram_id)],
+      );
+      const result = { success: true, game, bet, win, balance, ...detail };
+      await c.query(
+        "INSERT INTO arcade_rounds(player_id,request_id,game,bet,win,result) VALUES($1,$2,$3,$4,$5,$6::jsonb)",
+        [
+          String(p.telegram_id),
+          requestId,
+          game,
+          bet,
+          win,
+          JSON.stringify(result),
+        ],
+      );
+      return { status: 200, data: result };
+    });
+    res.status(out.status).json(out.data);
+  } catch (e) {
+    console.error("/api/arcade/play", e);
+    res
+      .status(500)
+      .json({ error: "Arcade round failed; no coins were charged" });
+  }
+});
 
 // Six independent themed slot configurations. All outcomes and awards are server-authoritative.
-const THEMED_CONFIG={
- red:{name:'Red Flags & Riches',symbols:['heart','rose','diamond','flag','heels','ring','wild'],bonus:'Block or Bank',trigger:'flag'},
- brat:{name:'Brat Tax',symbols:['bag','lipstick','diamond','crown','heels','cash','wild'],bonus:'Pay Up',trigger:'bag'},
- first:{name:'First Class Only',symbols:['plane','passport','champagne','luggage','diamond','key','wild'],bonus:'Baggage Claim',trigger:'luggage'},
- cash:{name:'Killa Cashgrab',symbols:['cash','stack','diamond','dollar','crown','bag','wild'],bonus:'Money Storm',trigger:'stack'},
- vip:{name:'VIP Only',symbols:['crown','champagne','key','diamond','gift','suite','wild'],bonus:'The Privé Penthouse',trigger:'key'},
- double:{name:'Double Trouble',symbols:['red','blonde','heart','diamond','cherry','crown','wild'],bonus:'Pick Your Side',trigger:'heart'}
+const THEMED_CONFIG = {
+  vault: {
+    name: "Millionaire’s Vault",
+    symbols: ["vault", "gold", "diamond", "cash", "crown", "panther", "key"],
+    bonus: "Lock & Collect",
+    trigger: "vault",
+    ways: true,
+  },
+  red: {
+    name: "Red Flags & Riches",
+    symbols: ["heart", "rose", "diamond", "flag", "heels", "ring", "wild"],
+    bonus: "Block or Bank",
+    trigger: "flag",
+  },
+  brat: {
+    name: "Brat Tax",
+    symbols: ["bag", "lipstick", "diamond", "crown", "heels", "cash", "wild"],
+    bonus: "Pay Up",
+    trigger: "bag",
+  },
+  first: {
+    name: "First Class Only",
+    symbols: [
+      "plane",
+      "passport",
+      "champagne",
+      "luggage",
+      "diamond",
+      "key",
+      "wild",
+    ],
+    bonus: "Baggage Claim",
+    trigger: "luggage",
+  },
+  cash: {
+    name: "Killa Cashgrab",
+    symbols: ["cash", "stack", "diamond", "dollar", "crown", "bag", "wild"],
+    bonus: "Money Storm",
+    trigger: "stack",
+  },
+  vip: {
+    name: "VIP Only",
+    symbols: ["crown", "champagne", "key", "diamond", "gift", "suite", "wild"],
+    bonus: "The Privé Penthouse",
+    trigger: "key",
+  },
+  double: {
+    name: "Double Trouble",
+    symbols: ["red", "blonde", "heart", "diamond", "cherry", "crown", "wild"],
+    bonus: "Pick Your Side",
+    trigger: "heart",
+  },
 };
-const THEMED_BETS=[100,250,500,1000];
-const THEMED_LINES=[[0,3,6,9,12],[1,4,7,10,13],[2,5,8,11,14],[0,4,8,10,12],[2,4,6,10,14]];
-function themedReels(cfg){return Array.from({length:15},()=>cfg.symbols[rand(cfg.symbols.length)])}
-function themedEvaluate(reels,bet,cfg){let win=0;const winningLines=[];
- THEMED_LINES.forEach((line,i)=>{const seq=line.map(j=>reels[j]);const target=seq.find(s=>s!=='wild');if(!target)return;let n=0;for(const s of seq){if(s===target||s==='wild')n++;else break}if(n<3)return;
- const multipliers=[0,0,0,1,3,8];const multiplier=multipliers[n]*(target==='diamond'?2:1);const award=bet*multiplier;win+=award;winningLines.push({line:i+1,symbol:target,matches:n,win:award,indexes:line.slice(0,n)});
- });return {win,winningLines}}
-function themedChoices(game,bet){const count=game==='vip'?5:game==='first'?6:game==='brat'?9:game==='cash'?8:game==='double'?2:3;
- return Array.from({length:count},(_,i)=>({label:game==='red'?['BLOCK','BANK','RISK IT'][i]:game==='double'?['TEAM RED','TEAM BLONDE'][i]:game==='vip'?['LOBBY','SUITE','VIP LOUNGE','ROOFTOP','PENTHOUSE'][i]:game==='first'?`SUITCASE ${i+1}`:game==='brat'?`BAG ${i+1}`:`CATCH ${i+1}`,award:bet*[0,1,2,3,5][rand(5)]}));}
-app.post('/api/themed/spin',auth,async(req,res)=>{const game=req.body?.game,bet=Number(req.body?.bet),requestId=req.body?.requestId,cfg=THEMED_CONFIG[game];
- if(!cfg||!THEMED_BETS.includes(bet)||!arcadeUuid(requestId))return res.status(400).json({error:'Invalid themed spin'});
- try{const out=await withLockedPlayer(req.telegramUser,async(c,p)=>{
- const previous=await c.query('SELECT reels,win,bonus_id FROM themed_slot_rounds WHERE player_id=$1 AND request_id=$2',[String(p.telegram_id),requestId]);
- if(previous.rowCount){const old=previous.rows[0];return {status:200,data:{success:true,duplicate:true,symbols:old.reels,win:Number(old.win),bonusId:old.bonus_id,balance:Number(p.balance)}}}
- if(Number(p.balance)<bet)return {status:400,data:{error:'Not enough KillaCoins'}};
- const reels=themedReels(cfg),payout=themedEvaluate(reels,bet,cfg),triggers=reels.filter(s=>s===cfg.trigger).length;
- // One active bonus per game, avoiding overwrites of unclaimed prizes.
- let bonusId=null;
- if(triggers>=3){const active=await c.query('SELECT id FROM themed_bonus_sessions WHERE player_id=$1 AND game=$2 AND NOT completed ORDER BY created_at DESC LIMIT 1',[String(p.telegram_id),game]);
- if(!active.rowCount){bonusId=crypto.randomUUID();await c.query('INSERT INTO themed_bonus_sessions(id,player_id,game,bet,choices) VALUES($1,$2,$3,$4,$5::jsonb)',[bonusId,String(p.telegram_id),game,bet,JSON.stringify(themedChoices(game,bet))])}else bonusId=active.rows[0].id;
- }
- const balance=Number(p.balance)-bet+payout.win;if(!Number.isSafeInteger(balance))return {status:500,data:{error:'Balance limit exceeded'}};
- await c.query('UPDATE players SET balance=$1,updated_at=NOW() WHERE telegram_id=$2',[balance,String(p.telegram_id)]);
- await c.query('INSERT INTO themed_slot_rounds(player_id,request_id,game,bet,win,reels,bonus_id) VALUES($1,$2,$3,$4,$5,$6::jsonb,$7)',[String(p.telegram_id),requestId,game,bet,payout.win,JSON.stringify(reels),bonusId]);
- await arcadeQualify(c,p.telegram_id);
- return {status:200,data:{success:true,game,symbols:reels,bet,win:payout.win,winningLines:payout.winningLines,bonusId,balance,bonusTriggered:!!bonusId}};
- });res.status(out.status).json(out.data)}catch(e){console.error('/api/themed/spin',e);res.status(500).json({error:'Spin failed; no coins charged'})}
+const THEMED_BETS = [100, 250, 500, 1000];
+const THEMED_LINES = [
+  [0, 3, 6, 9, 12],
+  [1, 4, 7, 10, 13],
+  [2, 5, 8, 11, 14],
+  [0, 4, 8, 10, 12],
+  [2, 4, 6, 10, 14],
+];
+function themedReels(cfg) {
+  return Array.from(
+    { length: 15 },
+    () => cfg.symbols[rand(cfg.symbols.length)],
+  );
+}
+function themedEvaluate(reels, bet, cfg) {
+  if (cfg.ways) {
+    let win = 0;
+    const winningLines = [];
+    for (const target of cfg.symbols.filter((x) => x !== "wild")) {
+      let count = 0,
+        ways = 1,
+        indexes = [];
+      for (let col = 0; col < 5; col++) {
+        const found = [0, 1, 2]
+          .map((r) => col * 3 + r)
+          .filter((i) => reels[i] === target || reels[i] === "wild");
+        if (!found.length) break;
+        count++;
+        ways *= found.length;
+        indexes.push(...found);
+      }
+      if (count >= 3) {
+        const award = Math.floor((bet * [0, 0, 0, 1, 3, 8][count] * ways) / 5);
+        win += award;
+        winningLines.push({
+          symbol: target,
+          matches: count,
+          ways,
+          win: award,
+          indexes,
+        });
+      }
+    }
+    return { win, winningLines };
+  }
+  let win = 0;
+  const winningLines = [];
+  THEMED_LINES.forEach((line, i) => {
+    const seq = line.map((j) => reels[j]);
+    const target = seq.find((s) => s !== "wild");
+    if (!target) return;
+    let n = 0;
+    for (const s of seq) {
+      if (s === target || s === "wild") n++;
+      else break;
+    }
+    if (n < 3) return;
+    const multipliers = [0, 0, 0, 1, 3, 8];
+    const multiplier = multipliers[n] * (target === "diamond" ? 2 : 1);
+    const award = bet * multiplier;
+    win += award;
+    winningLines.push({
+      line: i + 1,
+      symbol: target,
+      matches: n,
+      win: award,
+      indexes: line.slice(0, n),
+    });
+  });
+  return { win, winningLines };
+}
+function themedChoices(game, bet) {
+  const count =
+    game === "vault"
+      ? 12
+      : game === "vip"
+        ? 5
+        : game === "first"
+          ? 6
+          : game === "brat"
+            ? 9
+            : game === "cash"
+              ? 8
+              : game === "double"
+                ? 2
+                : 3;
+  return Array.from({ length: count }, (_, i) => ({
+    label:
+      game === "red"
+        ? ["BLOCK", "BANK", "RISK IT"][i]
+        : game === "double"
+          ? ["TEAM RED", "TEAM BLONDE"][i]
+          : game === "vip"
+            ? ["LOBBY", "SUITE", "VIP LOUNGE", "ROOFTOP", "PENTHOUSE"][i]
+            : game === "first"
+              ? `SUITCASE ${i + 1}`
+              : game === "brat"
+                ? `BAG ${i + 1}`
+                : `CATCH ${i + 1}`,
+    award: bet * [0, 1, 2, 3, 5][rand(5)],
+  }));
+}
+app.post("/api/themed/spin", auth, async (req, res) => {
+  const game = req.body?.game,
+    bet = Number(req.body?.bet),
+    requestId = req.body?.requestId,
+    cfg = THEMED_CONFIG[game];
+  if (!cfg || !THEMED_BETS.includes(bet) || !arcadeUuid(requestId))
+    return res.status(400).json({ error: "Invalid themed spin" });
+  try {
+    const out = await withLockedPlayer(req.telegramUser, async (c, p) => {
+      const previous = await c.query(
+        "SELECT reels,win,bonus_id,game,bet FROM themed_slot_rounds WHERE player_id=$1 AND request_id=$2",
+        [String(p.telegram_id), requestId],
+      );
+      if (previous.rowCount) {
+        const old = previous.rows[0];
+        if (old.game !== game || Number(old.bet) !== bet)
+          return {
+            status: 409,
+            data: { error: "Request ID already used for another spin" },
+          };
+        return {
+          status: 200,
+          data: {
+            success: true,
+            duplicate: true,
+            symbols: old.reels,
+            win: Number(old.win),
+            bonusId: old.bonus_id,
+            balance: Number(p.balance),
+          },
+        };
+      }
+      if (Number(p.balance) < bet)
+        return { status: 400, data: { error: "Not enough KillaCoins" } };
+      const reels = themedReels(cfg),
+        payout = themedEvaluate(reels, bet, cfg),
+        triggers = reels.filter((s) => s === cfg.trigger).length;
+      // One active bonus per game, avoiding overwrites of unclaimed prizes.
+      let bonusId = null;
+      if (triggers >= 3) {
+        const active = await c.query(
+          "SELECT id FROM themed_bonus_sessions WHERE player_id=$1 AND game=$2 AND NOT completed ORDER BY created_at DESC LIMIT 1",
+          [String(p.telegram_id), game],
+        );
+        if (!active.rowCount) {
+          bonusId = crypto.randomUUID();
+          await c.query(
+            "INSERT INTO themed_bonus_sessions(id,player_id,game,bet,choices,picks) VALUES($1,$2,$3,$4,$5::jsonb,$6)",
+            [
+              bonusId,
+              String(p.telegram_id),
+              game,
+              bet,
+              JSON.stringify(themedChoices(game, bet)),
+              Math.min(
+                game === "double" ? 2 : game === "red" ? 3 : 5,
+                Math.max(3, Math.min(5, triggers)),
+              ),
+            ],
+          );
+        } else bonusId = active.rows[0].id;
+      }
+      const balance = Number(p.balance) - bet + payout.win;
+      if (!Number.isSafeInteger(balance))
+        return { status: 500, data: { error: "Balance limit exceeded" } };
+      await c.query(
+        "UPDATE players SET balance=$1,updated_at=NOW() WHERE telegram_id=$2",
+        [balance, String(p.telegram_id)],
+      );
+      await c.query(
+        "INSERT INTO themed_slot_rounds(player_id,request_id,game,bet,win,reels,bonus_id) VALUES($1,$2,$3,$4,$5,$6::jsonb,$7)",
+        [
+          String(p.telegram_id),
+          requestId,
+          game,
+          bet,
+          payout.win,
+          JSON.stringify(reels),
+          bonusId,
+        ],
+      );
+      await arcadeQualify(c, p.telegram_id);
+      return {
+        status: 200,
+        data: {
+          success: true,
+          game,
+          symbols: reels,
+          bet,
+          win: payout.win,
+          winningLines: payout.winningLines,
+          bonusId,
+          balance,
+          bonusTriggered: !!bonusId,
+        },
+      };
+    });
+    res.status(out.status).json(out.data);
+  } catch (e) {
+    console.error("/api/themed/spin", e);
+    res.status(500).json({ error: "Spin failed; no coins charged" });
+  }
 });
-app.post('/api/themed/bonus/state',auth,async(req,res)=>{try{const game=req.body?.game;if(!THEMED_CONFIG[game])return res.status(400).json({error:'Invalid game'});
- const r=await pool.query('SELECT id,game,bet,choices,selections,total,completed FROM themed_bonus_sessions WHERE player_id=$1 AND game=$2 AND NOT completed ORDER BY created_at DESC LIMIT 1',[String(req.telegramUser.id),game]);
- if(!r.rowCount)return res.json({success:true,session:null});const s=r.rows[0];res.json({success:true,session:{id:s.id,game:s.game,bet:s.bet,labels:s.choices.map(x=>x.label),selections:s.selections,total:Number(s.total),completed:s.completed}})
- }catch(e){res.status(500).json({error:'Bonus state unavailable'})}});
-app.post('/api/themed/bonus/pick',auth,async(req,res)=>{const id=req.body?.id,choice=req.body?.choice;
- if(!arcadeUuid(id)||!Number.isInteger(choice))return res.status(400).json({error:'Invalid bonus pick'});
- try{const out=await withLockedPlayer(req.telegramUser,async(c,p)=>{const r=await c.query('SELECT * FROM themed_bonus_sessions WHERE id=$1 AND player_id=$2 FOR UPDATE',[id,String(p.telegram_id)]);
- if(!r.rowCount)return {status:404,data:{error:'Bonus not found'}};const s=r.rows[0];if(s.completed)return {status:409,data:{error:'Bonus already finished'}};
- const options=s.choices,selected=s.selections;if(choice<0||choice>=options.length||selected.some(x=>x.choice===choice))return {status:400,data:{error:'Invalid or repeated choice'}};
- const award=Number(options[choice].award),total=Number(s.total)+award,balance=Number(p.balance)+award;
- if(!Number.isSafeInteger(balance))return {status:500,data:{error:'Balance limit exceeded'}};
- const next=[...selected,{choice,award}];const completed=next.length>=(s.game==='brat'?3:s.game==='cash'?3:1);
- await c.query('UPDATE themed_bonus_sessions SET selections=$1::jsonb,total=$2,completed=$3 WHERE id=$4',[JSON.stringify(next),total,completed,id]);
- await c.query('UPDATE players SET balance=$1,updated_at=NOW() WHERE telegram_id=$2',[balance,String(p.telegram_id)]);
- return {status:200,data:{success:true,award,balance,total,completed,selections:next}};
- });res.status(out.status).json(out.data)}catch(e){console.error('/api/themed/bonus/pick',e);res.status(500).json({error:'Bonus pick failed; wallet unchanged'})}
+app.post("/api/themed/bonus/state", auth, async (req, res) => {
+  try {
+    const game = req.body?.game;
+    if (!THEMED_CONFIG[game])
+      return res.status(400).json({ error: "Invalid game" });
+    const r = await pool.query(
+      "SELECT id,game,bet,choices,selections,total,completed,picks FROM themed_bonus_sessions WHERE player_id=$1 AND game=$2 AND NOT completed ORDER BY created_at DESC LIMIT 1",
+      [String(req.telegramUser.id), game],
+    );
+    if (!r.rowCount) return res.json({ success: true, session: null });
+    const s = r.rows[0];
+    res.json({
+      success: true,
+      session: {
+        id: s.id,
+        game: s.game,
+        bet: s.bet,
+        labels: s.choices.map((x) => x.label),
+        selections: s.selections,
+        total: Number(s.total),
+        completed: s.completed,
+        picks: s.picks,
+      },
+    });
+  } catch (e) {
+    res.status(500).json({ error: "Bonus state unavailable" });
+  }
+});
+app.post("/api/themed/bonus/pick", auth, async (req, res) => {
+  const id = req.body?.id,
+    choice = req.body?.choice;
+  if (!arcadeUuid(id) || !Number.isInteger(choice))
+    return res.status(400).json({ error: "Invalid bonus pick" });
+  try {
+    const out = await withLockedPlayer(req.telegramUser, async (c, p) => {
+      const r = await c.query(
+        "SELECT * FROM themed_bonus_sessions WHERE id=$1 AND player_id=$2 FOR UPDATE",
+        [id, String(p.telegram_id)],
+      );
+      if (!r.rowCount)
+        return { status: 404, data: { error: "Bonus not found" } };
+      const s = r.rows[0];
+      if (s.completed)
+        return { status: 409, data: { error: "Bonus already finished" } };
+      const options = s.choices,
+        selected = s.selections;
+      if (
+        choice < 0 ||
+        choice >= options.length ||
+        selected.some((x) => x.choice === choice)
+      )
+        return { status: 400, data: { error: "Invalid or repeated choice" } };
+      const award = Number(options[choice].award),
+        total = Number(s.total) + award,
+        balance = Number(p.balance) + award;
+      if (!Number.isSafeInteger(balance))
+        return { status: 500, data: { error: "Balance limit exceeded" } };
+      const next = [...selected, { choice, award }];
+      const completed = next.length >= Number(s.picks);
+      await c.query(
+        "UPDATE themed_bonus_sessions SET selections=$1::jsonb,total=$2,completed=$3 WHERE id=$4",
+        [JSON.stringify(next), total, completed, id],
+      );
+      await c.query(
+        "UPDATE players SET balance=$1,updated_at=NOW() WHERE telegram_id=$2",
+        [balance, String(p.telegram_id)],
+      );
+      return {
+        status: 200,
+        data: {
+          success: true,
+          award,
+          balance,
+          total,
+          completed,
+          selections: next,
+        },
+      };
+    });
+    res.status(out.status).json(out.data);
+  } catch (e) {
+    console.error("/api/themed/bonus/pick", e);
+    res.status(500).json({ error: "Bonus pick failed; wallet unchanged" });
+  }
 });
 
-app.use("/api",(req,res)=>res.status(404).json({error:"API endpoint not found"}));
-app.use(express.static(__dirname));
-initializeDatabase().then(()=>app.listen(PORT,"0.0.0.0",()=>console.log(`SPOILED ROTTEN listening on ${PORT}`))).catch(e=>{console.error("Startup failed",e);process.exit(1)});
+app.post("/api/loyalty/claim", auth, async (req, res) => {
+  if (req.telegramUser.guest)
+    return res
+      .status(403)
+      .json({ error: "KillaMoney check-ins require Telegram." });
+  try {
+    const out = await withLockedPlayer(req.telegramUser, async (c, p) => {
+      if (!isAvailable(p.last_loyalty_at))
+        return {
+          status: 429,
+          data: { error: "Check-in already claimed today (UTC)." },
+        };
+      const points = Number(p.killa_money) + 1;
+      await c.query(
+        "UPDATE players SET killa_money=$1,last_loyalty_at=NOW() WHERE telegram_id=$2",
+        [points, String(p.telegram_id)],
+      );
+      return {
+        status: 200,
+        data: {
+          success: true,
+          killaMoney: points,
+          loyaltyAvailable: false,
+          balance: Number(p.balance),
+        },
+      };
+    });
+    res.status(out.status).json(out.data);
+  } catch (e) {
+    res.status(500).json({ error: "Check-in failed" });
+  }
+});
+app.post("/api/history", auth, async (req, res) => {
+  try {
+    const r = await pool.query(
+      "SELECT path,result,created_at FROM casino_requests WHERE player_id=$1 ORDER BY created_at DESC LIMIT 30",
+      [String(req.telegramUser.id)],
+    );
+    res.json({
+      history: r.rows.map((x) => ({
+        action: x.path.replace("/api/", ""),
+        at: x.created_at,
+        bet: x.result.bet || 0,
+        win: x.result.win ?? x.result.award ?? x.result.prize ?? 0,
+      })),
+    });
+  } catch (e) {
+    res.status(500).json({ error: "History unavailable" });
+  }
+});
+app.use(
+  "/assets",
+  express.static(path.join(__dirname, "assets"), { dotfiles: "deny" }),
+);
+app.get("/app.js", (req, res) => res.sendFile(path.join(__dirname, "app.js")));
+app.get("/style.css", (req, res) =>
+  res.sendFile(path.join(__dirname, "style.css")),
+);
+app.use("/api", (req, res) =>
+  res.status(404).json({ error: "API endpoint not found" }),
+);
+app.use((err, req, res, next) => {
+  console.error(err.message);
+  res
+    .status(err.status || 500)
+    .json({
+      error: err.status === 400 ? "Invalid JSON request" : "Request failed",
+    });
+});
+async function start() {
+  await initializeDatabase();
+  return app.listen(PORT, "0.0.0.0", () =>
+    console.log("Killamani Casino listening on " + PORT),
+  );
+}
+if (require.main === module)
+  start().catch((e) => {
+    console.error("Startup failed:", e.message);
+    process.exitCode = 1;
+  });
+module.exports = {
+  app,
+  pool,
+  initializeDatabase,
+  start,
+  evaluate,
+  scPayout,
+  themedEvaluate,
+  THEMED_CONFIG,
+  verifyTelegramInitData,
+};
