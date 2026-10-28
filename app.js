@@ -547,34 +547,116 @@ function setBet(i) {
   $("betValue").textContent =
     selected.id === "obsession" ? "1 TICKET" : fmt(selected.bets[betIndex]);
 }
-function symbolImage(symbol) {
-  if (
-    selected?.id === "squirt" &&
-    [
-      "diamond",
-      "splash",
-      "neon7",
-      "heart",
-      "bolt",
-      "moon",
-      "bubble",
-      "afterhours",
-    ].includes(symbol)
-  )
-    return "/assets/squirt-" + symbol + ".jpg";
-  const jewels = {
-    diamond: "diamond.webp",
-    heart: "heart.webp",
-    seven: "7.webp",
-    neon7: "7.webp",
-    wild: "crown.webp",
-    crown: "crown.webp",
-    cherry: "cherry.webp",
-    rose: "kp.svg",
-    star: "kp.svg",
-    scatter: "diamond.webp",
-  };
-  return jewels[symbol] ? "/assets/jewel-" + jewels[symbol] : null;
+// The 36 illustrated symbols share one transparent atlas to limit network requests.
+const symbolOrder = [
+  "diamond",
+  "seven",
+  "heart",
+  "rose",
+  "spade",
+  "star",
+  "wild",
+  "scatter",
+  "splash",
+  "neon7",
+  "bolt",
+  "moon",
+  "bubble",
+  "afterhours",
+  "bag",
+  "lipstick",
+  "crown",
+  "heels",
+  "cash",
+  "plane",
+  "passport",
+  "champagne",
+  "luggage",
+  "key",
+  "stack",
+  "dollar",
+  "gift",
+  "suite",
+  "red",
+  "blonde",
+  "cherry",
+  "flag",
+  "ring",
+  "vault",
+  "gold",
+  "panther",
+];
+const gameSymbolSets = {
+  spoiled: [
+    "diamond",
+    "seven",
+    "heart",
+    "rose",
+    "spade",
+    "star",
+    "wild",
+    "scatter",
+  ],
+  squirt: [
+    "splash",
+    "diamond",
+    "neon7",
+    "heart",
+    "bolt",
+    "moon",
+    "bubble",
+    "afterhours",
+  ],
+  brat: ["bag", "lipstick", "diamond", "crown", "heels", "cash", "wild"],
+  first: [
+    "plane",
+    "passport",
+    "champagne",
+    "luggage",
+    "diamond",
+    "key",
+    "wild",
+  ],
+  cash: ["cash", "stack", "diamond", "dollar", "crown", "bag", "wild"],
+  red: ["heart", "rose", "diamond", "flag", "heels", "ring", "wild"],
+  vip: ["crown", "champagne", "key", "diamond", "gift", "suite", "wild"],
+  double: ["red", "blonde", "heart", "diamond", "cherry", "crown", "wild"],
+  vault: ["vault", "gold", "diamond", "cash", "crown", "panther", "key"],
+};
+function sprite(symbol, label = symbol) {
+  const i = symbolOrder.indexOf(symbol),
+    el = document.createElement("span");
+  el.className = "lux-symbol";
+  el.setAttribute("role", "img");
+  el.setAttribute("aria-label", label);
+  if (i >= 0) {
+    el.style.backgroundPosition = `${(i % 6) * 20}% ${Math.floor(i / 6) * 20}%`;
+    el.dataset.symbol = symbol;
+  } else {
+    el.classList.add("lux-symbol-fallback");
+    el.textContent = icons[symbol] || symbol;
+  }
+  return el;
+}
+function spriteMarkup(symbol) {
+  const i = symbolOrder.indexOf(symbol);
+  return `<span aria-hidden="true" class="lux-symbol" style="background-position:${(i % 6) * 20}% ${Math.floor(i / 6) * 20}%"></span>`;
+}
+function celebrate(win) {
+  if (!win || matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+  const host = $("gameStage"),
+    fx = document.createElement("div");
+  fx.className = "win-particles";
+  fx.setAttribute("aria-hidden", "true");
+  for (let i = 0; i < 16; i++) {
+    const dot = document.createElement("i");
+    dot.style.setProperty("--dx", `${(Math.random() - 0.5) * 440}px`);
+    dot.style.setProperty("--dy", `${-70 - Math.random() * 200}px`);
+    dot.style.setProperty("--delay", `${Math.random() * 0.18}s`);
+    fx.append(dot);
+  }
+  host.append(fx);
+  setTimeout(() => fx.remove(), 1200);
 }
 
 function renderReels(symbols, winning = []) {
@@ -587,28 +669,13 @@ function renderReels(symbols, winning = []) {
       const i = col * 3 + row,
         el = document.createElement("div");
       el.className = "reel-cell" + (indexes.has(i) ? " win" : "");
-      const source = symbolImage(symbols[i]);
-      if (source) {
-        const img = document.createElement("img");
-        img.src = source;
-        img.alt = symbols[i];
-        img.draggable = false;
-        el.append(img);
-        if (
-          ["wild", "scatter", "afterhours", "rose", "star"].includes(symbols[i])
-        ) {
-          const tag = document.createElement("small");
-          tag.className = "symbol-tag";
-          tag.textContent = {
-            wild: "WILD",
-            scatter: "FREE SPINS",
-            afterhours: "FREE SPINS",
-            rose: "ROSE",
-            star: "STAR",
-          }[symbols[i]];
-          el.append(tag);
-        }
-      } else el.textContent = icons[symbols[i]] || symbols[i] || "♛";
+      el.append(sprite(symbols[i]));
+      if (["wild", "scatter", "afterhours"].includes(symbols[i])) {
+        const tag = document.createElement("small");
+        tag.className = "symbol-tag";
+        tag.textContent = symbols[i] === "wild" ? "WILD" : "FREE SPINS";
+        el.append(tag);
+      }
       el.setAttribute("aria-label", symbols[i] || "symbol");
       board.append(el);
     }
@@ -622,7 +689,9 @@ function wheelMarkup() {
           `<span class="wheel-label" style="transform:rotate(${(i * 360) / 7 + 360 / 14}deg) translateY(-104px) rotate(-${(i * 360) / 7 + 360 / 14}deg)">${fmt(v)}</span>`,
       )
       .join("") +
-    '<span class="wheel-center">♛</span></div></div>'
+    '<span class="wheel-center">' +
+    spriteMarkup("heart") +
+    "</span></div></div>"
   );
 }
 function clawPosition() {
@@ -663,7 +732,10 @@ function arcadeStage() {
   }
   if (selected.id === "claw") {
     $("gameStage").innerHTML =
-      '<div class="claw-field"><span class="claw-hook" id="hook">⚓</span><div class="claw-prizes"><span>💗</span><span>👜</span><span>💎</span><span>👑</span><span>🎁</span></div></div><div class="joystick"><button data-dx="-1" aria-label="Move claw left">◀</button><button data-dy="-1" aria-label="Move claw up">▲</button><button data-dy="1" aria-label="Move claw down">▼</button><button data-dx="1" aria-label="Move claw right">▶</button></div>';
+      '<div class="claw-field"><span class="claw-hook" id="hook">⚓</span><div class="claw-prizes"><span class="claw-prize-slot" data-prize="heart"></span><span class="claw-prize-slot" data-prize="bag"></span><span class="claw-prize-slot" data-prize="diamond"></span><span class="claw-prize-slot" data-prize="crown"></span><span class="claw-prize-slot" data-prize="gift"></span></div></div><div class="joystick"><button data-dx="-1" aria-label="Move claw left">◀</button><button data-dy="-1" aria-label="Move claw up">▲</button><button data-dy="1" aria-label="Move claw down">▼</button><button data-dx="1" aria-label="Move claw right">▶</button></div>';
+    $("gameStage")
+      .querySelectorAll("[data-prize]")
+      .forEach((el) => el.append(sprite(el.dataset.prize)));
     clawPosition();
     $("gameStage")
       .querySelectorAll(".joystick button")
@@ -700,6 +772,13 @@ async function openGame(id) {
   bonus = null;
   betIndex = 0;
   x = y = 0.5;
+  $("gameRoom").dataset.game = selected.id;
+  $("gameStage").dataset.layout = selected.arcade
+    ? ""
+    : selected.id === "vault"
+      ? "243 WAYS"
+      : "5 REELS · 5 PAYLINES";
+  $("bonusPanel").dataset.game = selected.id;
   $("gameName").textContent = selected.name;
   $("gameTag").textContent = selected.tag;
   $("roomArt").style.cssText = artStyle(selected.art);
@@ -729,7 +808,10 @@ async function openGame(id) {
   } else {
     $("gameStage").innerHTML =
       '<div id="reels" class="reels" aria-label="Slot reels"></div>';
-    renderReels(Array(15).fill("diamond"));
+    const preview = gameSymbolSets[id] || symbolOrder;
+    renderReels(
+      Array.from({ length: 15 }, (_, i) => preview[i % preview.length]),
+    );
     await loadBonus();
   }
   sync();
@@ -753,10 +835,10 @@ async function play() {
       animation = setInterval(
         () =>
           renderReels(
-            Array.from(
-              { length: 15 },
-              () => Object.keys(icons)[Math.floor(Math.random() * 8)],
-            ),
+            Array.from({ length: 15 }, () => {
+              const pool = gameSymbolSets[g.id] || symbolOrder;
+              return pool[Math.floor(Math.random() * pool.length)];
+            }),
           ),
         70,
       );
@@ -787,7 +869,10 @@ async function play() {
       (d.freeSpinUsed ? "FREE SPIN · " : "") +
       (d.win ? "WIN +" + fmt(d.win) + " KILLACOINS" : "NO WIN THIS ROUND") +
       (d.awardedFreeSpins ? " · +" + d.awardedFreeSpins + " FREE SPINS" : "");
-    if (d.win) sound();
+    if (d.win) {
+      sound();
+      celebrate(d.win);
+    }
     if (g.id === "duck") {
       const map = {
         blank: "🌊",
@@ -876,11 +961,30 @@ function renderBonus() {
   for (let i = 0; i < count; i++) {
     const chosen = selections.find((s) => s.choice === i),
       b = document.createElement("button");
-    b.textContent = chosen
+    const label = chosen
       ? "+" + fmt(chosen.award)
       : legacy
-        ? "🎁 " + (i + 1)
+        ? "GIFT " + (i + 1)
         : bonus.labels[i];
+    const symbol = chosen
+      ? "stack"
+      : {
+          spoiled: "scatter",
+          brat: "bag",
+          first: "luggage",
+          cash: "cash",
+          red: "flag",
+          vip: "suite",
+          double: i === 0 ? "red" : "blonde",
+          vault: "vault",
+        }[g.id] || "gift";
+    b.className = "bonus-prize";
+    b.append(sprite(symbol));
+    const text = document.createElement("span");
+    text.className = "prize-label";
+    text.textContent = label;
+    b.append(text);
+    b.setAttribute("aria-label", label);
     b.disabled = !!chosen || bonus.done || bonus.completed;
     b.classList.toggle("revealed", !!chosen);
     b.onclick = () => pickBonus(i);
@@ -1156,3 +1260,6 @@ try {
   tg?.ready();
   tg?.expand();
 } catch {}
+
+const atlasPreload = new Image();
+atlasPreload.src = "/assets/symbols-v2.png";
