@@ -680,13 +680,43 @@ function renderReels(symbols, winning = []) {
       board.append(el);
     }
 }
+function duckArt(i) {
+  return `<svg class="duck-art" viewBox="0 0 120 112" aria-hidden="true"><defs><linearGradient id="duck-${i}" x2="0.8" y2="1"><stop stop-color="#fff6b0"/><stop offset=".55" stop-color="#ffd166"/><stop offset="1" stop-color="#d98627"/></linearGradient></defs><ellipse cx="60" cy="96" rx="42" ry="7" fill="#76f8ed" opacity=".35"/><path d="M20 62Q7 52 14 38Q24 53 38 51C47 39 60 40 77 49L99 60C112 96 39 109 22 80Z" fill="url(#duck-${i})" stroke="#ffdba0" stroke-width="2"/><circle cx="76" cy="35" r="25" fill="url(#duck-${i})" stroke="#ffe3a5" stroke-width="2"/><path d="M95 34L115 41L94 48Z" fill="#f78050"/><ellipse cx="82" cy="29" rx="4" ry="5" fill="#38182a"/><circle cx="83" cy="27" r="1.3" fill="white"/><path d="M38 65Q53 50 69 64Q59 87 39 75" fill="#ffe8a0" stroke="#f3b246" stroke-width="2"/><ellipse cx="84" cy="44" rx="6" ry="3" fill="#f78e8a" opacity=".7"/><path d="M62 13L60 2L71 7L78 0L84 9L95 5L91 18Z" fill="#f7d78b" stroke="#a65f38" stroke-width="2"/><path d="M26 60Q25 67 31 73" stroke="#fff8ce" stroke-width="4" stroke-linecap="round" fill="none"/></svg>`;
+}
+function clawArt() {
+  return `<svg viewBox="0 0 100 130" aria-hidden="true"><defs><linearGradient id="claw-metal"><stop stop-color="#7c664d"/><stop offset=".3" stop-color="#fff2ca"/><stop offset=".55" stop-color="#c7a87d"/><stop offset=".8" stop-color="#fff6db"/><stop offset="1" stop-color="#786049"/></linearGradient></defs><path d="M50 0V54" stroke="#e6c997" stroke-width="5"/><path d="M37 54H63L70 75H30Z" fill="url(#claw-metal)" stroke="#fff2c6"/><path d="M34 72L16 98L28 120L40 111M66 72L84 98L72 120L60 111M50 78V109L44 120" fill="none" stroke="url(#claw-metal)" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/><circle cx="50" cy="67" r="5" fill="#ee75ae" stroke="#fff1cf"/></svg>`;
+}
+function updateCabinet() {
+  let marquee = document.getElementById("cabinetMarquee");
+  if (!marquee) {
+    marquee = document.createElement("div");
+    marquee.id = "cabinetMarquee";
+    marquee.className = "cabinet-marquee";
+    $("gameStage").before(marquee);
+  }
+  marquee.replaceChildren();
+  const crest = document.createElement("span");
+  crest.className = "cabinet-crest";
+  const featured = {spoiled:"diamond",squirt:"bolt",brat:"bag",first:"plane",cash:"cash",red:"rose",vip:"crown",double:"heart",vault:"key",duck:"crown",obsession:"heart",claw:"gift"};
+  crest.append(sprite(featured[selected.id]));
+  const copy = document.createElement("div");
+  const label = document.createElement("small");
+  label.textContent = "KILLAMANI · PRIVATE FORTUNE CLUB";
+  const title = document.createElement("strong");
+  title.textContent = selected.name;
+  copy.append(label, title);
+  const mode = document.createElement("span");
+  mode.className = "cabinet-mode";
+  mode.textContent = selected.arcade ? "ARCADE" : "SLOTS";
+  marquee.append(crest, copy, mode);
+}
 function wheelMarkup() {
   return (
     '<div class="wheel-wrap"><span class="wheel-pointer">▼</span><div id="wheel" class="wheel">' +
     [100, 250, 500, 750, 1000, 2000, 5000]
       .map(
         (v, i) =>
-          `<span class="wheel-label" style="transform:rotate(${(i * 360) / 7 + 360 / 14}deg) translateY(-104px) rotate(-${(i * 360) / 7 + 360 / 14}deg)">${fmt(v)}</span>`,
+          `<span class="wheel-label" style="transform:rotate(${(i * 360) / 7 + 360 / 14}deg) translateY(var(--wheel-radius, -104px)) rotate(-${(i * 360) / 7 + 360 / 14}deg)">${fmt(v)}</span>`,
       )
       .join("") +
     '<span class="wheel-center">' +
@@ -709,7 +739,7 @@ function arcadeStage() {
       Array.from(
         { length: 12 },
         (_, i) =>
-          `<button data-duck="${i}" aria-label="Choose duck ${i + 1}">🦆</button>`,
+          `<button data-duck="${i}" aria-label="Choose duck ${i + 1}">${duckArt(i)}<span class="duck-number">${String(i + 1).padStart(2, "0")}</span></button>`,
       ).join("") +
       "</div>";
     $("gameStage")
@@ -732,7 +762,7 @@ function arcadeStage() {
   }
   if (selected.id === "claw") {
     $("gameStage").innerHTML =
-      '<div class="claw-field"><span class="claw-hook" id="hook">⚓</span><div class="claw-prizes"><span class="claw-prize-slot" data-prize="heart"></span><span class="claw-prize-slot" data-prize="bag"></span><span class="claw-prize-slot" data-prize="diamond"></span><span class="claw-prize-slot" data-prize="crown"></span><span class="claw-prize-slot" data-prize="gift"></span></div></div><div class="joystick"><button data-dx="-1" aria-label="Move claw left">◀</button><button data-dy="-1" aria-label="Move claw up">▲</button><button data-dy="1" aria-label="Move claw down">▼</button><button data-dx="1" aria-label="Move claw right">▶</button></div>';
+      '<div class="claw-field"><span class="claw-hook" id="hook">' + clawArt() + '</span><div class="claw-prizes"><span class="claw-prize-slot" data-prize="heart"></span><span class="claw-prize-slot" data-prize="bag"></span><span class="claw-prize-slot" data-prize="diamond"></span><span class="claw-prize-slot" data-prize="crown"></span><span class="claw-prize-slot" data-prize="gift"></span></div></div><div class="joystick"><button data-dx="-1" aria-label="Move claw left">◀</button><button data-dy="-1" aria-label="Move claw up">▲</button><button data-dy="1" aria-label="Move claw down">▼</button><button data-dx="1" aria-label="Move claw right">▶</button></div>';
     $("gameStage")
       .querySelectorAll("[data-prize]")
       .forEach((el) => el.append(sprite(el.dataset.prize)));
@@ -773,6 +803,7 @@ async function openGame(id) {
   betIndex = 0;
   x = y = 0.5;
   $("gameRoom").dataset.game = selected.id;
+  updateCabinet();
   $("gameStage").dataset.layout = selected.arcade
     ? ""
     : selected.id === "vault"
@@ -882,8 +913,13 @@ async function play() {
         gold: "👑",
       };
       duckPicks.forEach((n, i) => {
-        $("gameStage").querySelector(`[data-duck="${n}"]`).textContent =
-          map[d.ducks[i]];
+        const button = $("gameStage").querySelector(`[data-duck="${n}"]`);
+        const symbol = {small:"gold",medium:"cash",large:"diamond",gold:"crown"}[d.ducks[i]];
+        button.replaceChildren();
+        button.classList.add("duck-revealed");
+        if (symbol) button.append(sprite(symbol));
+        else button.textContent = map[d.ducks[i]];
+        button.setAttribute("aria-label", "Duck " + (n + 1) + ": " + d.ducks[i]);
       });
       if (d.bonus) $("gameStatus").textContent += " · THREE GOLD JACKPOT!";
       await new Promise((r) => setTimeout(r, 1600));
@@ -1262,4 +1298,5 @@ try {
 } catch {}
 
 const atlasPreload = new Image();
-atlasPreload.src = "/assets/symbols-v2.png";
+atlasPreload.src = "/assets/symbols-v2.png?v=cabinet3";
+
