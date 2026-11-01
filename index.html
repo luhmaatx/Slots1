@@ -12,9 +12,9 @@
       content="Killamani Casino by LUHMAATX. A private fortune club with virtual coin games."
     />
     <title>Killamani Casino × LUHMAATX</title>
-    <link rel="stylesheet" href="/style.css?v=neon4" />
+    <link rel="stylesheet" href="/style.css?v=palace8" />
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
-    <script src="/app.js?v=neon4" defer></script>
+    <script src="/app.js?v=palace8" defer></script>
   </head>
   <body>
     <main id="app">
@@ -144,12 +144,12 @@
             <button id="loyalty" class="primary">CLAIM DAILY CHECK-IN</button>
             <p id="rewardStatus" class="status" role="status"></p>
           </div>
-          <div class="notice">
-            A redemption catalog has not been configured. No gift cards,
-            discounts, content access or physical prizes are issued by this
-            version. KillaMoney cannot be bought, exchanged for coins or cashed
-            out.
-          </div>
+          <div class="vault-heading"><h2>The Killa Vault</h2><button class="outline" id="openPenthouse">MY PENTHOUSE</button></div>
+          <p>Unlock wallpapers and room styles with KillaCoins. Each reward can be redeemed once per account.</p>
+          <p id="vaultStatus" role="status"></p><div id="vaultCatalog" class="reward-preview-grid"></div>
+          <h2>My Rewards</h2><p>Owned items stay here. Reopen downloads and codes without paying again.</p><div id="vaultOwned" class="reward-preview-grid"></div>
+          <button id="ownerDashboard" class="outline" hidden>OWNER DASHBOARD</button>
+          <p class="notice">KillaCoins have no cash value. Guest rewards belong to this browser's guest account; keep your session. KillaMoney check-ins remain separate.</p>
         </section>
         <section id="leaderboard" class="page" hidden>
           <span class="eyebrow">THE HOUSE ROYALTY</span>
@@ -218,7 +218,7 @@
                 <span class="wallet-medallion" data-room-symbol="gold"></span>
                 <span><small>BALANCE</small><strong id="roomBalance"></strong></span><span class="wallet-plus" aria-hidden="true">+</span>
               </button>
-              <button id="roomDaily" class="room-daily"><span data-room-symbol="gift"></span><span><strong>DAILY BONUS</strong><small id="roomDailyState">COINS & REWARDS</small></span><b aria-hidden="true">›</b></button>
+
             </div>
           </header>
           <div class="room-title">
@@ -251,17 +251,12 @@
               </button>
             </div>
             <p id="gameStatus" class="status" role="status"></p>
-          </div>
-          <div id="bonusPanel" class="panel" hidden>
+            <div id="bonusPanel" class="panel" hidden>
             <h2 id="bonusName"></h2>
             <p id="bonusText"></p>
             <div id="bonusChoices" class="choices"></div>
             <p id="bonusStatus" role="status" class="status"></p>
           </div>
-          <div class="room-shortcuts">
-            <button id="roomDailyCard"><span data-room-symbol="gift"></span><span><strong>DAILY BONUS</strong><small>FREE COINS & REWARDS</small></span><b aria-hidden="true">›</b></button>
-            <button id="roomBonusCard"><span data-room-symbol="red"></span><span><strong id="roomBonusLabel">AFTER HOURS</strong><small id="roomBonusHint">BONUS GAME</small></span><b aria-hidden="true">›</b></button>
-            <button id="roomRulesCard"><span data-room-symbol="diamond"></span><span><strong>PAYTABLE</strong><small>SYMBOLS & GAME RULES</small></span><b aria-hidden="true">›</b></button>
           </div>
           <section class="room-leaders" aria-label="Top players"><header><span>♛ &nbsp; TOP PLAYERS</span><button id="roomLeadersLink">VIEW ALL ›</button></header><div id="roomLeadersList">Loading players…</div></section>
           <p class="fine room-legal">VIRTUAL KILLACOINS · NO CASH VALUE</p>
@@ -282,4 +277,5 @@
     </main>
   </body>
 </html>
+
 

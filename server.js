@@ -10,6 +10,7 @@ const app = express(),
 const BOT_TOKEN = process.env.TELEGRAM_BOT_TOKEN,
   DATABASE_URL = process.env.DATABASE_URL;
 app.disable("x-powered-by");
+app.use("/api/owner/save", express.json({ limit: "3mb" }));
 app.use(express.json({ limit: "20kb" }));
 app.use((req, res, next) => {
   res.set("X-Content-Type-Options", "nosniff");
@@ -168,6 +169,7 @@ async function initializeDatabase() {
     await c.query(
       `CREATE TABLE IF NOT EXISTS arcade_rounds (id BIGSERIAL PRIMARY KEY,player_id BIGINT NOT NULL REFERENCES players(telegram_id),request_id UUID NOT NULL,game TEXT NOT NULL,bet INTEGER NOT NULL DEFAULT 0,win INTEGER NOT NULL DEFAULT 0,result JSONB NOT NULL,created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),UNIQUE(player_id,request_id))`,
     );
+    await expansion.initialize(c);
     await c.query("COMMIT");
   } catch (e) {
     await c.query("ROLLBACK");
@@ -1916,6 +1918,7 @@ app.get("/app.js", (req, res) => res.sendFile(path.join(__dirname, "app.js")));
 app.get("/style.css", (req, res) =>
   res.sendFile(path.join(__dirname, "style.css")),
 );
+const expansion = require("./expansion")({app,pool,auth,withLockedPlayer,READ_PATHS});
 app.use("/api", (req, res) =>
   res.status(404).json({ error: "API endpoint not found" }),
 );
@@ -1949,3 +1952,4 @@ module.exports = {
   THEMED_CONFIG,
   verifyTelegramInitData,
 };
+
