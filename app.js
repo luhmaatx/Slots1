@@ -160,7 +160,6 @@ const icons = {
   panther: "🐈‍⬛",
 };
 const collage = {
-  first: [1, 0],
   cash: [2, 0],
   red: [0, 1],
   vip: [1, 1],
@@ -186,6 +185,7 @@ let soundOn = store.get("sound") === "on",
   tapCount = 0,
   autoTimer = null;
 function artStyle(id) {
+  if (id === "first") return "background-image:url('/assets/first-class/cabin.webp');background-position:center 26%";
   if (collage[id]) {
     const [col, row] = collage[id];
     return `background-image:url('/assets/themes.webp');background-size:300% 200%;background-position:${col * 50}% ${row * 100}%`;
@@ -533,7 +533,7 @@ function stopAuto() {
 }
 function setBusy(value) {
   busy = value;
-  for (const id of ["back", "less", "more", "max", "play"])
+  for (const id of ["back", "bonusBack", "less", "more", "max", "play"])
     $(id).disabled = value;
 }
 function setBet(i) {
@@ -628,6 +628,16 @@ const gameSymbolSets = {
   double: ["red", "blonde", "heart", "diamond", "cherry", "crown", "wild"],
   vault: ["vault", "gold", "diamond", "cash", "crown", "panther", "key"],
 };
+const firstClassSymbolNames = {
+  plane: "Private jet",
+  passport: "Passport",
+  champagne: "Champagne flute",
+  luggage: "Carry-on",
+  diamond: "Diamond",
+  key: "Hotel key",
+  wild: "Winged wild",
+};
+
 function sprite(symbol, label = symbol) {
   if (symbol === "moon") {
     const el = document.createElement("span");
@@ -683,8 +693,16 @@ function reelCell(symbol, index, wins) {
   const cell = document.createElement("div");
   cell.className = "reel-cell" + (wins.has(index) ? " win" : "");
   cell.dataset.index = index;
-  cell.setAttribute("aria-label", symbol === "moon" ? "Pool float" : symbol || "symbol");
-  cell.append(sprite(symbol));
+  const firstClassLabel = selected?.id === "first" && firstClassSymbolNames[symbol];
+  const label = firstClassLabel || (symbol === "moon" ? "Pool float" : symbol || "symbol");
+  cell.setAttribute("aria-label", label);
+  const art = sprite(symbol, label);
+  if (firstClassLabel) {
+    const position = gameSymbolSets.first.indexOf(symbol);
+    art.classList.add("first-class-symbol");
+    art.style.backgroundPosition = (position % 4) * 100 / 3 + "% " + Math.floor(position / 4) * 100 + "%";
+  }
+  cell.append(art);
   if (["wild","scatter","afterhours"].includes(symbol)) {
     const tag = document.createElement("small"); tag.className = "symbol-tag";tag.textContent = symbol === "wild" ? "WILD" : "FREE SPINS";cell.append(tag);
   }
@@ -802,12 +820,28 @@ function renderMachineLooks() {
   }
 }
 function setBonusVisible(visible) {
-  $("bonusPanel").hidden = !visible;
-  $("gameRoom").classList.toggle("bonus-active", visible);
+  const panel = $("bonusPanel"), room = $("gameRoom");
+  const entering = visible && panel.hidden;
+  panel.hidden = !visible;
+  room.classList.toggle("bonus-active", visible);
   if (visible) {
     stopAuto();
-    requestAnimationFrame(() => { if (!$("bonusPanel").hidden) $("bonusPanel").scrollIntoView({block:"center",behavior:"instant"}); });
-  } else stopTap();
+    if (selected.id === "first") {
+      if (entering) {
+        requestAnimationFrame(() => {
+          if (!panel.hidden && room.dataset.game === "first") {
+            room.scrollTop = 0;
+            $("bonusName").focus({ preventScroll: true });
+          }
+        });
+      }
+    } else {
+      requestAnimationFrame(() => { if (!panel.hidden) panel.scrollIntoView({block:"center",behavior:"instant"}); });
+    }
+  } else {
+    $("bonusContinue").hidden = true;
+    stopTap();
+  }
 }
 function finishBonusView() {
   const complete = bonus && (bonus.done || bonus.completed);
@@ -817,7 +851,7 @@ function finishBonusView() {
     $("gameStatus").textContent = message;
     $("gameStatus").classList.add("bonus-finished");
     const timer=setTimeout(()=>{$("gameStatus").classList.remove("bonus-finished");transientTimers.delete(timer);},2400);transientTimers.add(timer);
-    toast(message);
+    if (selected.id !== "first") toast(message);
   }
 }
 function updateCabinet() {
@@ -829,6 +863,28 @@ function updateCabinet() {
   applyMachineLook();
   document.querySelectorAll("[data-room-nav]").forEach(el => el.classList.toggle("active", el.dataset.roomNav === (slot ? "slots" : "arcade")));
   refreshRoomLeaders();
+}
+function setGameName(game) {
+  const heading = $("gameName");
+  heading.textContent = game.name;
+  heading.removeAttribute("aria-label");
+  if (game.id !== "first") return;
+
+  heading.setAttribute("aria-label", game.name);
+  const marquee = document.createElement("span");
+  marquee.className = "first-class-marquee";
+  marquee.setAttribute("aria-hidden", "true");
+  for (const [index, word] of game.name.toUpperCase().split(" ").entries()) {
+    if (index > 0) marquee.append(" ");
+    const group = document.createElement("span");
+    for (const letter of word) {
+      const flap = document.createElement("span");
+      flap.textContent = letter;
+      group.append(flap);
+    }
+    marquee.append(group);
+  }
+  heading.replaceChildren(marquee);
 }
 async function refreshRoomLeaders() {
   const list = $("roomLeadersList");
@@ -962,7 +1018,7 @@ async function openGame(id) {
       ? "243 WAYS"
       : "5 REELS · 5 PAYLINES";
   $("bonusPanel").dataset.game = selected.id;
-  $("gameName").textContent = selected.name;
+  setGameName(selected);
   $("gameTag").textContent = selected.tag;
   $("roomArt").style.cssText = artStyle(selected.art);
   setBonusVisible(false);
@@ -1042,28 +1098,53 @@ async function play() {
 }
 async function loadBonus() {
   if (!selected || selected.arcade) return;
+  const g = selected;
   try {
-    const g = selected;
     const d = await api(
       g.endpoint ? "/api/bonus/session" : "/api/themed/bonus/state",
       g.endpoint
         ? { kind: g.id === "spoiled" ? "vault" : "slide" }
         : { game: g.id },
     );
+    if (selected !== g || $("gameRoom").hidden) return;
     bonus = d.session;
     if (bonus && !bonus.done && !bonus.completed) {
       stopAuto();
       renderBonus();
     } else setBonusVisible(false);
   } catch (e) {
+    if (selected !== g || $("gameRoom").hidden) return;
     if (!e.message.includes("Land at least")) {
       $("gameStatus").textContent = e.message;
       stopAuto();
     }
   }
 }
-function renderBonus() {
-  if (!bonus || bonus.done || bonus.completed) {
+function renderFirstClassCase(button, index, destination, award) {
+  const art = document.createElement("span");
+  art.className = "first-class-case-art";
+  art.setAttribute("aria-hidden", "true");
+  art.style.backgroundPosition = (index % 3) * 50 + "% " + Math.floor(index / 3) * 100 + "%";
+
+  const tag = document.createElement("span");
+  tag.className = "first-class-case-tag";
+  tag.textContent = destination;
+  button.classList.add("first-class-case");
+  button.append(art, tag);
+
+  if (award !== undefined) {
+    const ticket = document.createElement("strong");
+    ticket.className = "first-class-award";
+    ticket.textContent = "+" + fmt(award);
+    button.append(ticket);
+    button.setAttribute("aria-label", destination + ", " + fmt(award) + " KillaCoins");
+  } else {
+    button.setAttribute("aria-label", "Choose " + destination);
+  }
+}
+
+function renderBonus(showCompleted = false) {
+  if (!bonus || ((bonus.done || bonus.completed) && !showCompleted)) {
     finishBonusView();
     return;
   }
@@ -1074,6 +1155,7 @@ function renderBonus() {
   $("bonusName").textContent = scene?.name || g.bonus;
   $("bonusChoices").replaceChildren();
   $("bonusStatus").textContent = "";
+  $("bonusContinue").hidden = !showCompleted;
   if (g.id === "squirt") {
     renderTap();
     return;
@@ -1082,11 +1164,24 @@ function renderBonus() {
     selections = legacy ? bonus.opened : bonus.selections;
   const count = legacy ? 12 : bonus.labels.length,
     allowed = bonus.picks || 1;
+  const instruction = showCompleted
+    ? "Baggage claim complete."
+    : scene?.instruction || "Choose your prizes.";
   $("bonusText").textContent =
-    `${scene?.instruction || "Choose your prizes."} ${selections.length} / ${allowed} PICKS · TOTAL ${fmt(bonus.total)} KILLACOINS`;
+    instruction + " " + selections.length + " / " + allowed + " PICKS · TOTAL " + fmt(bonus.total) + " KILLACOINS";
   for (let i = 0; i < count; i++) {
     const chosen = selections.find((s) => s.choice === i),
       b = document.createElement("button");
+    b.type = "button";
+    b.className = "bonus-prize adventure-prize";
+    b.disabled = !!chosen || bonus.done || bonus.completed;
+    b.classList.toggle("revealed", !!chosen);
+    b.onclick = () => pickBonus(i);
+    if (g.id === "first") {
+      renderFirstClassCase(b, i, scene.labels[i] || bonus.labels[i], chosen?.award);
+      $("bonusChoices").append(b);
+      continue;
+    }
     const label = chosen
       ? "+" + fmt(chosen.award)
       : legacy
@@ -1097,14 +1192,12 @@ function renderBonus() {
       : {
           spoiled: "scatter",
           brat: "bag",
-          first: "luggage",
           cash: "cash",
           red: "flag",
           vip: "suite",
           double: i === 0 ? "red" : "blonde",
           vault: "vault",
         }[g.id] || "gift";
-    b.className = "bonus-prize adventure-prize";
     b.style.setProperty("--lane", i);
     b.append(sprite(symbol));
     const text = document.createElement("span");
@@ -1112,16 +1205,19 @@ function renderBonus() {
     text.textContent = chosen ? label : (scene?.labels?.[i % scene.labels.length] || label);
     b.append(text);
     b.setAttribute("aria-label", label);
-    b.disabled = !!chosen || bonus.done || bonus.completed;
-    b.classList.toggle("revealed", !!chosen);
-    b.onclick = () => pickBonus(i);
     $("bonusChoices").append(b);
   }
 }
 async function pickBonus(choice) {
   if (busy) return;
   const opening = $("bonusChoices").children[choice];
+  const firstClass = selected.id === "first";
+  const restoreFocus = firstClass && opening?.matches(":focus-visible");
   opening?.classList.add("prize-opening");
+  if (firstClass) {
+    tone(290, .055, 0, .018, "triangle");
+    tone(480, .07, .045, .012, "triangle");
+  }
   setBusy(true);
   $("bonusChoices")
     .querySelectorAll("button")
@@ -1135,16 +1231,20 @@ async function pickBonus(choice) {
     apply(d);
     await motionPause(260);
     bonus = legacy ? d.session : { ...bonus, ...d };
-    renderBonus();
+    renderBonus(firstClass && bonus.completed);
     $("bonusStatus").textContent =
       "+" +
       fmt(d.award) +
       " KILLACOINS" +
       (bonus.done || bonus.completed ? " · BONUS COMPLETE" : "");
+    if (restoreFocus) {
+      const next = bonus.completed ? $("bonusContinue") : $("bonusChoices").querySelector("button:not(:disabled)");
+      next?.focus({ preventScroll: true });
+    }
     sound();
   } catch (e) {
-    $("bonusStatus").textContent = e.message;
     await loadBonus();
+    $(firstClass && $("bonusPanel").hidden ? "gameStatus" : "bonusStatus").textContent = e.message;
   } finally {
     setBusy(false);
   }
@@ -1250,6 +1350,9 @@ function rules() {
   else if (g.id === "claw")
     text =
       "Move the claw horizontally to choose a shelf and vertically to align with it; drop near the prize level. Shelves from left to right: heart 0.5× bet / 42% base grip, bag 1.5× / 35%, diamond 2.5× / 27%, crown 4× / 19%, mystery 1× / 30%. Vertical alignment modifies grip probability. A caught crown has a 15% chance to add 5× bet. Prizes are virtual coins only.";
+  else if (g.id === "first")
+    text =
+      "Five paylines, read from left to right. Matching three, four or five symbols pays 1×, 3× or 8× the total bet per line, and diamonds pay double. The winged W substitutes for other symbols. An all-wild line pays zero. Land three or more carry-ons anywhere to open Destination: First Class with three to five suitcase picks.";
   else
     text =
       (g.id === "vault"
@@ -1290,6 +1393,12 @@ function rules() {
 }
 $("enter").onclick = () => login();
 $("guest").onclick = () => login(true);
+$("bonusBack").onclick = () => leaveRoom("slots");
+$("bonusContinue").onclick = () => {
+  finishBonusView();
+  $("gameRoom").scrollTop = 0;
+  $("play").focus({ preventScroll: true });
+};
 $("sound").onclick = () => {
   soundOn = !soundOn;
   store.set("sound", soundOn ? "on" : "off");
@@ -1462,7 +1571,7 @@ function themedBurst(host=$("gameStage")) {
 const bonusScenes = {
  spoiled:{name:"Shopping Spree",instruction:"Open the boutique gifts.",labels:["DIAMOND BOX","VELVET BAG","GOLD PARCEL","PRIVATE PICK"]},
  brat:{name:"Collect What You’re Owed",instruction:"Open sealed invoices to collect your tax.",labels:["BRAT TAX","LUXURY LEVY","LATE FEE","ATTITUDE TAX","SERVICE FEE","SPOILED SURCHARGE","VIP INVOICE","GLAM TAX","FINAL NOTICE"]},
- first:{name:"Destination: First Class",instruction:"Choose your next getaway.",labels:["PARIS","DUBAI","MONACO","MALDIVES","MILAN","ST. BARTS"]},
+ first:{name:"Destination: First Class",instruction:"Choose a suitcase.",labels:["Paris","Dubai","Monaco","Maldives","Milan","St. Barts"]},
  cash:{name:"Cash Catch",instruction:"Catch the drifting bundles. Take your time; unused picks never expire."},
  red:{name:"Rose Garden Riches",instruction:"Open each rose envelope to reveal its award.",labels:["RED ROSES","BLACK ROSES","GOLD ROSES"]},
  vip:{name:"Behind the Velvet Rope",instruction:"Unlock your private suites.",labels:["GOLD SUITE","RUBY SUITE","SKY LOUNGE","ROOFTOP","PENTHOUSE"]},
