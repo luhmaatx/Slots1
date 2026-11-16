@@ -9,15 +9,27 @@ const app = express(),
   PORT = process.env.PORT || 3000;
 const BOT_TOKEN = process.env.TELEGRAM_BOT_TOKEN,
   DATABASE_URL = process.env.DATABASE_URL;
+const STATIC_SITE_ORIGIN = "https://slots1.onrender.com";
 app.disable("x-powered-by");
-app.use("/api/owner/save", express.json({ limit: "3mb" }));
-app.use(express.json({ limit: "20kb" }));
 app.use((req, res, next) => {
   res.set("X-Content-Type-Options", "nosniff");
   res.set("Referrer-Policy", "same-origin");
-  if (req.path.startsWith("/api")) res.set("Cache-Control", "no-store");
+  if (req.path.startsWith("/api")) {
+    res.set("Cache-Control", "no-store");
+    res.vary("Origin");
+    if (req.get("Origin") === STATIC_SITE_ORIGIN) {
+      res.set("Access-Control-Allow-Origin", STATIC_SITE_ORIGIN);
+      if (req.method === "OPTIONS") {
+        res.set("Access-Control-Allow-Methods", "GET, POST");
+        res.set("Access-Control-Allow-Headers", "Content-Type");
+        return res.sendStatus(204);
+      }
+    }
+  }
   next();
 });
+app.use("/api/owner/save", express.json({ limit: "3mb" }));
+app.use(express.json({ limit: "20kb" }));
 const GUEST_SECRET = process.env.GUEST_SECRET;
 const READ_PATHS = new Set([
   "/api/me",

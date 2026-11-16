@@ -32,11 +32,21 @@ module.exports = function install({app,pool,auth,withLockedPlayer,READ_PATHS}) {
       ['decor-diamond','Diamond Penthouse','decor',4000,'Violet velvet and platinum details.',true,'diamond'],
       ['merch-ten','10% Merch Discount','discount',30000,'Owner must add eligibility, expiry and a real code before activating.',false,'']
     ];
-    for(const row of seeds) await c.query('INSERT INTO killa_catalog(id,title,kind,price,description,active,payload) VALUES($1,$2,$3,$4,$5,$6,$7) ON CONFLICT(id) DO NOTHING',row);
+    for (const row of seeds) {
+      const payload = row[6];
+      if (payload === null) continue;
+      await c.query('INSERT INTO killa_catalog(id,title,kind,price,description,active,payload) VALUES($1,$2,$3,$4,$5,$6,$7) ON CONFLICT(id) DO NOTHING', row);
+    }
   }
   function wallpaper(title,bg,accent){
     const file={'Ruby Royalty':'wallpaper-ruby','Neon Lagoon':'wallpaper-lagoon','Midnight Diamonds':'wallpaper-diamond'}[title];
-    return 'data:image/png;base64,'+require('fs').readFileSync(require('path').join(__dirname,'private-rewards',file+'.png')).toString('base64');
+    const filePath = require('path').join(__dirname, 'private-rewards', file + '.png');
+    try {
+      return 'data:image/png;base64,' + require('fs').readFileSync(filePath).toString('base64');
+    } catch (error) {
+      if (error.code === 'ENOENT') return null;
+      throw error;
+    }
   }
   route('/api/vault/state',async(c,p,b,u)=>{
     const items=await c.query(`SELECT id,title,kind,price,description,active,

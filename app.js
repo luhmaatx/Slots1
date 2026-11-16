@@ -2,6 +2,9 @@
 const $ = (id) => document.getElementById(id),
   fmt = (n) => Number(n || 0).toLocaleString(),
   tg = window.Telegram?.WebApp;
+const apiOrigin = window.location.origin === "https://slots1.onrender.com"
+  ? "https://kimia-prive-api.onrender.com"
+  : "";
 const store = {
   get: (k) => {
     try {
@@ -275,7 +278,7 @@ async function send(endpoint, body) {
   const controller = new AbortController(),
     timeout = setTimeout(() => controller.abort(), 15000);
   try {
-    response = await fetch(endpoint, {
+    response = await fetch(apiOrigin + endpoint, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ ...body, ...credentials() }),
@@ -452,7 +455,7 @@ async function nav(id) {
   }
 }
 async function leaders() {
-  const r = await fetch("/api/leaderboard");
+  const r = await fetch(apiOrigin + "/api/leaderboard");
   if (!r.ok) throw Error("Leaderboard unavailable");
   const d = await r.json();
   $("leaders").replaceChildren();
@@ -890,7 +893,7 @@ async function refreshRoomLeaders() {
   const list = $("roomLeadersList");
   list.textContent = "Loading players…";
   try {
-    const response = await fetch("/api/leaderboard");
+    const response = await fetch(apiOrigin + "/api/leaderboard");
     if (!response.ok) throw Error("unavailable");
     const data = await response.json();
     list.replaceChildren();
