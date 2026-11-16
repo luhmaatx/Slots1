@@ -180,7 +180,8 @@ let player = null,
   y = 0.5,
   rotation = 0,
   openedPage = "home";
-let tapClockOffset = 0;
+let tapDeadline = 0;
+let tapMoveAt = 0;
 let soundOn = store.get("sound") === "on",
   audio = null,
   tapTimer = null,
@@ -189,6 +190,7 @@ let soundOn = store.get("sound") === "on",
   autoTimer = null;
 function artStyle(id) {
   if (id === "first") return "background-image:url('/assets/first-class/cabin.webp');background-position:center 26%";
+  if (id === "squirt") return "background-image:url('/assets/squirt-city/rooftop.webp');background-position:center 36%";
   if (collage[id]) {
     const [col, row] = collage[id];
     return `background-image:url('/assets/themes.webp');background-size:300% 200%;background-position:${col * 50}% ${row * 100}%`;
@@ -610,8 +612,8 @@ const gameSymbolSets = {
     "diamond",
     "neon7",
     "heart",
-    "bolt",
     "moon",
+    "bolt",
     "bubble",
     "afterhours",
   ],
@@ -639,6 +641,16 @@ const firstClassSymbolNames = {
   diamond: "Diamond",
   key: "Hotel key",
   wild: "Winged wild",
+};
+const squirtSymbolNames = {
+  splash: "Water blaster wild",
+  diamond: "Ice-blue diamond",
+  neon7: "Neon seven",
+  heart: "Heart float",
+  moon: "Lifeguard float",
+  bolt: "Lightning bolt",
+  bubble: "Bubbles",
+  afterhours: "Piña colada free spins",
 };
 
 function sprite(symbol, label = symbol) {
@@ -696,18 +708,28 @@ function reelCell(symbol, index, wins) {
   const cell = document.createElement("div");
   cell.className = "reel-cell" + (wins.has(index) ? " win" : "");
   cell.dataset.index = index;
-  const firstClassLabel = selected?.id === "first" && firstClassSymbolNames[symbol];
-  const label = firstClassLabel || (symbol === "moon" ? "Pool float" : symbol || "symbol");
+  const game = selected?.id;
+  const firstClassLabel = game === "first" && firstClassSymbolNames[symbol];
+  const squirtLabel = game === "squirt" && squirtSymbolNames[symbol];
+  const label = firstClassLabel || squirtLabel || (symbol === "moon" ? "Pool float" : symbol || "symbol");
   cell.setAttribute("aria-label", label);
   const art = sprite(symbol, label);
-  if (firstClassLabel) {
-    const position = gameSymbolSets.first.indexOf(symbol);
-    art.classList.add("first-class-symbol");
+  if (firstClassLabel || squirtLabel) {
+    const position = gameSymbolSets[game].indexOf(symbol);
+    art.classList.add(firstClassLabel ? "first-class-symbol" : "squirt-symbol");
+    if (squirtLabel) {
+      art.classList.remove("pool-float", "lux-symbol-fallback");
+      art.setAttribute("aria-label", label);
+    }
     art.style.backgroundPosition = (position % 4) * 100 / 3 + "% " + Math.floor(position / 4) * 100 + "%";
   }
   cell.append(art);
-  if (["wild","scatter","afterhours"].includes(symbol)) {
-    const tag = document.createElement("small"); tag.className = "symbol-tag";tag.textContent = symbol === "wild" ? "WILD" : "FREE SPINS";cell.append(tag);
+  const isWild = symbol === "wild" || (game === "squirt" && symbol === "splash");
+  if (isWild || ["scatter", "afterhours"].includes(symbol)) {
+    const tag = document.createElement("small");
+    tag.className = "symbol-tag";
+    tag.textContent = isWild ? "WILD" : "FREE SPINS";
+    cell.append(tag);
   }
   return cell;
 }
@@ -829,10 +851,11 @@ function setBonusVisible(visible) {
   room.classList.toggle("bonus-active", visible);
   if (visible) {
     stopAuto();
-    if (selected.id === "first") {
+    const game = selected.id;
+    if (game === "first" || game === "squirt") {
       if (entering) {
         requestAnimationFrame(() => {
-          if (!panel.hidden && room.dataset.game === "first") {
+          if (!panel.hidden && room.dataset.game === game) {
             room.scrollTop = 0;
             $("bonusName").focus({ preventScroll: true });
           }
@@ -871,6 +894,13 @@ function setGameName(game) {
   const heading = $("gameName");
   heading.textContent = game.name;
   heading.removeAttribute("aria-label");
+  if (game.id === "squirt") {
+    const [name, suffix] = game.name.split(", ");
+    const accent = document.createElement("span");
+    accent.textContent = suffix;
+    heading.replaceChildren(name + ", ", accent);
+    return;
+  }
   if (game.id !== "first") return;
 
   heading.setAttribute("aria-label", game.name);
@@ -1257,75 +1287,114 @@ function stopTap() {
   tapTimer = null;
 }
 function renderTap() {
-  if (!bonus || bonus.done || bonus.completed) return finishBonusView();
-  if (bonus.started && Number.isFinite(bonus.remainingMs))
-    tapClockOffset =
-      Date.now() + bonus.remainingMs - Date.parse(bonus.expiresAt);
-  $("bonusText").textContent =
-    "Splash the moving pool target. Each accepted hit earns the triggering bet; the server caps hits at 16 per second.";
-  $("bonusChoices").innerHTML =
-    '<div style="grid-column:1/-1"><div class="tap-clock" id="tapClock"></div><div class="tap-arena"><button id="tapButton" class="tap-button">' +
-    (bonus.started ? "SPLASH!" : "START") +
-    "</button></div></div>";
+  if (!bonus) return finishBonusView();
+  stopTap();
+  const complete = bonus.done || bonus.completed;
+  const remaining = bonus.started
+    ? (bonus.remainingMs ?? Math.max(0, Date.parse(bonus.expiresAt) - Date.now()))
+    : bonus.duration * 1000;
+  tapDeadline = performance.now() + remaining;
+  tapMoveAt = performance.now() + 1500;
   tapCount = Number(bonus.taps || 0);
-  $("tapButton").onclick = async () => {
-    if (!bonus.started) {
-      if (busy) return;
-      setBusy(true);
-      try {
-        const d = await api("/api/bonus/start", { kind: "slide" });
-        bonus = d.session;
-        renderTap();
-      } catch (e) {
-        $("bonusStatus").textContent = e.message;
-      } finally {
-        setBusy(false);
-      }
-    } else if (!bonus.done) {
-      tapCount++;
-      if(!reducedEffects()) { $("tapButton").style.left=(8+Math.random()*62)+"%"; $("tapButton").style.top=(8+Math.random()*52)+"%"; }
-      if (performance.now()-lastSplash > 140) { lastSplash=performance.now(); themedSound("water"); themedBurst($("bonusPanel")); }
-      if(!reducedEffects()) $("tapButton").animate([{transform:"scale(.93)"},{transform:"scale(1)"}],{duration:110,easing:"ease-out"});
-      $("bonusStatus").textContent =
-        fmt(tapCount) + " TAPS · " + fmt(bonus.total) + " COINS CREDITED";
+  $("bonusName").textContent = complete ? "Splash complete" : "Pool Party Target Splash";
+  $("bonusText").textContent = complete
+    ? "KillaCoins added to your balance."
+    : "Tap the moving ring. Each accepted hit earns " + fmt(bonus.bet) + " KillaCoins.";
+  $("bonusStatus").textContent = "";
+  $("bonusChoices").innerHTML = `
+    <div class="squirt-round">
+      <dl class="squirt-round-stats" aria-label="Splash bonus results">
+        <div><dd id="tapClock">${complete ? 0 : Math.ceil(remaining / 1000)}</dd><dt>Seconds</dt></div>
+        <div><dd id="tapHits">${fmt(bonus.taps)}</dd><dt>Accepted hits</dt></div>
+        <div><dd id="tapAward">${fmt(bonus.total)}</dd><dt>KillaCoins</dt></div>
+      </dl>
+      <div class="tap-arena">
+        ${complete ? "" : '<button id="tapButton" class="tap-button squirt-target" type="button"><span>' +
+          (bonus.started ? "SPLASH!" : "START") + '</span></button>'}
+      </div>
+    </div>`;
+  $("bonusContinue").hidden = !complete;
+  if (complete) {
+    sound();
+    $("bonusContinue").focus({ preventScroll: true });
+    return;
+  }
+  const button = $("tapButton");
+  const hit = () => {
+    const now = performance.now();
+    if (!bonus.started || bonus.done || button.disabled || now >= tapDeadline) return;
+    tapCount++;
+    tapMoveAt = Math.max(tapMoveAt, now + 320);
+    if (now - lastSplash < 120) return;
+    lastSplash = now;
+    themedSound("water");
+    if (reducedEffects()) return;
+    const ripple = document.createElement("span");
+    ripple.className = "squirt-hit-ripple";
+    ripple.style.left = button.style.left || "50%";
+    ripple.style.top = button.style.top || "53%";
+    button.parentElement.append(ripple);
+    ripple.addEventListener("animationend", () => ripple.remove(), { once: true });
+  };
+  button.onpointerdown = (event) => {
+    if (event.isPrimary && event.button === 0) hit();
+  };
+  button.onclick = async (event) => {
+    if (bonus.started) {
+      if (event.detail === 0) hit();
+      return;
+    }
+    if (busy) return;
+    setBusy(true);
+    button.disabled = true;
+    try {
+      const d = await api("/api/bonus/start", { kind: "slide" });
+      bonus = d.session;
+      renderTap();
+      $("tapButton")?.focus({ preventScroll: true });
+    } catch (e) {
+      button.disabled = false;
+      $("bonusStatus").textContent = e.message;
+    } finally {
+      setBusy(false);
     }
   };
-  stopTap();
-  if (bonus.started && !bonus.done) {
+  if (bonus.started) {
     tapTimer = setInterval(tapTick, 400);
     tapTick();
-  } else $("tapClock").textContent = (bonus.duration || 0) + " SECONDS";
+  }
 }
 async function tapTick() {
-  if (!bonus || !selected || selected.id !== "squirt" || tapSending) return;
-  const left = Math.max(
-    0,
-    Date.parse(bonus.expiresAt) - Date.now() + tapClockOffset,
-  );
-  $("tapClock").textContent = Math.ceil(left / 1000) + " SECONDS";
-  if (!left) $("tapButton").disabled = true;
+  const button = $("tapButton");
+  if (!bonus?.started || bonus.done || selected?.id !== "squirt" || !button) return;
+  const now = performance.now();
+  const left = Math.max(0, tapDeadline - now);
+  $("tapClock").textContent = Math.ceil(left / 1000);
+  if (!left) {
+    button.disabled = true;
+  } else if (now >= tapMoveAt && !reducedEffects()) {
+    button.style.left = 32 + Math.random() * 36 + "%";
+    button.style.top = 39 + Math.random() * 30 + "%";
+    tapMoveAt = now + 1500;
+  }
+  if (tapSending || (left && tapCount === bonus.taps)) return;
   tapSending = true;
   try {
     const d = await api(left > 0 ? "/api/bonus/tap" : "/api/bonus/finish", {
       kind: "slide",
       taps: tapCount,
     });
-    bonus = d.session;
     apply(d);
-    $("bonusStatus").textContent =
-      fmt(bonus.taps) +
-      " ACCEPTED TAPS · " +
-      fmt(bonus.total) +
-      " KILLACOINS" +
-      (bonus.done ? " · COMPLETE" : "");
+    if (!button.isConnected || $("bonusPanel").hidden) return;
+    bonus = d.session;
+    $("tapHits").textContent = fmt(bonus.taps);
+    $("tapAward").textContent = fmt(bonus.total);
     if (bonus.done) {
-      stopTap();
-      $("tapButton").disabled = true;
-      finishBonusView();
+      renderTap();
     }
   } catch (e) {
     stopTap();
-    $("tapButton").disabled = true;
+    button.disabled = true;
     $("bonusStatus").textContent = e.message;
   } finally {
     tapSending = false;
@@ -1343,7 +1412,7 @@ function rules() {
       "Five fixed paylines, left to right from the first reel. 3/4/5 matches pay 2×/5×/12× total bet per line; sevens double that. 1/2/3+ wilds multiply a line by 2×/3×/5×. All-wild lines pay zero. Three or more diamonds anywhere unlock 3/4/5 gift picks (capped at five). Each gift awards 40–500 coins. Three or more gift scatters award 5 additional free spins per extra scatter above two, capped at 20.";
   else if (g.id === "squirt")
     text =
-      "Five fixed paylines. Splash is wild. Two-symbol matches can award a small return; the exact table is below. One wild doubles 3+ matches, two or more wilds triple them. Three or more diamonds unlock a timed tap bonus, 10–30 seconds. Each accepted tap awards one total bet. Accepted taps are capped at 16 per second; this cap does not establish that a human made the taps. Three or more AFTER HOURS scatters award 5–20 free spins.";
+      "Five fixed paylines. The water blaster is wild. One wild doubles wins with three or more matches. Two or more wilds triple those wins. Land three or more diamonds to unlock a 10–30 second splash bonus. Each accepted hit earns the triggering bet, up to 16 hits per second. Three or more piña coladas award 5–20 free spins.";
   else if (g.id === "duck")
     text =
       "Pick exactly 3 of 12 ducks. Each reveal is independent: blank 32%, small 30%, medium 21%, large 12%, gold 5%. Awards are 0, 0.25×, 0.75×, 2× and 1× bet, rounded down per reveal. Three gold ducks add 10× bet. The visible duck selection is sent to the server.";
@@ -1377,13 +1446,13 @@ function rules() {
         .map(
           ([s, v]) =>
             "<tr><td>" +
-            icons[s] +
+            squirtSymbolNames[s] +
             "</td>" +
             v.map((n) => "<td>" + n + "%</td>").join("") +
             "</tr>",
         )
         .join("") +
-      "</table><p>Percentages of total bet, per winning line. All-splash lines use the neon 7 table.</p>";
+          "</table><p>Percentages of total bet, per winning line. All-wild lines use the neon seven payouts.</p>";
   showInfo(
     "<h2>" +
       g.name +

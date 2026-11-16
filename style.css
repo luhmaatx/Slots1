@@ -2647,3 +2647,537 @@ html[data-effects=off] #bonusPanel .bonus-prize,html[data-effects=subtle] #bonus
 }
 
 .tap-arena{position:relative;height:310px;overflow:hidden;border-radius:22px;background:radial-gradient(ellipse at center,#56efff55,#14345899);border:1px solid #8ff9ff66}#bonusPanel[data-adventure=squirt] #tapButton{position:absolute;width:100px;min-width:0;height:100px;min-height:0;left:35%;top:25%;border-radius:50%;font-size:15px}
+
+/* Squirt City — rooftop cabinet and splash bonus. */
+#gameRoom[data-game="squirt"] {
+  --pool-ice: #b9fbff;
+  --pool-night: #051b33;
+  --pool-pink: #ff63bd;
+  --pool-image: url("/assets/squirt-city/rooftop.webp");
+  --pool-icons: url("/assets/squirt-city/reels.webp");
+  --pool-type: "Barlow Condensed", "Arial Narrow", system-ui, sans-serif;
+  background: linear-gradient(180deg, #180a3080 0%, #031526d9 80%), var(--pool-image) center 32% / cover;
+  color: #edfdff;
+  overflow-x: hidden;
+}
+
+#gameRoom[data-game="squirt"] .room-wrap {
+  width: 100%;
+  max-width: 650px;
+  min-height: 100%;
+  padding: max(11px, env(safe-area-inset-top)) 13px env(safe-area-inset-bottom);
+}
+
+#gameRoom[data-game="squirt"] .room-header {
+  margin: 0 0 8px;
+}
+
+#gameRoom[data-game="squirt"] :is(.room-member, .room-wallet) {
+  background: linear-gradient(160deg, #16405ded, #08233df2);
+  border: 1px solid #78d6f0a6;
+  box-shadow: inset 0 0 0 2px #79f9ff17, 0 5px 12px #03091c80;
+}
+
+#gameRoom[data-game="squirt"] .room-title {
+  display: grid;
+  place-items: center;
+  min-height: 138px;
+  margin: 0;
+  padding: 23px 37px 14px;
+  border: 0;
+  border-radius: 27px 27px 0 0;
+  background: linear-gradient(180deg, #270b4a2e, #071b32b8 88%), var(--pool-image) center 10% / cover;
+  text-align: center;
+}
+
+#gameRoom[data-game="squirt"] .room-logo {
+  display: block;
+  width: auto;
+  margin: 0 0 6px;
+  color: #fff2d4;
+  font: 850 10px/1.2 var(--pool-type);
+  letter-spacing: .18em;
+  text-shadow: 0 1px 5px #0b0c30;
+}
+
+#gameRoom[data-game="squirt"] .room-logo::before {
+  content: "KILLAMANI CASINO × LUHMAATX";
+}
+
+#gameRoom[data-game="squirt"] .room-logo svg,
+#gameRoom[data-game="squirt"] .room-slogan {
+  display: none;
+}
+
+#gameRoom[data-game="squirt"] #gameName {
+  position: static;
+  width: auto;
+  height: auto;
+  margin: 0;
+  padding: 0;
+  overflow: visible;
+  clip-path: none;
+  white-space: normal;
+  color: #edfaff;
+  font: italic 950 clamp(29px, 8vw, 52px)/.87 var(--pool-type);
+  letter-spacing: -.055em;
+  text-transform: uppercase;
+  text-shadow: 0 2px #1088d4, 0 4px #062768, 0 7px 12px #040d2f;
+}
+
+#gameRoom[data-game="squirt"] #gameName > span {
+  color: #ffd3ef;
+  text-shadow: 0 2px #db2790, 0 4px #710943, 0 7px 12px #210f36;
+}
+
+#gameRoom[data-game="squirt"] #gameTag {
+  display: block;
+  margin: 11px 0 0;
+  color: var(--pool-ice);
+  font: 800 9px/1 var(--pool-type);
+  letter-spacing: .22em;
+  text-shadow: 0 2px 4px #000;
+}
+
+#gameRoom[data-game="squirt"] :is(.room-menu, .room-info) {
+  top: 12px;
+  background: #062439da;
+  border-color: #99ecfb94;
+}
+
+#gameRoom[data-game="squirt"] .room-menu { left: 7px; }
+#gameRoom[data-game="squirt"] .room-info { right: 7px; }
+
+#gameRoom[data-game="squirt"] .machine {
+  width: 100%;
+  margin: 0;
+  padding: 10px 9px 11px;
+  border: 4px solid transparent;
+  border-radius: 35px 35px 24px 24px;
+  background: linear-gradient(160deg, #0c5871, #042943 52%, #06172f) padding-box,
+    linear-gradient(145deg, #f4ffff 0%, #49e8f8 9%, #00648d 23%, #ddfeff 29%, #045275 40%, #13c6d2 60%, #0a3150 78%, #f5bded 91%, #227b9b 100%) border-box;
+  box-shadow: inset 0 0 0 2px #0799b391, 0 0 24px #44cef085, 0 15px 30px #040b21d1;
+}
+
+#gameRoom[data-game="squirt"] #gameStage {
+  position: relative;
+  padding: 13px 4px;
+  overflow: hidden;
+  border-radius: 22px 22px 14px 14px;
+  border: 1px solid #73f7ff96;
+  background: linear-gradient(90deg, #013c58a8, #326d8445, #003a5caa), var(--pool-image) center 85% / 135% auto;
+  box-shadow: inset 0 0 16px #022540b0;
+}
+
+#gameRoom[data-game="squirt"] #gameStage::before,
+#gameRoom[data-game="squirt"] #gameStage::after {
+  content: "";
+  display: block;
+  position: absolute;
+  left: 8%;
+  width: 84%;
+  height: 11px;
+  padding: 0;
+  z-index: 1;
+  pointer-events: none;
+  background: linear-gradient(#efffffeb, #4cdef1ab 40%, #7cf9ff27),
+    repeating-linear-gradient(97deg, #ecffffbd 0 1px, #1ca8d862 1px 3px, transparent 3px 5px);
+  filter: drop-shadow(0 0 6px #99ffffbd);
+  animation: squirt-waterfall 1.5s ease-in-out infinite alternate;
+}
+
+#gameRoom[data-game="squirt"] #gameStage::before { top: 0; transform: scaleY(-1); }
+#gameRoom[data-game="squirt"] #gameStage::after { bottom: 0; }
+
+#gameRoom[data-game="squirt"] #reels {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: clamp(4px, 1.1vw, 9px);
+  padding: 0;
+  margin: 0;
+  min-width: 0;
+  border: 0;
+  background: none;
+  box-shadow: none;
+}
+
+#gameRoom[data-game="squirt"] .reel-column {
+  min-width: 0;
+  padding: 0;
+  border: 0;
+  border-radius: 12px;
+  box-shadow: none;
+  background: none;
+}
+
+#gameRoom[data-game="squirt"] .reel-track {
+  gap: clamp(4px, 1.1vw, 9px);
+}
+
+#gameRoom[data-game="squirt"] .reel-cell {
+  position: relative;
+  width: 100%;
+  height: auto;
+  min-width: 0;
+  min-height: 0;
+  aspect-ratio: 1;
+  overflow: hidden;
+  border: 1px solid #8af4ffcf;
+  border-radius: clamp(7px, 2vw, 15px);
+  background: linear-gradient(152deg, #70e7ec99 0%, #18b9d959 36%, #11678bba 76%, #44c0d988 100%),
+    var(--pool-image) center 82% / 235% auto;
+  box-shadow: inset 0 2px 1px #e4ffffa8, inset 0 -3px 5px #032a6dce, 0 2px 4px #001b37c9;
+}
+
+#gameRoom[data-game="squirt"] .reel-cell::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  border-radius: inherit;
+  background: linear-gradient(154deg, #d9ffff35, transparent 30% 78%, #77effa27);
+}
+
+#gameRoom[data-game="squirt"] .lux-symbol.squirt-symbol {
+  z-index: 1;
+  display: block;
+  width: 94%;
+  height: auto;
+  aspect-ratio: 1;
+  background-image: var(--pool-icons);
+  background-size: 400% 200%;
+  background-repeat: no-repeat;
+  border-radius: 13%;
+  mask-image: radial-gradient(ellipse at center, #000 55%, #000d 72%, transparent 89%);
+  filter: drop-shadow(0 3px 2px #022745a3);
+}
+
+#gameRoom[data-game="squirt"] .reel-cell.win {
+  border-color: #faffff;
+  box-shadow: inset 0 0 13px #cdfdff, 0 0 10px #e77fff;
+  z-index: 2;
+}
+
+#gameRoom[data-game="squirt"] .symbol-tag {
+  z-index: 2;
+  bottom: 1px;
+  font-size: clamp(6px, 1.8vw, 9px);
+  letter-spacing: .04em;
+  background: #042b50ee;
+  color: #d8fbff;
+  border-color: #7ae8fa93;
+}
+
+#gameRoom[data-game="squirt"] .bet-controls {
+  display: grid;
+  grid-template-columns: .72fr .65fr 1.6fr .65fr .75fr;
+  align-items: center;
+  gap: 5px;
+  width: 100%;
+  margin: 9px 0 0;
+  padding: 6px;
+  border: 1px solid #51c6e69f;
+  border-radius: 13px;
+  background: #072e47;
+}
+
+#gameRoom[data-game="squirt"] :is(.bet-line-count, .live-bet) {
+  min-width: 0;
+}
+
+#gameRoom[data-game="squirt"] :is(.bet-line-count, .live-bet) small {
+  color: #bcecff;
+  font-size: 8px;
+}
+
+#gameRoom[data-game="squirt"] .bet-controls button {
+  width: 100%;
+  min-width: 0;
+  min-height: 44px;
+  padding: 4px;
+  border: 1px solid #64daedab;
+  border-radius: 9px;
+  background: linear-gradient(#175e78, #0a2846);
+  color: #f4fdff;
+}
+
+#gameRoom[data-game="squirt"] .play-controls {
+  display: grid;
+  grid-template-columns: 1fr minmax(104px, 1.22fr) 1fr;
+  align-items: center;
+  width: min(100%, 356px);
+  min-height: 0;
+  gap: 8px;
+  margin: 10px auto 0;
+  padding: 0;
+}
+
+#gameRoom[data-game="squirt"] .spin-artwork { display: none; }
+
+#gameRoom[data-game="squirt"] .play-controls :is(#auto, #turbo) {
+  min-height: 44px;
+  width: 100%;
+  padding: 4px;
+  border: 1px solid #479bbb;
+  border-radius: 10px;
+  box-shadow: none;
+  background: #062b46;
+  color: #d5fbff;
+  transform: none;
+}
+
+#gameRoom[data-game="squirt"] .play-controls [aria-pressed="true"] {
+  border-color: #ffa9dc;
+  background: #520a53;
+}
+
+#gameRoom[data-game="squirt"] #play {
+  min-width: 0;
+  min-height: 57px;
+  width: 100%;
+  height: auto;
+  padding: 8px;
+  border: 4px solid #ffddd9;
+  border-radius: 50% / 46%;
+  background: radial-gradient(ellipse at 47% 16%, #ffb18a, #fb5b73 40%, #c41d63 76%, #7c124d);
+  color: white;
+  font: italic 950 clamp(23px, 5vw, 30px)/1 var(--pool-type);
+  text-shadow: 0 2px #7c123c;
+  box-shadow: inset 0 0 0 2px #ff8ea8, inset 0 -6px 11px #7909459e, 0 0 0 2px #ff8fac, 0 5px 10px #180221;
+}
+
+#gameRoom[data-game="squirt"] #play::before,
+#gameRoom[data-game="squirt"] #play::after { display: none; }
+
+#gameRoom[data-game="squirt"] :is(#gameStatus, .room-legal) {
+  color: #c8f8ff;
+}
+
+#gameRoom[data-game="squirt"].bonus-active {
+  padding: 0;
+}
+
+#gameRoom[data-game="squirt"].bonus-active .room-wrap {
+  max-width: 740px;
+  padding: 0;
+}
+
+#gameRoom[data-game="squirt"].bonus-active :is(.room-header, .room-title, .room-leaders, .room-legal, .room-nav) {
+  display: none;
+}
+
+#gameRoom[data-game="squirt"].bonus-active .machine {
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+  animation: none;
+}
+
+#gameRoom[data-game="squirt"].bonus-active .machine::before,
+#gameRoom[data-game="squirt"].bonus-active .machine::after {
+  display: none;
+}
+
+#gameRoom[data-game="squirt"].bonus-active #bonusPanel {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  min-height: 100dvh;
+  margin: 0;
+  padding: max(12px, env(safe-area-inset-top)) 12px max(16px, env(safe-area-inset-bottom));
+  border: 0;
+  border-radius: 0;
+  background: linear-gradient(180deg, #101334da 0%, #052536a6 25%, transparent 72%, #06132ec7),
+    var(--pool-image) center / 100% 100%;
+  box-shadow: none;
+}
+
+#gameRoom[data-game="squirt"] #bonusBack {
+  display: block;
+  align-self: flex-start;
+  min-height: 44px;
+  margin-bottom: 8px;
+  padding: 4px 13px;
+  border: 1px solid #75ddf1;
+  border-radius: 12px;
+  background: #072b46ed;
+  color: #effdff;
+}
+
+#gameRoom[data-game="squirt"] #bonusName {
+  margin: 0;
+  color: #f2fdff;
+  font: italic 950 clamp(25px, 7.5vw, 42px)/.99 var(--pool-type);
+  letter-spacing: -.033em;
+  text-transform: uppercase;
+  text-shadow: 0 2px #d82679, 0 4px #602755, 0 7px 12px #020e27;
+}
+
+#gameRoom[data-game="squirt"] #bonusText {
+  max-width: 28em;
+  margin: 11px auto 12px;
+  color: #e4fbff;
+  font-size: 13px;
+  line-height: 1.45;
+  text-shadow: 0 1px 5px #061321;
+}
+
+#gameRoom[data-game="squirt"] #bonusChoices {
+  display: block;
+  width: 100%;
+  margin: 0;
+}
+
+#gameRoom[data-game="squirt"] .squirt-round-stats {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  width: 100%;
+  max-width: 480px;
+  margin: 0 auto 12px;
+  padding: 9px 4px;
+  border: 1px solid #7ff7ffb3;
+  border-radius: 16px;
+  color: #f1feff;
+  background: linear-gradient(#104867ed, #051c37f0);
+  box-shadow: inset 0 0 0 2px #bceff32b, 0 7px 14px #020e2a9e;
+  text-align: center;
+}
+
+#gameRoom[data-game="squirt"] .squirt-round-stats > div + div {
+  border-left: 1px solid #61dbea58;
+}
+
+#gameRoom[data-game="squirt"] .squirt-round-stats dd {
+  margin: 0;
+  font: 850 clamp(18px, 5vw, 25px)/1.1 var(--pool-type);
+  font-variant-numeric: tabular-nums;
+}
+
+#gameRoom[data-game="squirt"] .squirt-round-stats dt {
+  margin-top: 2px;
+  font: 700 10px/1.2 var(--pool-type);
+  color: var(--pool-ice);
+}
+
+#gameRoom[data-game="squirt"] .tap-arena {
+  position: relative;
+  height: clamp(260px, 57dvh, 640px);
+  width: 100%;
+  max-width: 600px;
+  margin: 0 auto;
+  overflow: hidden;
+  border: 1px solid #b9f9ff9e;
+  border-radius: 22px;
+  background: linear-gradient(180deg, #00e5ff0f, #02284723);
+  box-shadow: inset 0 0 16px #7eeeff40, 0 8px 25px #08152c54;
+}
+
+#gameRoom[data-game="squirt"] #bonusPanel .squirt-target {
+  position: absolute;
+  z-index: 2;
+  display: grid;
+  place-items: center;
+  left: 50%;
+  top: 53%;
+  width: clamp(117px, 34vw, 181px);
+  height: auto;
+  min-height: 0;
+  max-width: none;
+  aspect-ratio: 1;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: var(--pool-icons) 0% 100% / 400% 200% no-repeat;
+  box-shadow: none;
+  color: white;
+  translate: -50% -50%;
+  transition: left .34s ease, top .34s ease;
+  touch-action: manipulation;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+  filter: drop-shadow(0 7px 6px #003d5baa);
+  mask-image: radial-gradient(circle, #000 61%, #000b 67%, transparent 74%);
+}
+
+#gameRoom[data-game="squirt"] .squirt-target::after { display: none; }
+
+#gameRoom[data-game="squirt"] .squirt-target > span {
+  color: white;
+  z-index: 1;
+  border-radius: 14px;
+  padding: 4px 6px;
+  background: #063c5bd6;
+  font: italic 950 clamp(15px, 4.2vw, 23px)/1 var(--pool-type);
+  letter-spacing: -.015em;
+  text-shadow: 0 2px #072342;
+}
+
+#gameRoom[data-game="squirt"] .squirt-target:focus-visible > span {
+  outline: 2px solid #fff5d4;
+  outline-offset: 2px;
+}
+
+#gameRoom[data-game="squirt"] .squirt-hit-ripple {
+  position: absolute;
+  z-index: 1;
+  width: 105px;
+  aspect-ratio: 1;
+  border: 3px solid #d5fcffd6;
+  border-radius: 50%;
+  box-shadow: 0 0 16px #52f5ff;
+  translate: -50% -50%;
+  pointer-events: none;
+  animation: squirt-ripple .5s ease-out both;
+}
+
+#gameRoom[data-game="squirt"] #bonusStatus {
+  margin: 6px 0;
+  color: #fff4cc;
+}
+#gameRoom[data-game="squirt"] #bonusStatus:empty { display: none; }
+
+#gameRoom[data-game="squirt"] #bonusContinue {
+  width: min(100%, 300px);
+  min-height: 46px;
+  margin: 14px auto 0;
+  border: 1px solid #b0f6ff;
+  border-radius: 13px;
+  background: linear-gradient(#b7fcff, #55d8ef);
+  color: #062442;
+  font-weight: 850;
+}
+
+#gameRoom[data-game="squirt"] #bonusPanel:has(#bonusContinue:not([hidden])) .tap-arena {
+  height: clamp(140px, 37dvh, 420px);
+}
+
+#gameRoom[data-game="squirt"] :is(button, [tabindex]):focus-visible {
+  outline: 2px solid #fff1ba;
+  outline-offset: 3px;
+}
+
+@keyframes squirt-waterfall {
+  from { opacity: .7; }
+  to { opacity: 1; }
+}
+
+@keyframes squirt-ripple {
+  from { scale: .67; opacity: 1; }
+  to { scale: 2.5; opacity: 0; }
+}
+
+@media (max-width: 375px) {
+  #gameRoom[data-game="squirt"] .room-wrap { padding-inline: 8px; }
+  #gameRoom[data-game="squirt"] .machine { padding-inline: 6px; }
+  #gameRoom[data-game="squirt"] .room-title { min-height: 124px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  #gameRoom[data-game="squirt"] #gameStage::before,
+  #gameRoom[data-game="squirt"] #gameStage::after {
+    animation: none;
+  }
+  #gameRoom[data-game="squirt"] .squirt-target { transition: none; }
+}
