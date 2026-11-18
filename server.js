@@ -1927,9 +1927,9 @@ app.use(
   express.static(path.join(__dirname, "assets"), { dotfiles: "deny" }),
 );
 app.get("/app.js", (req, res) => res.sendFile(path.join(__dirname, "app.js")));
-app.get("/style.css", (req, res) =>
-  res.sendFile(path.join(__dirname, "style.css")),
-);
+for (const file of ["style.css", "obsession.css", "princess.css", "pond.css", "boutique.css"]) {
+  app.get("/" + file, (req, res) => res.sendFile(path.join(__dirname, file)));
+}
 const expansion = require("./expansion")({app,pool,auth,withLockedPlayer,READ_PATHS});
 app.use("/api", (req, res) =>
   res.status(404).json({ error: "API endpoint not found" }),
