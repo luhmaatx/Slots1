@@ -810,14 +810,6 @@ async function celebrate(win, bet = selected?.bets[betIndex] || 1) {
   await new Promise(resolve=>{function frame(now){const progress=Math.min(1,(now-start)/duration);amount.textContent=fmt(Math.round(win*(1-Math.pow(1-progress,3))));if(progress<1&&!reducedEffects())requestAnimationFrame(frame);else{amount.textContent=fmt(win);resolve();}}requestAnimationFrame(frame);});
   await motionPause(turbo?120:330);showcase.remove();fx.remove();$("gameRoom").classList.remove("round-win");
 }
-async function revealDuck(button, symbol, label) {
-  themedSound("water"); themedBurst();
-  await animateElement(button,[{transform:"rotateY(0)"},{transform:"rotateY(90deg)"}],{duration:110,easing:"ease-in"});
-  button.replaceChildren();button.classList.add("duck-revealed");
-  if(symbol)button.append(sprite(symbol));else{const wave=document.createElement("span");wave.className="water-ripple";wave.textContent="≈";button.append(wave);}
-  button.setAttribute("aria-label",label);
-  await animateElement(button,[{transform:"rotateY(-90deg) scale(.92)"},{transform:"rotateY(0) scale(1)"}],{duration:190,easing:"ease-out"});
-}
 async function animateClaw(result) {
   themedSound("motor");
   const hook = $("hook");
@@ -837,8 +829,22 @@ async function animateClaw(result) {
   item.style.visibility = "";
   clawPosition();
 }
-function duckArt(i) {
-  return '<img class="duck-art" src="/assets/neon-duck-v4.png" width="1024" height="1024" alt="" draggable="false" decoding="async">';
+function duckArt(index, jeweled = false) {
+  return `<span aria-hidden="true" class="art${jeweled ? " jewel" : ""}" data-sprite="${index % 4}"></span>`;
+}
+
+function duckResults(result, bet) {
+  const pond = $("duckPond");
+  const amounts = { blank: 0, small: Math.floor(bet / 4), medium: Math.floor(bet * .75), large: bet * 2, gold: bet };
+  pond.classList.add("results");
+  $("duckCount").textContent = "YOUR PICKS";
+  pond.innerHTML = result.picks.map((index, position) => {
+    const outcome = result.ducks[position];
+    return `<div class="result">${duckArt(index, outcome === "gold")}
+      <span class="ticket"><small>DUCK ${index + 1}</small><strong>+${fmt(amounts[outcome])}</strong></span></div>`;
+  }).join("");
+  $("play").textContent = "PLAY AGAIN";
+  themedSound("water");
 }
 const machineThemes = {
   spoiled: {names:["Pink Diamond Suite", "Midnight Diamonds"], scene:"spoiled", tint:"#ff8dcb", spin:"0deg"},
@@ -1078,27 +1084,25 @@ function clawPosition() {
 function arcadeStage() {
   duckPicks = [];
   if (selected.id === "duck") {
-    $("gameStage").innerHTML =
-      '<div class="pool">' +
-      Array.from(
-        { length: 12 },
-        (_, i) =>
-          `<button data-duck="${i}" aria-label="Choose duck ${i + 1}">${duckArt(i)}<span class="duck-number">${String(i + 1).padStart(2, "0")}</span></button>`,
-      ).join("") +
-      "</div>";
-    $("gameStage")
-      .querySelectorAll("button")
-      .forEach(
-        (b) =>
-          (b.onclick = () => {
-            if (busy || b.disabled || duckPicks.length >= 3) return;
-            duckPicks.push(Number(b.dataset.duck));
-            b.classList.add("selected");
-            b.disabled = true;
-            $("gameStatus").textContent =
-              duckPicks.length + " OF 3 DUCKS SELECTED";
-          }),
-      );
+    $("play").textContent = "REVEAL";
+    $("play").disabled = true;
+    $("gameStatus").textContent = "";
+    const buttons = Array.from({length: 12}, (_, index) =>
+      `<button class="duck" data-duck="${index}" aria-pressed="false" aria-label="Choose duck ${index + 1}">
+        ${duckArt(index)}<span class="number">${index + 1}</span></button>`);
+    $("gameStage").innerHTML = `<p id="duckCount" role="status">0 OF 3 SELECTED</p><div id="duckPond" class="pond">${buttons.join("")}</div>`;
+    for (const button of $("duckPond").children) {
+      button.onclick = () => {
+        if (busy) return;
+        const index = Number(button.dataset.duck);
+        if (duckPicks.includes(index)) duckPicks = duckPicks.filter(n => n !== index);
+        else if (duckPicks.length < 3) duckPicks.push(index);
+        else return;
+        button.setAttribute("aria-pressed", String(duckPicks.includes(index)));
+        $("duckCount").textContent = duckPicks.length + " OF 3 SELECTED";
+        $("play").disabled = duckPicks.length !== 3;
+      };
+    }
   }
   if (selected.id === "obsession") {
     $("gameStage").innerHTML = wheelMarkup();
@@ -1153,6 +1157,7 @@ async function openGame(id) {
   setBet(0);
   $("auto").hidden = $("turbo").hidden = !!selected.arcade;
   $("betControls").hidden = selected.id === "obsession";
+  $("play").disabled = false;
   $("play").textContent =
     selected.id === "duck"
       ? "REVEAL"
@@ -1187,6 +1192,7 @@ async function openGame(id) {
 async function play() {
   if (busy || !selected) return;
   const g=selected,bet=g.bets[betIndex];
+  if (g.id === "duck" && $("duckPond").classList.contains("results")) { arcadeStage(); return; }
   if(g.id==="duck"&&duckPicks.length!==3)return toast("Choose exactly 3 ducks first.");
   if(bonus&&!bonus.done&&!bonus.completed){stopAuto();return toast("Finish your unlocked bonus first.");}
   setBusy(true);cleanupVisuals();$("gameStatus").textContent="GOOD LUCK…";
@@ -1197,18 +1203,13 @@ async function play() {
     const body={bet,...(g.arcade||!g.endpoint?{game:g.id}:{}),...(g.id==="claw"?{x,y}:g.id==="duck"?{picks:duckPicks}:{})};
     const d=await api(g.arcade?"/api/arcade/play":g.endpoint||"/api/themed/spin",body);
     if(!g.arcade)await settleReels(d.symbols,d.winningLines,started);
-    if(g.id==="duck"){
-      for(const [i,n] of duckPicks.entries()){
-        const symbol={small:"gold",medium:"cash",large:"diamond",gold:"crown"}[d.ducks[i]];
-        await revealDuck($("gameStage").querySelector(`[data-duck="${n}"]`),symbol,"Duck "+(n+1)+": "+d.ducks[i]);reelClick(i);
-      }
-    }
+    if (g.id === "duck") duckResults(d, bet);
     if(g.id==="obsession") await animateObsession(d.win);
     if(g.id==="claw")await animateClaw(d);
     if(g.id==="squirt")apply({balance:d.balance,squirtFreeSpins:d.freeSpins});else apply(d);
     $("gameStatus").textContent=(d.freeSpinUsed?"FREE SPIN · ":"")+(d.win?"WIN +"+fmt(d.win)+" KILLACOINS":"NO WIN THIS ROUND")+(d.awardedFreeSpins?" · +"+d.awardedFreeSpins+" FREE SPINS":"");
     if(g.id==="claw")$("gameStatus").textContent=(d.caught?"CAUGHT "+d.item.toUpperCase()+" · +"+fmt(d.win):"THE CLAW MISSED")+(d.royal?" · ROYAL BONUS +5× BET":"");
-    if(g.id==="duck"&&d.bonus)$("gameStatus").textContent+=" · THREE GOLD JACKPOT!";
+    if(g.id==="duck"&&d.bonus)$("gameStatus").textContent+=" · THREE JEWELED DUCKS!";
     if (g.id === "obsession") {
       $("gameStatus").textContent = `+${fmt(d.win)} KillaCoins`;
       $("gameStatus").classList.add("obsession-won");
@@ -1217,7 +1218,6 @@ async function play() {
       tickets.textContent = "–";
       await arcadeState().catch(() => {});
     } else if (d.win) await celebrate(d.win, bet);
-    if(g.id==="duck"){await motionPause(800);arcadeStage();}
     if(!g.arcade)await loadBonus();
     if (g.id === "obsession") await refresh().catch(() => {});
     else await refresh();

@@ -1,0 +1,29 @@
+#gameRoom[data-game="duck"] #duckCount { width:fit-content; margin:2px auto 7px; padding:5px 14px; text-align:center; border:2px solid #bb8c43; border-radius:8px; background:#fff2cf; box-shadow:0 2px 3px #6a3b2e55; font:700 15px Georgia,serif; }
+#gameRoom[data-game="duck"] .pond { position:relative; display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:3px 6px; padding:7px; border:8px ridge #77ad93; border-radius:28px; background:repeating-radial-gradient(ellipse at 38% 56%,#c6ffff2e 0 2px,#27a1a033 5px 14px,transparent 18px 24px),linear-gradient(#2d918e,#12686d); box-shadow:inset 0 5px 10px #133732b3; }
+#gameRoom[data-game="duck"] .duck { display:grid; place-items:center; position:relative; min-width:0; min-height:53px; aspect-ratio:1.39; padding:0; color:#402713; border:2px solid transparent; border-radius:22px; background:radial-gradient(ellipse at 49% 78%,#bae9d779 0 19%,transparent 42%); touch-action:manipulation; cursor:pointer; }
+#gameRoom[data-game="duck"] .duck[aria-pressed=true] { border-color:#fff2a9; background-color:#ffe58b29; box-shadow:inset 0 0 10px #ffed86a0,0 0 9px #ffe69a; }
+#gameRoom[data-game="duck"] .art { display:block; width:min(84%,106px); aspect-ratio:1; background:url("/assets/lucky-ducky/ducks.webp") 0 0/200% 200%; filter:drop-shadow(0 4px 3px #10433d96); }
+#gameRoom[data-game="duck"] .art[data-sprite="1"] { background-position:100% 0; }
+#gameRoom[data-game="duck"] .art[data-sprite="2"] { background-position:0 100%; }
+#gameRoom[data-game="duck"] .art[data-sprite="3"] { background-position:100% 100%; }
+#gameRoom[data-game="duck"] .number { position:absolute; bottom:1px; right:2px; display:grid; place-items:center; min-width:24px; min-height:23px; border:1px solid #aa7441; border-radius:50%; background:#fff0c2; font:750 12px Georgia,serif; }
+#gameRoom[data-game="duck"] .results { min-height:180px; align-items:center; padding:24px 6px 16px; background:repeating-linear-gradient(90deg,#264e3d 0 14px,#315743 14px 28px); }
+#gameRoom[data-game="duck"] .result { min-width:0; display:grid; justify-items:center; }
+#gameRoom[data-game="duck"] .result .art { width:min(100%,132px); }
+#gameRoom[data-game="duck"] .result .jewel { background:#fff url("/assets/lucky-ducky/jewel.webp") center / contain no-repeat; mix-blend-mode:screen; border-radius:50%; background-color:transparent; mix-blend-mode:normal; mask-image:radial-gradient(ellipse,#000 61%,transparent 76%); }
+#gameRoom[data-game="duck"] .ticket { display:grid; width:94%; gap:1px; padding:5px 1px; border:2px ridge #c28a3c; border-radius:8px; background:linear-gradient(90deg,#e6be74,#fff0c9,#e6be74); text-align:center; }
+#gameRoom[data-game="duck"] .ticket small { font-size:9px; font-weight:800; }
+#gameRoom[data-game="duck"] .ticket strong { font:700 clamp(16px,4.8vw,27px) Georgia,serif; }
+#gameRoom[data-game="duck"] .room-wrap {max-width:540px}
+#gameRoom[data-game="duck"] .room-title {min-height:0;margin:8px 0 0;padding:0;aspect-ratio:752/248;background:url(/assets/lucky-ducky/marquee.webp) center/contain no-repeat}
+#gameRoom[data-game="duck"] #gameName {position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%)}
+#gameRoom[data-game="duck"] :is(#gameTag,.room-slogan,.spin-artwork){display:none}
+#gameRoom[data-game="duck"] .room-menu {top:5px;width:34px;height:34px}
+#gameRoom[data-game="duck"] .machine {padding:7px;border:4px ridge #b7b18b;background:repeating-conic-gradient(#fbefcc 0 25%,#e7b87c 0 50%) 0 0/26px 26px}
+#gameRoom[data-game="duck"] .machine::before {display:none}
+#gameRoom[data-game="duck"] #gameStage::before {display:none}
+#gameRoom[data-game="duck"] :is(.ticket,#duckCount){color:#402713}
+#gameRoom[data-game="duck"] .play-controls {display:flex;justify-content:center;min-height:0;margin:5px auto}
+#gameRoom[data-game="duck"] #play {height:auto;min-height:48px;width:85%;font:bold 22px Georgia;color:#431f0d;background:linear-gradient(#fff7dc,#f4d8a0);border:4px ridge #dba554;border-radius:17px}
+#gameRoom[data-game="duck"] #play::after {display:none}
+#gameRoom[data-game="duck"] #gameStatus {background:#254c3c;color:#fff0ce;border-radius:8px}
