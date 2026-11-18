@@ -820,17 +820,25 @@ async function revealDuck(button, symbol, label) {
 }
 async function animateClaw(result) {
   themedSound("motor");
-  const hook=$("hook");hook.style.top="180px";hook.classList.add("dropping");
-  await motionPause(430);hook.classList.add("gripping");reelClick(2);await motionPause(260);
-  if(result.caught){const prize=document.createElement("span");prize.className="caught-prize";prize.append(sprite(result.item==="mystery"?"gift":result.item));hook.append(prize);}
-  hook.classList.add("lifting");clawPosition();await motionPause(560);hook.classList.remove("dropping","gripping","lifting");
-  await motionPause(200);hook.querySelector(".caught-prize")?.remove();
+  const hook = $("hook");
+  const item = $("shelf").children[result.shelf];
+  const caught = $("caught");
+  hook.style.top = "61%";
+  await motionPause(430);
+  reelClick(2);
+  if (result.caught) {
+    item.style.visibility = "hidden";
+    caught.src = item.src;
+    caught.hidden = false;
+  }
+  hook.style.top = "6%";
+  await motionPause(650);
+  caught.hidden = true;
+  item.style.visibility = "";
+  clawPosition();
 }
 function duckArt(i) {
   return '<img class="duck-art" src="/assets/neon-duck-v4.png" width="1024" height="1024" alt="" draggable="false" decoding="async">';
-}
-function clawArt() {
-  return `<svg viewBox="0 0 100 130" aria-hidden="true"><defs><linearGradient id="claw-metal"><stop stop-color="#7c664d"/><stop offset=".3" stop-color="#fff2ca"/><stop offset=".55" stop-color="#c7a87d"/><stop offset=".8" stop-color="#fff6db"/><stop offset="1" stop-color="#786049"/></linearGradient></defs><path d="M50 0V54" stroke="#e6c997" stroke-width="5"/><path d="M37 54H63L70 75H30Z" fill="url(#claw-metal)" stroke="#fff2c6"/><path d="M34 72L16 98L28 120L40 111M66 72L84 98L72 120L60 111M50 78V109L44 120" fill="none" stroke="url(#claw-metal)" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/><circle cx="50" cy="67" r="5" fill="#ee75ae" stroke="#fff1cf"/></svg>`;
 }
 const machineThemes = {
   spoiled: {names:["Pink Diamond Suite", "Midnight Diamonds"], scene:"spoiled", tint:"#ff8dcb", spin:"0deg"},
@@ -1058,12 +1066,14 @@ function celebrateObsession() {
   transientTimers.add(timer);
 }
 
+const clawPrizes = [["heart", .5], ["bag", 1.5], ["diamond", 2.5], ["crown", 4], ["mystery", 1]];
 function clawPosition() {
-  const hook = $("hook");
-  if (hook) {
-    hook.style.left = 10 + x * 80 + "%";
-    hook.style.top = 12 + y * 100 + "px";
-  }
+  const index = Math.min(4, Math.floor(x * 5));
+  $("hook").style.left = (10 + index * 20) + "%";
+  $("hook").style.top = (6 + y * 33) + "%";
+  Array.from($("shelf").children).forEach((item, i) => item.classList.toggle("aim", index === i));
+  const [name, multiplier] = clawPrizes[index];
+  $("clawTarget").textContent = name.toUpperCase() + " · " + multiplier + "× · Depth " + Math.round(y * 10) + "/10";
 }
 function arcadeStage() {
   duckPicks = [];
@@ -1095,37 +1105,22 @@ function arcadeStage() {
     rotation = 0;
   }
   if (selected.id === "claw") {
-    $("gameStage").innerHTML =
-      '<div class="claw-field"><span class="claw-hook" id="hook">' + clawArt() + '</span><div class="claw-prizes"><span class="claw-prize-slot" data-prize="heart"></span><span class="claw-prize-slot" data-prize="bag"></span><span class="claw-prize-slot" data-prize="diamond"></span><span class="claw-prize-slot" data-prize="crown"></span><span class="claw-prize-slot" data-prize="gift"></span></div></div><div class="joystick"><button data-dx="-1" aria-label="Move claw left">◀</button><button data-dy="-1" aria-label="Move claw up">▲</button><button data-dy="1" aria-label="Move claw down">▼</button><button data-dx="1" aria-label="Move claw right">▶</button></div>';
-    $("gameStage")
-      .querySelectorAll("[data-prize]")
-      .forEach((el) => el.append(sprite(el.dataset.prize)));
+    const prizes = clawPrizes.map(([name]) =>
+      `<img class="prize" src="/assets/claw/${name}.webp" alt="${name}">`
+    ).join("");
+    $("gameStage").innerHTML = `<div id="glass"><div id="hook"><i></i><b></b><img id="caught" alt="" hidden></div><div id="shelf">${prizes}</div></div>
+      <div id="clawTarget"></div><div class="pad" aria-label="Joystick">
+      <button data-dy="-1" aria-label="Aim up">▲</button><button data-dx="-1" aria-label="Aim left">◀</button>
+      <button data-dx="1" aria-label="Aim right">▶</button><button data-dy="1" aria-label="Aim down">▼</button></div>`;
     clawPosition();
-    $("gameStage")
-      .querySelectorAll(".joystick button")
-      .forEach((b) => {
-        let hold;
-        const stop = () => clearInterval(hold),
-          move = () => {
-            if (busy) return;
-            x = Math.max(0, Math.min(1, x + Number(b.dataset.dx || 0) * 0.04));
-            y = Math.max(0, Math.min(1, y + Number(b.dataset.dy || 0) * 0.04));
-            clawPosition();
-          };
-        b.onpointerdown = (e) => {
-          e.preventDefault();
-          b.setPointerCapture(e.pointerId);
-          move();
-          hold = setInterval(move, 80);
-        };
-        b.onpointerup = b.onpointercancel = b.onlostpointercapture = stop;
-        b.onkeydown = (e) => {
-          if (e.key === "Enter" || e.key === " ") {
-            e.preventDefault();
-            move();
-          }
-        };
-      });
+    for (const button of $("gameStage").querySelectorAll(".pad button")) {
+      button.onclick = () => {
+        if (busy) return;
+        x = Math.max(.1, Math.min(.9, x + Number(button.dataset.dx || 0) / 5));
+        y = Math.max(0, Math.min(1, y + Number(button.dataset.dy || 0) / 10));
+        clawPosition();
+      };
+    }
   }
 }
 async function openGame(id) {
