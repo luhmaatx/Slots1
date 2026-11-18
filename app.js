@@ -191,6 +191,8 @@ let soundOn = store.get("sound") === "on",
 function artStyle(id) {
   if (id === "first") return "background-image:url('/assets/first-class/cabin.webp');background-position:center 26%";
   if (id === "squirt") return "background-image:url('/assets/squirt-city/rooftop.webp');background-position:center 36%";
+  if (id === "vault") return "background-image:url('/assets/millionaires-vault/chamber.webp');background-position:center top";
+  if (id === "double") return "background-image:url('/assets/double-trouble/lounge.webp');background-position:center 29%";
   if (collage[id]) {
     const [col, row] = collage[id];
     return `background-image:url('/assets/themes.webp');background-size:300% 200%;background-position:${col * 50}% ${row * 100}%`;
@@ -652,6 +654,20 @@ const squirtSymbolNames = {
   bubble: "Bubbles",
   afterhours: "Piña colada free spins",
 };
+const vaultSymbolNames = {
+  vault: "Vault door", gold: "Gold bars", diamond: "Icy diamond", cash: "Cash bundle",
+  crown: "Sapphire crown", panther: "Black panther", key: "Steel key",
+};
+const doubleSymbolNames = {
+  red: "Ruby lips", blonde: "Blonde ribbon", heart: "Ruby heart",
+  diamond: "Diamond", cherry: "Cherries", crown: "Crown", wild: "Gold W wild",
+};
+const reelArt = {
+  first: { className: "first-class-symbol", names: firstClassSymbolNames },
+  squirt: { className: "squirt-symbol", names: squirtSymbolNames },
+  double: { className: "double-symbol", names: doubleSymbolNames },
+  vault: { className: "vault-symbol", names: vaultSymbolNames },
+};
 
 function sprite(symbol, label = symbol) {
   if (symbol === "moon") {
@@ -709,26 +725,26 @@ function reelCell(symbol, index, wins) {
   cell.className = "reel-cell" + (wins.has(index) ? " win" : "");
   cell.dataset.index = index;
   const game = selected?.id;
-  const firstClassLabel = game === "first" && firstClassSymbolNames[symbol];
-  const squirtLabel = game === "squirt" && squirtSymbolNames[symbol];
-  const label = firstClassLabel || squirtLabel || (symbol === "moon" ? "Pool float" : symbol || "symbol");
+  const theme = reelArt[game];
+  const themedLabel = theme?.names[symbol];
+  const label = themedLabel || (symbol === "moon" ? "Pool float" : symbol || "symbol");
   cell.setAttribute("aria-label", label);
   const art = sprite(symbol, label);
-  if (firstClassLabel || squirtLabel) {
+  if (themedLabel) {
     const position = gameSymbolSets[game].indexOf(symbol);
-    art.classList.add(firstClassLabel ? "first-class-symbol" : "squirt-symbol");
-    if (squirtLabel) {
-      art.classList.remove("pool-float", "lux-symbol-fallback");
-      art.setAttribute("aria-label", label);
-    }
+    art.classList.add(theme.className);
+    art.classList.remove("pool-float", "lux-symbol-fallback");
+    art.textContent = "";
+    art.setAttribute("aria-label", label);
     art.style.backgroundPosition = (position % 4) * 100 / 3 + "% " + Math.floor(position / 4) * 100 + "%";
   }
   cell.append(art);
   const isWild = symbol === "wild" || (game === "squirt" && symbol === "splash");
-  if (isWild || ["scatter", "afterhours"].includes(symbol)) {
+  const isBonusSymbol = (game === "vault" && symbol === "vault") || (game === "double" && symbol === "heart");
+  if (isWild || isBonusSymbol || ["scatter", "afterhours"].includes(symbol)) {
     const tag = document.createElement("small");
     tag.className = "symbol-tag";
-    tag.textContent = isWild ? "WILD" : "FREE SPINS";
+    tag.textContent = isWild ? "WILD" : isBonusSymbol ? "BONUS" : "FREE SPINS";
     cell.append(tag);
   }
   return cell;
@@ -852,7 +868,7 @@ function setBonusVisible(visible) {
   if (visible) {
     stopAuto();
     const game = selected.id;
-    if (game === "first" || game === "squirt") {
+    if (game === "first" || game === "squirt" || game === "vault" || game === "double") {
       if (entering) {
         requestAnimationFrame(() => {
           if (!panel.hidden && room.dataset.game === game) {
@@ -1055,7 +1071,9 @@ async function openGame(id) {
   $("gameTag").textContent = selected.tag;
   $("roomArt").style.cssText = artStyle(selected.art);
   setBonusVisible(false);
-  $("gameStatus").textContent = "CHOOSE YOUR BET AND PLAY";
+  $("gameStatus").textContent = id === "vault"
+    ? "LAND 3+ VAULT DOORS FOR CRACK THE COLLECTION"
+    : id === "double" ? "LAND 3+ HEARTS FOR RED × BLONDE" : "CHOOSE YOUR BET AND PLAY";
   $("gameRoom").hidden = false;
   document.body.style.overflow = "hidden";
   $("gameRoom").scrollTop = 0;
@@ -1176,7 +1194,52 @@ function renderFirstClassCase(button, index, destination, award) {
   }
 }
 
-function renderBonus(showCompleted = false) {
+function renderVaultDrawer(button, index, award, reveal) {
+  const label = "Drawer " + (index + 1);
+  const dial = document.createElement("span");
+  dial.className = "vault-dial";
+  dial.setAttribute("aria-hidden", "true");
+  const plate = document.createElement("span");
+  plate.className = "vault-drawer-number";
+  plate.textContent = String(index + 1).padStart(2, "0");
+  button.classList.add("vault-drawer");
+  button.classList.toggle("vault-reveal", reveal);
+  button.append(plate);
+  if (award === undefined) {
+    button.append(dial);
+    button.setAttribute("aria-label", "Open " + label);
+    return;
+  }
+  const amount = document.createElement("strong");
+  amount.textContent = "+" + fmt(award);
+  button.append(amount);
+  button.setAttribute("aria-label", label + ", " + fmt(award) + " KillaCoins");
+}
+
+function renderDoubleRoute(button, index, name, award, reveal) {
+  const art = document.createElement("span");
+  art.className = "double-route-art";
+  art.setAttribute("aria-hidden", "true");
+  art.style.backgroundPosition = index * 100 / 3 + "% 0%";
+  const nameplate = document.createElement("span");
+  nameplate.className = "double-route-name";
+  nameplate.textContent = name;
+  button.classList.add("double-route");
+  button.dataset.route = index ? "blonde" : "red";
+  button.classList.toggle("double-route-reveal", reveal);
+  button.append(art, nameplate);
+  if (award === undefined) {
+    button.setAttribute("aria-label", "Reveal " + name);
+    return;
+  }
+  const amount = document.createElement("strong");
+  amount.className = "double-route-award";
+  amount.textContent = "+" + fmt(award);
+  button.append(amount);
+  button.setAttribute("aria-label", name + ", " + fmt(award) + " KillaCoins");
+}
+
+function renderBonus(showCompleted = false, revealedChoice) {
   if (!bonus || ((bonus.done || bonus.completed) && !showCompleted)) {
     finishBonusView();
     return;
@@ -1197,11 +1260,20 @@ function renderBonus(showCompleted = false) {
     selections = legacy ? bonus.opened : bonus.selections;
   const count = legacy ? 12 : bonus.labels.length,
     allowed = bonus.picks || 1;
-  const instruction = showCompleted
-    ? "Baggage claim complete."
-    : scene?.instruction || "Choose your prizes.";
-  $("bonusText").textContent =
-    instruction + " " + selections.length + " / " + allowed + " PICKS · TOTAL " + fmt(bonus.total) + " KILLACOINS";
+  if (g.id === "vault" || g.id === "double") {
+    const noun = g.id === "vault" ? "PICK" : "ROUTE";
+    const remaining = Math.max(0, allowed - selections.length);
+    const tally = document.createElement("span");
+    tally.className = "vault-bonus-tally";
+    tally.textContent = remaining + " " + noun + (remaining === 1 ? " LEFT" : "S LEFT") + " · " + fmt(bonus.total) + " KILLACOINS";
+    $("bonusText").replaceChildren(showCompleted ? "Bonus complete." : scene.instruction, tally);
+  } else {
+    const instruction = showCompleted
+      ? "Baggage claim complete."
+      : scene?.instruction || "Choose your prizes.";
+    $("bonusText").textContent =
+      instruction + " " + selections.length + " / " + allowed + " PICKS · TOTAL " + fmt(bonus.total) + " KILLACOINS";
+  }
   for (let i = 0; i < count; i++) {
     const chosen = selections.find((s) => s.choice === i),
       b = document.createElement("button");
@@ -1210,6 +1282,16 @@ function renderBonus(showCompleted = false) {
     b.disabled = !!chosen || bonus.done || bonus.completed;
     b.classList.toggle("revealed", !!chosen);
     b.onclick = () => pickBonus(i);
+    if (g.id === "double") {
+      renderDoubleRoute(b, i, scene.labels[i], chosen?.award, revealedChoice === i);
+      $("bonusChoices").append(b);
+      continue;
+    }
+    if (g.id === "vault") {
+      renderVaultDrawer(b, i, chosen?.award, revealedChoice === i);
+      $("bonusChoices").append(b);
+      continue;
+    }
     if (g.id === "first") {
       renderFirstClassCase(b, i, scene.labels[i] || bonus.labels[i], chosen?.award);
       $("bonusChoices").append(b);
@@ -1227,9 +1309,6 @@ function renderBonus(showCompleted = false) {
           brat: "bag",
           cash: "cash",
           red: "flag",
-          vip: "suite",
-          double: i === 0 ? "red" : "blonde",
-          vault: "vault",
         }[g.id] || "gift";
     b.style.setProperty("--lane", i);
     b.append(sprite(symbol));
@@ -1245,7 +1324,9 @@ async function pickBonus(choice) {
   if (busy) return;
   const opening = $("bonusChoices").children[choice];
   const firstClass = selected.id === "first";
-  const restoreFocus = firstClass && opening?.matches(":focus-visible");
+  const vault = selected.id === "vault";
+  const keepResult = firstClass || vault || selected.id === "double";
+  const restoreFocus = keepResult && opening?.matches(":focus-visible");
   opening?.classList.add("prize-opening");
   if (firstClass) {
     tone(290, .055, 0, .018, "triangle");
@@ -1264,7 +1345,7 @@ async function pickBonus(choice) {
     apply(d);
     await motionPause(260);
     bonus = legacy ? d.session : { ...bonus, ...d };
-    renderBonus(firstClass && bonus.completed);
+    renderBonus(keepResult && bonus.completed, choice);
     $("bonusStatus").textContent =
       "+" +
       fmt(d.award) +
@@ -1274,10 +1355,15 @@ async function pickBonus(choice) {
       const next = bonus.completed ? $("bonusContinue") : $("bonusChoices").querySelector("button:not(:disabled)");
       next?.focus({ preventScroll: true });
     }
-    sound();
+    if (vault) {
+      tone(88, .10, 0, .03, "triangle");
+      tone(1047, .21, .08, .018);
+    } else {
+      sound();
+    }
   } catch (e) {
     await loadBonus();
-    $(firstClass && $("bonusPanel").hidden ? "gameStatus" : "bonusStatus").textContent = e.message;
+    $(keepResult && $("bonusPanel").hidden ? "gameStatus" : "bonusStatus").textContent = e.message;
   } finally {
     setBusy(false);
   }
@@ -1425,6 +1511,12 @@ function rules() {
   else if (g.id === "first")
     text =
       "Five paylines, read from left to right. Matching three, four or five symbols pays 1×, 3× or 8× the total bet per line, and diamonds pay double. The winged W substitutes for other symbols. An all-wild line pays zero. Land three or more carry-ons anywhere to open Destination: First Class with three to five suitcase picks.";
+  else if (g.id === "double")
+    text =
+      "Match three, four or five symbols from the left on any of five paylines to win 1×, 3× or 8× the total bet per line. Diamonds pay double. The gold W substitutes for other symbols. An all-wild line pays zero. Land three or more hearts anywhere to enter Red × Blonde. Reveal both routes. Each route can award 0×, 1×, 2×, 3× or 5× the triggering bet in KillaCoins.";
+  else if (g.id === "vault")
+    text =
+      "243 ways to win. Match a symbol on consecutive reels from the left. Three, four or five matching reels pay 1×, 3× or 8× the total bet per way, divided by five and rounded down. Three or more vault doors anywhere unlock Crack the Collection. Open one drawer per vault door, up to five. Each drawer can award 0×, 1×, 2×, 3× or 5× the triggering bet.";
   else
     text =
       (g.id === "vault"
@@ -1646,9 +1738,9 @@ const bonusScenes = {
  first:{name:"Destination: First Class",instruction:"Choose a suitcase.",labels:["Paris","Dubai","Monaco","Maldives","Milan","St. Barts"]},
  cash:{name:"Cash Catch",instruction:"Catch the drifting bundles. Take your time; unused picks never expire."},
  red:{name:"Rose Garden Riches",instruction:"Open each rose envelope to reveal its award.",labels:["RED ROSES","BLACK ROSES","GOLD ROSES"]},
- vip:{name:"Behind the Velvet Rope",instruction:"Unlock your private suites.",labels:["GOLD SUITE","RUBY SUITE","SKY LOUNGE","ROOFTOP","PENTHOUSE"]},
- double:{name:"Red × Blonde",instruction:"Follow both paths to reveal your awards.",labels:["RED ROUTE","BLONDE ROUTE"]},
- vault:{name:"Crack the Collection",instruction:"Unlock the numbered vault doors."},
+ vip:{name:"Behind the Velvet Rope",instruction:"Choose a suite door.",labels:["Gold Suite","Ruby Suite","Sky Lounge","Rooftop","Penthouse"]},
+ double:{name:"Red × Blonde",instruction:"Reveal both sides of your fortune.",labels:["Red Route","Blonde Route"]},
+ vault:{name:"Crack the Collection",instruction:"Choose a safe-deposit drawer."},
  squirt:{name:"Pool Party Target Splash"}
 };
 let vaultSnapshot=null, vaultLoading=false;

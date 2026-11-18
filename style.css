@@ -2146,7 +2146,7 @@ html[data-effects="off"] .theme-burst {display:none;}
 .penthouse-rug{position:absolute;width:90%;height:30%;bottom:0;left:5%;border-radius:50%;background:#f0cdbe33}.penthouse-caption{position:absolute;bottom:8px;z-index:5;width:100%;text-align:center;font-size:9px;letter-spacing:3px;color:#ffe5ba}
 #penthouseView>button {margin:6px}
 #bonusPanel[data-adventure=brat] .bonus-prize {background:linear-gradient(145deg,#fff1d4,#cfb6c3);color:#40152b;border:2px dashed #961746;transform:rotate(-2deg);border-radius:3px}
-#bonusPanel[data-adventure=vip] .bonus-prize,#bonusPanel[data-adventure=vault] .bonus-prize {min-height:155px;background:linear-gradient(90deg,#251332,#63365b,#251332);border:4px ridge #cba86c;border-radius:65px 65px 6px 6px}
+#bonusPanel[data-adventure=vault] .bonus-prize {min-height:155px;background:linear-gradient(90deg,#251332,#63365b,#251332);border:4px ridge #cba86c;border-radius:65px 65px 6px 6px}
 #bonusPanel[data-adventure=double] #bonusChoices {grid-template-columns:repeat(2,1fr)}
 #bonusPanel[data-adventure=double] .bonus-prize:first-child{background:linear-gradient(#a2163b,#310f28)}
 #bonusPanel[data-adventure=double] .bonus-prize:nth-child(2){background:linear-gradient(#ecd29e,#795b41)}
@@ -3181,3 +3181,986 @@ html[data-effects=off] #bonusPanel .bonus-prize,html[data-effects=subtle] #bonus
   }
   #gameRoom[data-game="squirt"] .squirt-target { transition: none; }
 }
+
+/* Millionaire’s Vault cabinet and drawers. */
+#gameRoom[data-game="vault"] {
+  --vault-photo: url("/assets/millionaires-vault/chamber.webp");
+  --vault-reels: url("/assets/millionaires-vault/reels.webp");
+  --vault-brass: linear-gradient(125deg, #324751, #91bdcd 18%, #effbff 27%, #3f5866 44%, #759eae 61%, #f1faff 78%, #526e80);
+  --vault-cream: #eefaff;
+  --vault-serif: "Cinzel", Georgia, serif;
+  background: linear-gradient(#10071780, #0c0613da), var(--vault-photo) center top / cover;
+  color: var(--vault-cream);
+  scrollbar-color: #846141 #1b0e23;
+  overflow-x: hidden;
+}
+
+#gameRoom[data-game="vault"]::before { display: none; }
+
+#gameRoom[data-game="vault"] .room-wrap {
+  max-width: 580px;
+  min-height: 100%;
+  padding: max(11px, env(safe-area-inset-top)) 12px 0;
+}
+
+#gameRoom[data-game="vault"] .room-header {
+  align-items: stretch;
+  gap: 9px;
+  margin: 0 1px 10px;
+}
+
+#gameRoom[data-game="vault"] .room-header-right {
+  width: auto;
+  min-width: 0;
+  align-self: stretch;
+}
+
+#gameRoom[data-game="vault"] :is(.room-member, .room-wallet) {
+  width: auto;
+  min-height: 46px;
+  padding: 5px 12px;
+  border: 1px solid #ba8e55b0;
+  border-radius: 7px;
+  background: linear-gradient(160deg, #142c3e, #110c17);
+  box-shadow: inset 0 1px #e2b67e35, 0 4px 9px #080511a8;
+}
+
+#gameRoom[data-game="vault"] :is(.member-medallion, .wallet-medallion) {
+  width: 30px;
+  height: 30px;
+  flex: 0 0 30px;
+  border-color: #bc9461;
+  box-shadow: none;
+}
+
+#gameRoom[data-game="vault"] :is(.member-copy small, .room-wallet small) { color: #ead1ed; }
+#gameRoom[data-game="vault"] .member-light { display: none; }
+#gameRoom[data-game="vault"] #roomBalance { color: var(--vault-cream); font-variant-numeric: tabular-nums; }
+
+#gameRoom[data-game="vault"] .room-title {
+  justify-content: flex-end;
+  min-height: clamp(124px, 32vw, 205px);
+  margin: 0;
+  padding: 28px 49px 13px;
+  border: 4px solid transparent;
+  border-bottom-width: 2px;
+  border-radius: 48% 48% 0 0 / 50% 50% 0 0;
+  background: linear-gradient(#150a2429, #170b1f6b 53%, #160b1af5) padding-box,
+    var(--vault-photo) center 15% / cover padding-box,
+    var(--vault-brass) border-box;
+  box-shadow: inset 0 0 0 2px #edd5a13d, 0 3px 15px #07020ec4;
+  text-align: center;
+}
+
+#gameRoom[data-game="vault"] .room-logo {
+  display: block;
+  width: auto;
+  margin: 0;
+  color: #ffe6bc;
+  font: 700 clamp(7px, 2vw, 10px)/1.2 system-ui, sans-serif;
+  letter-spacing: .18em;
+  text-shadow: 0 1px 4px #050306;
+}
+
+#gameRoom[data-game="vault"] .room-logo::before { content: "KILLAMANI CASINO × LUHMAATX"; }
+
+#gameRoom[data-game="vault"] :is(.room-logo svg, #gameTag, .room-slogan, .spin-artwork) { display: none; }
+
+#gameRoom[data-game="vault"] #gameName {
+  margin: 8px 0 1px;
+  color: var(--vault-cream);
+  background: linear-gradient(#fff5d7 10%, #ffe29d 49%, #e9b371 64%, #fff2c6 88%);
+  background-clip: text;
+  -webkit-text-stroke: .45px #ffe8b3;
+  font: 700 clamp(37px, 12vw, 75px)/.98 var(--vault-serif);
+  letter-spacing: .035em;
+  filter: drop-shadow(0 2px #6e442a) drop-shadow(0 5px 8px #08010e);
+  white-space: nowrap;
+}
+
+#gameRoom[data-game="vault"] :is(.room-menu, .room-info) {
+  top: auto;
+  bottom: 6px;
+  width: 44px;
+  height: 44px;
+  border: 0;
+  border-radius: 5px;
+  background: #1d1025;
+  box-shadow: inset 0 0 0 1px #b58759a8;
+  color: var(--vault-cream);
+  font-size: 18px;
+}
+
+#gameRoom[data-game="vault"] .room-menu { left: 5px; }
+#gameRoom[data-game="vault"] .room-info { right: 5px; }
+
+#gameRoom[data-game="vault"] .machine {
+  width: 100%;
+  margin: 0;
+  padding: 10px 9px;
+  border: 4px solid transparent;
+  border-radius: 0 0 14px 14px;
+  background: repeating-linear-gradient(90deg, #170d1b 0 4px, #291734 5px, #1f1228 7px) padding-box,
+    var(--vault-brass) border-box;
+  box-shadow: inset 0 0 0 1px #fff0b648, inset 0 0 22px #070309f0, 0 10px 34px #08030ec4;
+}
+
+#gameRoom[data-game="vault"] .machine::before { display: none; }
+#gameRoom[data-game="vault"] .machine::after {
+  left: 5%;
+  right: 5%;
+  top: 2px;
+  height: 1px;
+  background: #f7d79e;
+  box-shadow: 0 0 10px #ffd7a2;
+}
+
+#gameRoom[data-game="vault"] #gameStage { position: relative; }
+
+#gameRoom[data-game="vault"] #reels {
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: clamp(4px, 1.2vw, 8px);
+  padding: 5px;
+  border: 1px solid #ad8255;
+  border-radius: 7px;
+  background: #0b0610;
+  box-shadow: inset 0 1px 8px #000, 0 1px 1px #f5d39d55;
+}
+
+#gameRoom[data-game="vault"] .reel-column {
+  aspect-ratio: 1 / 3.15;
+  background: none;
+}
+
+#gameRoom[data-game="vault"] .reel-column::after { display: none; }
+#gameRoom[data-game="vault"] .reel-track { gap: clamp(3px, .93vw, 6px); }
+
+#gameRoom[data-game="vault"] .reel-cell {
+  position: relative;
+  overflow: hidden;
+  min-width: 0;
+  border: 1px solid #b48d58b9;
+  border-radius: 6px;
+  background: linear-gradient(148deg, #e8cafd22 0%, transparent 34%),
+    radial-gradient(ellipse at 50% 45%, #20435b, #071320 72%, #03080f);
+  box-shadow: inset 0 0 0 2px #0b080e9e, inset 0 0 8px #e4b0762e;
+}
+
+#gameRoom[data-game="vault"] .reel-cell.win {
+  border-color: #fff2c8;
+  background: radial-gradient(ellipse, #905aad, #241031 78%);
+  box-shadow: inset 0 0 8px #fff3c5, 0 0 11px #c987f7;
+}
+
+#gameRoom[data-game="vault"] .vault-symbol {
+  display: block;
+  width: 94%;
+  height: auto;
+  aspect-ratio: 1;
+  background: var(--vault-reels) no-repeat;
+  background-size: 400% 200%;
+  filter: drop-shadow(0 2px 3px #08050be0);
+}
+
+#gameRoom[data-game="vault"] .symbol-tag {
+  width: auto;
+  left: 50%;
+  bottom: 1px;
+  padding: 1px 3px;
+  transform: translateX(-50%);
+  border: 1px solid #896043;
+  background: #251131;
+  box-shadow: none;
+  color: #fff1ce;
+  font: 750 clamp(6px, 1.65vw, 9px)/1 system-ui, sans-serif;
+  letter-spacing: .055em;
+}
+
+#gameRoom[data-game="vault"] .bet-controls {
+  grid-template-columns: .75fr minmax(44px, .68fr) minmax(66px, 1.3fr) minmax(44px, .68fr) minmax(44px, .75fr);
+  gap: 4px;
+  margin: 8px 0 0;
+  padding: 5px;
+  border: 1px solid #8e644b;
+  border-radius: 6px;
+  background: #150c1b;
+  box-shadow: inset 0 0 11px #996ba32f;
+}
+
+#gameRoom[data-game="vault"] :is(.bet-controls button, .play-controls .outline) {
+  min-height: 44px;
+  min-width: 0;
+  padding: 4px;
+  border: 1px solid #b48b5e;
+  border-radius: 5px;
+  background: linear-gradient(#243f51, #0b1927);
+  box-shadow: inset 0 0 0 2px #fbd69a15, 0 2px 3px #07030a88;
+  color: var(--vault-cream);
+  text-shadow: none;
+}
+
+#gameRoom[data-game="vault"] .bet-controls :is(small, strong) {
+  color: var(--vault-cream);
+  font-variant-numeric: tabular-nums;
+}
+
+#gameRoom[data-game="vault"] .bet-controls small { font-size: 8px; }
+#gameRoom[data-game="vault"] .bet-controls strong { font-size: 18px; }
+
+#gameRoom[data-game="vault"] .play-controls {
+  grid-template-columns: 1fr minmax(106px, 1.72fr) 1fr;
+  width: min(100%, 407px);
+  min-height: 0;
+  gap: 7px;
+  margin: 4px auto;
+  padding: 0 3px;
+}
+
+#gameRoom[data-game="vault"] .play-controls .outline {
+  width: 100%;
+  max-width: 82px;
+  aspect-ratio: auto;
+}
+
+#gameRoom[data-game="vault"] .control-glyph { font-size: 19px; }
+#gameRoom[data-game="vault"] .play-controls .outline small { font-size: 8px; }
+#gameRoom[data-game="vault"] .play-controls .outline[aria-pressed="true"] {
+  border-color: #ffeabc;
+  background: #563673;
+  box-shadow: inset 0 0 10px #e6a0ff65, 0 0 9px #e1b6ee55;
+}
+
+#gameRoom[data-game="vault"] #play {
+  isolation: isolate;
+  width: 100%;
+  height: auto;
+  min-height: 65px;
+  aspect-ratio: 1.75;
+  padding: 24px 4px 0;
+  background: none;
+  color: var(--vault-cream);
+  font: 700 clamp(20px, 6.8vw, 32px)/1 var(--vault-serif);
+  letter-spacing: .06em;
+  text-shadow: 0 1px 4px #130719, 0 2px 2px #130719;
+}
+
+#gameRoom[data-game="vault"] #play::before {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  inset: 0;
+  background: url("/assets/millionaires-vault/spin.webp") center / contain no-repeat;
+  filter: drop-shadow(0 4px 4px #06030c);
+  pointer-events: none;
+}
+
+#gameRoom[data-game="vault"] #play::after { display: none; }
+#gameRoom[data-game="vault"] #play:hover:not(:disabled) { background: none; filter: brightness(1.16); }
+#gameRoom[data-game="vault"] :is(button, #bonusName):focus-visible {
+  outline: 2px solid #ffe9b7;
+  outline-offset: 3px;
+}
+
+#gameRoom[data-game="vault"] :is(#gameStatus, #bonusStatus, .room-legal) {
+  border-color: #b0845b7d;
+  background: #140c1c;
+  color: #ffe6c1;
+}
+
+#gameRoom[data-game="vault"].bonus-active .room-wrap { max-width: 640px; padding: 0; }
+
+#gameRoom[data-game="vault"].bonus-active :is(.room-header, .room-title, .room-leaders, .room-legal, .room-nav),
+#gameRoom[data-game="vault"].bonus-active .machine::after {
+  display: none;
+}
+
+#gameRoom[data-game="vault"].bonus-active .machine {
+  padding: 0;
+  border: 0;
+  background: none;
+  box-shadow: none;
+  animation: none;
+}
+
+#gameRoom[data-game="vault"] #bonusPanel {
+  min-height: 100dvh;
+  padding: max(19px, env(safe-area-inset-top)) 13px max(20px, env(safe-area-inset-bottom));
+  border: 4px solid transparent;
+  border-radius: 22px;
+  background: linear-gradient(#1a0b30a0, #1d0d29b0 51%, #100819f2) padding-box,
+    var(--vault-photo) center top / cover padding-box, var(--vault-brass) border-box;
+  box-shadow: inset 0 0 0 2px #fff0c243, inset 0 -10px 40px #0b0212c0;
+  text-align: center;
+}
+
+#gameRoom[data-game="vault"] #bonusName {
+  max-width: 12em;
+  margin: 11px auto 7px;
+  color: #ffe7b3;
+  font: 700 clamp(24px, 7vw, 44px)/1.04 var(--vault-serif);
+  letter-spacing: .045em;
+  text-shadow: 0 2px #79492a, 0 4px 13px #08040b;
+  text-transform: uppercase;
+}
+
+#gameRoom[data-game="vault"] #bonusBack {
+  display: block;
+  min-height: 44px;
+  padding: 4px 11px;
+  border: 1px solid #c49461;
+  border-radius: 5px;
+  background: #23132d;
+  color: var(--vault-cream);
+}
+
+#gameRoom[data-game="vault"] #bonusText {
+  margin: 0;
+  color: #f2ddeb;
+  font: 500 13px/1.4 system-ui, sans-serif;
+}
+
+.vault-bonus-tally {
+  display: table;
+  margin: 8px auto 1px;
+  padding: 6px 10px;
+  border: 1px solid #c99458;
+  border-radius: 5px;
+  background: #201028;
+  color: #ffe4b7;
+  font: 750 10px/1.2 system-ui, sans-serif;
+  letter-spacing: .065em;
+}
+
+#gameRoom[data-game="vault"] #bonusChoices {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 6px 8px;
+  width: min(100%, 395px);
+  margin: 10px auto 0;
+  padding: 0;
+}
+
+#gameRoom[data-game="vault"] #bonusPanel .vault-drawer {
+  isolation: isolate;
+  position: relative;
+  display: grid;
+  grid-column: span 2;
+  grid-template-columns: minmax(0, 1fr);
+  align-content: end;
+  justify-items: center;
+  width: 100%;
+  min-width: 0;
+  min-height: 0;
+  height: auto;
+  padding: 0 1px 1px;
+  border: 0;
+  border-radius: 8px;
+  background: none;
+  box-shadow: none;
+  color: var(--vault-cream);
+  font-family: var(--vault-serif);
+  transition: filter .18s ease-out;
+  touch-action: manipulation;
+  animation: none;
+}
+
+#gameRoom[data-game="vault"] #bonusPanel .vault-drawer:last-child { grid-column: 2 / 4; }
+#gameRoom[data-game="vault"] #bonusPanel .vault-drawer:disabled { opacity: 1; }
+#gameRoom[data-game="vault"] #bonusPanel .vault-drawer:hover:not(:disabled) { filter: brightness(1.22); }
+#gameRoom[data-game="vault"] #bonusPanel .vault-drawer::after { display: none; }
+
+#gameRoom[data-game="vault"] #bonusStatus {
+  width: fit-content;
+  min-height: 25px;
+  margin: 9px auto 0;
+  padding: 3px 7px;
+}
+
+#gameRoom[data-game="vault"] #bonusStatus:empty { display: none; }
+
+#gameRoom[data-game="vault"] #bonusContinue {
+  min-height: 44px;
+  margin: 10px auto 0;
+  padding: 7px 17px;
+  border: 1px solid #f7d99c;
+  border-radius: 6px;
+  background: var(--vault-brass);
+  color: #26162a;
+  font: 700 14px/1.3 var(--vault-serif);
+}
+
+@media (max-width: 359px) {
+  #gameRoom[data-game="vault"] .room-wrap { padding-inline: 7px; }
+  #gameRoom[data-game="vault"].bonus-active .room-wrap { padding-inline: 0; }
+  #gameRoom[data-game="vault"] .machine { padding-inline: 6px; }
+  #gameRoom[data-game="vault"].bonus-active .machine { padding-inline: 0; }
+  #gameRoom[data-game="vault"] #gameName { font-size: 33px; }
+  #gameRoom[data-game="vault"] #bonusPanel { padding-inline: 9px; }
+}
+
+
+
+#gameRoom[data-game="vault"] #gameName {
+  font-size: clamp(23px, 7.2vw, 50px);
+  white-space: normal;
+  letter-spacing: .01em;
+  background-image: linear-gradient(#fff, #a1deff 58%, #eefaff);
+  -webkit-text-stroke-color: #deefff;
+}
+#gameRoom[data-game="vault"] .room-title { border-radius: 50% 50% 0 0 / 68% 68% 0 0; }
+#gameRoom[data-game="vault"] .machine {
+  background: repeating-linear-gradient(105deg,#152838 0 3px,#142431 4px,#1d3547 6px) padding-box,var(--vault-brass) border-box;
+}
+#gameRoom[data-game="vault"] #play { padding: 0; color: #e9faff; }
+#gameRoom[data-game="vault"] #bonusName { color:#d5f3ff; text-shadow:0 2px #255272,0 4px 13px #02070f; }
+#gameRoom[data-game="vault"] #bonusChoices {
+  grid-template-columns: repeat(3,minmax(0,1fr));
+  gap: 8px;
+  max-width: 470px;
+}
+#gameRoom[data-game="vault"] #bonusPanel .vault-drawer,
+#gameRoom[data-game="vault"] #bonusPanel .vault-drawer:last-child {
+  grid-column: auto;
+  min-height: clamp(76px, 23vw, 123px);
+  align-content: center;
+  gap: 5px;
+  border: 2px solid #83a9bc;
+  border-radius: 6px;
+  background: repeating-linear-gradient(0deg,#1a3140 0 2px,#203e50 3px,#284758 5px);
+  box-shadow: inset 0 0 0 3px #122433, 0 4px 3px #03090e;
+  color:#ecf9ff;
+}
+#gameRoom[data-game="vault"] #bonusPanel .vault-drawer:nth-child(even) {
+  background:linear-gradient(144deg,#567784,#172d3f 62%);
+}
+#gameRoom[data-game="vault"] #bonusPanel .vault-drawer.revealed {
+  background:radial-gradient(ellipse at bottom,#246588,#081d2a 75%);
+  border-color:#b5eaff;
+  box-shadow:inset 0 0 11px #6ab5d8,0 2px 4px #020b12;
+}
+.vault-drawer-number { font:700 11px system-ui; letter-spacing:.15em; }
+.vault-dial {
+  width: min(46%, 44px);
+  aspect-ratio: 1;
+  border: 3px ridge #98abb6;
+  border-radius: 50%;
+  background: repeating-conic-gradient(#253949 0deg 10deg,#70818a 11deg 14deg,#263e50 15deg 30deg);
+  box-shadow:0 3px 4px #04090e;
+}
+.vault-drawer.prize-opening .vault-dial { transform:rotate(30deg); transition:transform .2s; }
+.vault-drawer strong { font:700 clamp(14px,4vw,24px) system-ui; }
+.vault-drawer.vault-reveal { animation: vault-open .35s ease-out !important; }
+@keyframes vault-open { 0% {transform:translateY(-4px);filter:brightness(1.65)} 100% {transform:none;filter:none} }
+@media (prefers-reduced-motion:reduce) {
+  .vault-drawer.vault-reveal {animation:none !important;}
+}
+
+/* Double Trouble cabinet and bonus routes. */
+#gameRoom[data-game="double"] {
+  --double-photo: url("/assets/double-trouble/lounge.webp");
+  --double-reels: url("/assets/double-trouble/reels.webp");
+  --double-brass: linear-gradient(125deg, #704126, #dba455 18%, #fff1bd 27%, #915b33 44%, #dfb276 61%, #fbedbd 78%, #a27345);
+  --double-cream: #ffecc9;
+  --double-serif: "Cinzel", Georgia, serif;
+  background: linear-gradient(#10071780, #0c0613da), var(--double-photo) center top / cover;
+  color: var(--double-cream);
+  scrollbar-color: #846141 #1b0e23;
+  overflow-x: hidden;
+}
+
+#gameRoom[data-game="double"]::before { display: none; }
+
+#gameRoom[data-game="double"] .room-wrap {
+  max-width: 580px;
+  min-height: 100%;
+  padding: max(11px, env(safe-area-inset-top)) 12px 0;
+}
+
+#gameRoom[data-game="double"] .room-header {
+  align-items: stretch;
+  gap: 9px;
+  margin: 0 1px 10px;
+}
+
+#gameRoom[data-game="double"] .room-header-right {
+  width: auto;
+  min-width: 0;
+  align-self: stretch;
+}
+
+#gameRoom[data-game="double"] :is(.room-member, .room-wallet) {
+  width: auto;
+  min-height: 46px;
+  padding: 5px 12px;
+  border: 1px solid #ba8e55b0;
+  border-radius: 7px;
+  background: linear-gradient(160deg, #4d1424, #110c17);
+  box-shadow: inset 0 1px #e2b67e35, 0 4px 9px #080511a8;
+}
+
+#gameRoom[data-game="double"] :is(.member-medallion, .wallet-medallion) {
+  width: 30px;
+  height: 30px;
+  flex: 0 0 30px;
+  border-color: #bc9461;
+  box-shadow: none;
+}
+
+#gameRoom[data-game="double"] :is(.member-copy small, .room-wallet small) { color: #ead1ed; }
+#gameRoom[data-game="double"] .member-light { display: none; }
+#gameRoom[data-game="double"] #roomBalance { color: var(--double-cream); font-variant-numeric: tabular-nums; }
+
+#gameRoom[data-game="double"] .room-title {
+  justify-content: flex-end;
+  min-height: clamp(124px, 32vw, 205px);
+  margin: 0;
+  padding: 28px 49px 13px;
+  border: 4px solid transparent;
+  border-bottom-width: 2px;
+  border-radius: 48% 48% 0 0 / 50% 50% 0 0;
+  background: linear-gradient(#150a2429, #2407126b 53%, #160b1af5) padding-box,
+    var(--double-photo) center 15% / cover padding-box,
+    var(--double-brass) border-box;
+  box-shadow: inset 0 0 0 2px #edd5a13d, 0 3px 15px #07020ec4;
+  text-align: center;
+}
+
+#gameRoom[data-game="double"] .room-logo {
+  display: block;
+  width: auto;
+  margin: 0;
+  color: #ffe6bc;
+  font: 700 clamp(7px, 2vw, 10px)/1.2 system-ui, sans-serif;
+  letter-spacing: .18em;
+  text-shadow: 0 1px 4px #050306;
+}
+
+#gameRoom[data-game="double"] .room-logo::before { content: "KILLAMANI CASINO × LUHMAATX"; }
+
+#gameRoom[data-game="double"] :is(.room-logo svg, #gameTag, .room-slogan, .spin-artwork) { display: none; }
+
+#gameRoom[data-game="double"] #gameName {
+  margin: 8px 0 1px;
+  color: var(--double-cream);
+  background: linear-gradient(#fff5d7 10%, #ffe29d 49%, #e9b371 64%, #fff2c6 88%);
+  background-clip: text;
+  -webkit-text-stroke: .45px #ffe8b3;
+  font: 700 clamp(37px, 12vw, 75px)/.98 var(--double-serif);
+  letter-spacing: .035em;
+  filter: drop-shadow(0 2px #6e442a) drop-shadow(0 5px 8px #08010e);
+  white-space: nowrap;
+}
+
+#gameRoom[data-game="double"] :is(.room-menu, .room-info) {
+  top: auto;
+  bottom: 6px;
+  width: 44px;
+  height: 44px;
+  border: 0;
+  border-radius: 5px;
+  background: #1d1025;
+  box-shadow: inset 0 0 0 1px #b58759a8;
+  color: var(--double-cream);
+  font-size: 18px;
+}
+
+#gameRoom[data-game="double"] .room-menu { left: 5px; }
+#gameRoom[data-game="double"] .room-info { right: 5px; }
+
+#gameRoom[data-game="double"] .machine {
+  width: 100%;
+  margin: 0;
+  padding: 10px 9px;
+  border: 4px solid transparent;
+  border-radius: 0 0 14px 14px;
+  background: repeating-linear-gradient(90deg, #170d1b 0 4px, #291734 5px, #1f1228 7px) padding-box,
+    var(--double-brass) border-box;
+  box-shadow: inset 0 0 0 1px #fff0b648, inset 0 0 22px #070309f0, 0 10px 34px #08030ec4;
+}
+
+#gameRoom[data-game="double"] .machine::before { display: none; }
+#gameRoom[data-game="double"] .machine::after {
+  left: 5%;
+  right: 5%;
+  top: 2px;
+  height: 1px;
+  background: #f7d79e;
+  box-shadow: 0 0 10px #ffd7a2;
+}
+
+#gameRoom[data-game="double"] #gameStage { position: relative; }
+
+#gameRoom[data-game="double"] #reels {
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: clamp(4px, 1.2vw, 8px);
+  padding: 5px;
+  border: 1px solid #ad8255;
+  border-radius: 7px;
+  background: #0b0610;
+  box-shadow: inset 0 1px 8px #000, 0 1px 1px #f5d39d55;
+}
+
+#gameRoom[data-game="double"] .reel-column {
+  aspect-ratio: 1 / 3.15;
+  background: none;
+}
+
+#gameRoom[data-game="double"] .reel-column::after { display: none; }
+#gameRoom[data-game="double"] .reel-track { gap: clamp(3px, .93vw, 6px); }
+
+#gameRoom[data-game="double"] .reel-cell {
+  position: relative;
+  overflow: hidden;
+  min-width: 0;
+  border: 1px solid #b48d58b9;
+  border-radius: 6px;
+  background: linear-gradient(148deg, #e8cafd22 0%, transparent 34%),
+    radial-gradient(ellipse at 50% 45%, #6a1732, #1e0811 72%, #0c0711);
+  box-shadow: inset 0 0 0 2px #0b080e9e, inset 0 0 8px #e4b0762e;
+}
+
+#gameRoom[data-game="double"] .reel-cell.win {
+  border-color: #fff2c8;
+  background: radial-gradient(ellipse, #905aad, #241031 78%);
+  box-shadow: inset 0 0 8px #fff3c5, 0 0 11px #c987f7;
+}
+
+#gameRoom[data-game="double"] .double-symbol {
+  display: block;
+  width: 94%;
+  height: auto;
+  aspect-ratio: 1;
+  background: var(--double-reels) no-repeat;
+  background-size: 400% 200%;
+  filter: drop-shadow(0 2px 3px #08050be0);
+}
+
+#gameRoom[data-game="double"] .symbol-tag {
+  width: auto;
+  left: 50%;
+  bottom: 1px;
+  padding: 1px 3px;
+  transform: translateX(-50%);
+  border: 1px solid #896043;
+  background: #251131;
+  box-shadow: none;
+  color: #fff1ce;
+  font: 750 clamp(6px, 1.65vw, 9px)/1 system-ui, sans-serif;
+  letter-spacing: .055em;
+}
+
+#gameRoom[data-game="double"] .bet-controls {
+  grid-template-columns: .75fr minmax(44px, .68fr) minmax(66px, 1.3fr) minmax(44px, .68fr) minmax(44px, .75fr);
+  gap: 4px;
+  margin: 8px 0 0;
+  padding: 5px;
+  border: 1px solid #8e644b;
+  border-radius: 6px;
+  background: #150c1b;
+  box-shadow: inset 0 0 11px #996ba32f;
+}
+
+#gameRoom[data-game="double"] :is(.bet-controls button, .play-controls .outline) {
+  min-height: 44px;
+  min-width: 0;
+  padding: 4px;
+  border: 1px solid #b48b5e;
+  border-radius: 5px;
+  background: linear-gradient(#672039, #210e15);
+  box-shadow: inset 0 0 0 2px #fbd69a15, 0 2px 3px #07030a88;
+  color: var(--double-cream);
+  text-shadow: none;
+}
+
+#gameRoom[data-game="double"] .bet-controls :is(small, strong) {
+  color: var(--double-cream);
+  font-variant-numeric: tabular-nums;
+}
+
+#gameRoom[data-game="double"] .bet-controls small { font-size: 8px; }
+#gameRoom[data-game="double"] .bet-controls strong { font-size: 18px; }
+
+#gameRoom[data-game="double"] .play-controls {
+  grid-template-columns: 1fr minmax(106px, 1.72fr) 1fr;
+  width: min(100%, 407px);
+  min-height: 0;
+  gap: 7px;
+  margin: 4px auto;
+  padding: 0 3px;
+}
+
+#gameRoom[data-game="double"] .play-controls .outline {
+  width: 100%;
+  max-width: 82px;
+  aspect-ratio: auto;
+}
+
+#gameRoom[data-game="double"] .control-glyph { font-size: 19px; }
+#gameRoom[data-game="double"] .play-controls .outline small { font-size: 8px; }
+#gameRoom[data-game="double"] .play-controls .outline[aria-pressed="true"] {
+  border-color: #ffeabc;
+  background: #563673;
+  box-shadow: inset 0 0 10px #e6a0ff65, 0 0 9px #e1b6ee55;
+}
+
+#gameRoom[data-game="double"] #play {
+  isolation: isolate;
+  width: 100%;
+  height: auto;
+  min-height: 65px;
+  aspect-ratio: 1.75;
+  padding: 24px 4px 0;
+  background: none;
+  color: var(--double-cream);
+  font: 700 clamp(20px, 6.8vw, 32px)/1 var(--double-serif);
+  letter-spacing: .06em;
+  text-shadow: 0 1px 4px #130719, 0 2px 2px #130719;
+}
+
+#gameRoom[data-game="double"] #play::before {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  inset: 0;
+  background: url("/assets/double-trouble/spin.webp") center / contain no-repeat;
+  filter: drop-shadow(0 4px 4px #06030c);
+  pointer-events: none;
+}
+
+#gameRoom[data-game="double"] #play::after { display: none; }
+#gameRoom[data-game="double"] #play:hover:not(:disabled) { background: none; filter: brightness(1.16); }
+#gameRoom[data-game="double"] :is(button, #bonusName):focus-visible {
+  outline: 2px solid #ffe9b7;
+  outline-offset: 3px;
+}
+
+#gameRoom[data-game="double"] :is(#gameStatus, #bonusStatus, .room-legal) {
+  border-color: #b0845b7d;
+  background: #140c1c;
+  color: #ffe6c1;
+}
+
+#gameRoom[data-game="double"].bonus-active .room-wrap { max-width: 640px; padding: 0; }
+
+#gameRoom[data-game="double"].bonus-active :is(.room-header, .room-title, .room-leaders, .room-legal, .room-nav),
+#gameRoom[data-game="double"].bonus-active .machine::after {
+  display: none;
+}
+
+#gameRoom[data-game="double"].bonus-active .machine {
+  padding: 0;
+  border: 0;
+  background: none;
+  box-shadow: none;
+  animation: none;
+}
+
+#gameRoom[data-game="double"] #bonusPanel {
+  min-height: 100dvh;
+  padding: max(19px, env(safe-area-inset-top)) 13px max(20px, env(safe-area-inset-bottom));
+  border: 4px solid transparent;
+  border-radius: 22px;
+  background: linear-gradient(#1a0b30a0, #1d0d29b0 51%, #100819f2) padding-box,
+    var(--double-photo) center top / cover padding-box, var(--double-brass) border-box;
+  box-shadow: inset 0 0 0 2px #fff0c243, inset 0 -10px 40px #0b0212c0;
+  text-align: center;
+}
+
+#gameRoom[data-game="double"] #bonusName {
+  max-width: 12em;
+  margin: 11px auto 7px;
+  color: #ffe7b3;
+  font: 700 clamp(24px, 7vw, 44px)/1.04 var(--double-serif);
+  letter-spacing: .045em;
+  text-shadow: 0 2px #79492a, 0 4px 13px #08040b;
+  text-transform: uppercase;
+}
+
+#gameRoom[data-game="double"] #bonusBack {
+  display: block;
+  min-height: 44px;
+  padding: 4px 11px;
+  border: 1px solid #c49461;
+  border-radius: 5px;
+  background: #23132d;
+  color: var(--double-cream);
+}
+
+#gameRoom[data-game="double"] #bonusText {
+  margin: 0;
+  color: #f2ddeb;
+  font: 500 13px/1.4 system-ui, sans-serif;
+}
+
+.double-bonus-tally {
+  display: table;
+  margin: 8px auto 1px;
+  padding: 6px 10px;
+  border: 1px solid #c99458;
+  border-radius: 5px;
+  background: #201028;
+  color: #ffe4b7;
+  font: 750 10px/1.2 system-ui, sans-serif;
+  letter-spacing: .065em;
+}
+
+#gameRoom[data-game="double"] #bonusChoices {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 6px 8px;
+  width: min(100%, 395px);
+  margin: 10px auto 0;
+  padding: 0;
+}
+
+#gameRoom[data-game="double"] #bonusPanel .double-door {
+  isolation: isolate;
+  position: relative;
+  display: grid;
+  grid-column: span 2;
+  grid-template-columns: minmax(0, 1fr);
+  align-content: end;
+  justify-items: center;
+  width: 100%;
+  min-width: 0;
+  min-height: 0;
+  height: auto;
+  padding: 0 1px 1px;
+  border: 0;
+  border-radius: 8px;
+  background: none;
+  box-shadow: none;
+  color: var(--double-cream);
+  font-family: var(--double-serif);
+  transition: filter .18s ease-out;
+  touch-action: manipulation;
+  animation: none;
+}
+
+#gameRoom[data-game="double"] #bonusPanel .double-door:last-child { grid-column: 2 / 4; }
+#gameRoom[data-game="double"] #bonusPanel .double-door:disabled { opacity: 1; }
+#gameRoom[data-game="double"] #bonusPanel .double-door:hover:not(:disabled) { filter: brightness(1.22); }
+#gameRoom[data-game="double"] #bonusPanel .double-door::after { display: none; }
+
+.double-door-art {
+  position: relative;
+  width: min(100%, clamp(87px, 29.5vw, 121px));
+  aspect-ratio: 224 / 328;
+  background: url("/assets/double-trouble/reels.webp") no-repeat;
+  background-size: 500% 200%;
+  filter: drop-shadow(0 5px 6px #06030abe);
+  pointer-events: none;
+}
+
+.double-door.prize-opening .double-door-art::after {
+  content: "";
+  position: absolute;
+  top: 62%;
+  left: 50%;
+  width: 7px;
+  height: 7px;
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+  background: #fff8d4;
+  box-shadow: 0 0 8px 3px #fff0a7, 0 0 18px 7px #ffc668;
+  animation: double-keyhole .26s ease-out both;
+}
+
+.double-door-name {
+  z-index: 1;
+  min-width: 68%;
+  margin-top: -4px;
+  padding: 4px 5px;
+  border: 1px solid #b47a46;
+  border-radius: 3px;
+  background: linear-gradient(160deg, #fff2bf, #d3a16d 62%, #f5d69a);
+  box-shadow: 0 2px 4px #09040cbc;
+  color: #341e1f;
+  font: 700 clamp(9px, 3vw, 13px)/1.08 var(--double-serif);
+  text-transform: uppercase;
+}
+
+.double-door-award {
+  position: absolute;
+  top: 54%;
+  left: 50%;
+  z-index: 2;
+  transform: translate(-50%, -50%);
+  padding: 4px 7px;
+  border: 1px solid #e1b87c;
+  border-radius: 4px;
+  background: #200d27f0;
+  box-shadow: 0 0 13px #ffbb6b77;
+  color: #fff3ce;
+  font: 700 clamp(13px, 4vw, 21px)/1.15 var(--double-serif);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.double-door-reveal .double-door-art { animation: double-door-light .35s ease-out; }
+.double-door-reveal .double-door-award { animation: double-award-in .27s ease-out both; }
+
+@keyframes double-keyhole {
+  from { opacity: .1; }
+  to { opacity: 1; }
+}
+
+@keyframes double-door-light {
+  from { filter: brightness(1.56) drop-shadow(0 0 11px #ffcc88b8); }
+  to { filter: drop-shadow(0 5px 6px #06030abe); }
+}
+
+@keyframes double-award-in {
+  from { opacity: 0; transform: translate(-50%, -42%) scale(.87); }
+  to { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+}
+
+#gameRoom[data-game="double"] #bonusStatus {
+  width: fit-content;
+  min-height: 25px;
+  margin: 9px auto 0;
+  padding: 3px 7px;
+}
+
+#gameRoom[data-game="double"] #bonusStatus:empty { display: none; }
+
+#gameRoom[data-game="double"] #bonusContinue {
+  min-height: 44px;
+  margin: 10px auto 0;
+  padding: 7px 17px;
+  border: 1px solid #f7d99c;
+  border-radius: 6px;
+  background: var(--double-brass);
+  color: #26162a;
+  font: 700 14px/1.3 var(--double-serif);
+}
+
+@media (max-width: 359px) {
+  #gameRoom[data-game="double"] .room-wrap { padding-inline: 7px; }
+  #gameRoom[data-game="double"].bonus-active .room-wrap { padding-inline: 0; }
+  #gameRoom[data-game="double"] .machine { padding-inline: 6px; }
+  #gameRoom[data-game="double"].bonus-active .machine { padding-inline: 0; }
+  #gameRoom[data-game="double"] #gameName { font-size: 33px; }
+  #gameRoom[data-game="double"] #bonusPanel { padding-inline: 9px; }
+}
+
+@media (max-height: 760px) {
+  .double-door-art { width: min(100%, clamp(83px, 26vw, 98px)); }
+}
+
+#gameRoom[data-game="double"] #gameName { font-size:clamp(24px,7.6vw,46px); letter-spacing:0; white-space:normal; }
+#gameRoom[data-game="double"] #reels .reel-column:nth-child(-n+2) .reel-cell { background:radial-gradient(ellipse,#74203c,#1a060e); }
+#gameRoom[data-game="double"] #reels .reel-column:nth-child(n+4) .reel-cell { background:linear-gradient(135deg,#eed7b6,#b1977d); border-color:#fff1c8; }
+#gameRoom[data-game="double"] #reels .reel-column:nth-child(3) .reel-cell { background:linear-gradient(110deg,#5a0c29 48%,#d9bd96 52%); }
+#gameRoom[data-game="double"].round-win .machine { box-shadow:-8px 0 24px #ff315a88,8px 0 24px #ffe9b988; }
+#gameRoom[data-game="double"] #bonusChoices { grid-template-columns:repeat(2,minmax(0,1fr)); gap:12px; max-width:510px; margin-top:22px; }
+#gameRoom[data-game="double"] #bonusPanel .double-route,
+#gameRoom[data-game="double"] #bonusPanel .double-route:last-child { grid-column:auto; min-height:330px; align-content:center; gap:20px; border:3px solid #ceab75; border-radius:100px 100px 12px 12px; background:linear-gradient(130deg,#990f32,#370716 65%); box-shadow:inset 0 0 0 4px #f4d9ab22; }
+#gameRoom[data-game="double"] #bonusPanel .double-route[data-route="blonde"] { background:linear-gradient(130deg,#fff0d6,#b29470); }
+#gameRoom[data-game="double"] .double-route-art { width:100%; aspect-ratio:1; background-image:url("/assets/double-trouble/reels.webp"); background-size:400% 200%; }
+#gameRoom[data-game="double"] .double-route.revealed { box-shadow:inset 0 0 35px #ffe5b999,0 0 18px #ffd2a85c; }
+#gameRoom[data-game="double"] .double-route-award { position:static; transform:none; display:block; margin:0 auto; animation:none; }
+#gameRoom[data-game="double"] .double-route-name { width:95%; font-size:12px; }
+#gameRoom[data-game="double"] #bonusPanel { padding-top:40px; }
+
+#gameRoom[data-game="double"] .double-bonus-tally { display:table; margin:8px auto 1px; padding:6px 10px; border:1px solid #c99458; border-radius:5px; background:#201028; color:#ffe4b7; font:750 10px/1.2 system-ui; }
