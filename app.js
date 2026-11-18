@@ -32,7 +32,7 @@ const games = [
     art: "spoiled",
     bets: [300, 600, 1500, 3000],
     endpoint: "/api/spin",
-    bonus: "Spoiled Rotten · Mystery Gifts",
+    bonus: "Shopping Spree",
   },
   {
     id: "squirt",
@@ -189,6 +189,7 @@ let soundOn = store.get("sound") === "on",
   tapCount = 0,
   autoTimer = null;
 function artStyle(id) {
+  if (id === "spoiled") return "background-image:url('/assets/spoiled-rotten/boutique.webp');background-position:center 32%";
   if (id === "first") return "background-image:url('/assets/first-class/cabin.webp');background-position:center 26%";
   if (id === "squirt") return "background-image:url('/assets/squirt-city/rooftop.webp');background-position:center 36%";
   if (id === "vault") return "background-image:url('/assets/millionaires-vault/chamber.webp');background-position:center top";
@@ -667,7 +668,18 @@ const doubleSymbolNames = {
   red: "Ruby lips", blonde: "Blonde ribbon", heart: "Ruby heart",
   diamond: "Diamond", cherry: "Cherries", crown: "Crown", wild: "Gold W wild",
 };
+const spoiledSymbolNames = {
+  diamond: "Pink diamond",
+  seven: "Crystal seven",
+  heart: "Diamond heart",
+  rose: "Pink rose",
+  spade: "Onyx spade",
+  star: "Mother-of-pearl star",
+  wild: "Crowned wild",
+  scatter: "Satin gift free spins",
+};
 const reelArt = {
+  spoiled: { className: "spoiled-symbol", names: spoiledSymbolNames },
   first: { className: "first-class-symbol", names: firstClassSymbolNames },
   squirt: { className: "squirt-symbol", names: squirtSymbolNames },
   double: { className: "double-symbol", names: doubleSymbolNames },
@@ -893,7 +905,7 @@ function setBonusVisible(visible) {
   if (visible) {
     stopAuto();
     const game = selected.id;
-    if (game === "first" || game === "squirt" || game === "vault" || game === "double") {
+    if (game === "spoiled" || game === "first" || game === "squirt" || game === "vault" || game === "double") {
       if (entering) {
         requestAnimationFrame(() => {
           if (!panel.hidden && room.dataset.game === game) {
@@ -935,11 +947,12 @@ function setGameName(game) {
   const heading = $("gameName");
   heading.textContent = game.name;
   heading.removeAttribute("aria-label");
-  if (game.id === "squirt") {
-    const [name, suffix] = game.name.split(", ");
+  if (game.id === "squirt" || game.id === "spoiled") {
+    const separator = game.id === "squirt" ? ", " : " ";
+    const [name, suffix] = game.name.split(separator);
     const accent = document.createElement("span");
     accent.textContent = suffix;
-    heading.replaceChildren(name + ", ", accent);
+    heading.replaceChildren(name + separator, accent);
     return;
   }
   if (game.id === "obsession") {
@@ -1320,6 +1333,23 @@ function renderDoubleRoute(button, index, name, award, reveal) {
   button.setAttribute("aria-label", name + ", " + fmt(award) + " KillaCoins");
 }
 
+function renderShoppingGift(button, index, gift, award, reveal) {
+  const art = document.createElement("span");
+  art.className = "shopping-gift-art";
+  art.setAttribute("aria-hidden", "true");
+  art.style.backgroundPosition = (index % 4) * 100 / 3 + "% " + (award === undefined ? 0 : 100) + "%";
+  const label = document.createElement("span");
+  label.className = "shopping-gift-label";
+  label.textContent = award === undefined ? gift : "+" + fmt(award);
+  button.classList.add("shopping-gift");
+  button.classList.toggle("gift-reveal", reveal);
+  button.append(art, label);
+  button.setAttribute(
+    "aria-label",
+    gift + " " + (index + 1) + (award === undefined ? ", open gift" : ", " + fmt(award) + " KillaCoins"),
+  );
+}
+
 function renderBonus(showCompleted = false, revealedChoice) {
   if (!bonus || ((bonus.done || bonus.completed) && !showCompleted)) {
     finishBonusView();
@@ -1350,7 +1380,7 @@ function renderBonus(showCompleted = false, revealedChoice) {
     $("bonusText").replaceChildren(showCompleted ? "Bonus complete." : scene.instruction, tally);
   } else {
     const instruction = showCompleted
-      ? "Baggage claim complete."
+      ? (legacy ? "Shopping Spree complete." : "Baggage claim complete.")
       : scene?.instruction || "Choose your prizes.";
     $("bonusText").textContent =
       instruction + " " + selections.length + " / " + allowed + " PICKS · TOTAL " + fmt(bonus.total) + " KILLACOINS";
@@ -1363,6 +1393,11 @@ function renderBonus(showCompleted = false, revealedChoice) {
     b.disabled = !!chosen || bonus.done || bonus.completed;
     b.classList.toggle("revealed", !!chosen);
     b.onclick = () => pickBonus(i);
+    if (legacy) {
+      renderShoppingGift(b, i, scene.labels[i % scene.labels.length], chosen?.award, revealedChoice === i);
+      $("bonusChoices").append(b);
+      continue;
+    }
     if (g.id === "double") {
       renderDoubleRoute(b, i, scene.labels[i], chosen?.award, revealedChoice === i);
       $("bonusChoices").append(b);
@@ -1406,7 +1441,7 @@ async function pickBonus(choice) {
   const opening = $("bonusChoices").children[choice];
   const firstClass = selected.id === "first";
   const vault = selected.id === "vault";
-  const keepResult = firstClass || vault || selected.id === "double";
+  const keepResult = selected.id === "spoiled" || firstClass || vault || selected.id === "double";
   const restoreFocus = keepResult && opening?.matches(":focus-visible");
   opening?.classList.add("prize-opening");
   if (firstClass) {
@@ -1426,14 +1461,14 @@ async function pickBonus(choice) {
     apply(d);
     await motionPause(260);
     bonus = legacy ? d.session : { ...bonus, ...d };
-    renderBonus(keepResult && bonus.completed, choice);
+    renderBonus(keepResult && (bonus.completed || bonus.done), choice);
     $("bonusStatus").textContent =
       "+" +
       fmt(d.award) +
       " KILLACOINS" +
       (bonus.done || bonus.completed ? " · BONUS COMPLETE" : "");
     if (restoreFocus) {
-      const next = bonus.completed ? $("bonusContinue") : $("bonusChoices").querySelector("button:not(:disabled)");
+      const next = (bonus.completed || bonus.done) ? $("bonusContinue") : $("bonusChoices").querySelector("button:not(:disabled)");
       next?.focus({ preventScroll: true });
     }
     if (vault) {
@@ -1814,7 +1849,7 @@ function themedBurst(host=$("gameStage")) {
 }
 
 const bonusScenes = {
- spoiled:{name:"Shopping Spree",instruction:"Open the boutique gifts.",labels:["DIAMOND BOX","VELVET BAG","GOLD PARCEL","PRIVATE PICK"]},
+ spoiled:{name:"Shopping Spree",instruction:"Choose a boutique gift.",labels:["Pearl chest","Velvet pouch","Satin box","Gold parcel"]},
  brat:{name:"Collect What You’re Owed",instruction:"Open sealed invoices to collect your tax.",labels:["BRAT TAX","LUXURY LEVY","LATE FEE","ATTITUDE TAX","SERVICE FEE","SPOILED SURCHARGE","VIP INVOICE","GLAM TAX","FINAL NOTICE"]},
  first:{name:"Destination: First Class",instruction:"Choose a suitcase.",labels:["Paris","Dubai","Monaco","Maldives","Milan","St. Barts"]},
  cash:{name:"Cash Catch",instruction:"Catch the drifting bundles. Take your time; unused picks never expire."},

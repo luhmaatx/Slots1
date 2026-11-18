@@ -1,0 +1,525 @@
+/* Spoiled Rotten — a rose-velvet jewelry case and its Shopping Spree. */
+#gameRoom[data-game="spoiled"] {
+  --boutique-image: url("/assets/spoiled-rotten/boutique.webp");
+  --boutique-silk: #fff0e7;
+  --boutique-ink: #431528;
+  --boutique-gold: linear-gradient(135deg, #fff2ce 5%, #b3773c 27%, #ffe7bb 47%, #a56332 78%, #f3c88b);
+  --boutique-serif: "DM Serif Text", Georgia, serif;
+  --chrome: var(--boutique-gold);
+  --accent-soft: #b34d72;
+  background: linear-gradient(180deg, #4d102b4d, #250a16cf 80%), var(--boutique-image) center top / cover;
+  color: var(--boutique-silk);
+  overflow-x: hidden;
+}
+
+#gameRoom[data-game="spoiled"][data-look="night"] {
+  background: linear-gradient(180deg, #290f30b0, #100819ef), var(--boutique-image) center top / cover;
+  --accent-soft: #803864;
+}
+
+#gameRoom[data-game="spoiled"]::before {
+  display: none;
+}
+
+#gameRoom[data-game="spoiled"] .room-wrap {
+  width: 100%;
+  max-width: 590px;
+  min-height: 100%;
+  padding: max(12px, env(safe-area-inset-top)) 13px 0;
+}
+
+#gameRoom[data-game="spoiled"] .room-header {
+  margin-bottom: 8px;
+}
+
+#gameRoom[data-game="spoiled"] :is(.room-member, .room-wallet, .room-menu, .room-info) {
+  color: var(--boutique-silk);
+  border: 1px solid transparent;
+  background: linear-gradient(150deg, #6b2942, #2a0c1b) padding-box, var(--boutique-gold) border-box;
+  box-shadow: inset 0 1px #ffe7ca4f, 0 3px 10px #2a091e8a;
+}
+
+#gameRoom[data-game="spoiled"] .room-title {
+  isolation: isolate;
+  justify-content: center;
+  min-height: clamp(142px, 27vw, 222px);
+  margin: 0 0 -9px;
+  padding: clamp(15px, 4vw, 24px) 42px 20px;
+}
+
+#gameRoom[data-game="spoiled"] .room-title::before {
+  content: "";
+  position: absolute;
+  inset: 0 3%;
+  z-index: -1;
+  border-radius: 47% 47% 10% 10% / 34% 34% 7% 7%;
+  border: 2px solid #ffda9a;
+  background: linear-gradient(180deg, transparent 24%, #3c071d9c 68%, #3b0b20),
+    var(--boutique-image) center 8% / 113% auto no-repeat;
+  box-shadow: 0 0 0 2px #794426, 0 0 0 3px #f7d6ab, 0 8px 21px #2107149e;
+}
+
+#gameRoom[data-game="spoiled"] .room-title::after {
+  content: "";
+  position: absolute;
+  inset: 9px calc(3% + 7px) auto;
+  height: 6px;
+  z-index: -1;
+  border-radius: 50%;
+  background: linear-gradient(90deg, transparent, #fff6ddaa, transparent);
+  filter: blur(3px);
+}
+
+#gameRoom[data-game="spoiled"] #gameName {
+  position: relative;
+  margin: 7px 0 2px;
+  font: 700 clamp(38px, 10vw, 73px)/.84 var(--boutique-serif);
+  letter-spacing: -.054em;
+  text-transform: none;
+  color: #fff3df;
+  background: none;
+  -webkit-text-fill-color: currentColor;
+  -webkit-text-stroke: 0;
+  filter: none;
+  text-shadow: 0 2px #844550, 0 4px #4b192c, 0 6px 12px #210615;
+}
+
+#gameRoom[data-game="spoiled"] #gameName > span {
+  display: block;
+  font-size: .79em;
+  font-style: italic;
+  color: #ffbdd0;
+  margin-top: .15em;
+}
+
+#gameRoom[data-game="spoiled"] :is(#gameTag, #roomSlogan, .spin-artwork) {
+  display: none;
+}
+
+#gameRoom[data-game="spoiled"] :is(.room-menu, .room-info) {
+  width: 44px;
+  height: 44px;
+  top: auto;
+  bottom: 15px;
+}
+
+#gameRoom[data-game="spoiled"] .room-menu { left: 8px; font-size: 18px; }
+#gameRoom[data-game="spoiled"] .room-info { right: 8px; }
+
+#gameRoom[data-game="spoiled"] .machine {
+  width: 100%;
+  padding: 13px clamp(9px, 2.4vw, 16px) 10px;
+  border: 4px solid transparent;
+  border-radius: 24px 24px 18px 18px;
+  background: radial-gradient(ellipse at 50% 0%, #9c4967, #4b162b 63%, #2c0a19) padding-box,
+    var(--boutique-gold) border-box;
+  box-shadow: inset 0 0 0 1px #ffddab94, inset 0 0 26px #210814bc, 0 4px 0 #7b472e, 0 10px 30px #260714b0;
+}
+
+#gameRoom[data-game="spoiled"] .machine::before {
+  inset: 4px 8px auto;
+  height: 7px;
+  z-index: 0;
+  border-radius: 0;
+  opacity: 1;
+  background: radial-gradient(circle at center, #fffdf3 9%, #ffe9d6 27%, #a96c60 39%, transparent 49%) 0 0 / 8px 7px repeat-x;
+}
+
+#gameRoom[data-game="spoiled"] .machine::after {
+  display: none;
+}
+
+#gameRoom[data-game="spoiled"] #gameStage {
+  position: relative;
+  min-height: 0;
+  padding: clamp(7px, 1.5vw, 12px);
+  border: 1px solid transparent;
+  border-radius: 16px;
+  background: radial-gradient(ellipse at 50% 0%, #a05770, #4e172d 70%) padding-box, var(--boutique-gold) border-box;
+  box-shadow: inset 0 0 14px #260714bf;
+}
+
+#gameRoom[data-game="spoiled"] #gameStage::after {
+  content: "";
+  position: absolute;
+  inset: auto 16% -3px;
+  height: 5px;
+  pointer-events: none;
+  background: linear-gradient(90deg, transparent, #ffe3a6 9%, #945b31 10% 12%, transparent 13% 87%, #945b31 88% 90%, #ffe3a6 91%, transparent);
+}
+
+#gameRoom[data-game="spoiled"] #reels {
+  --reel-gap: clamp(3px, 1vw, 8px);
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: var(--reel-gap);
+  padding: 0;
+  border: 0;
+  border-radius: 9px;
+  background: none;
+  box-shadow: none;
+}
+
+#gameRoom[data-game="spoiled"] .reel-column {
+  aspect-ratio: 1 / 3.16;
+  border: 0;
+  border-radius: 9px;
+  background: none;
+  box-shadow: none;
+}
+
+#gameRoom[data-game="spoiled"] .reel-column::after {
+  background: linear-gradient(#92465c20, transparent 12% 89%, #92465c26);
+  box-shadow: none;
+}
+
+#gameRoom[data-game="spoiled"] .reel-track {
+  gap: var(--reel-gap);
+}
+
+#gameRoom[data-game="spoiled"] .reel-cell {
+  width: 100%;
+  overflow: hidden;
+  border: 1px solid #c99b62;
+  border-radius: 27% 27% 23% 23% / 22% 22% 20% 20%;
+  background: radial-gradient(ellipse at 40% 26%, #fffaf0 9%, #ffece6 59%, #dba5a9 98%);
+  box-shadow: inset 0 0 0 1px #ffecd8, inset 0 -4px 6px #9b51624d, inset 0 3px 5px #ffffffbf;
+}
+
+#gameRoom[data-game="spoiled"] .reel-cell::before {
+  content: "";
+  position: absolute;
+  inset: 3%;
+  pointer-events: none;
+  border: 1px solid #fffdf1bc;
+  border-radius: inherit;
+}
+
+#gameRoom[data-game="spoiled"] .lux-symbol.spoiled-symbol {
+  display: block;
+  width: 92%;
+  height: auto;
+  aspect-ratio: 1;
+  background-image: url("/assets/spoiled-rotten/reels.webp");
+  background-size: 400% 200%;
+  background-repeat: no-repeat;
+  mask-image: radial-gradient(ellipse at center, #000 62%, #000e 75%, transparent 96%);
+  filter: drop-shadow(0 2px 2px #71354c6b);
+}
+
+#gameRoom[data-game="spoiled"] .reel-cell.win {
+  border-color: #fff1ac;
+  background: radial-gradient(ellipse, #fffae8, #ffcfcd 73%, #e6b16b);
+  box-shadow: inset 0 0 0 1px #fff4bf, inset 0 0 9px #f8a622, 0 0 8px #ffcb89;
+  z-index: 2;
+}
+
+#gameRoom[data-game="spoiled"] .symbol-tag {
+  bottom: 1px;
+  color: #fff3df;
+  border-color: #f4c892;
+  background: #581730f5;
+  font-size: clamp(6px, 1.75vw, 9px);
+  letter-spacing: .02em;
+}
+
+#gameRoom[data-game="spoiled"] .bet-controls {
+  display: grid;
+  grid-template-columns: minmax(34px, .7fr) 44px minmax(62px, 1.2fr) 44px 44px;
+  align-items: center;
+  gap: clamp(3px, 1.3vw, 9px);
+  width: 100%;
+  margin: 10px auto 0;
+  padding: 4px;
+  border: 1px solid #d29d6d96;
+  border-radius: 12px;
+  background: #320a1bc7;
+  box-shadow: inset 0 1px #f0bb9180;
+}
+
+#gameRoom[data-game="spoiled"] .bet-controls :is(.bet-line-count, .live-bet) {
+  padding: 0;
+  border: 0;
+  box-shadow: none;
+  background: none;
+}
+
+#gameRoom[data-game="spoiled"] .bet-controls small {
+  color: #ffcabf;
+  font-size: clamp(7px, 1.8vw, 10px);
+}
+
+#gameRoom[data-game="spoiled"] .bet-controls button {
+  width: 44px;
+  height: 44px;
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+  border: 1px solid transparent;
+  border-radius: 9px;
+  color: var(--boutique-ink);
+  background: linear-gradient(#fff1d9, #d99d79) padding-box, var(--boutique-gold) border-box;
+  box-shadow: inset 0 1px #fff9ef, 0 2px 3px #240616a3;
+  text-shadow: none;
+}
+
+#gameRoom[data-game="spoiled"] .play-controls {
+  min-height: 0;
+  grid-template-columns: minmax(47px, .75fr) minmax(94px, 1.7fr) minmax(47px, .75fr);
+  gap: clamp(5px, 2.4vw, 17px);
+  margin: 8px auto 7px;
+  padding: 0;
+}
+
+#gameRoom[data-game="spoiled"] .play-controls :is(#auto, #turbo) {
+  min-height: 44px;
+  max-width: 85px;
+  aspect-ratio: auto;
+  gap: 1px;
+  border: 1px solid transparent;
+  border-radius: 12px;
+  color: #ffe9d5;
+  background: linear-gradient(#71324b, #400d23) padding-box, var(--boutique-gold) border-box;
+  box-shadow: inset 0 1px #fff3d75c, 0 2px 6px #1f0414a8;
+  text-shadow: none;
+}
+
+#gameRoom[data-game="spoiled"] .play-controls [aria-pressed="true"] {
+  color: var(--boutique-ink);
+  background: #ffdcbe;
+  box-shadow: 0 0 9px #ffc3929c;
+}
+
+#gameRoom[data-game="spoiled"] .control-glyph { font-size: 22px; }
+#gameRoom[data-game="spoiled"] .play-controls .outline small { font-size: 9px; }
+
+#gameRoom[data-game="spoiled"] #play {
+  height: clamp(63px, 14vw, 85px);
+  max-width: 235px;
+  border: 3px solid transparent;
+  border-radius: 23% 23% 23% 23% / 45% 45% 45% 45%;
+  color: #fff7e9;
+  background: radial-gradient(ellipse at 50% 47%, #b93160 5%, transparent 64%) padding-box,
+    conic-gradient(from 19deg, #880e42, #ed7ca0 9%, #92274c 14%, #58132f 20%, #ca517c 28%, #711535 38%, #a52352 45%, #f7a4b7 50%, #9b2450 58%, #4e0b28 72%, #c2406c 79%, #ffa3ba 87%, #8a1c47) padding-box,
+    var(--boutique-gold) border-box;
+  box-shadow: inset 0 0 0 2px #ffc3c3a1, inset 0 5px 12px #ffb4c988, 0 4px 0 #6b391f, 0 6px 10px #250615;
+  font: 700 clamp(27px, 6vw, 38px)/1 var(--boutique-serif);
+  text-shadow: 0 1px 1px #641236, 0 2px 5px #32071e;
+}
+
+#gameRoom[data-game="spoiled"] #play::before,
+#gameRoom[data-game="spoiled"] #play::after { display: none; }
+
+#gameRoom[data-game="spoiled"] .machine #gameStatus {
+  color: #ffe1cb;
+  border-color: #cc947970;
+  background: #290b19;
+}
+
+#gameRoom[data-game="spoiled"] .room-nav,
+#gameRoom[data-game="spoiled"] .room-leaders {
+  color: #ffe7d2;
+  background: linear-gradient(#360f24f2, #230a18fa);
+  border-color: #c89b6e9c;
+  box-shadow: 0 3px 10px #210714b8;
+}
+
+#gameRoom[data-game="spoiled"] .room-nav {
+  margin-inline: -13px;
+}
+
+#gameRoom[data-game="spoiled"].bonus-active .room-wrap {
+  max-width: 680px;
+  padding: 0;
+}
+
+#gameRoom[data-game="spoiled"].bonus-active :is(.room-header, .room-title, .room-leaders, .room-legal, .room-nav) {
+  display: none;
+}
+
+#gameRoom[data-game="spoiled"].bonus-active .machine {
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: none;
+  box-shadow: none;
+}
+
+#gameRoom[data-game="spoiled"].bonus-active .machine::before {
+  display: none;
+}
+
+#gameRoom[data-game="spoiled"].bonus-active #bonusPanel {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-height: 100dvh;
+  margin: 0;
+  padding: max(13px, env(safe-area-inset-top)) clamp(10px, 3vw, 26px) max(16px, env(safe-area-inset-bottom));
+  border: 0;
+  border-radius: 0;
+  background: linear-gradient(180deg, #330a20a6, #430d26d1 36%, #260c19e8), var(--boutique-image) center top / cover;
+  box-shadow: none;
+  color: var(--boutique-silk);
+}
+
+#gameRoom[data-game="spoiled"] #bonusBack {
+  position: static;
+  align-self: start;
+  min-height: 44px;
+  padding: 5px 15px;
+  color: var(--boutique-silk);
+  border: 1px solid #dfb18a;
+  border-radius: 8px;
+  background: #3b1226;
+}
+
+#gameRoom[data-game="spoiled"] #bonusName {
+  margin: 7px auto 6px;
+  color: #fff1dc;
+  font: 700 clamp(38px, 10vw, 66px)/.98 var(--boutique-serif);
+  letter-spacing: -.034em;
+  text-shadow: 0 2px #945465, 0 5px 14px #2c091b;
+  text-align: center;
+}
+
+#gameRoom[data-game="spoiled"] #bonusText {
+  min-height: 34px;
+  margin: 6px 0 9px;
+  color: #ffdfcb;
+  font: 700 clamp(11px, 2.84vw, 14px)/1.45 system-ui, sans-serif;
+  text-align: center;
+}
+
+#gameRoom[data-game="spoiled"] #bonusChoices {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  width: 100%;
+  max-width: 520px;
+  gap: clamp(5px, 1.5vw, 10px);
+  margin: 0 auto;
+  padding: clamp(6px, 1.8vw, 13px);
+  border: 2px solid transparent;
+  border-radius: 18px;
+  background: radial-gradient(ellipse at 50% 5%, #8b435c, #43172c 78%) padding-box, var(--boutique-gold) border-box;
+  box-shadow: inset 0 0 16px #230715, 0 5px 16px #230614af;
+}
+
+#gameRoom[data-game="spoiled"] #bonusChoices .shopping-gift {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-width: 0;
+  min-height: 68px;
+  aspect-ratio: 1.18;
+  gap: 1px;
+  padding: 2px;
+  overflow: hidden;
+  touch-action: manipulation;
+  border: 1px solid #e1af7d9c;
+  border-bottom: 3px solid #e1af7d;
+  border-radius: 11px 11px 7px 7px;
+  background: radial-gradient(ellipse at 50% 5%, #edb7b9, #ae657b 78%);
+  box-shadow: inset 0 1px #fff1e6a8, inset 0 -4px 10px #6c2f4b63, 0 3px 3px #230615a3;
+  transition: filter .16s, opacity .16s;
+}
+
+#gameRoom[data-game="spoiled"] .shopping-gift::before,
+#gameRoom[data-game="spoiled"] .shopping-gift::after {
+  display: none;
+}
+
+#gameRoom[data-game="spoiled"] .shopping-gift-art {
+  display: block;
+  width: min(81%, 108px);
+  aspect-ratio: 1;
+  flex: 0 0 auto;
+  background: url("/assets/spoiled-rotten/gifts.webp") 0 0 / 400% 200% no-repeat;
+  mask-image: radial-gradient(ellipse at center, #000 60%, #000e 77%, transparent 96%);
+  filter: drop-shadow(0 2px 2px #4f1f3380);
+}
+
+#gameRoom[data-game="spoiled"] .shopping-gift-label {
+  position: relative;
+  display: block;
+  max-width: 100%;
+  margin-top: -6%;
+  padding: 3px 6px;
+  border-radius: 5px;
+  color: var(--boutique-ink);
+  background: #fff0dfff;
+  font: 700 clamp(9px, 2.25vw, 13px)/1.15 system-ui, sans-serif;
+  text-align: center;
+}
+
+#gameRoom[data-game="spoiled"] #bonusChoices .shopping-gift.revealed {
+  opacity: 1;
+  border-color: #ffe1a4;
+  background: radial-gradient(ellipse at 50% 30%, #fff3cb, #d9968f 86%);
+  box-shadow: inset 0 0 10px #fff2c8ad, 0 2px 6px #3d1a2e;
+}
+
+#gameRoom[data-game="spoiled"] .shopping-gift.revealed .shopping-gift-label {
+  color: #fff6de;
+  background: #712242;
+}
+
+#gameRoom[data-game="spoiled"] #bonusChoices .shopping-gift:disabled:not(.revealed) { opacity: .82; }
+
+#gameRoom[data-game="spoiled"] .shopping-gift:not(:disabled):hover { filter: brightness(1.08); }
+
+#gameRoom[data-game="spoiled"] .shopping-gift.prize-opening .shopping-gift-art {
+  animation: shopping-gift-clasp .26s ease-in-out both;
+}
+
+#gameRoom[data-game="spoiled"] .shopping-gift.gift-reveal .shopping-gift-art {
+  animation: shopping-gift-glint .52s ease-out both;
+}
+
+#gameRoom[data-game="spoiled"] #bonusPanel #bonusStatus {
+  display: block;
+  width: min(100%, 520px);
+  min-height: 32px;
+  margin: 8px 0;
+  border: 0;
+  color: #ffedc9;
+  background: none;
+  font: 800 12px/1.35 system-ui, sans-serif;
+  text-align: center;
+}
+
+#gameRoom[data-game="spoiled"] #bonusContinue {
+  min-height: 46px;
+  color: var(--boutique-ink);
+  border: 1px solid #fff3c8;
+  border-radius: 10px;
+  background: linear-gradient(#fff5df, #e6b281);
+  box-shadow: 0 3px 8px #2e0b1d;
+  text-shadow: none;
+}
+
+#gameRoom[data-game="spoiled"] :is(button, [tabindex]):focus-visible {
+  outline: 2px solid #fff0b6;
+  outline-offset: 2px;
+}
+
+@keyframes shopping-gift-clasp {
+  40% { transform: translateY(-4px) rotate(-4deg); }
+  75% { transform: translateY(-1px) rotate(3deg); }
+}
+
+@keyframes shopping-gift-glint {
+  0% { opacity: .7; transform: scale(.85); }
+  48% { filter: brightness(1.2) drop-shadow(0 0 8px #fff1af); transform: scale(1.07); }
+}
+
+@media (max-width: 360px) {
+  #gameRoom[data-game="spoiled"] .room-wrap { padding-inline: 8px; }
+  #gameRoom[data-game="spoiled"] .room-nav { margin-inline: -8px; }
+  #gameRoom[data-game="spoiled"] .machine { padding-inline: 7px; }
+}
+
+html[data-effects="off"] #gameRoom[data-game="spoiled"] .shopping-gift-art {
+  animation: none;
+}
