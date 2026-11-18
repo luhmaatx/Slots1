@@ -505,10 +505,15 @@ async function history() {
     $("giftHistory").append(div);
   }
 }
+let arcadeStateRequest = 0;
 async function arcadeState() {
+  const request = ++arcadeStateRequest;
+  const ticketDisplay = $("obsessionTickets");
   const d = await api("/api/arcade/state");
+  if (request !== arcadeStateRequest) return d;
   $("ticketProgress").textContent =
     `${fmt(d.wheelTickets)} WHEEL TICKETS · ${d.qualifyingRounds % 10}/10 PAID SLOT ROUNDS TOWARD YOUR NEXT TICKET`;
+  if (ticketDisplay?.isConnected) ticketDisplay.textContent = fmt(d.wheelTickets);
   return d;
 }
 async function daily(kind, fields = {}) {
@@ -717,7 +722,13 @@ function cleanupVisuals() {
   transientTimers.clear();
   document.querySelectorAll(".win-showcase,.win-particles,.caught-prize,.theme-burst").forEach(el => el.remove());
   $("gameRoom").classList.remove("round-playing","round-win");
-  $("gameStatus").classList.remove("bonus-finished");
+  $("gameStatus").classList.remove("bonus-finished", "obsession-won");
+  const wheel = $("obsessionFrame");
+  if (wheel) {
+    wheel.classList.remove("spinning", "celebrating");
+    wheel.querySelector(".sector.winner")?.classList.remove("winner");
+    wheel.querySelector(".wheel-confetti").replaceChildren();
+  }
 }
 function winningIndexes(lines = []) { return new Set(lines.flatMap(line => line.indexes || [])); }
 function reelCell(symbol, index, wins) {
@@ -917,6 +928,12 @@ function setGameName(game) {
     heading.replaceChildren(name + ", ", accent);
     return;
   }
+  if (game.id === "obsession") {
+    const prefix = document.createElement("span");
+    prefix.textContent = "Wheel of";
+    heading.replaceChildren(prefix, " Obsession");
+    return;
+  }
   if (game.id !== "first") return;
 
   heading.setAttribute("aria-label", game.name);
@@ -966,20 +983,81 @@ function leaveRoom(page) {
   document.body.style.overflow = "";
   nav(page);
 }
+const obsessionPrizes = [100, 250, 500, 750, 1000, 2000, 5000];
+const obsessionSlice = 360 / obsessionPrizes.length;
+
 function wheelMarkup() {
-  return (
-    '<div class="wheel-wrap"><span class="wheel-pointer">▼</span><div id="wheel" class="wheel">' +
-    [100, 250, 500, 750, 1000, 2000, 5000]
-      .map(
-        (v, i) =>
-          `<span class="wheel-label" style="transform:rotate(${(i * 360) / 7 + 360 / 14}deg) translateY(var(--wheel-radius, -104px)) rotate(-${(i * 360) / 7 + 360 / 14}deg)">${fmt(v)}</span>`,
-      )
-      .join("") +
-    '<span class="wheel-center">' +
-    spriteMarkup("heart") +
-    "</span></div></div>"
-  );
+  const sectors = obsessionPrizes.map((amount, index) =>
+    `<div class="sector" style="--angle:${index * obsessionSlice}deg"><span>${fmt(amount)}</span></div>`
+  ).join("");
+  const lamps = Array.from({ length: 40 }, (_, index) =>
+    `<i class="bulb" style="--bearing:${index * 9}deg;--chase:${-index * .07}s"></i>`
+  ).join("");
+
+  return `<div class="obsession-frame" id="obsessionFrame">
+    <div class="pointer" aria-hidden="true"></div>
+    <div class="obsession-rotor"><div id="wheel" class="obsession-face" role="img" aria-label="Seven prizes from 100 to 5,000 KillaCoins">${sectors}</div></div>
+    <div class="bulbs" aria-hidden="true">${lamps}</div>
+    <div class="hub" aria-hidden="true"><span>♥</span></div>
+    <div class="wheel-confetti" aria-hidden="true"></div>
+  </div>
+  <p class="obsession-tickets"><strong id="obsessionTickets">–</strong> Wheel Tickets</p>`;
 }
+
+async function animateObsession(amount) {
+  const wheel = $("wheel");
+  const frame = $("obsessionFrame");
+  const index = obsessionPrizes.indexOf(amount);
+  if (index < 0) return;
+  const target = (360 - index * obsessionSlice) % 360;
+  const next = rotation + 1440 + (target - rotation % 360 + 360) % 360;
+  if (!reducedEffects()) {
+    frame.classList.add("spinning");
+    const ticks = [130, 270, 445, 640, 875, 1130, 1420, 1770, 2070, 2340]
+      .map((delay, index) => setTimeout(() => reelClick(index), delay));
+    try {
+      await animateElement(wheel,
+        [{ transform: `rotate(${rotation}deg)` }, { transform: `rotate(${next}deg)` }],
+        { duration: 2600, easing: "cubic-bezier(.14,.75,.11,1)" });
+    } finally {
+      ticks.forEach(clearTimeout);
+      frame.classList.remove("spinning");
+    }
+  }
+  rotation = next;
+  wheel.style.transform = `rotate(${rotation}deg)`;
+  wheel.children[index].classList.add("winner");
+}
+
+function celebrateObsession() {
+  themedSound("win");
+  if (reducedEffects()) return;
+  const frame = $("obsessionFrame");
+  const confetti = frame.querySelector(".wheel-confetti");
+  const count = store.get("effects") === "subtle" ? 10 : 26;
+  frame.classList.add("celebrating");
+
+  for (let index = 0; index < count; index++) {
+    const spark = document.createElement("i");
+    const direction = index / count * Math.PI * 2;
+    const radius = frame.clientWidth * (.36 + Math.random() * .14);
+    spark.textContent = index % 3 ? "✦" : "◆";
+    spark.style.setProperty("--x", Math.cos(direction) * radius + "px");
+    spark.style.setProperty("--y", Math.sin(direction) * radius + "px");
+    spark.style.setProperty("--size", 9 + Math.random() * 13 + "px");
+    spark.style.setProperty("--turn", index * 29 + "deg");
+    spark.style.setProperty("--flight", 850 + Math.random() * 550 + "ms");
+    spark.style.setProperty("--color", ["#ffe5a3", "#ff93c6", "#fff8e8"][index % 3]);
+    confetti.append(spark);
+  }
+  const timer = setTimeout(() => {
+    frame.classList.remove("celebrating");
+    confetti.replaceChildren();
+    transientTimers.delete(timer);
+  }, 1450);
+  transientTimers.add(timer);
+}
+
 function clawPosition() {
   const hook = $("hook");
   if (hook) {
@@ -1086,16 +1164,20 @@ async function openGame(id) {
       : selected.id === "claw"
         ? "DROP"
         : "SPIN";
-  $("play").dataset.caption = selected.id === "squirt" ? "TO SQUIRT" : selected.id === "duck" ? "YOUR PICKS" : selected.id === "claw" ? "THE CLAW" : "YOUR FORTUNE";
+  $("play").dataset.caption = selected.id === "squirt" ? "TO SQUIRT" : selected.id === "duck" ? "YOUR PICKS" : selected.id === "claw" ? "THE CLAW" : selected.id === "obsession" ? "1 TICKET" : "YOUR FORTUNE";
   if (selected.arcade) {
     arcadeStage();
-    if (id === "obsession")
-      try {
-        const d = await arcadeState();
-        $("gameStatus").textContent = d.wheelTickets + " TICKETS AVAILABLE";
-      } catch (e) {
-        $("gameStatus").textContent = e.message;
-      }
+    if (id === "obsession") {
+      const wheel = $("obsessionFrame");
+      $("gameStatus").textContent = "";
+      await arcadeState().then(d => {
+        if (wheel.isConnected && selected?.id === id && !$("gameRoom").hidden && !busy && !rotation && !d.wheelTickets)
+          $("gameStatus").textContent = "Earn a ticket by completing 10 paid slot rounds.";
+      }).catch(e => {
+        if (wheel.isConnected && selected?.id === id && !$("gameRoom").hidden && !busy && !rotation)
+          $("gameStatus").textContent = e.message;
+      });
+    }
   } else {
     $("gameStage").innerHTML =
       '<div id="reels" class="reels" aria-label="Slot reels"></div>';
@@ -1126,25 +1208,29 @@ async function play() {
         await revealDuck($("gameStage").querySelector(`[data-duck="${n}"]`),symbol,"Duck "+(n+1)+": "+d.ducks[i]);reelClick(i);
       }
     }
-    if(g.id==="obsession"){
-      const amounts=[100,250,500,750,1000,2000,5000],target=(360-((amounts.indexOf(d.win)*360)/7+360/14))%360;
-      rotation+=1800+((target-rotation%360+360)%360);$("wheel").querySelectorAll(".awarded-segment").forEach(el=>el.classList.remove("awarded-segment"));$("wheel").closest(".wheel-wrap").classList.add("wheel-in-motion");
-      $("wheel").style.transform=`rotate(${rotation}deg)`;await motionPause(2700);
-      $("wheel").closest(".wheel-wrap").classList.remove("wheel-in-motion");$("wheel").querySelectorAll(".wheel-label")[amounts.indexOf(d.win)]?.classList.add("awarded-segment");await arcadeState();
-    }
+    if(g.id==="obsession") await animateObsession(d.win);
     if(g.id==="claw")await animateClaw(d);
     if(g.id==="squirt")apply({balance:d.balance,squirtFreeSpins:d.freeSpins});else apply(d);
     $("gameStatus").textContent=(d.freeSpinUsed?"FREE SPIN · ":"")+(d.win?"WIN +"+fmt(d.win)+" KILLACOINS":"NO WIN THIS ROUND")+(d.awardedFreeSpins?" · +"+d.awardedFreeSpins+" FREE SPINS":"");
     if(g.id==="claw")$("gameStatus").textContent=(d.caught?"CAUGHT "+d.item.toUpperCase()+" · +"+fmt(d.win):"THE CLAW MISSED")+(d.royal?" · ROYAL BONUS +5× BET":"");
     if(g.id==="duck"&&d.bonus)$("gameStatus").textContent+=" · THREE GOLD JACKPOT!";
-    if(d.win)await celebrate(d.win,bet);
+    if (g.id === "obsession") {
+      $("gameStatus").textContent = `+${fmt(d.win)} KillaCoins`;
+      $("gameStatus").classList.add("obsession-won");
+      celebrateObsession();
+      const tickets = $("obsessionTickets");
+      tickets.textContent = "–";
+      await arcadeState().catch(() => {});
+    } else if (d.win) await celebrate(d.win, bet);
     if(g.id==="duck"){await motionPause(800);arcadeStage();}
     if(!g.arcade)await loadBonus();
-    await refresh();
+    if (g.id === "obsession") await refresh().catch(() => {});
+    else await refresh();
   } catch(e){
     stopReelSound();$("gameRoom").classList.remove("round-playing","round-win");
     if(!g.arcade&&$("reels")) renderReels(lastReelSymbols);
     stopAuto();$("gameStatus").textContent=e.message;await refresh().catch(()=>{});
+    if (g.id === "obsession") await arcadeState().catch(() => {});
   } finally{stopReelSound();setBusy(false);setBet(betIndex);if(automatic)autoTimer=setTimeout(play,turbo?150:650);}
 }
 async function loadBonus() {

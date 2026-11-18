@@ -1,0 +1,288 @@
+#gameRoom[data-game="obsession"] {
+  --accent: #ffabd3;
+  --accent-soft: #791642;
+  --cabinet-tone: #4c0b2b;
+  --chrome: linear-gradient(135deg, #fbedb3, #9a522b 34%, #fff0b4 61%, #a05b36);
+  background: radial-gradient(ellipse at 50% 34%, #732047, #2a071d 68%, #130411);
+  color: #fff1cc;
+  scrollbar-color: #b36a45 #240519;
+  overflow-x: clip;
+}
+#gameRoom[data-game="obsession"] .room-wrap { max-width: 520px; }
+#gameRoom[data-game="obsession"] .room-title {
+  min-height: 0;
+  margin: 10px 2px 0;
+  padding: 9px 46px 12px;
+  border: 3px double #fff1b9;
+  border-radius: 46% / 21%;
+  background: radial-gradient(ellipse, #e52b74, #aa134e 54%, #480c2d);
+  box-shadow: 0 0 0 2px #b2662d, 0 0 0 4px #f0c778, inset 0 0 14px #fff3b065, 0 0 24px #f9509a60;
+  text-align: center;
+}
+#gameRoom[data-game="obsession"] :is(.room-logo, #gameTag, .room-slogan, .spin-artwork),
+#gameRoom[data-game="obsession"] .machine::before,
+#gameRoom[data-game="obsession"] .machine::after {
+  display: none;
+}
+#gameRoom[data-game="obsession"] #gameName {
+  display: block;
+  margin: 0;
+  color: #fff2c3;
+  background: none;
+  -webkit-text-fill-color: currentColor;
+  -webkit-text-stroke: 0;
+  filter: none;
+  font: 900 clamp(23px, 8.4vw, 55px)/.95 Georgia, serif;
+  text-transform: uppercase;
+  letter-spacing: -.065em;
+  text-shadow: 0 1px #6e331c, 0 3px #a74f28, 0 5px #5e0b2d, 0 0 18px #ff72a4;
+}
+#gameRoom[data-game="obsession"] #gameName span {
+  display: block;
+  margin-bottom: 3px;
+  color: inherit;
+  font: italic 700 .44em/1 Georgia, serif;
+  text-transform: none;
+  letter-spacing: .02em;
+}
+#gameRoom[data-game="obsession"] :is(.room-menu, .room-info) {
+  top: 50%;
+  bottom: auto;
+  transform: translateY(-50%);
+  width: 34px;
+  height: 34px;
+  box-shadow: none;
+  background: #4c0b2c;
+  border: 1px solid #e6ac68;
+  color: #fff1c6;
+}
+#gameRoom[data-game="obsession"] .machine {
+  isolation: isolate;
+  margin-top: 11px;
+  padding: 10px clamp(11px, 4vw, 25px) 7px;
+  border: 3px solid #e2a84e;
+  border-radius: 24px;
+  background: linear-gradient(#33082118, #38051700 49%, #36081fb8),
+    url("/assets/obsession/showroom.webp") center / cover #600e3f;
+  box-shadow: 0 0 0 2px #6f3119, inset 0 0 0 2px #fff5b9, inset 0 0 0 5px #a44a23, 0 12px 24px #100108b0;
+}
+#gameRoom[data-game="obsession"] #gameStage[data-layout]::before { content: none; }
+#gameRoom[data-game="obsession"] .obsession-tickets {
+  margin: 12px auto 6px;
+  width: fit-content;
+  padding: 5px 14px;
+  border: 1px solid #e2ae69;
+  border-radius: 99px;
+  color: #fff2c9;
+  background: #4c0b2c;
+  font: 700 .77rem system-ui, sans-serif;
+}
+#gameRoom[data-game="obsession"] .play-controls {
+  display: block;
+  min-height: 0;
+  margin: 0 auto;
+  padding: 0;
+  text-align: center;
+}
+#gameRoom[data-game="obsession"] #play {
+  width: min(100%, 240px);
+  min-height: 48px;
+  height: auto;
+  padding: 5px 10px 4px;
+  border: 3px double #a75e2c;
+  border-radius: 12px;
+  background: linear-gradient(#fff8cf, #ffd880 46%, #efab4c 52%, #ffdd81);
+  box-shadow: inset 0 1px 2px #fff2bf, 0 2px 5px #22071b;
+  color: #590c2d;
+  text-shadow: 0 1px #fff4cc;
+  font: 900 23px/1 Georgia, serif;
+}
+#gameRoom[data-game="obsession"] #play::before { display: none }
+#gameRoom[data-game="obsession"] #play::after {
+  position: static;
+  display: block;
+  margin-top: 3px;
+  color: inherit;
+  font: 900 9px/1 system-ui, sans-serif;
+  letter-spacing: .08em;
+}
+#gameRoom[data-game="obsession"] #gameStatus {
+  display: grid;
+  align-items: center;
+  min-height: 32px;
+  margin: 7px auto 2px;
+  padding: 2px 6px;
+  text-align: center;
+  color: #fff1ca;
+  background: transparent;
+  box-shadow: none;
+  border: 1px solid transparent;
+}
+#gameRoom[data-game="obsession"] #gameStatus.obsession-won {
+  border-radius: 10px;
+  border: 1px solid #ecc47e;
+  background: linear-gradient(100deg, #651335, #a41e57, #651335);
+  box-shadow: inset 0 0 12px #fef4b835, 0 0 13px #ff90b476;
+  font: 800 clamp(18px, 5.2vw, 27px)/1.12 Georgia, serif;
+  animation: obsession-prize-pop .5s cubic-bezier(.18,1.6,.52,1) both;
+}
+@keyframes obsession-prize-pop { from { opacity: .4; transform: scale(.84) } }
+:root[data-effects="off"] #gameRoom[data-game="obsession"] #gameStatus.obsession-won { animation: none; }
+@media (prefers-reduced-motion: reduce) {
+  #gameRoom[data-game="obsession"] #gameStatus.obsession-won { animation: none; }
+}
+
+#gameRoom[data-game="obsession"] .obsession-frame {
+  position: relative;
+  isolation: isolate;
+  width: min(100%, 362px);
+  aspect-ratio: 1;
+  margin: 12px auto 9px;
+  border-radius: 50%;
+  background: conic-gradient(#fff0b1, #bd732b 12%, #ffe8a4 28%, #a34f26 42%, #fff3bd 52%, #b27531 67%, #ffeb9b 85%, #fff0b1);
+  box-shadow: 0 0 0 2px #ffe99d, 0 0 0 5px #782e2a, 0 0 0 7px #e5a951, 0 14px 30px #340918cf, 0 0 37px #ff63ac85, inset 0 0 0 4px #fbe19f;
+}
+#gameRoom[data-game="obsession"] .obsession-rotor {
+  position: absolute;
+  inset: 5.1%;
+  overflow: hidden;
+  border-radius: 50%;
+  box-shadow: 0 0 0 2px #88452d;
+}
+#gameRoom[data-game="obsession"] .obsession-face {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  border-radius: 50%;
+  background: conic-gradient(from -25.7142857deg, #c82668 0% 14.2857143%, #ffe7a2 14.2857143% 28.5714286%, #ae1437 28.5714286% 42.8571429%, #ed8db0 42.8571429% 57.1428571%, #8d1c7f 57.1428571% 71.4285714%, #f7c766 71.4285714% 85.7142857%, #b81556 85.7142857%);
+  box-shadow: 0 0 0 2px #88452d, inset 0 0 0 2px #fff4bd;
+}
+#gameRoom[data-game="obsession"] .obsession-face::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background: radial-gradient(circle at 32% 22%, #fff4d351, transparent 45%), radial-gradient(circle, #46082e75, transparent 64%, #4b1c2c36);
+  pointer-events: none;
+}
+#gameRoom[data-game="obsession"] .sector { position: absolute; inset: 0; transform: rotate(var(--angle)); pointer-events: none }
+#gameRoom[data-game="obsession"] .sector::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: conic-gradient(from -25.714deg, #fff1b9 0deg .65deg, #fff0da30 .65deg 17deg, transparent 17deg 51.43deg, transparent 51.43deg);
+}
+#gameRoom[data-game="obsession"] .sector.winner::before {
+  background: conic-gradient(from -25.714deg, #fff7b8e8 0deg 51.43deg, transparent 51.43deg);
+}
+#gameRoom[data-game="obsession"] .sector span {
+  position: absolute;
+  z-index: 1;
+  top: 11%;
+  left: 50%;
+  transform: translateX(-50%);
+  font: 900 clamp(19px, 6.7vw, 34px)/1 Georgia, serif;
+  color: #fff6d7;
+  text-shadow: 0 2px 2px #620626;
+}
+#gameRoom[data-game="obsession"] .sector:nth-child(2) span, #gameRoom[data-game="obsession"] .sector:nth-child(4) span, #gameRoom[data-game="obsession"] .sector:nth-child(6) span, #gameRoom[data-game="obsession"] .sector.winner span {
+  color: #4b0926;
+  text-shadow: 0 1px #fff8d5;
+}
+#gameRoom[data-game="obsession"] .sector:last-child span::after {
+  content: "◆";
+  display: block;
+  margin-top: 5px;
+  text-align: center;
+  font: .51em/1 Georgia, serif;
+}
+#gameRoom[data-game="obsession"] .bulbs { position: absolute; inset: 0; z-index: 2; pointer-events: none; overflow: hidden; border-radius: 50% }
+#gameRoom[data-game="obsession"] .bulb {
+  position: absolute;
+  inset: 0;
+  transform: rotate(var(--bearing));
+}
+#gameRoom[data-game="obsession"] .bulb::before {
+  content: "";
+  position: absolute;
+  width: 2.2%;
+  aspect-ratio: 1;
+  left: 50%;
+  top: 2.65%;
+  transform: translate(-50%, -50%);
+  border-radius: 100%;
+  background: #fffacc;
+  box-shadow: 0 0 4px 2px #ffe069, inset 0 -1px 2px #e9a946;
+}
+#gameRoom[data-game="obsession"] .spinning .bulb::before, #gameRoom[data-game="obsession"] .celebrating .bulb::before {
+  animation: obsession-chase .56s ease-in-out infinite alternate;
+  animation-delay: var(--chase);
+}
+@keyframes obsession-chase {
+  from { opacity: .45; box-shadow: 0 0 1px 1px #d59b36 }
+  to { opacity: 1; box-shadow: 0 0 8px 3px #fff1a8 }
+}
+#gameRoom[data-game="obsession"] .pointer {
+  width: 13%;
+  height: 13%;
+  position: absolute;
+  left: 50%;
+  top: -3.9%;
+  z-index: 5;
+  transform: translateX(-50%);
+  transform-origin: 50% 20%;
+  filter: drop-shadow(0 3px 2px #61132a);
+}
+#gameRoom[data-game="obsession"] .pointer::before, #gameRoom[data-game="obsession"] .pointer::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(110deg, #fff9d1, #d59136 46%, #fff3b5 76%, #b65b22);
+  clip-path: polygon(50% 0, 98% 27%, 50% 100%, 2% 27%);
+}
+#gameRoom[data-game="obsession"] .pointer::after {
+  inset: 12% 20% 29%;
+  background: linear-gradient(130deg, #fff3ec, #f34a8e 30%, #8f103a 49%, #ed67a6 76%, #5b0929);
+}
+#gameRoom[data-game="obsession"] .hub {
+  position: absolute;
+  inset: 35.2%;
+  z-index: 3;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  border: 4px double #fff0aa;
+  background: radial-gradient(circle at 35% 25%, #f55b9f, #9e124f 45%, #4e0b2c 72%);
+  box-shadow: 0 0 0 2px #aa5b32, 0 5px 10px #4d0828, inset 0 0 14px #ffddb465;
+}
+#gameRoom[data-game="obsession"] .hub span {
+  transform: translateY(-2%);
+  color: transparent;
+  background: conic-gradient(from 30deg, #ff99bd, #fff1eb 14%, #ee4089 25%, #6e0a43 39%, #ff519d 58%, #b51b54 67%, #ffbed6 85%, #ff99bd);
+  background-clip: text;
+  font: 900 clamp(48px, 16vw, 80px)/.9 Georgia, serif;
+  filter: drop-shadow(0 2px 0 #ffdb90) drop-shadow(0 -1px 0 #fff2bf) drop-shadow(0 4px 3px #43031e);
+}
+
+#gameRoom[data-game="obsession"] .wheel-confetti {
+  position: absolute;
+  inset: -18px;
+  z-index: 6;
+  pointer-events: none;
+  overflow: hidden;
+}
+#gameRoom[data-game="obsession"] .wheel-confetti i {
+  position: absolute;
+  left: 50%;
+  top: 55%;
+  color: var(--color);
+  font: normal 900 var(--size)/1 Georgia, serif;
+  text-shadow: 0 0 5px #ffe2ac;
+  animation: obsession-burst var(--flight) cubic-bezier(.12,.65,.28,1) forwards;
+}
+@keyframes obsession-burst {
+  0% { opacity: 0; transform: scale(.25) }
+  10% { opacity: 1 }
+  75% { opacity: 1 }
+  100% { opacity: 0; transform: translate(var(--x), var(--y)) rotate(var(--turn)) scale(.45) }
+}
