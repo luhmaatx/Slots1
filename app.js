@@ -827,8 +827,10 @@ async function animateClaw(result) {
   const hook = $("hook");
   const item = $("shelf").children[result.shelf];
   const caught = $("caught");
+  const cabinet = $("gameStage").querySelector(".princess-cabinet");
+  cabinet?.classList.add("claw-dropping");
   hook.style.top = "61%";
-  await motionPause(430);
+  await motionPause(550);
   reelClick(2);
   if (result.caught) {
     item.style.visibility = "hidden";
@@ -836,8 +838,10 @@ async function animateClaw(result) {
     caught.hidden = false;
   }
   hook.style.top = "6%";
-  await motionPause(650);
+  cabinet?.classList.toggle("claw-success", !!result.caught);
+  await motionPause(750);
   caught.hidden = true;
+  cabinet?.classList.remove("claw-dropping", "claw-success");
   item.style.visibility = "";
   clawPosition();
 }
@@ -1125,12 +1129,24 @@ function arcadeStage() {
     const prizes = clawPrizes.map(([name]) =>
       `<img class="prize" src="/assets/claw/${name}.webp" alt="${name}">`
     ).join("");
-    $("gameStage").innerHTML = `<div id="glass"><div id="hook"><i></i><b></b><img id="caught" alt="" hidden></div><div id="shelf">${prizes}</div></div>
+    $("gameStage").innerHTML = `<section class="princess-cabinet" aria-label="Spoiled Princess Claw arcade machine">
+      <div class="princess-topper"><span class="princess-stars" aria-hidden="true">✦ ✧ ✦</span><strong>PRINCESS PRIZE PALACE</strong><small>THE LUXURY CLAW CHALLENGE</small></div>
+      <div class="princess-lights" aria-hidden="true"></div>
+      <div class="princess-glass-frame"><div id="glass">
+        <div class="princess-backdrop" aria-hidden="true"><span>✧</span><span>✦</span><span>✧</span></div>
+        <div class="princess-rail" aria-hidden="true"></div>
+        <div id="hook"><i></i><b></b><img id="caught" alt="" hidden></div>
+        <div class="princess-podiums" aria-hidden="true"></div>
+        <div id="shelf">${prizes}</div>
+        <div class="princess-glass-glare" aria-hidden="true"></div>
+      </div></div>
+      <div class="princess-lower"><div class="princess-coin-slot" aria-hidden="true"><span>✦</span> KILLA COINS <span>✦</span></div>
       <div id="clawTarget" role="status" aria-live="polite"></div>
       <p class="claw-help">Move left or right to choose your prize. Move up or down to set depth, then drop.</p>
       <div class="pad" role="group" aria-label="Claw joystick controls">
       <button type="button" data-dy="-1" aria-label="Move claw up">▲</button><button type="button" data-dx="-1" aria-label="Move claw left">◀</button>
-      <button type="button" data-dx="1" aria-label="Move claw right">▶</button><button type="button" data-dy="1" aria-label="Move claw down">▼</button></div>`;
+      <button type="button" data-dx="1" aria-label="Move claw right">▶</button><button type="button" data-dy="1" aria-label="Move claw down">▼</button></div>
+      <div class="princess-control-note">ALIGN YOUR CLAW · DROP TO WIN</div></div></section>`;
     clawPosition();
     for (const button of $("gameStage").querySelectorAll(".pad button")) {
       button.onclick = () => {
