@@ -1089,7 +1089,7 @@ const clawPrizes = [["heart", .5], ["bag", 1.5], ["diamond", 2.5], ["crown", 4],
 function clawPosition() {
   const index = Math.min(4, Math.floor(x * 5));
   $("hook").style.left = (10 + index * 20) + "%";
-  $("hook").style.top = (6 + y * 33) + "%";
+  $("hook").style.top = (7 + y * 46) + "%";
   Array.from($("shelf").children).forEach((item, i) => item.classList.toggle("aim", index === i));
   const [name, multiplier] = clawPrizes[index];
   $("clawTarget").textContent = name.toUpperCase() + " · " + multiplier + "× · Depth " + Math.round(y * 10) + "/10";
@@ -1126,15 +1126,19 @@ function arcadeStage() {
       `<img class="prize" src="/assets/claw/${name}.webp" alt="${name}">`
     ).join("");
     $("gameStage").innerHTML = `<div id="glass"><div id="hook"><i></i><b></b><img id="caught" alt="" hidden></div><div id="shelf">${prizes}</div></div>
-      <div id="clawTarget"></div><div class="pad" aria-label="Joystick">
-      <button data-dy="-1" aria-label="Aim up">▲</button><button data-dx="-1" aria-label="Aim left">◀</button>
-      <button data-dx="1" aria-label="Aim right">▶</button><button data-dy="1" aria-label="Aim down">▼</button></div>`;
+      <div id="clawTarget" role="status" aria-live="polite"></div>
+      <p class="claw-help">Move left or right to choose your prize. Move up or down to set depth, then drop.</p>
+      <div class="pad" role="group" aria-label="Claw joystick controls">
+      <button type="button" data-dy="-1" aria-label="Move claw up">▲</button><button type="button" data-dx="-1" aria-label="Move claw left">◀</button>
+      <button type="button" data-dx="1" aria-label="Move claw right">▶</button><button type="button" data-dy="1" aria-label="Move claw down">▼</button></div>`;
     clawPosition();
     for (const button of $("gameStage").querySelectorAll(".pad button")) {
       button.onclick = () => {
-        if (busy) return;
-        x = Math.max(.1, Math.min(.9, x + Number(button.dataset.dx || 0) / 5));
-        y = Math.max(0, Math.min(1, y + Number(button.dataset.dy || 0) / 10));
+        if (busy || selected?.id !== "claw") return;
+        const dx = Number(button.dataset.dx || 0), dy = Number(button.dataset.dy || 0);
+        // Quantize five prize positions and ten depth steps.
+        if (dx) x = Math.max(.1, Math.min(.9, Math.round((x + dx * .2) * 100) / 100));
+        if (dy) y = Math.max(0, Math.min(1, Math.round((y + dy * .1) * 10) / 10));
         clawPosition();
       };
     }
@@ -1142,6 +1146,10 @@ function arcadeStage() {
 }
 async function openGame(id) {
   if (busy) return;
+  if (!games.some((game) => game.id === id)) {
+    toast("That game is unavailable. Return to the arcade and try again.");
+    return;
+  }
   stopAuto();
   stopTap();
   cleanupVisuals();
@@ -1410,6 +1418,26 @@ function renderBonus(showCompleted = false, revealedChoice) {
     }
     if (g.id === "first") {
       renderFirstClassCase(b, i, scene.labels[i] || bonus.labels[i], chosen?.award);
+      $("bonusChoices").append(b);
+      continue;
+    }
+    // Match the visible prize objects to what each bonus promises.
+    if (g.id === "brat" || g.id === "vip") {
+      const isInvoice = g.id === "brat";
+      b.classList.add(isInvoice ? "invoice-prize" : "door-prize");
+      const art = document.createElement("span");
+      art.className = isInvoice ? "invoice-front" : "door-front";
+      art.setAttribute("aria-hidden", "true");
+      const seal = document.createElement("span");
+      seal.className = "bonus-seal";
+      seal.textContent = isInvoice ? "$" : "K";
+      art.append(seal);
+      const caption = document.createElement("span");
+      caption.className = "prize-label";
+      const title = scene.labels[i % scene.labels.length];
+      caption.textContent = chosen ? "+" + fmt(chosen.award) + " KILLACOINS" : title;
+      b.append(art, caption);
+      b.setAttribute("aria-label", chosen ? title + ", " + fmt(chosen.award) + " KillaCoins" : "Open " + title);
       $("bonusChoices").append(b);
       continue;
     }

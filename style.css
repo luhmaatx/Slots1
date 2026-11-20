@@ -4164,3 +4164,15 @@ html[data-effects=off] #bonusPanel .bonus-prize,html[data-effects=subtle] #bonus
 #gameRoom[data-game="double"] #bonusPanel { padding-top:40px; }
 
 #gameRoom[data-game="double"] .double-bonus-tally { display:table; margin:8px auto 1px; padding:6px 10px; border:1px solid #c99458; border-radius:5px; background:#201028; color:#ffe4b7; font:750 10px/1.2 system-ui; }
+
+/* Phase 1: bonus artwork that matches the labels and payout interaction. */
+#gameRoom .bonus-prize.invoice-prize,#gameRoom .bonus-prize.door-prize{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;min-height:142px;padding:12px 7px;background:radial-gradient(ellipse at top,#ffd8a922,#391026 80%);border:1px solid #e6b972;border-radius:14px;transition:transform .2s,box-shadow .2s}
+#gameRoom .bonus-prize.invoice-prize .invoice-front{position:relative;display:grid;place-items:center;width:74%;height:88px;border:3px double #c08e5b;border-radius:3px;background:linear-gradient(135deg,#fff4dc,#e9c49d);box-shadow:4px 5px 0 #8a4e4a,0 7px 14px #170712aa;transform:rotate(-3deg)}
+#gameRoom .bonus-prize.invoice-prize .invoice-front:before{content:"INVOICE";position:absolute;top:12px;font:900 10px system-ui;letter-spacing:2px;color:#65323d}
+#gameRoom .bonus-prize.door-prize .door-front{position:relative;display:grid;place-items:center;width:65%;height:102px;border:5px ridge #d6ad6a;border-radius:36px 36px 4px 4px;background:linear-gradient(115deg,#3a133a,#8e3c64 52%,#3d1639);box-shadow:inset 0 0 0 3px #f5d9a8,4px 5px 13px #17071299}
+#gameRoom .bonus-prize.door-prize .door-front:after{content:"";position:absolute;right:10%;top:55%;width:7px;height:7px;border-radius:50%;background:#ffe1a0;box-shadow:0 0 6px #ffce79}
+#gameRoom .bonus-prize :is(.invoice-front,.door-front) .bonus-seal{display:grid;place-items:center;width:30px;height:30px;border:2px solid #fce7af;border-radius:50%;background:linear-gradient(#d9aa59,#8d4c32);color:#fff5d2;font:900 19px Georgia}
+#gameRoom .bonus-prize.invoice-prize .bonus-seal{position:absolute;bottom:10px;right:9px}
+#gameRoom .bonus-prize:is(.invoice-prize,.door-prize) .prize-label{position:static;display:block;max-width:100%;text-align:center;overflow-wrap:anywhere;color:#fff1d3;font:800 11px/1.25 system-ui;letter-spacing:.04em}
+#gameRoom .bonus-prize:is(.invoice-prize,.door-prize).revealed{border-color:#fff0b1;box-shadow:0 0 20px #ffcf7d88}
+@media(prefers-reduced-motion:no-preference){#gameRoom .bonus-prize:is(.invoice-prize,.door-prize).prize-opening .invoice-front{animation:invoice-open .3s ease-out}#gameRoom .bonus-prize:is(.invoice-prize,.door-prize).prize-opening .door-front{animation:door-open .35s ease-out}@keyframes invoice-open{50%{transform:rotate(8deg) translateY(-8px)}}@keyframes door-open{50%{transform:perspective(180px) rotateY(-24deg)}}}
