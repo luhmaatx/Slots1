@@ -1,40 +1,58 @@
-#gameRoom[data-game="claw"] #glass { position:relative;overflow:hidden;isolation:isolate;aspect-ratio:1.26;border:5px ridge #ffd598;border-radius:40px 40px 12px 12px;background:linear-gradient(110deg,#dca9ff17 15%,#fff2 16%,transparent 25%,#4d123531),url("/assets/claw/room.webp") center/cover;box-shadow:inset 0 8px 16px #481333 }
-#gameRoom[data-game="claw"] #shelf { position:absolute;bottom:8%;left:0;width:100%;display:flex;align-items:end;border-bottom:8px ridge #e8bb7c;background:linear-gradient(transparent,#ce86ae66) }
-#gameRoom[data-game="claw"] .prize { width:20%;aspect-ratio:1;object-fit:contain;filter:drop-shadow(0 3px 2px #571d37) }
-#gameRoom[data-game="claw"] .aim { background:radial-gradient(ellipse at bottom,#fff6b6a0,transparent 72%) }
-#gameRoom[data-game="claw"] #hook { position:absolute;width:12%;height:22%;left:50%;top:20%;transform:translateX(-50%);z-index:2;transition:top .34s,left .15s }
-#gameRoom[data-game="claw"] #hook:before { content:"";position:absolute;bottom:92%;height:320px;width:5px;left:46%;background:linear-gradient(90deg,#544050,#fff5c9,#775574) }
-#gameRoom[data-game="claw"] #hook i, #gameRoom[data-game="claw"] #hook b { position:absolute;top:12%;height:72%;width:57%;border:5px ridge #f8daae;border-top:0;border-radius:0 0 60% 55% }
-#gameRoom[data-game="claw"] #hook i { left:0;transform:rotate(22deg);border-right:0 }
-#gameRoom[data-game="claw"] #hook b { right:0;transform:rotate(-22deg);border-left:0 }
-#gameRoom[data-game="claw"] #hook:after { content:"";position:absolute;top:3%;left:26%;width:48%;height:28%;border-radius:40%;background:linear-gradient(#fff2bb,#aa644b,#f9d88d) }
-#gameRoom[data-game="claw"] #caught { position:absolute;width:135%;left:-18%;top:48% }
-#gameRoom[data-game="claw"] #clawTarget { text-align:center;background:#431230;border:1px solid #ba8554;border-radius:8px;padding:5px;font-weight:bold }
-#gameRoom[data-game="claw"] .pad { display:grid;grid-template-columns:repeat(3,34px);grid-template-rows:repeat(3,32px);background:radial-gradient(circle,#ffa7cb 8%,#5b173b 27%,#8c455d 62%,transparent 64%) }
-#gameRoom[data-game="claw"] .pad button:nth-child(1), #gameRoom[data-game="claw"] .pad button:nth-child(4) { grid-column:2 }
-#gameRoom[data-game="claw"] .pad button:nth-child(2) { grid-column:1;grid-row:2 }
-#gameRoom[data-game="claw"] .pad button:nth-child(3) { grid-column:3;grid-row:2 }
-#gameRoom[data-game="claw"] .pad button:nth-child(4) { grid-row:3 }
-#gameRoom[data-game="claw"] .pad { width:max-content; margin:8px auto; }
-#gameRoom[data-game="claw"] .pad button {padding:0;background:linear-gradient(#fff4d0,#dcaa64);color:#48142d;border:1px solid #e4b476;border-radius:10px}
-#gameRoom[data-game="claw"] .room-wrap {max-width:520px}
-#gameRoom[data-game="claw"] .room-title {min-height:0;margin:10px 0;padding:12px 38px;background:#671541;border:3px double #ffd598;border-radius:18px}
-#gameRoom[data-game="claw"] .room-title h1 {margin:0;background:none;color:#fff2c9;-webkit-text-fill-color:currentColor;-webkit-text-stroke:0;filter:none;font:italic bold clamp(27px,7vw,42px)/1 Georgia}
-#gameRoom[data-game="claw"] :is(.room-slogan,#gameTag,.spin-artwork,.machine::before){display:none}
-#gameRoom[data-game="claw"] .room-menu {top:8px;width:32px;height:32px}
-#gameRoom[data-game="claw"] .machine {background:linear-gradient(145deg,#9e4771,#3f1238 45%,#641333);border:4px double #ffd795;border-radius:24px;padding:12px}
-#gameRoom[data-game="claw"] .play-controls {min-height:0;display:flex;justify-content:center;margin:6px auto}
-#gameRoom[data-game="claw"] #play {height:auto;min-height:50px;width:60%;padding:7px;color:#48142d;background:linear-gradient(#fff4d0,#dcaa64);font:800 22px Georgia;border-radius:12px}
-#gameRoom[data-game="claw"] #play::before {display:none}
-#gameRoom[data-game="claw"] #play::after {position:static;display:block}
-#gameRoom[data-game="claw"] #gameStage::before {display:none}
-#gameRoom[data-game="claw"] #caught[hidden] {display:none}
-@media(prefers-reduced-motion:reduce){#gameRoom[data-game="claw"] #hook {transition:none}}
 
-/* Phase 1: responsive, accessible claw controls and visible prize travel. */
-#gameRoom[data-game="claw"] .claw-help{margin:8px auto 4px;max-width:350px;text-align:center;color:#fff0d8;font:600 12px/1.4 system-ui,sans-serif}
-#gameRoom[data-game="claw"] .pad{grid-template-columns:repeat(3,minmax(46px,1fr));grid-template-rows:repeat(3,46px);gap:3px}
-#gameRoom[data-game="claw"] .pad button{min-width:46px;min-height:46px;font-size:20px;touch-action:manipulation;cursor:pointer}
-#gameRoom[data-game="claw"] .pad button:focus-visible{outline:3px solid #fff5b0;outline-offset:2px}
-#gameRoom[data-game="claw"] .pad button:active{filter:brightness(1.3);transform:scale(.94)}
-#gameRoom[data-game="claw"] #clawTarget{min-height:34px;line-height:1.4}
+/* SPOILED PRINCESS CLAW — full jewel-box arcade cabinet redesign */
+#gameRoom[data-game="claw"]{--princess-gold:#f5d18b;--princess-pink:#ff9ed5;--princess-dark:#26071f;background:radial-gradient(ellipse at 50% 10%,#e947a43b,transparent 55%),linear-gradient(145deg,#1d0925,#070511 70%)}
+#gameRoom[data-game="claw"] .room-wrap{max-width:620px}
+#gameRoom[data-game="claw"] .room-title{min-height:0;margin:8px auto 15px;padding:12px 42px;background:linear-gradient(110deg,#400e35,#8a225d 50%,#390a32);border:2px solid #ffdf9c;border-radius:20px;box-shadow:0 0 20px #e85eab55,inset 0 0 20px #ffd9a11f}
+#gameRoom[data-game="claw"] .room-title h1{margin:0;background:none;color:#fff0c9;-webkit-text-fill-color:currentColor;-webkit-text-stroke:0;filter:none;font:italic 900 clamp(28px,7vw,45px)/1.1 Georgia;text-shadow:0 3px #3b0a34,0 0 14px #ff9ac5}
+#gameRoom[data-game="claw"] :is(.room-slogan,#gameTag,.spin-artwork,.machine::before){display:none}
+#gameRoom[data-game="claw"] .machine{width:100%;max-width:560px;margin:auto;padding:10px 8px 12px;border:4px solid #ffe2aa;border-radius:30px;background:linear-gradient(115deg,#5d153d,#bc5991 13%,#45102f 33%,#5e1742 67%,#e487b5 90%,#45102e);box-shadow:inset 0 0 0 3px #9e4c6b,inset 0 0 0 6px #f8c67c,0 0 32px #f35eac66,0 18px 35px #000a}
+#gameRoom[data-game="claw"] .machine::after{display:none}
+#gameRoom[data-game="claw"] #gameStage{padding:0;background:none;border:0;box-shadow:none;overflow:visible}
+#gameRoom[data-game="claw"] #gameStage::before{display:none}
+#gameRoom[data-game="claw"] .princess-cabinet{position:relative;isolation:isolate;padding:10px 10px 14px;border:3px solid #f8d99b;border-radius:25px;background:linear-gradient(125deg,#c05e93,#551236 18%,#350b2c 85%,#bd6492);box-shadow:inset 0 0 0 3px #6e234d,0 6px 16px #1b051b}
+#gameRoom[data-game="claw"] .princess-topper{position:relative;display:flex;flex-direction:column;align-items:center;gap:3px;margin:-5px 5px 8px;padding:12px 6px 10px;border:3px ridge #f8dca2;border-radius:48% 48% 12px 12px / 22px 22px 12px 12px;background:radial-gradient(ellipse at 50% -25%,#ffe4f5 0,#b53f82 38%,#5b123f 78%);box-shadow:inset 0 0 15px #ffe2a744,0 0 18px #ff9bca55;text-align:center}
+#gameRoom[data-game="claw"] .princess-topper strong{font:900 clamp(17px,4.4vw,28px)/1.05 Georgia;letter-spacing:.07em;color:#fff3c9;text-shadow:0 2px #5b1b3e,0 0 13px #fff3b6}
+#gameRoom[data-game="claw"] .princess-topper small{font:800 9px/1.2 system-ui;letter-spacing:.28em;color:#ffd9ed}
+#gameRoom[data-game="claw"] .princess-stars{color:#fff0ab;letter-spacing:.9em;font-size:17px}
+#gameRoom[data-game="claw"] .princess-lights{height:10px;margin:0 8px 8px;border-radius:10px;background:radial-gradient(circle,#fff8dc 0 2px,#ff7db6 3px,transparent 5px) 0 0/22px 10px repeat-x;filter:drop-shadow(0 0 4px #ffb4da);animation:princess-lights 1.8s ease-in-out infinite alternate}
+#gameRoom[data-game="claw"] .princess-glass-frame{padding:7px;border:6px ridge #ffdb9e;border-radius:24px 24px 13px 13px;background:linear-gradient(120deg,#9e4674,#fff0c1 20%,#9c426e 36%,#fce6ad 65%,#7b294d);box-shadow:0 0 0 2px #4b1639,inset 0 0 15px #23051d}
+#gameRoom[data-game="claw"] #glass{position:relative;isolation:isolate;overflow:hidden;aspect-ratio:1.13;border:2px solid #ffe6c6;border-radius:14px;background:radial-gradient(ellipse at 50% 28%,#f1a8e2a8,#8e3978 43%,#321333 80%),url('/assets/claw/room.webp') center/cover;box-shadow:inset 0 0 35px #240521,0 0 10px #f5c6f4}
+#gameRoom[data-game="claw"] .princess-backdrop{position:absolute;inset:0;display:flex;justify-content:space-around;align-items:center;color:#ffe7a9;font-size:36px;opacity:.4;pointer-events:none;text-shadow:0 0 14px #fff0bd}
+#gameRoom[data-game="claw"] .princess-backdrop span:nth-child(2){transform:translateY(-30px);font-size:58px}
+#gameRoom[data-game="claw"] .princess-rail{position:absolute;top:4%;left:5%;right:5%;height:9px;border:2px solid #ffedc5;border-radius:10px;background:linear-gradient(#fef5d5,#9b5876,#ffe6ad);box-shadow:0 4px 6px #0006,0 0 10px #fff3c7}
+#gameRoom[data-game="claw"] #hook{position:absolute;width:13%;height:22%;left:50%;top:20%;transform:translateX(-50%);z-index:4;transition:top .55s cubic-bezier(.2,.6,.3,1),left .2s ease;filter:drop-shadow(0 5px 3px #2e092eaa)}
+#gameRoom[data-game="claw"] #hook:before{content:"";position:absolute;bottom:87%;height:400px;width:6px;left:calc(50% - 3px);background:repeating-linear-gradient(180deg,#f9e6bc 0 5px,#a77d7b 5px 8px);box-shadow:1px 0 3px #fff8d7}
+#gameRoom[data-game="claw"] #hook i,#gameRoom[data-game="claw"] #hook b{position:absolute;top:17%;height:70%;width:57%;border:6px ridge #fce0a6;border-top:0;border-radius:0 0 65% 55%;background:linear-gradient(90deg,#ffffff1f,transparent)}
+#gameRoom[data-game="claw"] #hook i{left:0;transform:rotate(23deg);border-right:0}
+#gameRoom[data-game="claw"] #hook b{right:0;transform:rotate(-23deg);border-left:0}
+#gameRoom[data-game="claw"] #hook:after{content:"";position:absolute;top:4%;left:26%;width:48%;height:28%;border:3px solid #fff0bf;border-radius:50%;background:linear-gradient(#fff2c7,#b66b91,#ffdb8e);box-shadow:0 0 10px #fff1b3}
+#gameRoom[data-game="claw"] #caught{position:absolute;width:135%;left:-18%;top:48%;z-index:2;filter:drop-shadow(0 0 10px #fff1b0)}
+#gameRoom[data-game="claw"] #caught[hidden]{display:none}
+#gameRoom[data-game="claw"] .princess-podiums{position:absolute;bottom:6%;left:0;right:0;height:21%;background:repeating-linear-gradient(90deg,#ffcc9a22 0 19%,#fce4c455 19% 20%);border-top:2px solid #ffebc8;box-shadow:0 -5px 20px #ffe6bd33}
+#gameRoom[data-game="claw"] #shelf{position:absolute;bottom:8%;left:0;width:100%;height:25%;display:flex;align-items:flex-end;justify-content:space-around;border-bottom:9px ridge #f9dca4;background:linear-gradient(transparent,#7b2e6e66);z-index:2}
+#gameRoom[data-game="claw"] .prize{width:19%;max-height:90%;aspect-ratio:1;object-fit:contain;padding:3px;border-radius:14px;filter:drop-shadow(0 5px 3px #260c31);transition:transform .2s,filter .2s}
+#gameRoom[data-game="claw"] .prize.aim{transform:translateY(-9px) scale(1.08);filter:drop-shadow(0 0 12px #fff3a7) drop-shadow(0 4px 2px #33052e)}
+#gameRoom[data-game="claw"] .princess-glass-glare{position:absolute;inset:0;pointer-events:none;z-index:6;background:linear-gradient(116deg,#ffffff4a 0,transparent 15% 67%,#ffffff16 72%,transparent 77%);box-shadow:inset 0 0 20px #fff8}
+#gameRoom[data-game="claw"] .princess-lower{margin-top:8px;padding:9px 10px 12px;border:2px solid #eec587;border-radius:12px;background:linear-gradient(130deg,#631d49,#2b0c2b 52%,#681e4c);box-shadow:inset 0 0 15px #ffb4e222}
+#gameRoom[data-game="claw"] .princess-coin-slot{margin:0 auto 8px;text-align:center;font:900 10px system-ui;letter-spacing:.2em;color:#ffdf9b}
+#gameRoom[data-game="claw"] #clawTarget{margin:auto;max-width:95%;text-align:center;background:#17091c;border:1px solid #f4c88b;border-radius:8px;padding:8px;color:#ffeac5;font:800 12px/1.4 system-ui;letter-spacing:.06em}
+#gameRoom[data-game="claw"] .claw-help{margin:8px auto;text-align:center;color:#f9c9df;font:600 11px/1.35 system-ui}
+#gameRoom[data-game="claw"] .pad{display:grid;grid-template-columns:repeat(3,54px);grid-template-rows:repeat(3,50px);gap:4px;width:max-content;margin:6px auto;background:none}
+#gameRoom[data-game="claw"] .pad button:nth-child(1),#gameRoom[data-game="claw"] .pad button:nth-child(4){grid-column:2}
+#gameRoom[data-game="claw"] .pad button:nth-child(2){grid-column:1;grid-row:2}
+#gameRoom[data-game="claw"] .pad button:nth-child(3){grid-column:3;grid-row:2}
+#gameRoom[data-game="claw"] .pad button:nth-child(4){grid-row:3}
+#gameRoom[data-game="claw"] .pad button{min-width:50px;min-height:46px;padding:0;border:3px solid #ffdf9b;border-radius:14px;background:linear-gradient(145deg,#fff3c8,#dca060 48%,#89513b);box-shadow:inset 0 2px 3px #fff8,0 5px 0 #57273d,0 8px 9px #0008;color:#5c1a3f;font:900 23px system-ui;touch-action:manipulation;cursor:pointer}
+#gameRoom[data-game="claw"] .pad button:active{transform:translateY(4px);box-shadow:inset 0 1px 4px #5d2c41,0 1px 0 #57273d}
+#gameRoom[data-game="claw"] .pad button:focus-visible{outline:3px solid #fff;outline-offset:3px}
+#gameRoom[data-game="claw"] .princess-control-note{text-align:center;color:#ffdca7;font:900 9px system-ui;letter-spacing:.16em}
+#gameRoom[data-game="claw"] .play-controls{min-height:0;display:flex;justify-content:center;margin:10px auto}
+#gameRoom[data-game="claw"] #play{width:min(80%,330px);height:auto;min-height:65px;padding:10px;border:4px ridge #ffe1a5;border-radius:45px;background:radial-gradient(ellipse at 50% 0,#fff5c7,#f3b16e 40%,#b44e80 85%);box-shadow:inset 0 3px 7px #fff9,0 6px 0 #66203f,0 0 19px #ffa8d466;color:#49112c;font:900 26px Georgia;text-shadow:0 1px #fff9;letter-spacing:.08em}
+#gameRoom[data-game="claw"] #play:before{display:none}
+#gameRoom[data-game="claw"] #play:after{position:static;display:block;font-size:10px;letter-spacing:.2em}
+#gameRoom[data-game="claw"] #play:active:not(:disabled){transform:translateY(4px);box-shadow:inset 0 3px 9px #7e3c56,0 2px 0 #66203f}
+#gameRoom[data-game="claw"] .princess-cabinet.claw-dropping .princess-lights{animation-duration:.22s}
+#gameRoom[data-game="claw"] .princess-cabinet.claw-success .princess-glass-frame{box-shadow:0 0 24px #fff0a6,0 0 40px #ff8acb}
+@keyframes princess-lights{from{opacity:.55;filter:drop-shadow(0 0 2px #ffb4da)}to{opacity:1;filter:drop-shadow(0 0 8px #fff1bb)}}
+@media(max-width:430px){#gameRoom[data-game="claw"] .machine{padding:7px 4px}#gameRoom[data-game="claw"] .princess-cabinet{padding:7px 5px}#gameRoom[data-game="claw"] .princess-glass-frame{padding:4px;border-width:4px}#gameRoom[data-game="claw"] .pad{grid-template-columns:repeat(3,48px);grid-template-rows:repeat(3,46px)}#gameRoom[data-game="claw"] .pad button{min-width:46px;min-height:44px}#gameRoom[data-game="claw"] .princess-topper strong{font-size:18px}}
+@media(prefers-reduced-motion:reduce){#gameRoom[data-game="claw"] :is(#hook,.princess-lights,.prize){animation:none;transition:none}}
