@@ -4176,3 +4176,28 @@ html[data-effects=off] #bonusPanel .bonus-prize,html[data-effects=subtle] #bonus
 #gameRoom .bonus-prize:is(.invoice-prize,.door-prize) .prize-label{position:static;display:block;max-width:100%;text-align:center;overflow-wrap:anywhere;color:#fff1d3;font:800 11px/1.25 system-ui;letter-spacing:.04em}
 #gameRoom .bonus-prize:is(.invoice-prize,.door-prize).revealed{border-color:#fff0b1;box-shadow:0 0 20px #ffcf7d88}
 @media(prefers-reduced-motion:no-preference){#gameRoom .bonus-prize:is(.invoice-prize,.door-prize).prize-opening .invoice-front{animation:invoice-open .3s ease-out}#gameRoom .bonus-prize:is(.invoice-prize,.door-prize).prize-opening .door-front{animation:door-open .35s ease-out}@keyframes invoice-open{50%{transform:rotate(8deg) translateY(-8px)}}@keyframes door-open{50%{transform:perspective(180px) rotateY(-24deg)}}}
+
+/* BRAT TAX + VIP ONLY: remove inherited neon splash / liquid-button treatment. */
+#gameRoom[data-game="brat"] .spin-artwork,
+#gameRoom[data-game="vip"] .spin-artwork{display:none!important}
+#gameRoom[data-game="brat"] .play-controls,
+#gameRoom[data-game="vip"] .play-controls{min-height:118px;gap:9px;margin:8px 0;padding:7px 4px;isolation:isolate}
+#gameRoom[data-game="brat"] .play-controls .spin,
+#gameRoom[data-game="vip"] .play-controls .spin{width:100%;max-width:210px;height:92px;min-height:76px;border:3px solid #e9b976;border-radius:18px;box-shadow:inset 0 2px 0 #fff5,0 5px 0 #4b2239,0 8px 20px #0009;letter-spacing:.09em;font:900 clamp(22px,5vw,33px)/1 Georgia;text-shadow:0 2px 2px #0009;transition:transform .15s,filter .15s}
+#gameRoom[data-game="brat"] .play-controls .spin{background:linear-gradient(155deg,#f5d7f9,#9b56b9 35%,#51266e 72%,#260e43);color:#fff1e5}
+#gameRoom[data-game="vip"] .play-controls .spin{background:linear-gradient(155deg,#f9e7b8,#8d6cb7 28%,#352053 72%,#1b0c30);color:#fff1ce}
+#gameRoom[data-game="brat"] .play-controls .spin::before,
+#gameRoom[data-game="vip"] .play-controls .spin::before{display:none!important;content:none!important}
+#gameRoom[data-game="brat"] .play-controls .spin::after,
+#gameRoom[data-game="vip"] .play-controls .spin::after{display:block;position:static;content:attr(data-caption);font:800 10px/1.6 system-ui;letter-spacing:.16em;text-shadow:none;color:inherit}
+#gameRoom[data-game="brat"] .play-controls .spin:hover:not(:disabled),
+#gameRoom[data-game="vip"] .play-controls .spin:hover:not(:disabled){background-position:center;filter:brightness(1.12)}
+#gameRoom[data-game="brat"] .play-controls .spin:active:not(:disabled),
+#gameRoom[data-game="vip"] .play-controls .spin:active:not(:disabled){transform:translateY(4px);box-shadow:inset 0 2px 5px #0008,0 1px 0 #4b2239}
+#gameRoom[data-game="brat"] .play-controls .outline,
+#gameRoom[data-game="vip"] .play-controls .outline{width:100%;max-width:95px;min-height:75px;aspect-ratio:auto;border:2px solid #e0b87d;border-radius:14px;background:linear-gradient(160deg,#59305c,#160c24);box-shadow:inset 0 1px #fff5,0 4px 0 #321429,0 6px 14px #0006;color:#f8e3c1;text-shadow:none}
+#gameRoom[data-game="brat"] .play-controls .outline[aria-pressed=true],
+#gameRoom[data-game="vip"] .play-controls .outline[aria-pressed=true]{background:linear-gradient(160deg,#9871aa,#3a2058);box-shadow:inset 0 0 0 2px #ffe5a5,0 0 14px #e3b5fb77}
+#gameRoom[data-game="brat"] .play-controls .control-glyph,
+#gameRoom[data-game="vip"] .play-controls .control-glyph{font-size:27px}
+@media(max-width:450px){#gameRoom[data-game="brat"] .play-controls .spin,#gameRoom[data-game="vip"] .play-controls .spin{height:80px;font-size:22px}#gameRoom[data-game="brat"] .play-controls .outline,#gameRoom[data-game="vip"] .play-controls .outline{min-height:72px;padding:3px}}
